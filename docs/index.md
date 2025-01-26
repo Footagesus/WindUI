@@ -15,7 +15,7 @@ hero:
     - theme: alt
       text: View on GitHub
       link: https://github.com/Footagesus/WindUI
-
+ 
 features:
   - icon: 🎨
     title: Customizable Color Scheme
