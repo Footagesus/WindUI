@@ -1,0 +1,72 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local runService = game:GetService("RunService")
+
+local farming = false
+
+
+local gui = Instance.new("ScreenGui", player.PlayerGui)
+gui.Name = "AutoFarmATMGui"
+gui.ResetOnSpawn = false
+
+local button = Instance.new("TextButton", gui)
+button.Size = UDim2.new(0, 200, 0, 46)
+button.Position = UDim2.new(0, 30, 0, 200)
+button.Text = "เริ่มบินฟาร์ม ATM"
+button.BackgroundColor3 = Color3.fromRGB(60, 180, 75)
+button.TextColor3 = Color3.new(1,1,1)
+button.Font = Enum.Font.SourceSansBold
+button.TextSize = 22
+
+
+local function moveBikeTo(targetPos)
+    local character = player.Character
+    if not character then return end
+    local bike = character:FindFirstChild("Bike")
+    if not bike or not bike.PrimaryPart then return end
+    bike:SetPrimaryPartCFrame(CFrame.new(targetPos + Vector3.new(0,5,0)))
+end
+
+
+local function getNearestATM()
+    local character = player.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return nil end
+    local myPos = character.HumanoidRootPart.Position
+    local nearest, dist = nil, math.huge
+    for _, atm in ipairs(workspace:GetChildren()) do
+        if atm.Name == "ATM" and atm:IsA("BasePart") then
+            local d = (atm.Position - myPos).magnitude
+            if d < dist then
+                nearest = atm
+                dist = d
+            end
+        end
+    end
+    return nearest
+end
+
+
+local function startFarm()
+    while farming do
+        local atm = getNearestATM()
+        if atm then
+            moveBikeTo(atm.Position)
+            
+            task.wait(1)
+        else
+            task.wait(1)
+        end
+    end
+end
+
+button.MouseButton1Click:Connect(function()
+    farming = not farming
+    if farming then
+        button.Text = "หยุดบินฟาร์ม ATM"
+        button.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
+        startFarm()
+    else
+        button.Text = "เริ่มบินฟาร์ม ATM"
+        button.BackgroundColor3 = Color3.fromRGB(60, 180, 75)
+    end
+end)
