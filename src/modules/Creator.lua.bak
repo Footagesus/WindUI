@@ -1,4 +1,4 @@
---[[j
+--[[
 
 Credits: dawid 
 
@@ -9,7 +9,7 @@ local RenderStepped = RunService.Heartbeat
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 
-local Icons = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Fami-dev/Icons/refs/heads/main/Main.lua"))()
+local Icons = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Footagesus/Icons/main/Main.lua"))()
 Icons.SetIconsType("lucide")
 
 local Creator = {
