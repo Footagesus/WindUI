@@ -1,4 +1,4 @@
---[[j
+--[[
 
 Credits: dawid 
 
@@ -8,23 +8,19 @@ local RunService = game:GetService("RunService")
 local RenderStepped = RunService.Heartbeat
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
-local LocalizationService = game:GetService("LocalizationService")
 
-local Icons = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Fami-dev/Icons/refs/heads/main/Main.lua"))()
+local Icons = loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/Footagesus/Icons/main/Main.lua"))()
 Icons.SetIconsType("lucide")
 
 local Creator = {
     Font = "rbxassetid://12187365364", -- Inter
-    Localization = nil,
     CanDraggable = true,
     Theme = nil,
     Themes = nil,
     WindUI = nil,
     Signals = {},
     Objects = {},
-    LocalizationObjects = {},
     FontObjects = {},
-    Language = string.match(LocalizationService.SystemLocaleId , "^[a-z]+"),
     Request = http_request or (syn and syn.request) or request,
     DefaultProperties = {
         ScreenGui = {
@@ -78,9 +74,6 @@ local Creator = {
         ScrollingFrame = {
             ScrollBarImageTransparency = 1,
             BorderSizePixel = 0,
-        },
-        VideoFrame = {
-            BorderSizePixel = 0,
         }
     },
     Colors = {
@@ -90,10 +83,8 @@ local Creator = {
         Blue = "#039be5",   -- Info
         White = "#ffffff",   -- White
         Grey = "#484848",   -- Grey
-    },
+    }
 }
-
-
 
 function Creator.Init(WindUI)
     Creator.WindUI = WindUI
@@ -158,13 +149,6 @@ function Creator.AddThemeObject(Object, Properties)
     Creator.UpdateTheme(Object, false)
     return Object
 end
-function Creator.AddLangObject(idx)
-    local currentObj = Creator.LocalizationObjects[idx]
-    local Object = currentObj.Object
-    local TranslationId = currentObjTranslationId
-    Creator.UpdateLang(Object, TranslationId)
-    return Object
-end
 
 function Creator.UpdateTheme(TargetObject, isTween)
     local function ApplyTheme(objData)
@@ -192,69 +176,6 @@ function Creator.UpdateTheme(TargetObject, isTween)
     end
 end
 
-function Creator.SetLangForObject(index)
-    if Creator.Localization and Creator.Localization.Enabled then
-        local data = Creator.LocalizationObjects[index]
-        if not data then return end
-        
-        local obj = data.Object
-        local translationId = data.TranslationId
-        
-        local translations = Creator.Localization.Translations[Creator.Language]
-        if translations and translations[translationId] then
-            obj.Text = translations[translationId]
-        else
-            local enTranslations = Creator.Localization and Creator.Localization.Translations and Creator.Localization.Translations.en or nil
-            if enTranslations and enTranslations[translationId] then
-                obj.Text = enTranslations[translationId]
-            else
-                obj.Text = "[" .. translationId .. "]"
-            end
-        end
-    end
-end
-
-
-function Creator:ChangeTranslationKey(object, newKey)
-    if Creator.Localization and Creator.Localization then
-        local ParsedKey = string.match(newKey, "^" .. Creator.Localization.Prefix .. "(.+)")
-        for i, data in ipairs(Creator.LocalizationObjects) do
-            if data.Object == object then
-                data.TranslationId = ParsedKey
-                Creator.SetLangForObject(i)
-                return
-            end
-        end
-        
-        table.insert(Creator.LocalizationObjects, {
-            TranslationId = ParsedKey,
-            Object = object
-        })
-        Creator.SetLangForObject(#Creator.LocalizationObjects)
-    end
-end
-
-
-function Creator.UpdateLang(newLang)
-    if newLang then
-        Creator.Language = newLang
-    end
-    
-    for i = 1, #Creator.LocalizationObjects do
-        local data = Creator.LocalizationObjects[i]
-        if data.Object and data.Object.Parent ~= nil then
-            Creator.SetLangForObject(i)
-        else
-            Creator.LocalizationObjects[i] = nil
-        end
-    end
-end
-
-function Creator.SetLanguage(lang)
-    Creator.Language = lang
-    Creator.UpdateLang()
-end
-
 function Creator.Icon(Icon)
     return Icons.Icon(Icon)
 end
@@ -269,15 +190,6 @@ function Creator.New(Name, Properties, Children)
     for Name, Value in next, Properties or {} do
         if Name ~= "ThemeTag" then
             Object[Name] = Value
-        end
-        if Creator.Localization and Creator.Localization.Enabled and Name == "Text" then
-            local TranslationId = string.match(Value, "^" .. Creator.Localization.Prefix .. "(.+)")
-            if TranslationId then
-                local currentId = #Creator.LocalizationObjects + 1
-                Creator.LocalizationObjects[currentId] = { TranslationId = TranslationId, Object = Object }
-                
-                Creator.SetLangForObject(currentId)
-            end
         end
     end
     

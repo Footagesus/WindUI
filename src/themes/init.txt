@@ -6,7 +6,7 @@ return {
         Outline = "#FFFFFF",
         Text = "#FFFFFF",
         Placeholder = "#999999",
-        Background = "#101010",
+        Background = "#0e0e10",
         Button = "#52525b",
         Icon = "#a1a1aa",
     },
