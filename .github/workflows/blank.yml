@@ -1,0 +1,42 @@
+name: Build WindUI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Lua
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - name: Setup LuaRocks
+        uses: leafo/gh-actions-luarocks@v4
+
+      - name: Install darklua
+        run: luarocks install darklua
+
+      - name: Run build
+        run: sh build/build.sh build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: windui-dist
+          path: dist/
