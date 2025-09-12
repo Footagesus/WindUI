@@ -22,14 +22,10 @@ jobs:
         run: npm install
 
       - name: Setup Lua
-        uses: leafo/gh-actions-lua@v10
-        with:
-          luaVersion: "5.3"
+        uses: leafo/gh-actions-lua@v11
 
       - name: Setup LuaRocks
-        uses: leafo/gh-actions-luarocks@v4
-        with:
-          luaVersion: "5.3"
+        uses: leafo/gh-actions-luarocks@v5
 
       - name: Install darklua
         run: luarocks install darklua
