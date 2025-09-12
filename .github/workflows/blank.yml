@@ -21,16 +21,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Setup Lua
-        uses: leafo/gh-actions-lua@v11
-        with:
-          luaVersion: "5.1"
+      - name: Setup Aftman
+        uses: ok-nick/setup-aftman@v0.3.0
 
-      - name: Setup LuaRocks
-        uses: leafo/gh-actions-luarocks@v5
-
-      - name: Install darklua
-        run: luarocks install darklua
+      - name: Install Rojo, Lune and DarkLua
+        run: aftman install
 
       - name: Run build
         run: sh build/build.sh build
