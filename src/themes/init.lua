@@ -182,4 +182,54 @@ return {
         Button = "#5e81ac",         -- deep blue
         Icon = "#a3be8c",           -- soft green
     },
+    Neon = {
+        Name = "Neon",
+        Accent = "#39FF14",         -- neon green
+        Outline = "#FF10F0",        -- neon pink
+        Text = "#E0E0E0",           -- light gray text
+        Placeholder = "#AAAAAA",    -- muted gray
+        Background = "#0A0A0A",     -- almost black background
+        Button = "#00F0FF",         -- neon cyan button
+        Icon = "#FFD300",           -- bright yellow icon
+    },
+    Cyberpunk = {
+        Name = "Cyberpunk",
+        Accent = "#ff007c",         -- hot pink
+        Outline = "#0affef",        -- bright cyan
+        Text = "#f2f2f2",           -- near white
+        Placeholder = "#9e9e9e",    -- muted gray
+        Background = "#1a1a2e",     -- deep navy
+        Button = "#ff4b5c",         -- red-pink button
+        Icon = "#ffe227",           -- neon yellow icon
+    },
+    Desert = {
+        Name = "Desert",
+        Accent = "#d97706",         -- amber/orange
+        Outline = "#fef3c7",        -- sandy light
+        Text = "#fff7ed",           -- soft cream text
+        Placeholder = "#fcd34d",    -- muted yellow
+        Background = "#78350f",     -- deep brown
+        Button = "#ca8a04",         -- gold button
+        Icon = "#fde68a",           -- soft yellow icon
+    },
+    Ocean = {
+        Name = "Ocean",
+        Accent = "#0284c7",         -- deep ocean blue
+        Outline = "#bae6fd",        -- light aqua outline
+        Text = "#e0f2fe",           -- light text
+        Placeholder = "#7dd3fc",    -- aqua placeholder
+        Background = "#0c4a6e",     -- deep sea background
+        Button = "#0ea5e9",         -- sky blue button
+        Icon = "#38bdf8",           -- light cyan icon
+    },
+    PastelLight = {
+        Name = "Pastel Light",
+        Accent = "#f9a8d4",         -- pastel pink
+        Outline = "#fce7f3",        -- light pastel pink
+        Text = "#1f2937",           -- gray-800 text
+        Placeholder = "#9ca3af",    -- gray placeholder
+        Background = "#fdf2f8",     -- very light pink bg
+        Button = "#93c5fd",         -- soft pastel blue
+        Icon = "#a7f3d0",           -- mint green
+    },
 }
