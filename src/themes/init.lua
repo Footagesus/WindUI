@@ -142,4 +142,44 @@ return {
         Button = "#F5B0DE",         -- candy pink button
         Icon = "#78E0E8",           -- aqua icon
     },
+    Dracula = {
+        Name = "Dracula",
+        Accent = "#ff79c6",         -- pink accent
+        Outline = "#44475a",        -- dark gray outline
+        Text = "#f8f8f2",           -- white text
+        Placeholder = "#6272a4",    -- muted blue
+        Background = "#282a36",     -- dark dracula bg
+        Button = "#50fa7b",         -- green button
+        Icon = "#8be9fd",           -- cyan icon
+    },
+    SolarizedDark = {
+        Name = "Solarized Dark",
+        Accent = "#268bd2",         -- blue
+        Outline = "#073642",        -- outline green/blue
+        Text = "#eee8d5",           -- light cream text
+        Placeholder = "#586e75",    -- muted gray
+        Background = "#002b36",     -- dark solarized bg
+        Button = "#b58900",         -- yellow button
+        Icon = "#cb4b16",           -- orange icon
+    },
+    Gruvbox = {
+        Name = "Gruvbox",
+        Accent = "#fe8019",         -- orange
+        Outline = "#3c3836",        -- dark gray
+        Text = "#ebdbb2",           -- cream text
+        Placeholder = "#a89984",    -- gray
+        Background = "#282828",     -- gruvbox dark bg
+        Button = "#d3869b",         -- purple
+        Icon = "#b8bb26",           -- green
+    },
+    Nord = {
+        Name = "Nord",
+        Accent = "#88c0d0",         -- frost cyan
+        Outline = "#4c566a",        -- dark gray
+        Text = "#eceff4",           -- light
+        Placeholder = "#81a1c1",    -- blue-gray
+        Background = "#2e3440",     -- nord dark bg
+        Button = "#5e81ac",         -- deep blue
+        Icon = "#a3be8c",           -- soft green
+    },
 }
