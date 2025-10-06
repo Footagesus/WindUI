@@ -29,7 +29,7 @@ local j=loadstring(
 game.HttpGetAsync and game:HttpGetAsync(i)
 or h:GetAsync(i)
 )()
-j.SetIconsType"lucide"
+j.SetsType"lucide"
 
 local l
 
@@ -1356,7 +1356,7 @@ return aa end function a.g()
 return{
 platoboost={
 Name="Platoboost",
-Icon="rbxassetid://75920162824531",
+Icon="rbxassetid://89321031950804",
 Args={"ServiceId","Secret"},
 
 
