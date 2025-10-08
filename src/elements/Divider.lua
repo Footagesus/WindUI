@@ -15,13 +15,13 @@ function Element:New(Config)
     })
     local MainDivider = New("Frame", {
         Parent = Config.Parent,
-        Size = UDim2.new(1,-7,0,5),
+        Size = UDim2.new(1,-7,0,7),
         BackgroundTransparency = 1,
     }, {
         Divider
     })
     
-    return "Divider", {}
+    return "Divider", { __type = "Divider", ElementFrame = MainDivider }
 end
 
 return Element

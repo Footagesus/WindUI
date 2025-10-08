@@ -1,25 +1,12 @@
+-- This is just an example.
+
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 
-WindUI:Localization({
+local Localization = WindUI:Localization({
     Enabled = true,
     Prefix = "loc:",
     DefaultLanguage = "en",
     Translations = {
-        --[[["ru"] = {
-            ["WINDUI_EXAMPLE"] = "WindUI ÃƒÂÃ…Â¸Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â¼ÃƒÂÃ‚ÂµÃƒâ€˜Ã¢â€šÂ¬",
-            ["WELCOME"] = "ÃƒÂÃ¢â‚¬ÂÃƒÂÃ‚Â¾ÃƒÂÃ‚Â±Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â¾ ÃƒÂÃ‚Â¿ÃƒÂÃ‚Â¾ÃƒÂÃ‚Â¶ÃƒÂÃ‚Â°ÃƒÂÃ‚Â»ÃƒÂÃ‚Â¾ÃƒÂÃ‚Â²ÃƒÂÃ‚Â°Ãƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã…â€™ ÃƒÂÃ‚Â² WindUI!",
-            ["LIB_DESC"] = "ÃƒÂÃ¢â‚¬ËœÃƒÂÃ‚Â¸ÃƒÂÃ‚Â±ÃƒÂÃ‚Â»ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â¾Ãƒâ€˜Ã¢â‚¬Å¡ÃƒÂÃ‚ÂµÃƒÂÃ‚ÂºÃƒÂÃ‚Â° ÃƒÂÃ‚Â´ÃƒÂÃ‚Â»Ãƒâ€˜Ã‚Â Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â¾ÃƒÂÃ‚Â·ÃƒÂÃ‚Â´ÃƒÂÃ‚Â°ÃƒÂÃ‚Â½ÃƒÂÃ‚Â¸Ãƒâ€˜Ã‚Â ÃƒÂÃ‚ÂºÃƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â°Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â¸ÃƒÂÃ‚Â²Ãƒâ€˜Ã¢â‚¬Â¹Ãƒâ€˜Ã¢â‚¬Â¦ ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â½Ãƒâ€˜Ã¢â‚¬Å¡ÃƒÂÃ‚ÂµÃƒâ€˜Ã¢â€šÂ¬Ãƒâ€˜Ã¢â‚¬Å¾ÃƒÂÃ‚ÂµÃƒÂÃ‚Â¹Ãƒâ€˜Ã‚ÂÃƒÂÃ‚Â¾ÃƒÂÃ‚Â²",
-            ["SETTINGS"] = "ÃƒÂÃ‚ÂÃƒÂÃ‚Â°Ãƒâ€˜Ã‚ÂÃƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â¾ÃƒÂÃ‚Â¹ÃƒÂÃ‚ÂºÃƒÂÃ‚Â¸",
-            ["APPEARANCE"] = "ÃƒÂÃ¢â‚¬â„¢ÃƒÂÃ‚Â½ÃƒÂÃ‚ÂµÃƒâ€˜Ã‹â€ ÃƒÂÃ‚Â½ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â¹ ÃƒÂÃ‚Â²ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â´",
-            ["FEATURES"] = "ÃƒÂÃ‚Â¤Ãƒâ€˜Ã†â€™ÃƒÂÃ‚Â½ÃƒÂÃ‚ÂºÃƒâ€˜Ã¢â‚¬Â ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â¾ÃƒÂÃ‚Â½ÃƒÂÃ‚Â°ÃƒÂÃ‚Â»",
-            ["UTILITIES"] = "ÃƒÂÃ‹Å“ÃƒÂÃ‚Â½Ãƒâ€˜Ã‚ÂÃƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã¢â€šÂ¬Ãƒâ€˜Ã†â€™ÃƒÂÃ‚Â¼ÃƒÂÃ‚ÂµÃƒÂÃ‚Â½Ãƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã¢â‚¬Â¹",
-            ["UI_ELEMENTS"] = "UI ÃƒÂÃ‚Â­ÃƒÂÃ‚Â»ÃƒÂÃ‚ÂµÃƒÂÃ‚Â¼ÃƒÂÃ‚ÂµÃƒÂÃ‚Â½Ãƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã¢â‚¬Â¹",
-            ["CONFIGURATION"] = "ÃƒÂÃ…Â¡ÃƒÂÃ‚Â¾ÃƒÂÃ‚Â½Ãƒâ€˜Ã¢â‚¬Å¾ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â³Ãƒâ€˜Ã†â€™Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â°Ãƒâ€˜Ã¢â‚¬Â ÃƒÂÃ‚Â¸Ãƒâ€˜Ã‚Â",
-            ["SAVE_CONFIG"] = "ÃƒÂÃ‚Â¡ÃƒÂÃ‚Â¾Ãƒâ€˜Ã¢â‚¬Â¦Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â°ÃƒÂÃ‚Â½ÃƒÂÃ‚Â¸Ãƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã…â€™ ÃƒÂÃ‚ÂºÃƒÂÃ‚Â¾ÃƒÂÃ‚Â½Ãƒâ€˜Ã¢â‚¬Å¾ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â³Ãƒâ€˜Ã†â€™Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â°Ãƒâ€˜Ã¢â‚¬Â ÃƒÂÃ‚Â¸Ãƒâ€˜Ã…Â½",
-            ["LOAD_CONFIG"] = "ÃƒÂÃ¢â‚¬â€ÃƒÂÃ‚Â°ÃƒÂÃ‚Â³Ãƒâ€˜Ã¢â€šÂ¬Ãƒâ€˜Ã†â€™ÃƒÂÃ‚Â·ÃƒÂÃ‚Â¸Ãƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã…â€™ ÃƒÂÃ‚ÂºÃƒÂÃ‚Â¾ÃƒÂÃ‚Â½Ãƒâ€˜Ã¢â‚¬Å¾ÃƒÂÃ‚Â¸ÃƒÂÃ‚Â³Ãƒâ€˜Ã†â€™Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â°Ãƒâ€˜Ã¢â‚¬Â ÃƒÂÃ‚Â¸Ãƒâ€˜Ã…Â½",
-            ["THEME_SELECT"] = "ÃƒÂÃ¢â‚¬â„¢Ãƒâ€˜Ã¢â‚¬Â¹ÃƒÂÃ‚Â±ÃƒÂÃ‚ÂµÃƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â¸Ãƒâ€˜Ã¢â‚¬Å¡ÃƒÂÃ‚Âµ Ãƒâ€˜Ã¢â‚¬Å¡ÃƒÂÃ‚ÂµÃƒÂÃ‚Â¼Ãƒâ€˜Ã†â€™",
-            ["TRANSPARENCY"] = "ÃƒÂÃ…Â¸Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â¾ÃƒÂÃ‚Â·Ãƒâ€˜Ã¢â€šÂ¬ÃƒÂÃ‚Â°Ãƒâ€˜Ã¢â‚¬Â¡ÃƒÂÃ‚Â½ÃƒÂÃ‚Â¾Ãƒâ€˜Ã‚ÂÃƒâ€˜Ã¢â‚¬Å¡Ãƒâ€˜Ã…â€™ ÃƒÂÃ‚Â¾ÃƒÂÃ‚ÂºÃƒÂÃ‚Â½ÃƒÂÃ‚Â°"
-        },--]]
         ["en"] = {
             ["WINDUI_EXAMPLE"] = "WindUI Example",
             ["WELCOME"] = "Welcome to WindUI!",
@@ -33,7 +20,8 @@ WindUI:Localization({
             ["SAVE_CONFIG"] = "Save Configuration",
             ["LOAD_CONFIG"] = "Load Configuration",
             ["THEME_SELECT"] = "Select Theme",
-            ["TRANSPARENCY"] = "Window Transparency"
+            ["TRANSPARENCY"] = "Window Transparency",
+            ["LOCKED_TAB"] = "Locked Tab"
         }
     }
 })
@@ -95,15 +83,15 @@ WindUI.Services.mysuperservicetogetkey = {
             return setclipboard("link to key system service.")
         end
         
-        return {
-            -- ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Å“ do not change this!!1!1!1!1!1!!1!100
+        return { 
+        
             Verify = validateKey, -- <-----  THIS TOO IMPORTANT!!!!!
             Copy = copyLink -- <-------- IMPORTANT!1!1!1!1!1!1!11!
-            -- ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Ëœ do not change this!!1!1!1!1!1!!1!100
         }
     end
 }
 ]]
+
 
 local Window = WindUI:CreateWindow({
     Title = "loc:WINDUI_EXAMPLE",
@@ -112,6 +100,9 @@ local Window = WindUI:CreateWindow({
     Folder = "WindUI_Example",
     Size = UDim2.fromOffset(580, 490),
     Theme = "Dark",
+    
+    HidePanelBackground = false,
+    NewElements = false,
     -- Background = WindUI:Gradient({
     --     ["0"] = { Color = Color3.fromHex("#0f0c29"), Transparency = 1 },
     --     ["100"] = { Color = Color3.fromHex("#302b63"), Transparency = 0.9 },
@@ -130,10 +121,10 @@ local Window = WindUI:CreateWindow({
             })
         end
     },
-    Acrylic = true,
+    Acrylic = false,
     HideSearchBar = false,
     SideBarWidth = 200,
-    -- KeySystem = { -- <- ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Å“ remove this all, if you dont neet the key system
+    -- KeySystem = { -- 
     --     -- Key = { "1234", "5678" },  
     --     Note = "Example Key System. With platoboost, etc.",
     --     -- URL = "https://github.com/Footagesus/WindUI",
@@ -164,7 +155,7 @@ local Window = WindUI:CreateWindow({
     --             ScriptId = "...",
     --             Discord = "https://discord.com/invite/...",
     --         },
-    --         { -- Custom service ( ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬ËœÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Ëœ look at line 73 ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬ËœÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬Ëœ )
+    --         { -- Custom service 
     --             Type = "mysuperservicetogetkey",
     --             ServiceId = 42,
     --         }
@@ -181,7 +172,17 @@ local Window = WindUI:CreateWindow({
 })
 
 
+
 -- OPTIONAL   >:(
+
+
+Window.User:SetAnonymous(true)
+--Window.User:Disable()
+
+
+
+
+Window:SetIconSize(48)
 
 Window:Tag({
     Title = "v1.6.4",
@@ -233,29 +234,45 @@ Window:CreateTopbarButton("theme-switcher", "moon", function()
     })
 end, 990)
 
-local Tabs = {
+local Sections = {
     Main = Window:Section({ Title = "loc:FEATURES", Opened = true }),
     Settings = Window:Section({ Title = "loc:SETTINGS", Opened = true }),
     Utilities = Window:Section({ Title = "loc:UTILITIES", Opened = true })
 }
 
-local TabHandles = {
-    Elements = Tabs.Main:Tab({ Title = "loc:UI_ELEMENTS", Icon = "layout-grid", Desc = "UI Elements Example" }),
-    Appearance = Tabs.Settings:Tab({ Title = "loc:APPEARANCE", Icon = "brush" }),
-    Config = Tabs.Utilities:Tab({ Title = "loc:CONFIGURATION", Icon = "settings" })
+local Tabs = {
+    Elements = Sections.Main:Tab({ Title = "loc:UI_ELEMENTS", Icon = "layout-grid", Desc = "UI Elements Example" }),
+    Appearance = Sections.Settings:Tab({ Title = "loc:APPEARANCE", Icon = "brush" }),
+    Config = Sections.Utilities:Tab({ Title = "loc:CONFIGURATION", Icon = "settings" }),
+    LockedTab1 = Window:Tab({ Title = "loc:LOCKED_TAB", Icon = "bird", Locked = true, }),
+    LockedTab2 = Window:Tab({ Title = "loc:LOCKED_TAB", Icon = "bird", Locked = true, }),
+    LockedTab3 = Window:Tab({ Title = "loc:LOCKED_TAB", Icon = "bird", Locked = true, }),
+    LockedTab4 = Window:Tab({ Title = "loc:LOCKED_TAB", Icon = "bird", Locked = true, }),
+    LockedTab5 = Window:Tab({ Title = "loc:LOCKED_TAB", Icon = "bird", Locked = true, }),
 }
 
-TabHandles.Elements:Paragraph({
+-- Tabs.Elements:Paragraph({
+--     Title = "Interactive Components",
+--     Desc = "Explore WindUI's powerful elements",
+--     Image = "component",
+--     ImageSize = 20,
+--     Color = Color3.fromHex("#30ff6a"),
+-- })
+
+Tabs.Elements:Section({
     Title = "Interactive Components",
-    Desc = "Explore WindUI's powerful elements",
-    Image = "component",
-    ImageSize = 20,
-    Color = Color3.fromHex("#30ff6a"),
+    TextSize = 20,
 })
 
-TabHandles.Elements:Divider()
+Tabs.Elements:Section({
+    Title = "Explore WindUI's powerful elements",
+    TextSize = 16,
+    TextTransparency = .25,
+})
 
-local ElementsSection = TabHandles.Elements:Section({
+Tabs.Elements:Divider()
+
+local ElementsSection = Tabs.Elements:Section({
     Title = "Section Example",
     Icon = "bird",
 })
@@ -285,18 +302,29 @@ local intensitySlider = ElementsSection:Slider({
     end
 })
 
-local modeDropdown = ElementsSection:Dropdown({
-    Title = "Select Mode",
-    Values = { "Standard", "Advanced", "Expert" },
-    Value = "Standard",
+local values = {}
+
+for i = 1, 40 do
+    table.insert(values, "Test " .. i)
+end
+
+ElementsSection:Space()
+
+
+local testDropdown = ElementsSection:Dropdown({
+    Title = "Dropdown test",
+    Values = values,
+    Value = "Test 1",
     Callback = function(option)
-        WindUI:Notify({
-            Title = "Mode Changed",
-            Content = "Selected: "..option,
-            Duration = 2
-        })
+        -- WindUI:Notify({
+        --     Title = "Dropdown",
+        --     Content = "Selected: "..option,
+        --     Duration = 2
+        -- })
     end
 })
+
+testDropdown:Refresh(values)
 
 ElementsSection:Divider()
 
@@ -335,7 +363,7 @@ ElementsSection:Code({
     end
 })
 
-TabHandles.Appearance:Paragraph({
+Tabs.Appearance:Paragraph({
     Title = "Customize Interface",
     Desc = "Personalize your experience",
     Image = "palette",
@@ -354,9 +382,11 @@ local canchangedropdown = true
 
 
 
-local themeDropdown = TabHandles.Appearance:Dropdown({
+local themeDropdown = Tabs.Appearance:Dropdown({
     Title = "loc:THEME_SELECT",
     Values = themes,
+    SearchBarEnabled = true,
+    MenuWidth = 280,
     Value = "Dark",
     Callback = function(theme)
         canchangedropdown = false
@@ -371,7 +401,7 @@ local themeDropdown = TabHandles.Appearance:Dropdown({
     end
 })
 
-local transparencySlider = TabHandles.Appearance:Slider({
+local transparencySlider = Tabs.Appearance:Slider({
     Title = "loc:TRANSPARENCY",
     Value = { 
         Min = 0,
@@ -385,7 +415,7 @@ local transparencySlider = TabHandles.Appearance:Slider({
     end
 })
 
-local ThemeToggle = TabHandles.Appearance:Toggle({
+local ThemeToggle = Tabs.Appearance:Toggle({
     Title = "Enable Dark Mode",
     Desc = "Use dark color scheme",
     Value = true,
@@ -406,7 +436,7 @@ WindUI:OnThemeChange(function(theme)
 end)
 
 
-TabHandles.Appearance:Button({
+Tabs.Appearance:Button({
     Title = "Create New Theme",
     Icon = "plus",
     Callback = function()
@@ -423,7 +453,7 @@ TabHandles.Appearance:Button({
     end
 })
 
-TabHandles.Config:Paragraph({
+Tabs.Config:Paragraph({
     Title = "Configuration Manager",
     Desc = "Save and load your settings",
     Image = "save",
@@ -439,7 +469,7 @@ local MyPlayerData = {
     inventory = { "sword", "shield", "potion" }
 }
 
-TabHandles.Config:Input({
+Tabs.Config:Input({
     Title = "Config Name",
     Value = configName,
     Callback = function(value)
@@ -451,7 +481,7 @@ local ConfigManager = Window.ConfigManager
 if ConfigManager then
     ConfigManager:Init(Window)
     
-    TabHandles.Config:Button({
+    Tabs.Config:Button({
         Title = "loc:SAVE_CONFIG",
         Icon = "save",
         Variant = "Primary",
@@ -460,7 +490,7 @@ if ConfigManager then
             
             configFile:Register("featureToggle", featureToggle)
             configFile:Register("intensitySlider", intensitySlider)
-            configFile:Register("modeDropdown", modeDropdown)
+            configFile:Register("testDropdown", testDropdown)
             configFile:Register("themeDropdown", themeDropdown)
             configFile:Register("transparencySlider", transparencySlider)
             
@@ -485,7 +515,7 @@ if ConfigManager then
         end
     })
 
-    TabHandles.Config:Button({
+    Tabs.Config:Button({
         Title = "loc:LOAD_CONFIG",
         Icon = "folder",
         Callback = function()
@@ -505,7 +535,7 @@ if ConfigManager then
                     Duration = 5
                 })
                 
-                TabHandles.Config:Paragraph({
+                Tabs.Config:Paragraph({
                     Title = "Player Data",
                     Desc = string.format("Name: %s\nLevel: %d\nInventory: %s", 
                         MyPlayerData.name, 
@@ -523,7 +553,7 @@ if ConfigManager then
         end
     })
 else
-    TabHandles.Config:Paragraph({
+    Tabs.Config:Paragraph({
         Title = "Config Manager Not Available",
         Desc = "This feature requires ConfigManager",
         Image = "alert-triangle",
@@ -534,8 +564,8 @@ end
 
 
 local footerSection = Window:Section({ Title = "WindUI " .. WindUI.Version })
-TabHandles.Config:Paragraph({
-    Title = "Created with ❤️",
+Tabs.Config:Paragraph({
+    Title = "Github Repository",
     Desc = "github.com/Footagesus/WindUI",
     Image = "github",
     ImageSize = 20,
@@ -571,3 +601,35 @@ end)
 Window:OnDestroy(function()
     print("Window destroyed")
 end)
+
+Window:OnOpen(function()
+    print("Window opened")
+end)
+
+
+
+-- lock all elements
+Window:UnlockAll()
+
+-- unlock all elements
+--Window:UnlockAll()
+
+-- unlock all elements in tab
+task.wait(0.05)
+--  no working :( idk why 
+-- Tabs.Elements:LockAll()
+
+if Window:GetUnlocked() and #Window:GetUnlocked() > 0 then
+    print("Locked Elements in Window: ")
+    for _, lockedelement in next, Window:GetUnlocked() do
+        local title = lockedelement.Title
+        if string.find(title, Localization.Prefix) then
+            local translations = Localization.Translations[WindUI.Creator.Language] or Localization.Translations[Localization.DefaultLanguage]
+            title = translations[ title:gsub("^" .. Localization.Prefix, "") ]
+        end
+        print("- " .. (title or "Unknown"))
+    end
+    
+end
+
+

@@ -4,7 +4,7 @@ local WindUI = {
     Creator = require("./modules/Creator"),
     LocalizationModule = require("./modules/Localization"),
     NotificationModule = require("./components/Notification"),
-    Themes = require("./themes/init"),
+    Themes = nil,
     Transparent = false,
     
     TransparencyValue = .15,
@@ -12,7 +12,7 @@ local WindUI = {
     UIScale = 1,
     
     --ConfigManager = nil,
-    Version = "1.6.45",
+    Version = "0.0.0",
     
     Services = require("./utils/services/Init"),
     
@@ -26,30 +26,26 @@ local HttpService = game:GetService("HttpService")
 local Package = HttpService:JSONDecode(require("../build/package"))
 if Package then
     WindUI.Version = Package.version
-    --print(Package.name)
 end
 
 local KeySystem = require("./components/KeySystem")
 
 local ServicesModule = WindUI.Services
 
-local Themes = WindUI.Themes
 local Creator = WindUI.Creator
 
 local New = Creator.New
 local Tween = Creator.Tween
 
-Creator.Themes = Themes
 
 local Acrylic = require("./utils/Acrylic/Init")
 
 local LocalPlayer = game:GetService("Players") and game:GetService("Players").LocalPlayer or nil
---WindUI.Themes = Themes
 
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
-local GUIParent = gethui and gethui() or game.CoreGui
---local GUIParent = game.CoreGui
+local GUIParent = gethui and gethui() or (game.CoreGui or game.Players.LocalPlayer:WaitForChild("PlayerGui"))
+
 
 WindUI.ScreenGui = New("ScreenGui", {
     Name = "WindUI",
@@ -120,27 +116,27 @@ function WindUI:OnThemeChange(func)
 end
 
 function WindUI:AddTheme(LTheme)
-    Themes[LTheme.Name] = LTheme
+    WindUI.Themes[LTheme.Name] = LTheme
     return LTheme
 end
 
 function WindUI:SetTheme(Value)
-    if Themes[Value] then
-        WindUI.Theme = Themes[Value]
-        Creator.SetTheme(Themes[Value])
+    if WindUI.Themes[Value] then
+        WindUI.Theme = WindUI.Themes[Value]
+        Creator.SetTheme(WindUI.Themes[Value])
         
         if WindUI.OnThemeChangeFunction then
             WindUI.OnThemeChangeFunction(Value)
         end
         --Creator.UpdateTheme()
         
-        return Themes[Value]
+        return WindUI.Themes[Value]
     end
     return nil
 end
 
 function WindUI:GetThemes()
-    return Themes
+    return WindUI.Themes
 end
 function WindUI:GetCurrentTheme()
     return WindUI.Theme.Name
@@ -174,9 +170,6 @@ function WindUI:ToggleAcrylic(Value)
 	end
 end
 
-
-WindUI:SetTheme("Dark")
-WindUI:SetLanguage(Creator.Language)
 
 
 function WindUI:Gradient(stops, props)
@@ -222,6 +215,15 @@ function WindUI:Popup(PopupConfig)
 end
 
 
+WindUI.Themes = require("./themes/init")(WindUI)
+
+Creator.Themes = WindUI.Themes
+
+
+WindUI:SetTheme("Dark")
+WindUI:SetLanguage(Creator.Language)
+
+
 function WindUI:CreateWindow(Config)
     local CreateWindow = require("./components/window/Init")
     
@@ -244,7 +246,7 @@ function WindUI:CreateWindow(Config)
     
     local CanLoadWindow = true
     
-    local Theme = Themes[Config.Theme or "Dark"]
+    local Theme = WindUI.Themes[Config.Theme or "Dark"]
     
     --WindUI.Theme = Theme
     Creator.SetTheme(Theme)

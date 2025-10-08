@@ -113,7 +113,7 @@ function ConfigManager:Init(WindowTable)
     local files = ConfigManager:AllConfigs()
     
     for _, f in next, files do
-        if isfile(f .. ".json") then
+        if isfile and readfile and isfile(f .. ".json") then
             ConfigManager.Configs[f] = readfile(f .. ".json")
         end
     end
@@ -160,15 +160,20 @@ function ConfigManager:CreateConfig(configFilename)
         end
         
         local jsonData = HttpService:JSONEncode(saveData)
-        writefile(ConfigModule.Path, jsonData)
+        if writefile then 
+            writefile(ConfigModule.Path, jsonData)
+        end
+        
+        return saveData
     end
     
     function ConfigModule:Load()
-        if not isfile(ConfigModule.Path) then 
+        if isfile and not isfile(ConfigModule.Path) then 
             return false, "Config file does not exist" 
         end
         
         local success, loadData = pcall(function()
+            local readfile = readfile or function() warn("[ WindUI.ConfigManager ] The config system doesn't work in the studio.") return nil end
             return HttpService:JSONDecode(readfile(ConfigModule.Path))
         end)
         

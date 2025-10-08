@@ -16,8 +16,10 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded)
             ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
             Size = UDim2.new(0,24-3,0,24-3),
             BackgroundTransparency = 1,
+            ImageColor3 = Variant == "White" and Color3.new(0,0,0) or nil,
+            ImageTransparency = Variant == "White" and .4 or 0,
             ThemeTag = {
-                ImageColor3 = "Icon",
+                ImageColor3 = Variant ~= "White" and "Icon" or nil,
             }
         })
     end

@@ -1,11 +1,18 @@
-# 1.6.45
+# 1.6.53
 ## Changelog:
-- Now you can make Gradient Background for `Tag`
-- Some Changes in build
-- SearchBar UI Changes
-- Fixed some bugs
-- Added `WindUI:ToggleAcrylic(--[[boolean]])`
-- Added `Width` to `KeySystem.Thumbnail`
-- Added `Radius` to `Tag`
-- Added `Acrylic` to `Window`
-- Added More Icons (geist, craft)
+- Themes Rework (Gradients, Color3)
+- Fixed Label Colors
+- Fixed `Tab:Select()`
+- Fixed Dropdown Height
+- Fixed `Window.BackgroundImageTransparency`
+- Fixed Window Background Animation
+- Fixed Input
+- Fixed Section Center Text
+- Fixed OpenButton on PC
+- Fixed UI in studio (maybe)
+- Added `IconSize` to `Window`
+- Added `OpenButton` to `:CreateWindow()`
+- Added Icons to `Dropdown`
+- Added `IconOnly` to `OpenButton`
+- Added Section box
+- Added `:SetMax(number)` and `:SetMin(number)` to `Slider`

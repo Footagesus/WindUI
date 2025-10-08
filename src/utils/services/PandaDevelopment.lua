@@ -56,7 +56,7 @@ function PandaDevelopment.New(serviceId)
     end
     
     function GetKeyLink()
-        return "https://pandadevelopment.net/getkey?service=" .. tostring(serviceId) .. "&hwid=" .. tostring(hwid)
+        return "https://pandadevelopment.net/getkey?service=" .. tostring(serviceId) .. "&hwid=" .. tostring(hwid())
     end
     
     function CopyLink()

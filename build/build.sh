@@ -1,20 +1,26 @@
 #!/bin/bash
 
 MODE=${1:-"build"}
+INPUT_FILE=${2:-"./main.lua"}
+
 
 if [ "$MODE" = "dev" ]; then
-    INPUT_FILE="main.lua"
+    INPUT_FILE=${INPUT_FILE:-"./main.lua"}
     OUTPUT_FILE="dist/main.lua"
     CONFIG_FILE="build/darklua.dev.config.json"
-    # echo "Running in DEV mode (processing main.lua)"
 else
     INPUT_FILE="src/init.lua"
     OUTPUT_FILE="dist/main.lua"
     CONFIG_FILE="build/darklua.dev.config.json"
-    # echo "Running in BUILD mode (processing init.lua)"
 fi
 
-echo "-- Generated from package.json | build/build.sh \n\nreturn [[$(cat package.json)]]" > build/package.lua
+{
+    echo "-- Generated from package.json | build/build.sh"
+    echo ""
+    echo "return [["
+    cat package.json
+    echo "]]"
+} > build/package.lua
 
 DARKLUA_OUTPUT=$(darklua process "$INPUT_FILE" "$OUTPUT_FILE" --config "$CONFIG_FILE" 2>&1)
 

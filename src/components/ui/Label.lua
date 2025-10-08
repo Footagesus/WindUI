@@ -5,7 +5,7 @@ local New = Creator.New
 local Tween = Creator.Tween
 
 
-function Label.New(Text, Icon, Parent)
+function Label.New(Text, Icon, Parent, IsPlaceholder)
     local Radius = 10
     local IconLabelFrame
     if Icon and Icon ~= "" then
@@ -28,7 +28,7 @@ function Label.New(Text, Icon, Parent)
         Size = UDim2.new(1,IconLabelFrame and -29 or 0,1,0),
         TextXAlignment = "Left",
         ThemeTag = {
-            TextColor3 = "Text",
+            TextColor3 = IsPlaceholder and "Placeholder" or "Text",
         },
         Text = Text,
     })
@@ -48,14 +48,14 @@ function Label.New(Text, Icon, Parent)
                     ImageColor3 = "Accent",
                 },
                 Size = UDim2.new(1,0,1,0),
-                ImageTransparency = .85,
+                ImageTransparency = .97,
             }),
             Creator.NewRoundFrame(Radius, "SquircleOutline", {
                 ThemeTag = {
                     ImageColor3 = "Outline",
                 },
                 Size = UDim2.new(1,0,1,0),
-                ImageTransparency = .9,
+                ImageTransparency = .95,
             }, {
                 New("UIGradient", {
                     Rotation = 70,

@@ -12,7 +12,6 @@ function Element:New(Config)
         Title = Config.Title,
         Code = Config.Code,
         OnCopy = Config.OnCopy,
-        UIElements = {}
     }
     
     local CanCallback = not Code.Locked
@@ -44,7 +43,7 @@ function Element:New(Config)
                 })
             end
         end
-    end, Config.WindUI.UIScale)
+    end, Config.WindUI.UIScale, Code)
     
     function Code:SetCode(code)
         CodeElement.Set(code)
@@ -54,6 +53,8 @@ function Element:New(Config)
         CodeElement.Destroy()
         Code = nil
     end
+    
+    Code.ElementFrame = CodeElement.CodeFrame
     
     return Code.__type, Code
 end

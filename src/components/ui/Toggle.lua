@@ -26,12 +26,12 @@ function Toggle.New(Value, Icon, Parent, Callback)
     end
     
     local ToggleFrame = Creator.NewRoundFrame(Radius, "Squircle",{
-        ImageTransparency = .95,
+        ImageTransparency = .93,
         ThemeTag = {
             ImageColor3 = "Text"
         },
         Parent = Parent,
-        Size = UDim2.new(0,20*2.1,0,26),
+        Size = UDim2.new(0,26*1.6,0,26),
     }, {
         Creator.NewRoundFrame(Radius, "Squircle", {
             Size = UDim2.new(1,0,1,0),
@@ -63,16 +63,20 @@ function Toggle.New(Value, Icon, Parent, Callback)
             AnchorPoint = Vector2.new(0,0.5),
             ImageTransparency = 0,
             ImageColor3 =  Color3.new(1,1,1),
+            -- ThemeTag = {
+            --     ImageColor3 = "Icon",
+            -- },
             Name = "Frame",
         }, {
             IconToggleFrame,
         })
     })
     
-    function Toggle:Set(Toggled)
+    
+    function Toggle:Set(Toggled, isCallback)
         if Toggled then
-            Tween(ToggleFrame.Frame, 0.1, {
-                Position = UDim2.new(1, -18 - 4, 0.5, 0),
+            Tween(ToggleFrame.Frame, 0.15, {
+                Position = UDim2.new(1, -18 - 3 - 1, 0.5, 0),
                 --Size = UDim2.new(0,20,0,20),
             }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             Tween(ToggleFrame.Layer, 0.1, {
@@ -88,7 +92,7 @@ function Toggle.New(Value, Icon, Parent, Callback)
                 }):Play()
             end
         else
-            Tween(ToggleFrame.Frame, 0.1, {
+            Tween(ToggleFrame.Frame, 0.15, {
                 Position = UDim2.new(0, 4, 0.5, 0),
                 Size = UDim2.new(0,18,0,18),
             }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
@@ -106,8 +110,10 @@ function Toggle.New(Value, Icon, Parent, Callback)
             end
         end
 
+        if isCallback ~= false then isCallback = true end
+        
         task.spawn(function()
-            if Callback then
+            if Callback and isCallback then
                 Creator.SafeCallback(Callback, Toggled)
             end
         end)

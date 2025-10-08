@@ -171,6 +171,8 @@ function Code.New(Code, Title, Parent, Callback, UIScale)
         CopyButton,
     })
     
+    CodeModule.CodeFrame = CodeFrame
+    
     Creator.AddSignal(TextLabel:GetPropertyChangedSignal("TextBounds"), function()
         ScrollingFrame.Size = UDim2.new(1,0,0,(TextLabel.TextBounds.Y/(UIScale or 1)) + ((CodeModule.Padding+3)*2))
     end)

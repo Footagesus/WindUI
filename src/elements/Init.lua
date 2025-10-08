@@ -11,11 +11,17 @@ return {
         Colorpicker = require("./Colorpicker"),
         Section     = require("./Section"),
         Divider     = require("./Divider"),
+        Space       = require("./Space"),
+        Image       = require("./Image"),
     },
-    Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale)
-        for name, module in pairs(Elements) do
+    Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale, Tab)
+        for name, module in next, Elements do
             tbl[name] = function(self, config)
                 config = config or {}
+                config.Tab = Tab or tbl
+                config.ParentTable = tbl
+                config.Index = #tbl.Elements + 1
+                config.GlobalIndex = #Window.AllElements + 1
                 config.Parent = Container
                 config.Window = Window
                 config.WindUI = WindUI
@@ -23,8 +29,8 @@ return {
                 config.ElementsModule = ElementsModule
         
                 local elementInstance, content = module:New(config)
-                table.insert(tbl.Elements, content)
-        
+                
+                
                 local frame
                 for key, value in pairs(content) do
                     if typeof(value) == "table" and key:match("Frame$") then
@@ -34,15 +40,35 @@ return {
                 end
                 
                 if frame then
+                    content.ElementFrame = frame.UIElements.Main
                     function content:SetTitle(title)
                         frame:SetTitle(title)
                     end
                     function content:SetDesc(desc)
                         frame:SetDesc(desc)
                     end
+                    function content:Highlight()
+                        frame:Highlight()
+                    end
                     function content:Destroy()
+                        
+                        table.remove(Window.AllElements, config.GlobalIndex)
+                        table.remove(tbl.Elements, config.Index)
+                        table.remove(Tab.Elements, config.Index)
+                        tbl:UpdateAllElementShapes(tbl)
+                    
                         frame:Destroy()
                     end
+                end
+                
+                
+                
+                Window.AllElements[config.Index] = content
+                tbl.Elements[config.Index] =  content
+                if Tab then Tab.Elements[config.Index] =  content end
+                
+                if Window.NewElements then
+                    tbl:UpdateAllElementShapes(tbl)
                 end
                 
                 if OnElementCreateFunction then
@@ -51,6 +77,26 @@ return {
                 return content
             end
         end
-
-    end
+        function tbl:UpdateAllElementShapes(bbb)
+            for i, element in next, bbb.Elements do
+                local frame
+                for key, value in pairs(element) do
+                    if typeof(value) == "table" and key:match("Frame$") then
+                        frame = value
+                        break
+                    end
+                end
+                
+                if frame then
+                    --print("idx changed : " .. i .. " " .. (element.Title or "not found"))
+                    frame.Index = i
+                    if frame.UpdateShape then
+                        --print(" .changed: " .. i)
+                        frame.UpdateShape(bbb)
+                    end
+                end
+            end
+        end
+    end,
+    
 }

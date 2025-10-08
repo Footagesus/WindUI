@@ -32,6 +32,10 @@ function Element:New(Config)
         Parent = Config.Parent,
         TextOffset = 85,
         Hover = Keybind.CanChange,
+        Tab = Config.Tab,
+        Index = Config.Index,
+        Window = Config.Window,
+        ElementTable = Keybind,
     })
     
     Keybind.UIElements.Keybind = CreateLabel(Keybind.Value, nil, Keybind.KeybindFrame.UIElements.Main)
@@ -60,10 +64,12 @@ function Element:New(Config)
     end)
 
     function Keybind:Lock()
+        Keybind.Locked = true
         CanCallback = false
-        return Keybind.KeybindFrame:Lock()
+        return Keybind.KeybindtrueFrame:Lock()
     end
     function Keybind:Unlock()
+        Keybind.Locked = false
         CanCallback = true
         return Keybind.KeybindFrame:Unlock()
     end

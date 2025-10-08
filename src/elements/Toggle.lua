@@ -12,6 +12,7 @@ function Element:New(Config)
         __type = "Toggle",
         Title = Config.Title or "Toggle",
         Desc = Config.Desc or nil,
+        Locked = Config.Locked or false,
         Value = Config.Value,
         Icon = Config.Icon or nil,
         Type = Config.Type or "Toggle",
@@ -29,6 +30,9 @@ function Element:New(Config)
         Parent = Config.Parent,
         TextOffset = 44,
         Hover = false,
+        Tab = Config.Tab,
+        Index = Config.Index,
+        ElementTable = Toggle,
     })
     
     local CanCallback = true
@@ -40,10 +44,12 @@ function Element:New(Config)
     
 
     function Toggle:Lock()
+        Toggle.Locked = true
         CanCallback = false
         return Toggle.ToggleFrame:Lock()
     end
     function Toggle:Unlock()
+        Toggle.Locked = false
         CanCallback = true
         return Toggle.ToggleFrame:Unlock()
     end
@@ -63,18 +69,18 @@ function Element:New(Config)
         error("Unknown Toggle Type: " .. tostring(Toggle.Type))
     end
 
-    ToggleFrame.AnchorPoint = Vector2.new(1,0.5)
-    ToggleFrame.Position = UDim2.new(1,0,0.5,0)
+    ToggleFrame.AnchorPoint = Vector2.new(1,Config.Window.NewElements and 0 or 0.5)
+    ToggleFrame.Position = UDim2.new(1,0,Config.Window.NewElements and 0 or 0.5,0)
         
-    function Toggle:Set(v)
+    function Toggle:Set(v, isCallback)
         if CanCallback then
-            ToggleFunc:Set(v)
+            ToggleFunc:Set(v, isCallback)
             Toggled = v
             Toggle.Value = v
         end
     end
 
-    Toggle:Set(Toggled)
+    Toggle:Set(Toggled, false)
 
     Creator.AddSignal(Toggle.ToggleFrame.UIElements.Main.MouseButton1Click, function()
         Toggle:Set(not Toggled)

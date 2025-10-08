@@ -7,7 +7,7 @@ local Tween = Creator.Tween
 
 local TabModule = require("./Tab")
 
-function Section.New(SectionConfig, Parent, Folder, UIScale)
+function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
     local SectionModule = {
         Title = SectionConfig.Title or "Section",
         Icon = SectionConfig.Icon,
@@ -108,7 +108,7 @@ function Section.New(SectionConfig, Parent, Folder, UIScale)
         }, {
             New("UIListLayout", {
                 FillDirection = "Vertical",
-                Padding = UDim.new(0,0),
+                Padding = UDim.new(0,Window.Gap),
                 VerticalAlignment = "Bottom",
             }),
         })

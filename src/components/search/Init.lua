@@ -13,9 +13,9 @@ local Tween = Creator.Tween
 
 function SearchBar.new(TabModule, Parent, OnClose)
     local SearchBarModule = {
-        IconSize = 14,
+        IconSize = 18,
         Padding = 14,
-        Radius = 18,
+        Radius = 22,
         Width = 400,
         MaxHeight = 380,
         
@@ -42,7 +42,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
         BackgroundTransparency = 1,
         TextXAlignment = "Left",
         FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
-        TextSize = 17,
+        TextSize = 18,
     })
     
     local CloseButton = New("ImageLabel", {
@@ -51,9 +51,9 @@ function SearchBar.new(TabModule, Parent, OnClose)
         ImageRectOffset = Creator.Icon("x")[2].ImageRectPosition,
         BackgroundTransparency = 1,
         ThemeTag = {
-            ImageColor3 = "Text",
+            ImageColor3 = "Icon",
         },
-        ImageTransparency = .2,
+        ImageTransparency = .1,
         Size = UDim2.new(0,SearchBarModule.IconSize,0,SearchBarModule.IconSize)
     }, {
         New("TextButton", {
@@ -92,15 +92,18 @@ function SearchBar.new(TabModule, Parent, OnClose)
     local SearchFrame = Creator.NewRoundFrame(SearchBarModule.Radius, "Squircle", {
         Size = UDim2.new(1,0,1,0),
         ThemeTag = {
-            ImageColor3 = "Accent",
+            ImageColor3 = "Background",
         },
         ImageTransparency = 0,
     }, {
-        New("Frame", {
+        Creator.NewRoundFrame(SearchBarModule.Radius, "Squircle", {
             Size = UDim2.new(1,0,1,0),
             BackgroundTransparency = 1,
             --AutomaticSize = "Y",
             Visible = false,
+            ImageColor3 = Color3.new(1,1,1),
+            ImageTransparency = .98,
+            Name = "Frame",
         }, {
             New("Frame", { -- topbar search
                 Size = UDim2.new(1,0,0,46),
@@ -126,7 +129,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
                         ThemeTag = {
                             ImageColor3 = "Icon",
                         },
-                        ImageTransparency = .05,
+                        ImageTransparency = .1,
                         Size = UDim2.new(0,SearchBarModule.IconSize,0,SearchBarModule.IconSize)
                     }),
                     TextBox,
@@ -208,7 +211,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
             BackgroundTransparency = 1,
             Parent = Parent or nil
         }, {
-            Creator.NewRoundFrame(SearchBarModule.Radius-6, "Squircle", {
+            Creator.NewRoundFrame(SearchBarModule.Radius-11, "Squircle", {
                 Size = UDim2.new(1,0,0,0),
                 Position = UDim2.new(0.5,0,0.5,0),
                 AnchorPoint = Vector2.new(0.5,0.5),
@@ -219,7 +222,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
                 ImageTransparency = 1, -- .95
                 Name = "Main"
             }, {
-                Creator.NewRoundFrame(SearchBarModule.Radius-6, "SquircleOutline2", {
+                Creator.NewRoundFrame(SearchBarModule.Radius-11, "SquircleOutline2", {
                     Size = UDim2.new(1,0,1,0),
                     Position = UDim2.new(0.5,0,0.5,0),
                     AnchorPoint = Vector2.new(0.5,0.5),
@@ -249,9 +252,9 @@ function SearchBar.new(TabModule, Parent, OnClose)
                         ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
                         BackgroundTransparency = 1,
                         ThemeTag = {
-                            ImageColor3 = "Text",
+                            ImageColor3 = "Icon",
                         },
-                        ImageTransparency = .2,
+                        ImageTransparency = .1,
                         Size = UDim2.new(0,SearchBarModule.IconSize,0,SearchBarModule.IconSize)
                     }),
                     New("Frame", {
@@ -279,7 +282,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
                                 TextColor3 = "Text",
                             },
                             TextSize = 15,
-                            TextTransparency = .25,
+                            TextTransparency = .3,
                             BackgroundTransparency = 1,
                             TextXAlignment = "Left",
                             FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
@@ -395,7 +398,8 @@ function SearchBar.new(TabModule, Parent, OnClose)
                             Title = elem.Title,
                             Desc = elem.Desc,
                             Original = elem,
-                            __type = elem.__type
+                            __type = elem.__type,
+                            Index = elemindex,
                         }
                     end
                 end
@@ -439,6 +443,10 @@ function SearchBar.new(TabModule, Parent, OnClose)
                         CreateSearchTab(e.Title, e.Desc, ElementIcon, TabMainElement:FindFirstChild("ParentContainer") and TabMainElement.ParentContainer.Frame or nil, false, function()
                             SearchBarModule:Close()
                             TabModule:SelectTab(tabindex) 
+                            if i.Tab.ScrollToTheElement then
+                                --print("uooo")
+                                i.Tab:ScrollToTheElement(e.Index)
+                            end
                             --
                         end)
                         --task.wait(0)

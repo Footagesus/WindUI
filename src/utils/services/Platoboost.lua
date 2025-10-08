@@ -57,7 +57,8 @@ function Platoboost.New(Service, Secret)
                     identifier = lDigest(fGetHwid())
                 }),
                 Headers = {
-                    ["Content-Type"] = "application/json"
+                    ["Content-Type"] = "application/json",
+                    ["User-Agent"] = "Roblox/Exploit"
                 }
             });
     
