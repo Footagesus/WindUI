@@ -381,11 +381,11 @@ local testDropdown = ElementsSection:Dropdown({
     SearchBarEnabled = true,
     Value = "Test 1",
     Callback = function(option)
-        -- WindUI:Notify({
-        --     Title = "Dropdown",
-        --     Content = "Selected: "..option,
-        --     Duration = 2
-        -- })
+    	WindUI:Notify({
+            Title = "Dropdown",
+            Content = "Selected: "..option,
+            Duration = 2
+        })
     end
 })
 
