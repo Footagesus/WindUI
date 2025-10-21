@@ -25,6 +25,9 @@ function PandaDevelopment.New(serviceId)
                 Headers = { ["User-Agent"] = "Roblox/Exploit" }
             })
         end)
+
+        print(success)
+        print(response)
         
         if success and response then
             if response.Success then
