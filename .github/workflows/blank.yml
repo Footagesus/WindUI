@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 18
 
@@ -22,15 +22,15 @@ jobs:
         run: npm install
 
       - name: Setup Lua
-        uses: leafo/gh-actions-lua@v10
+        uses: leafo/gh-actions-lua@v11
         with:
           luaVersion: "5.1"
 
-      - name: Setup LuaRocks
-        uses: leafo/gh-actions-luarocks@v4
+      - name: Setup Aftman
+        uses: ok-nick/setup-aftman@v0.3.0
 
-      - name: Install darklua
-        run: luarocks install darklua
+      - name: Install Rojo, Lune and DarkLua
+        run: aftman install
 
       - name: Run build
         run: sh build/build.sh build
