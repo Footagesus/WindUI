@@ -31,6 +31,7 @@ return function(Config)
         Resizable = Config.Resizable ~= false,
         Background = Config.Background,
         BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
+        ShadowTransparency = Config.ShadowTransparency or 0.7,
         User = Config.User or {},
         
         Size = Config.Size,
@@ -41,6 +42,8 @@ return function(Config)
         TopBarButtonIconSize = Config.TopBarButtonIconSize or 16,
         
         ToggleKey = Config.ToggleKey,
+        ElementsRadius = Config.ElementsRadius,
+        Radius = Config.Radius or 16,
         Transparent = Config.Transparent or false,
         HideSearchBar = Config.HideSearchBar ~= false,
         ScrollBarEnabled = Config.ScrollBarEnabled or false,
@@ -53,7 +56,7 @@ return function(Config)
         OpenButton = Config.OpenButton,
         
         Position = UDim2.new(0.5, 0, 0.5, 0),
-        UICorner = 16,
+        UICorner = nil, -- Window.Radius (16)
         UIPadding = 14,
         UIElements = {},
         CanDropdown = true,
@@ -86,10 +89,11 @@ return function(Config)
         PendingFlags = {},
     }
     
+    Window.UICorner = Window.Radius
     
     Window.ElementConfig = {
-        UIPadding = Window.NewElements and 10 or 13,
-        UICorner = Window.NewElements and 23 or 12,
+        UIPadding = (Window.NewElements and 10 or 13),
+        UICorner = Window.ElementsRadius or (Window.NewElements and 23 or 12),
     }
     
     local WindowSize = Window.Size or UDim2.new(0, 580, 0, 460)
@@ -275,10 +279,13 @@ return function(Config)
         })
     })
     
-    local Blur = New("ImageLabel", {
+    local Blur = New("ImageLabel", { -- Shadow
         Image = "rbxassetid://8992230677",
-        ImageColor3 = Color3.new(0,0,0),
-        ImageTransparency = 1, -- 0.7
+        ThemeTag = {
+            ImageColor3 = "WindowShadow",
+            --ImageTransparency = "WindowShadowTransparency",
+        },
+        ImageTransparency = 1, -- .7
         Size = UDim2.new(1,120,1,116),
         Position = UDim2.new(0,-120/2,0,-116/2),
         ScaleType = "Slice",
@@ -287,6 +294,7 @@ return function(Config)
         ZIndex = -999999999999999,
         Name = "Blur",
     })
+    
 
 
     if UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled then
@@ -472,12 +480,6 @@ return function(Config)
     local BGVideo = typeof(Window.Background) == "string" and string.match(Window.Background, "^video:(.+)") or nil
     local BGImageUrl = typeof(Window.Background) == "string" and not BGVideo and string.match(Window.Background, "^https?://.+") or nil
     
-    local function SanitizeFilename(str)
-        str = str:gsub("[%s/\\:*?\"<>|]+", "-")
-        str = str:gsub("[^%w%-_%.]", "")
-        return str
-    end
-    
     local function GetImageExtension(url)
         local ext = url:match("%.(%w+)$") or url:match("%.(%w+)%?")
         if ext then
@@ -493,14 +495,14 @@ return function(Config)
         IsVideoBG = true
     
         if string.find(BGVideo, "http") then
-            local videoPath = Window.Folder .. "/assets/." .. SanitizeFilename(BGVideo) .. ".webm"
+            local videoPath = Window.Folder .. "/assets/." .. Creator.SanitizeFilename(BGVideo) .. ".webm"
             if not isfile(videoPath) then
                 local success, result = pcall(function()
                     local response = Creator.Request({Url = BGVideo, Method="GET", Headers = { ["User-Agent"] = "Roblox/Exploit" }})
                     writefile(videoPath, response.Body)
                 end)
                 if not success then
-                    warn("[ Window.Background ] Failed to download video: " .. tostring(result))
+                    warn("[ WindUI.Window.Background ] Failed to download video: " .. tostring(result))
                     return
                 end
             end
@@ -509,9 +511,10 @@ return function(Config)
                 return getcustomasset(videoPath)
             end)
             if not success then
-                warn("[ Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
+                warn("[ WindUI.Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
                 return
             end
+            warn("[ WindUI.Window.Background ] VideoFrame may not work with custom video")
             BGVideo = customAsset
         end
     
@@ -529,7 +532,7 @@ return function(Config)
         BGImage:Play()
     
     elseif BGImageUrl then
-        local imagePath = Window.Folder .. "/assets/." .. SanitizeFilename(BGImageUrl) .. GetImageExtension(BGImageUrl)
+        local imagePath = Window.Folder .. "/assets/." .. Creator.SanitizeFilename(BGImageUrl) .. GetImageExtension(BGImageUrl)
         if not isfile(imagePath) then
             local success, result = pcall(function()
                 local response = Creator.Request({Url = BGImageUrl, Method="GET", Headers = { ["User-Agent"] = "Roblox/Exploit" }})
@@ -606,7 +609,7 @@ return function(Config)
             TextSize = 13,
             LayoutOrder = 2,
             ThemeTag = {
-                TextColor3 = "TopbarAuthor"
+                TextColor3 = "WindowTopbarAuthor"
             },
             Name = "Author",
         })
@@ -629,7 +632,7 @@ return function(Config)
         TextXAlignment = "Left",
         TextSize = 16,
         ThemeTag = {
-            TextColor3 = "TopbarTitle"
+            TextColor3 = "WindowTopbarTitle"
         }
     })
     
@@ -802,16 +805,16 @@ return function(Config)
             Icon,
             0,
             Window.Folder,
-            "TopbarIcon",
+            "WindowTopbarIcon",
             true,
             IconThemed,
-            "TopbarButtonIcon"
+            "WindowTopbarButtonIcon"
         )
         IconFrame.Size = UDim2.new(0,Window.TopBarButtonIconSize,0,Window.TopBarButtonIconSize)
         IconFrame.AnchorPoint = Vector2.new(0.5,0.5)
         IconFrame.Position = UDim2.new(0.5,0,0.5,0)
         
-        local Button = Creator.NewRoundFrame(9, "Squircle", {
+        local Button = Creator.NewRoundFrame(Window.UICorner-(Window.UIPadding/2), "Squircle", {
             Size = UDim2.new(0,36,0,36),
             LayoutOrder = LayoutOrder or 999,
             Parent = Window.UIElements.Main.Main.Topbar.Right,
@@ -822,7 +825,7 @@ return function(Config)
             },
             ImageTransparency = 1 -- .93
         }, {
-            Creator.NewRoundFrame(9, "SquircleOutline", {
+            Creator.NewRoundFrame(Window.UICorner-(Window.UIPadding/2), "SquircleOutline", {
                 Size = UDim2.new(1,0,1,0),
                 ThemeTag = {
                     ImageColor3 = "Text",
@@ -932,7 +935,7 @@ return function(Config)
                 "Window",
                 true,
                 Window.IconThemed,
-                "TopbarIcon"
+                "WindowTopbarIcon"
             )
             WindowIcon.Parent = Window.UIElements.Main.Main.Topbar.Left
             WindowIcon.Size = UDim2.new(0,Window.IconSize,0,Window.IconSize)
@@ -1120,7 +1123,7 @@ return function(Config)
             end
             
             --Tween(Window.UIElements.Main.Background.UIScale, 0.2, {Scale = 1}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
-            Tween(Blur, 0.25, {ImageTransparency = .7}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(Blur, 0.25, {ImageTransparency = Window.ShadowTransparency}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             if UIStroke then
                 Tween(UIStroke, 0.25, {Transparency = .8}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end

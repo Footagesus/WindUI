@@ -1,4 +1,6 @@
-# 1.6.56
+# 1.6.6
 ## Changelog:
-- Fixed Window Background (theme)
-- Fixed Tags (no longer cover the title)
+- Fixed `Image` in `Paragraph` element (element image)
+- Fixed Multi Dropdown
+- Dropdown is now more advanced (example at [main_example.lua](https://github.com/Footagesus/WindUI/blob/main/main_example.lua))
+- 

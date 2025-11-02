@@ -18,7 +18,7 @@ function PopupModule.new(PopupConfig)
     }
     
     local DialogInit = require("../window/Dialog").Init(nil, PopupConfig.WindUI.ScreenGui.Popups)
-    local Dialog = DialogInit.Create(true)
+    local Dialog = DialogInit.Create(true, "Popup")
     
     local ThumbnailSize = 200
     
@@ -42,7 +42,8 @@ function PopupModule.new(PopupConfig)
             PopupConfig.WindUI.Window,
             "Popup",
             true,
-            PopupConfig.IconThemed
+            PopupConfig.IconThemed,
+            "PopupIcon"
         )
         IconFrame.Size = UDim2.new(0,Popup.IconSize,0,Popup.IconSize)
         IconFrame.LayoutOrder = -1
@@ -56,7 +57,7 @@ function PopupModule.new(PopupConfig)
         TextXAlignment = "Left",
         FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
         ThemeTag = {
-            TextColor3 = "Text",
+            TextColor3 = "PopupTitle",
         },
         TextSize = 20,
         TextWrapped = true,
@@ -99,7 +100,7 @@ function PopupModule.new(PopupConfig)
             TextSize = 18,
             TextTransparency = .2,
             ThemeTag = {
-                TextColor3 = "Text",
+                TextColor3 = "PopupContent",
             },
             BackgroundTransparency = 1,
             RichText = true,

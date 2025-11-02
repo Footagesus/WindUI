@@ -6,7 +6,6 @@
     
     v{{VERSION}}  |  {{BUILD_DATE}}  |  {{DESCRIPTION}}
     
-    This script is NOT intended to be modified.
     To view the source code, see the `src/` folder on the official GitHub repository.
     
     Author: Footagesus (Footages, .ftgs, oftgs)

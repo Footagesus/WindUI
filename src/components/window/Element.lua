@@ -164,6 +164,7 @@ return function(Config)
             Config.Window.NewElements and Element.UICorner-11 or (Element.UICorner-4), 
             Config.Window.Folder,
             "Image",
+            Element.IconThemed,
             not Element.Color and true or false,
             "ElementIcon"
         )
@@ -491,76 +492,42 @@ return function(Config)
         end
     end
     
-    function Element:SetImage(newImage, newSize, newColor, newIconThemed)
+    function Element:SetImage(newImage, newSize)
         Element.Image = newImage
         if newSize then
             Element.ImageSize = newSize
             ImageSize = newSize
         end
-        if newColor ~= nil then
-            Element.Color = newColor
-        end
-        if newIconThemed ~= nil then
-            Element.IconThemed = newIconThemed
-        end
         
-        if ImageFrame then
-            if newImage then
-                ImageFrame.Size = UDim2.new(0,ImageSize,0,ImageSize)
-                Creator.UpdateImage(ImageFrame, newImage, Element.Title)
-                
-                if typeof(Element.Color) == "string" then 
-                    ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
-                elseif typeof(Element.Color) == "Color3" then
-                    ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Element.Color)
-                elseif not Element.Color then
-                    ImageFrame.ImageLabel.ImageColor3 = Color3.new(1,1,1)
-                end
-                
-                ImageFrame.Visible = true
-                IconOffset = ImageSize
-            else
-                ImageFrame.Visible = false
-                IconOffset = 0
+        if newImage then
+            ImageFrame = Creator.Image(
+                newImage, 
+                Element.Title, 
+                Element.UICorner-3, 
+                Config.Window.Folder,
+                "Image",
+                not Element.Color and true or false
+            )
+            
+            if typeof(Element.Color) == "string" then 
+                ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
+            elseif typeof(Element.Color) == "Color3" then
+                ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Element.Color)
             end
+            
+            ImageFrame.Visible = true
+
+            ImageFrame.Size = UDim2.new(0,ImageSize,0,ImageSize)
+            IconOffset = ImageSize
+            
         else
-            if newImage then
-                ImageFrame = Creator.Image(
-                    newImage, 
-                    Element.Title, 
-                    Element.UICorner-3, 
-                    Config.Window.Folder,
-                    "Image",
-                    not Element.Color and true or false
-                )
-                
-                if typeof(Element.Color) == "string" then 
-                    ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
-                elseif typeof(Element.Color) == "Color3" then
-                    ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Element.Color)
-                end
-                
-                ImageFrame.Size = UDim2.new(0,ImageSize,0,ImageSize)
-                IconOffset = ImageSize
-                
-                local horizontalContainer = Element.UIElements.Container:FindFirstChild("Frame")
-                if horizontalContainer then
-                    ImageFrame.Parent = horizontalContainer
-                    local layout = horizontalContainer:FindFirstChild("UIListLayout")
-                    if layout then
-                        ImageFrame.LayoutOrder = 0
-                    end
-                end
+            if ImageFrame then
+                ImageFrame.Visible = true
             end
+            IconOffset = 0
         end
         
-        -- local textContainer = Element.UIElements.Container.TitleFrame
-        -- if textContainer then
-        --     local textFrame = textContainer:FindFirstChild("Frame")
-        --     if textFrame then
-        --         textFrame.Size = UDim2.new(1,-IconOffset,1,0)
-        --     end
-        -- end
+        Element.UIElements.Container.TitleFrame.TitleFrame.Size = UDim2.new(1,-IconOffset,1,0)
     end
     
     function Element:Destroy()

@@ -45,7 +45,7 @@ function Element:New(Config)
     --     })
     -- })
     
-    local aspectRatio = ParseAspectRatio(Config.AspectRatio)
+    local aspectRatio = ParseAspectRatio(ImageModule.AspectRatio)
     local aspectRatioConstraint = nil
     
     if aspectRatio then

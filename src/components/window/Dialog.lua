@@ -16,7 +16,7 @@ function DialogModule.Init(WindowTable, Parent)
     return DialogModule
 end
 
-function DialogModule.Create(Key)
+function DialogModule.Create(Key, Type)
     local Dialog = {
         UICorner = 24,
         UIPadding = 15,
@@ -25,6 +25,8 @@ function DialogModule.Create(Key)
     
     if Key then Dialog.UIPadding = 0 end -- 16
     if Key then Dialog.UICorner  = 26 end
+    
+    Type = Type or "Dialog"
     
     if not Key then
         Dialog.UIElements.FullScreen = New("Frame", {
@@ -45,7 +47,7 @@ function DialogModule.Create(Key)
     Dialog.UIElements.Main = New("Frame", {
         Size = UDim2.new(0,280,0,0),
         ThemeTag = {
-            BackgroundColor3 = "Dialog",
+            BackgroundColor3 = Type .. "Background",
         },
         AutomaticSize = "Y",
         BackgroundTransparency = 1, -- .7
@@ -69,7 +71,8 @@ function DialogModule.Create(Key)
         AnchorPoint = Vector2.new(0.5,0.5),
         AutomaticSize = "XY",
         ThemeTag = {
-            ImageColor3 = "Dialog"
+            ImageColor3 = Type .. "Background",
+            ImageTransparency = Type .. "BackgroundTransparency",
         },
         ZIndex = 9999,
     }, {
@@ -82,22 +85,22 @@ function DialogModule.Create(Key)
         -- New("UIScale", {
         --     Scale = .9
         -- }),
-        Creator.NewRoundFrame(Dialog.UICorner, "SquircleOutline2", {
-            Size = UDim2.new(1,0,1,0),
-            ImageTransparency = 1,
-            ThemeTag = {
-                ImageColor3 = "Outline",
-            },
-        }, {
-            New("UIGradient", {
-                Rotation = 45,
-                Transparency = NumberSequence.new({
-                    NumberSequenceKeypoint.new(0, 0.55),
-                    NumberSequenceKeypoint.new(0.5, 0.8),
-                    NumberSequenceKeypoint.new(1, 0.6)
-                })
-            })
-        })
+        -- Creator.NewRoundFrame(Dialog.UICorner, "SquircleOutline2", {
+        --     Size = UDim2.new(1,0,1,0),
+        --     ImageTransparency = 1,
+        --     ThemeTag = {
+        --         ImageColor3 = "Outline",
+        --     },
+        -- }, {
+        --     New("UIGradient", {
+        --         Rotation = 45,
+        --         Transparency = NumberSequence.new({
+        --             NumberSequenceKeypoint.new(0, 0.55),
+        --             NumberSequenceKeypoint.new(0.5, 0.8),
+        --             NumberSequenceKeypoint.new(1, 0.6)
+        --         })
+        --     })
+        -- })
     })
 
     function Dialog:Open()

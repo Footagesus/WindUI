@@ -13,6 +13,7 @@ return {
         Divider     = require("./Divider"),
         Space       = require("./Space"),
         Image       = require("./Image"),
+        --Video       = require("./Video"),
     },
     Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale, Tab)
         for name, module in next, Elements do
@@ -78,13 +79,12 @@ return {
                         frame:Highlight()
                     end
                     function content:Destroy()
+                        frame:Destroy()
                         
                         table.remove(Window.AllElements, config.GlobalIndex)
                         table.remove(tbl.Elements, config.Index)
                         table.remove(Tab.Elements, config.Index)
                         tbl:UpdateAllElementShapes(tbl)
-                    
-                        frame:Destroy()
                     end
                 end
                 

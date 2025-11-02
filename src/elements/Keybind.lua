@@ -66,7 +66,7 @@ function Element:New(Config)
     function Keybind:Lock()
         Keybind.Locked = true
         CanCallback = false
-        return Keybind.KeybindtrueFrame:Lock()
+        return Keybind.KeybindFrame:Lock()
     end
     function Keybind:Unlock()
         Keybind.Locked = false

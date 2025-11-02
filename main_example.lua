@@ -20,6 +20,18 @@ do
 end
 
 
+WindUI:Popup({
+    Title = "Welcome to the WindUI!",
+    Icon = "bird",
+    Content = "Hello!",
+    Buttons = {
+        {
+            Title = "Hahaha",
+            Icon = "bird",
+        }
+    }
+})
+
 -- */  Window  /* --
 local Window = WindUI:CreateWindow({
     Title = ".ftgs hub  |  WindUI Example",
@@ -49,6 +61,7 @@ local Window = WindUI:CreateWindow({
 do
     Window:Tag({
         Title = "v" .. WindUI.Version,
+        Icon = "github",
         Color = Color3.fromHex("#6b31ff")
     })
 end
@@ -215,7 +228,7 @@ local function tableToClipboard(luau_table, indent)
 end
 
 
--- */  Abo ut Tab  /* --
+-- */  About Tab  /* --
 do
     local AboutTab = Window:Tab({
         Title = "About WindUI",
@@ -300,7 +313,7 @@ local OtherSection = Window:Section({
 
 -- */ Using Nebula Icons /* --
 do
-    local NebulaIcons = loadstring(game:HttpGet("https://raw.nebulasoftworks.xyz/nebula-icon-library-loader"))()
+    local NebulaIcons = loadstring(game:HttpGetAsync("https://raw.nebulasoftworks.xyz/nebula-icon-library-loader"))()
     
     -- Adding icons (e.g. Fluency)
     WindUI.Creator.AddIcons("fluency",    NebulaIcons.Fluency)
@@ -481,7 +494,80 @@ do
 end
 
 
+-- */  Dropdown Tab  /* --
+do
+    local DropdownTab = ElementsSection:Tab({
+        Title = "Dropdown",
+        Icon = "logs",
+    })
+    
+    
+    DropdownTab:Dropdown({
+        Title = "Advanced Dropdown (example)",
+        Values = {
+            {
+                Title = "New file",
+                Desc = "Create a new file",
+                Icon = "file-plus",
+                Callback = function() 
+                    print("Clicked 'New File'")
+                end
+            },
+            {
+                Title = "Copy link",
+                Desc = "Copy the file link",
+                Icon = "copy",
+                Callback = function() 
+                    print("Clicked 'Copy link'")
+                end
+            },
+            {
+                Title = "Edit file",
+                Desc = "Allows you to edit the file",
+                Icon = "file-pen",
+                Callback = function() 
+                    print("Clicked 'Edit file'")
+                end
+            },
+            {
+                Type = "Divider",
+            },
+            {
+                Title = "Delete file",
+                Desc = "Permanently delete the file",
+                Icon = "trash",
+                Callback = function() 
+                    print("Clicked 'Delete file'")
+                end
+            },
+        }
+    })
+    
+    DropdownTab:Space()
+    
+    
+end
 
+
+
+--[[  idk. VideoFrame is not working with custom video on exploits
+      I don't know why
+    
+-- */  Video Tab  /* --
+do
+    local VideoTab = ElementsSection:Tab({
+        Title = "Video",
+        Icon = "video",
+    })
+    
+    VideoTab:Video({
+        Title = "My Video Hahahah", -- optional
+        Author = ".ftgs", -- optional
+        Video = "https://cdn.discordapp.com/attachments/1337368451865645096/1402703845657673878/VID_20250616_180732_158.webm?ex=68fc5f01&is=68fb0d81&hm=f4f0a88dbace2d3cef92535b2e57effae6d4c4fc444338163faafa7f3fdac529&"
+    })
+end
+
+--]]
 
 
 -- */  Config Usage  /* --
@@ -531,6 +617,34 @@ do -- config elements
             print("Category selected: " .. option.Title .. " with icon " .. option.Icon) 
         end
     })
+    ConfigElementsTab:Dropdown({
+        Flag = "DropdownTest2",
+        Title = "Advanced Dropdown 2",
+        Values = {
+            {
+                Title = "Category A",
+                Icon = "bird"
+            },
+            {
+                Title = "Category B",
+                Icon = "house"
+            },
+            {
+                Title = "Category C",
+                Icon = "droplet"
+            },
+        },
+        Value = "Category A",
+        Multi = true,
+        Callback = function(options) 
+            local titles = {}
+            for _, v in ipairs(options) do
+                table.insert(titles, v.Title)
+            end
+            print("Selected: " .. table.concat(titles, ", "))
+        end
+    })
+    
     
     ConfigElementsTab:Space()
     
