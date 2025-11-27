@@ -151,10 +151,11 @@ function Element:New(Config)
     
                 if Value ~= LastValue then
                     Tween(Slider.UIElements.SliderIcon.Frame, 0.05, {Size = UDim2.new(delta,0,1,0)}):Play()
-                    Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(Value)
-                    Slider.Value.Default = FormatValue(Value)
+                    local formatted = FormatValue(Value)
+                    Slider.UIElements.SliderContainer.TextBox.Text = formatted
+                    Slider.Value.Default = formatted
                     LastValue = Value
-                    Creator.SafeCallback(Slider.Callback, FormatValue(Value))
+                    Creator.SafeCallback(Slider.Callback, tonumber(formatted))
                 end
     
                 if input then
@@ -168,10 +169,11 @@ function Element:New(Config)
     
                         if Value ~= LastValue then
                             Tween(Slider.UIElements.SliderIcon.Frame, 0.05, {Size = UDim2.new(delta,0,1,0)}):Play()
-                            Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(Value)
-                            Slider.Value.Default = FormatValue(Value)
+                            local formatted = FormatValue(Value)
+                            Slider.UIElements.SliderContainer.TextBox.Text = formatted
+                            Slider.Value.Default = formatted
                             LastValue = Value
-                            Creator.SafeCallback(Slider.Callback, FormatValue(Value))
+                            Creator.SafeCallback(Slider.Callback, tonumber(formatted))
                         end
                     end)
                     releaseconnection = cloneref(game:GetService("UserInputService")).InputEnded:Connect(function(endInput)
