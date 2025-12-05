@@ -34,6 +34,8 @@ return function(Config)
         BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
         ShadowTransparency = Config.ShadowTransparency or 0.7,
         User = Config.User or {},
+        Footer = Config.Footer or {},
+        Topbar = Config.Topbar or { Height = 52, ButtonsType = "Default" }, -- Default or Mac
         
         Size = Config.Size,
         
@@ -106,6 +108,10 @@ return function(Config)
         WindowSize.Y.Scale,
         math.clamp(WindowSize.Y.Offset, Window.MinSize.Y, Window.MaxSize.Y)
     )
+    
+    if Window.Topbar == {} then
+        Window.Topbar = { Height = 52, ButtonsType = "Default" }
+    end
     
     if Window.Folder then
         if not isfolder("WindUI/" .. Window.Folder) then
@@ -215,7 +221,7 @@ return function(Config)
             Name = "Frame",
         }, {
             New("UIPadding", {
-                PaddingTop = UDim.new(0,Window.UIPadding/2),
+                --PaddingTop = UDim.new(0,Window.UIPadding/2),
                 --PaddingLeft = UDim.new(0,4+(Window.UIPadding/2)),
                 --PaddingRight = UDim.new(0,4+(Window.UIPadding/2)),
                 PaddingBottom = UDim.new(0,Window.UIPadding/2),
@@ -235,8 +241,8 @@ return function(Config)
     })
     
     Window.UIElements.SideBarContainer = New("Frame", {
-        Size = UDim2.new(0,Window.SideBarWidth,1,Window.User.Enabled and -52 -42 -(Window.UIPadding*2) or -52 ),
-        Position = UDim2.new(0,0,0,52),
+        Size = UDim2.new(0,Window.SideBarWidth,1,Window.User.Enabled and -Window.Topbar.Height -42 -(Window.UIPadding*2) or -Window.Topbar.Height ),
+        Position = UDim2.new(0,0,0,Window.Topbar.Height),
         BackgroundTransparency = 1,
         Visible = true,
     }, {
@@ -261,7 +267,7 @@ return function(Config)
     
 
     Window.UIElements.MainBar = New("Frame", {
-        Size = UDim2.new(1,-Window.UIElements.SideBarContainer.AbsoluteSize.X,1,-52),
+        Size = UDim2.new(1,-Window.UIElements.SideBarContainer.AbsoluteSize.X,1,-Window.Topbar.Height),
         Position = UDim2.new(1,0,1,0),
         AnchorPoint = Vector2.new(1,1),
         BackgroundTransparency = 1,
@@ -275,7 +281,7 @@ return function(Config)
             Visible = not Window.HidePanelBackground
         }),
         New("UIPadding", {
-            PaddingTop = UDim.new(0,Window.UIPadding/2),
+            --PaddingTop = UDim.new(0,Window.UIPadding/2),
             PaddingLeft = UDim.new(0,Window.UIPadding/2),
             PaddingRight = UDim.new(0,Window.UIPadding/2),
             PaddingBottom = UDim.new(0,Window.UIPadding/2),
@@ -436,12 +442,12 @@ return function(Config)
         
         function Window.User:Enable()
             Window.User.Enabled = true
-            Tween(Window.UIElements.SideBarContainer, .25, { Size = UDim2.new(0,Window.SideBarWidth,1,-52 -42 -(Window.UIPadding*2)) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(Window.UIElements.SideBarContainer, .25, { Size = UDim2.new(0,Window.SideBarWidth,1,-Window.Topbar.Height -42 -(Window.UIPadding*2)) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             UserIcon.Visible = true
         end
         function Window.User:Disable()
             Window.User.Enabled = false
-            Tween(Window.UIElements.SideBarContainer, .25, { Size = UDim2.new(0,Window.SideBarWidth,1,-52 ) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            Tween(Window.UIElements.SideBarContainer, .25, { Size = UDim2.new(0,Window.SideBarWidth,1,-Window.Topbar.Height) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             UserIcon.Visible = false
         end
         function Window.User:SetAnonymous(v)
@@ -690,7 +696,7 @@ return function(Config)
             
             Outline2,
             New("Frame", { -- Topbar
-                Size = UDim2.new(1,0,0,52),
+                Size = UDim2.new(1,0,0,Window.Topbar.Height),
                 BackgroundTransparency = 1,
                 BackgroundColor3 = Color3.fromRGB(50,50,50),
                 Name = "Topbar"
@@ -757,12 +763,12 @@ return function(Config)
                 New("Frame", { -- Topbar Right Side -- Window.UIElements.Main.Main.Topbar.Right
                     AutomaticSize = "XY",
                     BackgroundTransparency = 1,
-                    Position = UDim2.new(1,0,0.5,0),
-                    AnchorPoint = Vector2.new(1,0.5),
+                    Position = UDim2.new(Window.Topbar.ButtonsType == "Default" and 1 or 0,0,0.5,0),
+                    AnchorPoint = Vector2.new(Window.Topbar.ButtonsType == "Default" and 1 or 0,0.5),
                     Name = "Right",
                 }, {
                     New("UIListLayout", {
-                        Padding = UDim.new(0,9),
+                        Padding = UDim.new(0,Window.Topbar.ButtonsType == "Default" and 9 or -1),
                         FillDirection = "Horizontal",
                         SortOrder = "LayoutOrder",
                     }),
@@ -770,7 +776,7 @@ return function(Config)
                 }),
                 New("UIPadding", {
                     PaddingTop = UDim.new(0,Window.UIPadding),
-                    PaddingLeft = UDim.new(0,Window.UIPadding),
+                    PaddingLeft = UDim.new(0,Window.Topbar.ButtonsType == "Default" and Window.UIPadding or Window.UIPadding-2),
                     PaddingRight = UDim.new(0,8),
                     PaddingBottom = UDim.new(0,Window.UIPadding),
                 })
@@ -781,10 +787,14 @@ return function(Config)
     Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
         local LeftWidth = 0
         local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X / Config.WindUI.UIScale
-        if WindowTitle and WindowAuthor then
-            LeftWidth = math.max(WindowTitle.TextBounds.X / Config.WindUI.UIScale, WindowAuthor.TextBounds.X / Config.WindUI.UIScale)
-        else
-            LeftWidth = WindowTitle.TextBounds.X / Config.WindUI.UIScale
+        -- if WindowTitle and WindowAuthor then
+        --     LeftWidth = math.max(WindowTitle.TextBounds.X / Config.WindUI.UIScale, WindowAuthor.TextBounds.X / Config.WindUI.UIScale)
+        -- else
+        --     LeftWidth = WindowTitle.TextBounds.X / Config.WindUI.UIScale
+        -- end
+        LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.WindUI.UIScale
+        if Window.Topbar.ButtonsType ~= "Default" then
+            LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
         end
         if WindowIcon then
             LeftWidth = LeftWidth + (Window.IconSize / Config.WindUI.UIScale) + (Window.UIPadding / Config.WindUI.UIScale) + (4 / Config.WindUI.UIScale)
@@ -803,38 +813,51 @@ return function(Config)
         )
     end)
     
-    function Window:CreateTopbarButton(Name, Icon, Callback, LayoutOrder, IconThemed)
+    if Window.Topbar.ButtonsType ~= "Default" then
+        Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Right:GetPropertyChangedSignal("AbsoluteSize"), function()
+            Window.UIElements.Main.Main.Topbar.Left.Position = UDim2.new(0,(Window.UIElements.Main.Main.Topbar.Right.AbsoluteSize.X/Config.WindUI.UIScale) + Window.UIPadding - 4,0,0)
+        end)
+    end
+    
+    function Window:CreateTopbarButton(Name, Icon, Callback, LayoutOrder, IconThemed, Color)
         local IconFrame = Creator.Image(
             Icon,
             Icon,
             0,
             Window.Folder,
             "WindowTopbarIcon",
-            true,
+            Window.Topbar.ButtonsType == "Default" and true or false,
             IconThemed,
             "WindowTopbarButtonIcon"
         )
-        IconFrame.Size = UDim2.new(0,Window.TopBarButtonIconSize,0,Window.TopBarButtonIconSize)
+        IconFrame.Size = Window.Topbar.ButtonsType == "Default" and UDim2.new(0,Window.TopBarButtonIconSize,0,Window.TopBarButtonIconSize) or UDim2.new(0,0,0,0)
         IconFrame.AnchorPoint = Vector2.new(0.5,0.5)
         IconFrame.Position = UDim2.new(0.5,0,0.5,0)
+        IconFrame.ImageLabel.ImageTransparency = Window.Topbar.ButtonsType == "Default" and 0 or 1
+        if Window.Topbar.ButtonsType ~= "Default" then
+            IconFrame.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Color)
+        end
         
-        local Button = Creator.NewRoundFrame(Window.UICorner-(Window.UIPadding/2), "Squircle", {
-            Size = UDim2.new(0,36,0,36),
+        local Button = Creator.NewRoundFrame(Window.Topbar.ButtonsType == "Default" and Window.UICorner-(Window.UIPadding/2) or 999, "Squircle", {
+            Size = Window.Topbar.ButtonsType == "Default" and UDim2.new(0,Window.Topbar.Height-16,0,Window.Topbar.Height-16) or UDim2.new(0,14,0,14),
             LayoutOrder = LayoutOrder or 999,
-            Parent = Window.UIElements.Main.Main.Topbar.Right,
+            Parent = Window.Topbar.ButtonsType == "Default" and Window.UIElements.Main.Main.Topbar.Right or nil,
             --Active = true,
             ZIndex = 9999,
-            ThemeTag = {
+            AnchorPoint = Vector2.new(0.5,0.5),
+            Position = UDim2.new(0.5,0,0.5,0),
+            ImageColor3 = Window.Topbar.ButtonsType ~= "Default" and (Color or Color3.fromHex("#ff3030")) or nil,
+            ThemeTag = Window.Topbar.ButtonsType == "Default" and {
                 ImageColor3 = "Text"
-            },
-            ImageTransparency = 1 -- .93
+            } or nil,
+            ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or 0 -- .93
         }, {
-            Creator.NewRoundFrame(Window.UICorner-(Window.UIPadding/2), "SquircleOutline", {
+            Creator.NewRoundFrame(Window.Topbar.ButtonsType == "Default" and Window.UICorner-(Window.UIPadding/2) or 999, "SquircleOutline", {
                 Size = UDim2.new(1,0,1,0),
                 ThemeTag = {
                     ImageColor3 = "Text",
                 },
-                ImageTransparency = 1, -- .75  
+                ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or .65, -- .75  
                 Name = "Outline"
             }, {
                 New("UIGradient", {
@@ -853,7 +876,16 @@ return function(Config)
             }),
             IconFrame
         }, true)
-    
+        
+        local ButtonContainer = New("Frame", {
+            Size = UDim2.new(0,24,0,24),
+            BackgroundTransparency = 1,
+            Parent = Window.Topbar.ButtonsType ~= "Default" and Window.UIElements.Main.Main.Topbar.Right or nil,
+            LayoutOrder = LayoutOrder or 999
+        }, {
+            Window.Topbar.ButtonsType ~= "Default" and Button or nil,
+        })
+        
         -- shhh
         
         Window.TopBarButtons[100-LayoutOrder] = {
@@ -865,14 +897,26 @@ return function(Config)
             Callback()
         end)
         Creator.AddSignal(Button.MouseEnter, function()
-            Tween(Button, .15, {ImageTransparency = .93}):Play()
-            Tween(Button.Outline, .15, {ImageTransparency = .75}):Play()
-            --Tween(IconFrame.ImageLabel, .15, {ImageTransparency = 0}):Play()
+            if Window.Topbar.ButtonsType == "Default" then
+                Tween(Button, .15, {ImageTransparency = .93}):Play()
+                Tween(Button.Outline, .15, {ImageTransparency = .75}):Play()
+                --Tween(IconFrame.ImageLabel, .15, {ImageTransparency = 0}):Play()
+            else
+                --Tween(Button, .1, {Size = UDim2.new(0,14+8,0,14+8)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Tween(IconFrame.ImageLabel, .1, {ImageTransparency = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Tween(IconFrame, .1, {Size = UDim2.new(0,11,0,11)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            end
         end)
         Creator.AddSignal(Button.MouseLeave, function()
-            Tween(Button, .1, {ImageTransparency = 1}):Play()
-            Tween(Button.Outline, .1, {ImageTransparency = 1}):Play()
-            --Tween(IconFrame.ImageLabel, .1, {ImageTransparency = .2}):Play()
+            if Window.Topbar.ButtonsType == "Default" then
+                Tween(Button, .1, {ImageTransparency = 1}):Play()
+                Tween(Button.Outline, .1, {ImageTransparency = 1}):Play()
+                --Tween(IconFrame.ImageLabel, .1, {ImageTransparency = .2}):Play()
+            else
+                --Tween(Button, .1, {Size = UDim2.new(0,14,0,14)}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+                Tween(IconFrame.ImageLabel, .1, {ImageTransparency = 1}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Tween(IconFrame, .1, {Size = UDim2.new(0,0,0,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            end
         end)
         
         return Button
@@ -1011,7 +1055,7 @@ return function(Config)
     
     local FullscreenButton = Window:CreateTopbarButton("Fullscreen", "maximize", function() 
         Window:ToggleFullscreen()
-    end, 998)
+    end, (Window.Topbar.ButtonsType == "Default" and 998 or 999), nil, Color3.fromHex("#60C762"))
     
     function Window:ToggleFullscreen()
         local isFullscreen = Window.IsFullscreen
@@ -1063,7 +1107,7 @@ return function(Config)
         --         Duration = 5,
         --     })
         -- end
-    end, 997)
+    end, (Window.Topbar.ButtonsType == "Default" and 997 or 998), nil, Color3.fromHex("#F4C948"))
     
     function Window:OnOpen(func)
         Window.OnOpenCallback = func
@@ -1639,7 +1683,7 @@ return function(Config)
         else
             Window:Destroy()
         end
-    end, 999)
+    end, (Window.Topbar.ButtonsType == "Default" and 999 or 997), nil, Color3.fromHex("#EC685D"))
     
     function Window:Tag(TagConfig)
         if Window.UIElements.Main.Main.Topbar.Center.Visible == false then Window.UIElements.Main.Main.Topbar.Center.Visible = true end
@@ -1774,7 +1818,7 @@ return function(Config)
         
         local SearchLabel = CreateLabel("Search", "search", Window.UIElements.SideBarContainer, true)
         SearchLabel.Size = UDim2.new(1,-Window.UIPadding/2,0,39)
-        SearchLabel.Position = UDim2.new(0,Window.UIPadding/2,0,Window.UIPadding/2)
+        SearchLabel.Position = UDim2.new(0,Window.UIPadding/2,0,--[[Window.UIPadding/2]] 0)
         
         Creator.AddSignal(SearchLabel.MouseButton1Click, function()
             if IsOpen then return end
