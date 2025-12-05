@@ -12,7 +12,8 @@ return function(WindUI)
             Button = Color3.fromHex("#52525b"),
             Icon = Color3.fromHex("#a1a1aa"),
             Toggle = Color3.fromHex("#33C759"),
-            Checkbox = Color3.fromHex("#0091ff"),
+            Slider = Color3.fromHex("#0091FF"),
+            Checkbox = Color3.fromHex("#0091FF"),
         },
         Light = {
             Name = "Light",

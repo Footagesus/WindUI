@@ -207,9 +207,15 @@ return function(Config)
     
     local Title = CreateText(Element.Title, "Title")
     local Desc = CreateText(Element.Desc, "Desc")
+    if not Element.Title or Element.Title == "" then
+        Desc.Visible = false
+    end
     if not Element.Desc or Element.Desc == "" then
         Desc.Visible = false
     end
+    
+    Element.UIElements.Title = Title
+    Element.UIElements.Desc = Desc
     
     Element.UIElements.Container = New("Frame", {
         Size = UDim2.new(1,0,1,0),

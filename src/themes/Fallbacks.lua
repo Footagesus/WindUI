@@ -49,4 +49,6 @@ return {
     
     Slider = "Button",
     SliderThumb = "White",
+    SliderIconFrom = Color3.fromHex("#908F95"),
+    SliderIconTo = Color3.fromHex("#908F95"),
 }
