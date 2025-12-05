@@ -48,9 +48,9 @@ end
 -- */  Window  /* --
 local Window = WindUI:CreateWindow({
     Title = ".ftgs hub  |  WindUI Example",
-    Author = "by .ftgs • Footagesus",
+    --Author = "by .ftgs • Footagesus",
     Folder = "ftgshub",
-    Icon = "sfsymbols:appleLogo",
+    --Icon = "sfsymbols:macwindow",
     IconSize = 22*2,
     NewElements = true,
     --Size = UDim2.fromOffset(700,700),
@@ -70,7 +70,11 @@ local Window = WindUI:CreateWindow({
             Color3.fromHex("#e7ff2f")
         )
     },
-    
+    Topbar = {
+        Height = 44,
+        ButtonsType = "Default", -- Default or Mac
+    },
+    --[[
     KeySystem = {
         Title = "Key System Example  |  WindUI Example",
         Note = "Key System. Key: 1234",
@@ -83,6 +87,7 @@ local Window = WindUI:CreateWindow({
             -- return EnteredKey == "1234" -- if key == "1234" then return true else return false end
         end
     }
+    ]]
 })
 
 
@@ -271,7 +276,7 @@ do
     })
     
     AboutSection:Image({
-        Image = "https://repository-images.githubusercontent.com/880118829/428bedb1-dcbd-43d5-bc7f-3beb2e9e0177",
+        Image = "https://repository-images.githubusercontent.com/880118829/22c020eb-d1b1-4b34-ac4d-e33fd88db38d",
         AspectRatio = "16:9",
         Radius = 9,
     })
@@ -777,6 +782,23 @@ do -- config elements
             Min = 20,
             Max = 120,
             Default = 70,
+        },
+        Callback = function(value)
+            print(value)
+        end
+    })
+    ConfigElementsTab:Slider({
+        Flag = "SliderTest2",
+        --Title = "Slider",
+        Icons = {
+            From = "sfsymbols:sunMinFill",
+            To = "sfsymbols:sunMaxFill",
+        },
+        Step = 1,
+        Value = {
+            Min = 0,
+            Max = 100,
+            Default = 50,
         },
         Callback = function(value)
             print(value)
