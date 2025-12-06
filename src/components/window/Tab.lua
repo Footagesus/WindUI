@@ -41,6 +41,8 @@ function TabModule.New(Config, UIScale)
         Title = Config.Title or "Tab",
         Desc = Config.Desc,
         Icon = Config.Icon,
+        IconColor = Config.IconColor,
+        IconShape = Config.IconShape,
         IconThemed = Config.IconThemed,
         Locked = Config.Locked,
         ShowTabTitle = Config.ShowTabTitle,
@@ -53,7 +55,17 @@ function TabModule.New(Config, UIScale)
         UICorner = Window.UICorner-(Window.UIPadding/2),
         
         Gap = Window.NewElements and 1 or 6,
+        
+        TabPaddingX = 4+(Window.UIPadding/2),
+        TabPaddingY = 3+(Window.UIPadding/2),
+        TitlePaddingY = 0,
     }
+    
+    if Tab.IconShape then
+        Tab.TabPaddingX = 2+(Window.UIPadding/4)
+        Tab.TabPaddingY = 2+(Window.UIPadding/4)
+        Tab.TitlePaddingY = 2+(Window.UIPadding/4)
+    end
     
     TabModule.TabCount = TabModule.TabCount + 1
     
@@ -103,7 +115,7 @@ function TabModule.New(Config, UIScale)
         }, {
             New("UIListLayout", {
                 SortOrder = "LayoutOrder",
-                Padding = UDim.new(0,10),
+                Padding = UDim.new(0,2+(Window.UIPadding/2)),
                 FillDirection = "Horizontal",
                 VerticalAlignment = "Center",
             }),
@@ -122,12 +134,19 @@ function TabModule.New(Config, UIScale)
                 LayoutOrder = 2,
                 TextXAlignment = "Left",
                 BackgroundTransparency = 1,
+            }, {
+                New("UIPadding", {
+                    PaddingTop = UDim.new(0,Tab.TitlePaddingY),
+                    --PaddingLeft = UDim.new(0,2+(Window.UIPadding/2)),
+                    --PaddingRight = UDim.new(0,2+(Window.UIPadding/2)),
+                    PaddingBottom = UDim.new(0,Tab.TitlePaddingY)
+                })
             }),
             New("UIPadding", {
-                PaddingTop = UDim.new(0,2+(Window.UIPadding/2)),
-                PaddingLeft = UDim.new(0,4+(Window.UIPadding/2)),
-                PaddingRight = UDim.new(0,4+(Window.UIPadding/2)),
-                PaddingBottom = UDim.new(0,2+(Window.UIPadding/2)),
+                PaddingTop = UDim.new(0,Tab.TabPaddingY),
+                PaddingLeft = UDim.new(0,Tab.TabPaddingX),
+                PaddingRight = UDim.new(0,Tab.TabPaddingX),
+                PaddingBottom = UDim.new(0,Tab.TabPaddingY),
             })
         }),
     }, true)
@@ -143,17 +162,60 @@ function TabModule.New(Config, UIScale)
             0,
             Window.Folder,
             Tab.__type,
-            true,
+            Tab.IconColor and false or true,
             Tab.IconThemed,
             "TabIcon"
         )
         Icon.Size = UDim2.new(0,16,0,16)
-        Icon.Parent = Tab.UIElements.Main.Frame
-        Icon.ImageLabel.ImageTransparency = not Tab.Locked and 0 or .7
-        Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1,-30,0,0)
-        TextOffset = -30
+        if Tab.IconColor then
+            Icon.ImageLabel.ImageColor3 = Tab.IconColor
+        end
+        if not Tab.IconShape then
+            Icon.Parent = Tab.UIElements.Main.Frame
+            Tab.UIElements.Icon = Icon
+            Icon.ImageLabel.ImageTransparency = not Tab.Locked and 0 or .7
+            TextOffset = -16-2-(Window.UIPadding/2)
+            Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1,TextOffset,0,0)
+        elseif Tab.IconColor then
+            local IconBG = Creator.NewRoundFrame(Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2+(Window.UIPadding/4))) or 9999, "Squircle", {
+                Size = UDim2.new(0,26,0,26),
+                ImageColor3 = Tab.IconColor,
+                Parent = Tab.UIElements.Main.Frame
+            }, {
+                Icon,
+                Creator.NewRoundFrame(Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2+(Window.UIPadding/4))) or 9999, "SquircleOutline", {
+                    Size = UDim2.new(1,0,1,0),
+                    ThemeTag = {
+                        ImageColor3 = "White",
+                    },
+                    ImageTransparency = .35,
+                    Name = "Outline"
+                }, {
+                    New("UIGradient", {
+                        Rotation = 45,
+                        Color = ColorSequence.new({
+                            ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
+                            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
+                            ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
+                        }),
+                        Transparency = NumberSequence.new({
+                            NumberSequenceKeypoint.new(0.0, 0.1),
+                            NumberSequenceKeypoint.new(0.5, 1),
+                            NumberSequenceKeypoint.new(1.0, 0.1),
+                        })
+                    }),
+                }),
+            })
+            Icon.AnchorPoint = Vector2.new(0.5,0.5)
+            Icon.Position = UDim2.new(0.5,0,0.5,0)
+            Icon.ImageLabel.ImageTransparency = 0
+            Icon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Tab.IconColor)
+            TextOffset = -26-2-(Window.UIPadding/2)
+            Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1,TextOffset,0,0)
+        end
         
-        Tab.UIElements.Icon = Icon
+        
+        
         
         
         Icon2 = Creator.Image(
@@ -287,11 +349,12 @@ function TabModule.New(Config, UIScale)
             hoverTimer = task.spawn(function()
                 task.wait(0.35)
                 if IsHovering and not ToolTip then
-                    ToolTip = CreateToolTip(Tab.Desc, TabModule.ToolTipParent)
+                    ToolTip = CreateToolTip(Tab.Desc, TabModule.ToolTipParent, true)
+                    ToolTip.Container.AnchorPoint = Vector2.new(0.5,0.5)
         
                     local function updatePosition()
                         if ToolTip then
-                            ToolTip.Container.Position = UDim2.new(0, Mouse.X, 0, Mouse.Y - 20)
+                            ToolTip.Container.Position = UDim2.new(0, Mouse.X, 0, Mouse.Y - 4)
                         end
                     end
         
@@ -474,18 +537,18 @@ function TabModule:SelectTab(TabIndex)
         for _, TabObject in next, TabModule.Tabs do
             if not TabObject.Locked then
                 Tween(TabObject.UIElements.Main, 0.15, {ImageTransparency = 1}):Play()
-                Tween(TabObject.UIElements.Main.Outline, 0.15, {ImageTransparency = 1}):Play()
+                --Tween(TabObject.UIElements.Main.Outline, 0.15, {ImageTransparency = 1}):Play()
                 Tween(TabObject.UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0.3}):Play()
-                if TabObject.UIElements.Icon then
+                if TabObject.UIElements.Icon and not TabObject.IconColor then
                     Tween(TabObject.UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.4}):Play()
                 end
                 TabObject.Selected = false
             end
         end
-        Tween(TabModule.Tabs[TabIndex].UIElements.Main, 0.15, {ImageTransparency = 0.95}):Play()
-        Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0.85}):Play()
+        Tween(TabModule.Tabs[TabIndex].UIElements.Main, 0.15, {ImageTransparency = 0.93}):Play()
+        --Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0.85}):Play()
         Tween(TabModule.Tabs[TabIndex].UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0}):Play()
-        if TabModule.Tabs[TabIndex].UIElements.Icon then
+        if TabModule.Tabs[TabIndex].UIElements.Icon and not TabModule.Tabs[TabIndex].IconColor then
             Tween(TabModule.Tabs[TabIndex].UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.1}):Play()
         end
         TabModule.Tabs[TabIndex].Selected = true
