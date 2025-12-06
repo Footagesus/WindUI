@@ -1,0 +1,110 @@
+-- You must already have Rayfield loaded as:
+-- local Rayfield = loadstring(game:HttpGet("YOUR_RAYFIELD_URL"))()
+
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Your remotes (edit names)
+local Remotes = {
+    PlantSeed = game.ReplicatedStorage:WaitForChild("PlantSeed"),
+    WaterPlant = game.ReplicatedStorage:WaitForChild("WaterPlant"),
+    SpeedGrow = game.ReplicatedStorage:WaitForChild("SpeedGrow"),
+    Harvest = game.ReplicatedStorage:WaitForChild("Harvest"),
+    OpenShop = game.ReplicatedStorage:WaitForChild("OpenShop")
+}
+
+-----------------------------------------------------------
+-- Window
+-----------------------------------------------------------
+local Window = Rayfield:CreateWindow({
+    Name = "Grow A Garden",
+    LoadingTitle = "Garden UI",
+    LoadingSubtitle = "v1.0",
+    ConfigurationSaving = {
+        Enabled = true,
+        FolderName = "GardenConfigs",
+        FileName = "Settings"
+    }
+})
+
+local MainTab = Window:CreateTab("Garden")
+local ShopTab = Window:CreateTab("Shop")
+
+-----------------------------------------------------------
+-- Plant Type Dropdown
+-----------------------------------------------------------
+local SelectedPlant = "Carrot"
+
+MainTab:CreateDropdown({
+    Name = "Select Plant Type",
+    Options = {"Carrot", "Sunflower", "Tomato", "Pumpkin"},
+    CurrentOption = "Carrot",
+    Callback = function(opt)
+        SelectedPlant = opt
+    end
+})
+
+-----------------------------------------------------------
+-- Plant Seed
+-----------------------------------------------------------
+MainTab:CreateButton({
+    Name = "Plant Seed",
+    Callback = function()
+        Remotes.PlantSeed:FireServer(SelectedPlant)
+    end
+})
+
+-----------------------------------------------------------
+-- Water Plant
+-----------------------------------------------------------
+MainTab:CreateButton({
+    Name = "Water Plant",
+    Callback = function()
+        Remotes.WaterPlant:FireServer()
+    end
+})
+
+-----------------------------------------------------------
+-- Growth Speed Slider (Game Dev Only)
+-----------------------------------------------------------
+MainTab:CreateSlider({
+    Name = "Growth Speed",
+    Range = {1, 10},
+    Increment = 1,
+    Suffix = "x",
+    CurrentValue = 1,
+    Callback = function(value)
+        Remotes.SpeedGrow:FireServer(value)
+    end
+})
+
+-----------------------------------------------------------
+-- Harvest Plant
+-----------------------------------------------------------
+MainTab:CreateButton({
+    Name = "Harvest",
+    Callback = function()
+        Remotes.Harvest:FireServer()
+    end
+})
+
+-----------------------------------------------------------
+-- Open Shop
+-----------------------------------------------------------
+ShopTab:CreateButton({
+    Name = "Open Seed Shop",
+    Callback = function()
+        Remotes.OpenShop:FireServer()
+    end
+})
+
+-----------------------------------------------------------
+-- UI Toggle Keybind
+-----------------------------------------------------------
+Window:CreateKeybind({
+    Name = "Toggle UI",
+    CurrentKeybind = "RightShift",
+    Callback = function()
+        Window:Toggle()
+    end
+})
