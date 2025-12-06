@@ -99,9 +99,15 @@ WindUI.DropdownGui = New("ScreenGui", {
     Parent = GUIParent,
     IgnoreGuiInset = true,
 })
+WindUI.TooltipGui = New("ScreenGui", {
+    Name = "WindUI/Tooltips",
+    Parent = GUIParent,
+    IgnoreGuiInset = true,
+})
 ProtectGui(WindUI.ScreenGui)
 ProtectGui(WindUI.NotificationGui)
 ProtectGui(WindUI.DropdownGui)
+ProtectGui(WindUI.TooltipGui)
 
 Creator.Init(WindUI)
 
