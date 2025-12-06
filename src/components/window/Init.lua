@@ -1684,7 +1684,7 @@ return function(Config)
         else
             Window:Destroy()
         end
-    end, (Window.Topbar.ButtonsType == "Default" and 999 or 997), nil, Color3.fromHex("#EC685D"))
+    end, (Window.Topbar.ButtonsType == "Default" and 999 or 997), nil, Color3.fromHex("#F4695F"))
     
     function Window:Tag(TagConfig)
         if Window.UIElements.Main.Main.Topbar.Center.Visible == false then Window.UIElements.Main.Main.Topbar.Center.Visible = true end
