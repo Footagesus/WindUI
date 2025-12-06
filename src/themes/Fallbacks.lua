@@ -1,6 +1,8 @@
 return {
     -- More soon!
     
+    Primary = Color3.fromHex("#0091FF"),
+    
     White = Color3.new(1,1,1),
     Black = Color3.new(0,0,0),
     
@@ -44,11 +46,16 @@ return {
     Toggle = "Button",
     ToggleBar = "White",
     
-    Checkbox = "Button",
+    Checkbox = "Primary",
     CheckboxIcon = "White",
     
-    Slider = "Button",
+    Slider = "Primary",
     SliderThumb = "White",
     SliderIconFrom = Color3.fromHex("#908F95"),
     SliderIconTo = Color3.fromHex("#908F95"),
+    
+    Tooltip = Color3.fromHex("4C4C4C"),
+    TooltipText = "White",
+    TooltipSecondary = "Primary",
+    TooltipSecondaryText = "White",
 }
