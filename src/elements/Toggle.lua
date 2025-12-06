@@ -87,7 +87,7 @@ function Element:New(Config)
 
     if Config.Window.NewElements and ToggleFunc.Animate then
         Creator.AddSignal(Toggle.ToggleFrame.UIElements.Main.InputBegan, function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            if not Config.Window.IsToggleDragging and input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                 ToggleFunc:Animate(input, Toggle)
             end
         end)
