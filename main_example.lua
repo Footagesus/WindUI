@@ -21,6 +21,19 @@ end
 
 
 
+WindUI.Creator.AddIcons("solar", {
+    ["CheckSquareBold"] = "rbxassetid://132438947521974",
+    ["CursorSquareBold"] = "rbxassetid://120306472146156",
+    ["FileTextBold"] = "rbxassetid://89294979831077",
+    ["FolderWithFilesBold"] = "rbxassetid://74631950400584",
+    ["HamburgerMenuBold"] = "rbxassetid://134384554225463",
+    ["Home2Bold"] = "rbxassetid://92190299966310",
+    ["InfoSquareBold"] = "rbxassetid://119096461016615",
+    ["PasswordMinimalisticInputBold"] = "rbxassetid://109919668957167",
+    ["SolarSquareTransferHorizontalBold"] = "rbxassetid://125444491429160",
+})
+
+
 function createPopup()
     return WindUI:Popup({
         Title = "Welcome to the WindUI!",
@@ -30,14 +43,17 @@ function createPopup()
             {
                 Title = "Hahaha",
                 Icon = "bird",
+                Variant = "Tertiary"
             },
             {
                 Title = "Hahaha",
                 Icon = "bird",
+                Variant = "Tertiary"
             },
             {
                 Title = "Hahaha",
                 Icon = "bird",
+                Variant = "Tertiary"
             }
         }
     })
@@ -72,7 +88,7 @@ local Window = WindUI:CreateWindow({
     },
     Topbar = {
         Height = 44,
-        ButtonsType = "Default", -- Default or Mac
+        ButtonsType = "Mac", -- Default or Mac
     },
     --[[
     KeySystem = {
@@ -90,6 +106,7 @@ local Window = WindUI:CreateWindow({
     ]]
 })
 
+--createPopup()
 
 --Window:SetUIScale(.8)
 
@@ -135,6 +152,14 @@ do
     -- WindUI:SetTheme("Stylish")
 end
 
+
+-- */  Colors  /* --
+local Purple = Color3.fromHex("#7775F2")
+local Yellow = Color3.fromHex("#ECA201")
+local Green = Color3.fromHex("#10C550")
+local Grey = Color3.fromHex("#83889E")
+local Blue = Color3.fromHex("#257AF7")
+local Red = Color3.fromHex("#EF4F1D")
 
 
 -- */ Other Functions /* --
@@ -268,7 +293,10 @@ end
 do
     local AboutTab = Window:Tab({
         Title = "About WindUI",
-        Icon = "info",
+        Desc = "Description Example", 
+        Icon = "solar:InfoSquareBold",
+        IconColor = Grey,
+        IconShape = "Square",
     })
     
     local AboutSection = AboutTab:Section({
@@ -353,7 +381,9 @@ local OtherSection = Window:Section({
 do
     local OverviewTab = ElementsSection:Tab({
         Title = "Overview",
-        Icon = "chart-no-axes-gantt"
+        Icon = "solar:Home2Bold",
+        IconColor = Grey,
+        IconShape = "Square",
     })
     
     local OverviewSection1 = OverviewTab:Section({
@@ -412,7 +442,9 @@ end
 do
     local ToggleTab = ElementsSection:Tab({
         Title = "Toggle",
-        Icon = "arrow-left-right"
+        Icon = "solar:CheckSquareBold",
+        IconColor = Green,
+        IconShape = "Square",
     })
     
     
@@ -469,7 +501,9 @@ end
 do
     local ButtonTab = ElementsSection:Tab({
         Title = "Button",
-        Icon = "mouse-pointer-click",
+        Icon = "solar:CursorSquareBold",
+        IconColor = Blue,
+        IconShape = "Square",
     })
     
     
@@ -531,7 +565,9 @@ end
 do
     local InputTab = ElementsSection:Tab({
         Title = "Input",
-        Icon = "text-cursor-input",
+        Icon = "solar:PasswordMinimalisticInputBold",
+        IconColor = Purple,
+        IconShape = "Square",
     })
     
     
@@ -592,11 +628,135 @@ do
 end
 
 
+-- */  Slider Tab  /* --
+do
+    local SliderTab = ElementsSection:Tab({
+        Title = "Slider",
+        Icon = "solar:SolarSquareTransferHorizontalBold",
+        IconColor = Green,
+        IconShape = "Square",
+    })
+    
+    SliderTab:Section({
+        Title = "Default Slider with Tooltip and without textbox",
+        TextSize = 14,
+    })
+    
+    SliderTab:Slider({
+        Title = "Slider Example",
+        Desc = "Hahahahaha hello",
+        IsTooltip = true,
+        IsTextbox = false,
+        Width = 200,
+        Step = 1,
+        Value = {
+            Min = 0,
+            Max = 200,
+            Default = 100,
+        },
+        Callback = function(value)
+            print(value)
+        end
+    })
+
+    SliderTab:Space()
+    
+    SliderTab:Section({
+        Title = "Slider without description",
+        TextSize = 14,
+    })
+    
+    SliderTab:Slider({
+        Title = "Slider Example",
+        Step = 1,
+        Width = 200,
+        Value = {
+            Min = 0,
+            Max = 200,
+            Default = 100,
+        },
+        Callback = function(value)
+            print(value)
+        end
+    })
+
+    SliderTab:Space()
+    
+    SliderTab:Section({
+        Title = "Slider without titles",
+        TextSize = 14,
+    })
+    
+    SliderTab:Slider({
+        IsTooltip = true,
+        Step = 1,
+        Value = {
+            Min = 0,
+            Max = 200,
+            Default = 100,
+        },
+        Callback = function(value)
+            print(value)
+        end
+    })
+
+    SliderTab:Space()
+    
+    SliderTab:Section({
+        Title = "Slider with icons ('from' only)",
+        TextSize = 14,
+    })
+    
+    SliderTab:Slider({
+        IsTooltip = true,
+        Step = 1,
+        Value = {
+            Min = 0,
+            Max = 200,
+            Default = 100,
+        },
+        Icons = {
+            From = "sfsymbols:sunMinFill",
+            --To = "sfsymbols:sunMaxFill",
+        },
+        Callback = function(value)
+            print(value)
+        end
+    })
+
+    SliderTab:Space()
+    
+    SliderTab:Section({
+        Title = "Slider with icons (from & to)",
+        TextSize = 14,
+    })
+    
+    SliderTab:Slider({
+        IsTooltip = true,
+        Step = 1,
+        Value = {
+            Min = 0,
+            Max = 100,
+            Default = 50,
+        },
+        Icons = {
+            From = "sfsymbols:sunMinFill",
+            To = "sfsymbols:sunMaxFill",
+        },
+        Callback = function(value)
+            print(value)
+        end
+    })
+end
+
+
 -- */  Dropdown Tab  /* --
 do
     local DropdownTab = ElementsSection:Tab({
         Title = "Dropdown",
-        Icon = "logs",
+        Icon = "solar:HamburgerMenuBold",
+        IconColor = Yellow,
+        IconShape = "Square",
     })
     
     
@@ -672,7 +832,9 @@ end
 do -- config elements
     local ConfigElementsTab = ConfigUsageSection:Tab({
         Title = "Config Elements",
-        Icon = "square-dashed-mouse-pointer",
+        Icon = "solar:FileTextBold",
+        IconColor = Blue,
+        IconShape = nil,
     })
     
     -- All elements are taken from the official documentation: https://footagesus.github.io/WindUI-Docs/docs
@@ -795,6 +957,7 @@ do -- config elements
             To = "sfsymbols:sunMaxFill",
         },
         Step = 1,
+        IsTooltip = true,
         Value = {
             Min = 0,
             Max = 100,
@@ -823,7 +986,9 @@ end
 do -- config panel
     local ConfigTab = ConfigUsageSection:Tab({
         Title = "Config Usage",
-        Icon = "folder",
+        Icon = "solar:FolderWithFilesBold",
+        IconColor = Purple,
+        IconShape = nil,
     })
 
     local ConfigManager = Window.ConfigManager
@@ -839,13 +1004,13 @@ do -- config panel
 
     ConfigTab:Space()
     
-    local AutoLoadToggle = ConfigTab:Toggle({
-        Title = "Enable Auto Load to Selected Config",
-        Value = false,
-        Callback = function(v)
-            Window.CurrentConfig:SetAutoLoad(v)
-        end
-    })
+    -- local AutoLoadToggle = ConfigTab:Toggle({
+    --     Title = "Enable Auto Load to Selected Config",
+    --     Value = false,
+    --     Callback = function(v)
+    --         Window.CurrentConfig:SetAutoLoad(v)
+    --     end
+    -- })
 
     ConfigTab:Space()
 
