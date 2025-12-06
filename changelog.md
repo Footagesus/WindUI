@@ -20,5 +20,3 @@
 - Some fixes in `Group` element
 - `Toggle` now smaller in size
 - More Fallbacks in Themes
-- 
-
