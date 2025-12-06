@@ -768,7 +768,7 @@ return function(Config)
                     Name = "Right",
                 }, {
                     New("UIListLayout", {
-                        Padding = UDim.new(0,Window.Topbar.ButtonsType == "Default" and 9 or -1),
+                        Padding = UDim.new(0,Window.Topbar.ButtonsType == "Default" and 9 or 0),
                         FillDirection = "Horizontal",
                         SortOrder = "LayoutOrder",
                     }),
@@ -796,9 +796,9 @@ return function(Config)
         if Window.Topbar.ButtonsType ~= "Default" then
             LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
         end
-        if WindowIcon then
-            LeftWidth = LeftWidth + (Window.IconSize / Config.WindUI.UIScale) + (Window.UIPadding / Config.WindUI.UIScale) + (4 / Config.WindUI.UIScale)
-        end
+        -- if WindowIcon then
+        --     LeftWidth = LeftWidth + (Window.IconSize / Config.WindUI.UIScale) + (Window.UIPadding / Config.WindUI.UIScale) + (4 / Config.WindUI.UIScale)
+        -- end
         Window.UIElements.Main.Main.Topbar.Center.Position = UDim2.new(
             0,
             LeftWidth + (Window.UIPadding / Config.WindUI.UIScale),
@@ -855,12 +855,12 @@ return function(Config)
             Creator.NewRoundFrame(Window.Topbar.ButtonsType == "Default" and Window.UICorner-(Window.UIPadding/2) or 999, "SquircleOutline", {
                 Size = UDim2.new(1,0,1,0),
                 ThemeTag = {
-                    ImageColor3 = "Text",
+                    ImageColor3 = "Black",
                 },
-                ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or .65, -- .75  
+                ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or .8, -- .75  
                 Name = "Outline"
             }, {
-                New("UIGradient", {
+                Window.Topbar.ButtonsType == "Default" and New("UIGradient", {
                     Rotation = 45,
                     Color = ColorSequence.new({
                         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
@@ -872,7 +872,7 @@ return function(Config)
                         NumberSequenceKeypoint.new(0.5, 1),
                         NumberSequenceKeypoint.new(1.0, 0.1),
                     })
-                }),
+                }) or nil,
             }),
             IconFrame
         }, true)
@@ -1280,6 +1280,7 @@ return function(Config)
                 Config.WindUI.ScreenGui:Destroy()
                 Config.WindUI.NotificationGui:Destroy()
                 Config.WindUI.DropdownGui:Destroy()
+                Config.WindUI.TooltipGui:Destroy()
                 
                 Creator.DisconnectAll()
                 
@@ -1423,7 +1424,7 @@ return function(Config)
     
     local TabModuleMain = require("./Tab")
     local SectionModule = require("./Section")
-    local TabModule = TabModuleMain.Init(Window, Config.WindUI, Config.Parent.Parent.ToolTips)
+    local TabModule = TabModuleMain.Init(Window, Config.WindUI, Config.WindUI.TooltipGui)
     TabModule:OnChange(function(t) Window.CurrentTab = t end)
     
     Window.TabModule = TabModuleMain
