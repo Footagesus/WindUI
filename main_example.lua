@@ -19,7 +19,7 @@ do
     end
 end
 
-
+--[[
 
 WindUI.Creator.AddIcons("solar", {
     ["CheckSquareBold"] = "rbxassetid://132438947521974",
@@ -31,7 +31,7 @@ WindUI.Creator.AddIcons("solar", {
     ["InfoSquareBold"] = "rbxassetid://119096461016615",
     ["PasswordMinimalisticInputBold"] = "rbxassetid://109919668957167",
     ["SolarSquareTransferHorizontalBold"] = "rbxassetid://125444491429160",
-})
+})--]]
 
 
 function createPopup()
@@ -294,7 +294,7 @@ do
     local AboutTab = Window:Tab({
         Title = "About WindUI",
         Desc = "Description Example", 
-        Icon = "solar:InfoSquareBold",
+        Icon = "solar:info-square-bold",
         IconColor = Grey,
         IconShape = "Square",
     })
@@ -381,7 +381,7 @@ local OtherSection = Window:Section({
 do
     local OverviewTab = ElementsSection:Tab({
         Title = "Overview",
-        Icon = "solar:Home2Bold",
+        Icon = "solar:home-2-bold",
         IconColor = Grey,
         IconShape = "Square",
     })
@@ -442,7 +442,7 @@ end
 do
     local ToggleTab = ElementsSection:Tab({
         Title = "Toggle",
-        Icon = "solar:CheckSquareBold",
+        Icon = "solar:check-square-bold",
         IconColor = Green,
         IconShape = "Square",
     })
@@ -501,7 +501,7 @@ end
 do
     local ButtonTab = ElementsSection:Tab({
         Title = "Button",
-        Icon = "solar:CursorSquareBold",
+        Icon = "solar:cursor-square-bold",
         IconColor = Blue,
         IconShape = "Square",
     })
@@ -565,7 +565,7 @@ end
 do
     local InputTab = ElementsSection:Tab({
         Title = "Input",
-        Icon = "solar:PasswordMinimalisticInputBold",
+        Icon = "solar:password-minimalistic-input-bold",
         IconColor = Purple,
         IconShape = "Square",
     })
@@ -632,7 +632,7 @@ end
 do
     local SliderTab = ElementsSection:Tab({
         Title = "Slider",
-        Icon = "solar:SolarSquareTransferHorizontalBold",
+        Icon = "solar:square-transfer-horizontal-bold",
         IconColor = Green,
         IconShape = "Square",
     })
@@ -754,7 +754,7 @@ end
 do
     local DropdownTab = ElementsSection:Tab({
         Title = "Dropdown",
-        Icon = "solar:HamburgerMenuBold",
+        Icon = "solar:hamburger-menu-bold",
         IconColor = Yellow,
         IconShape = "Square",
     })
@@ -832,7 +832,7 @@ end
 do -- config elements
     local ConfigElementsTab = ConfigUsageSection:Tab({
         Title = "Config Elements",
-        Icon = "solar:FileTextBold",
+        Icon = "solar:file-text-bold",
         IconColor = Blue,
         IconShape = nil,
     })
@@ -986,7 +986,7 @@ end
 do -- config panel
     local ConfigTab = ConfigUsageSection:Tab({
         Title = "Config Usage",
-        Icon = "solar:FolderWithFilesBold",
+        Icon = "solar:folder-with-files-bold",
         IconColor = Purple,
         IconShape = nil,
     })
