@@ -24,7 +24,7 @@
 #### Colorpicker script
 - [Dawid-Scripts](https://github.com/dawid-scripts) (Fluent)
 
-#### Icons
+#### Icons (https://github.com/Footagesus/Icons)
 - [Lucide-Icons](https://github.com/lucide-icons/lucide) 
 - [Craft Icons](https://www.figma.com/community/file/1415718327120418204)
 - [Geist Icons](https://vercel.com/geist/icons)
