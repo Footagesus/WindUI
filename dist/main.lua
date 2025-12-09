@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.62  |  2025-12-06  |  Roblox UI Library for scripts
+    v1.6.62  |  2025-12-09  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -501,7 +501,7 @@ p.UpdateLang()
 end
 
 function p.Icon(r,u)
-return l.Icon(r,nil,u~=false)
+return l.Icon2(r,nil,u~=false)
 end
 
 function p.AddIcons(r,u)
