@@ -3625,20 +3625,89 @@ end
 
 
 return aa end function a.v()
-local aa={}
 
+
+local aa={}
 
 local ab=a.load'b'
 local ac=ab.New
 local ad=ab.Tween
 
 
-function aa.New(ae,af,ag)
-local ah={
-Title=af.Title or"Tag",
-Icon=af.Icon,
-Color=af.Color or Color3.fromHex"#315dff",
-Radius=af.Radius or 999,
+local ae=false
+
+local function dprint(...)
+if ae then
+print("[Tag Debug]",...)
+end
+end
+
+
+local function Color3ToHSB(af)
+local ag,ah,ai=af.R,af.G,af.B
+local aj=math.max(ag,ah,ai)
+local ak=math.min(ag,ah,ai)
+local al=aj-ak
+
+local am=0
+if al~=0 then
+if aj==ag then
+am=((ah-ai)/al)%6
+elseif aj==ah then
+am=(ai-ag)/al+2
+else
+am=(ag-ah)/al+4
+end
+am=am*60
+end
+
+local an=aj==0 and 0 or al/aj
+local ao=aj
+
+return{h=math.floor(am+0.5),s=an,b=ao}
+end
+
+
+local function GetPerceivedBrightness(af)
+return 0.299*af.R+0.587*af.G+0.114*af.B
+end
+
+
+local function GetContrastTextColor(af)
+local ag=GetPerceivedBrightness(af)
+dprint("Base brightness:",ag,"→ Using",ag>0.5 and"dark"or"light","text")
+
+local ah=Color3ToHSB(af)
+if ag>0.5 then
+return Color3.fromHSV(ah.h/360,0,0.05)
+else
+return Color3.fromHSV(ah.h/360,0,0.98)
+end
+end
+
+
+local function GetAverageColor(af)
+local ag,ah,ai=0,0,0
+local aj=af.Color.Keypoints
+local ak=#aj
+
+for al,am in ipairs(aj)do
+ag+=am.Value.R
+ah+=am.Value.G
+ai+=am.Value.B
+end
+
+local al=Color3.new(ag/ak,ah/ak,ai/ak)
+dprint("Gradient average:",al:ToHex())
+return al
+end
+
+function aa.New(af,ag,ah)
+local ai={
+Title=ag.Title or"Tag",
+Icon=ag.Icon,
+Color=ag.Color or Color3.fromHex"#315dff",
+Radius=ag.Radius or 999,
 
 TagFrame=nil,
 Height=26,
@@ -3647,99 +3716,147 @@ TextSize=14,
 IconSize=16,
 }
 
-local ai
-if ah.Icon then
-ai=ab.Image(
-ah.Icon,
-ah.Icon,
+
+local aj
+if ai.Icon then
+aj=ab.Image(
+ai.Icon,
+ai.Icon,
 0,
-af.Window,
+ag.Window,
 "Tag",
 false
 )
-
-ai.Size=UDim2.new(0,ah.IconSize,0,ah.IconSize)
-ai.ImageLabel.ImageColor3=typeof(ah.Color)=="Color3"and ab.GetTextColorForHSB(ah.Color)or nil
+aj.Size=UDim2.new(0,ai.IconSize,0,ai.IconSize)
 end
 
-local aj=ac("TextLabel",{
+
+local ak=ac("TextLabel",{
 BackgroundTransparency=1,
 AutomaticSize="XY",
-TextSize=ah.TextSize,
+TextSize=ai.TextSize,
 FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
-Text=ah.Title,
-TextColor3=typeof(ah.Color)=="Color3"and ab.GetTextColorForHSB(ah.Color)or nil,
+Text=ai.Title,
+TextColor3=Color3.new(1,1,1),
 })
 
-local ak
 
-if typeof(ah.Color)=="table"then
+local al
 
-ak=ac"UIGradient"
-for al,am in next,ah.Color do
-ak[al]=am
+
+local function ApplyContrast()
+local am
+if typeof(ai.Color)=="table"and al then
+am=GetAverageColor(al)
+else
+am=ai.Color
 end
 
-aj.TextColor3=ab.GetTextColorForHSB(ab.GetAverageColor(ak))
-if ai then
-ai.ImageLabel.ImageColor3=ab.GetTextColorForHSB(ab.GetAverageColor(ak))
+local an=GetContrastTextColor(am)
+ak.TextColor3=an
+
+if aj then
+aj.ImageLabel.ImageColor3=an
+end
+
+dprint("Applied text color:",an:ToHex(),"for base:",am:ToHex())
+end
+
+
+if typeof(ai.Color)=="table"then
+al=ac"UIGradient"
+for am,an in next,ai.Color do
+al[am]=an
 end
 end
 
 
-
-local al=ab.NewRoundFrame(ah.Radius,"Squircle",{
+local am=ab.NewRoundFrame(ai.Radius,"Squircle",{
 AutomaticSize="X",
-Size=UDim2.new(0,0,0,ah.Height),
-Parent=ag,
-ImageColor3=typeof(ah.Color)=="Color3"and ah.Color or Color3.new(1,1,1),
+Size=UDim2.new(0,0,0,ai.Height),
+Parent=ah,
+ImageColor3=typeof(ai.Color)=="Color3"and ai.Color or Color3.new(1,1,1),
 },{
-ak,
+al,
 ac("UIPadding",{
-PaddingLeft=UDim.new(0,ah.Padding),
-PaddingRight=UDim.new(0,ah.Padding),
+PaddingLeft=UDim.new(0,ai.Padding),
+PaddingRight=UDim.new(0,ai.Padding),
 }),
-ai,
 aj,
+ak,
 ac("UIListLayout",{
 FillDirection="Horizontal",
 VerticalAlignment="Center",
-Padding=UDim.new(0,ah.Padding/1.5)
+Padding=UDim.new(0,ai.Padding/1.5)
 })
 })
 
+ai.TagFrame=am
 
-function ah.SetTitle(am,an)
-ah.Title=an
-aj.Text=an
+
+ApplyContrast()
+
+
+ak:GetPropertyChangedSignal"TextColor3":Connect(function()
+if ai.Color then
+task.defer(ApplyContrast)
+end
+end)
+
+if aj then
+aj.ImageLabel:GetPropertyChangedSignal"ImageColor3":Connect(function()
+if ai.Color then
+task.defer(ApplyContrast)
+end
+end)
 end
 
-function ah.SetColor(am,an)
-ah.Color=an
-if typeof(an)=="table"then
-local ao=ab.GetAverageColor(an)
-ad(aj,.06,{TextColor3=ab.GetTextColorForHSB(ao)}):Play()
-local ap=al:FindFirstChildOfClass"UIGradient"or ac("UIGradient",{Parent=al})
-for aq,ar in next,an do ap[aq]=ar end
-ad(al,.06,{ImageColor3=Color3.new(1,1,1)}):Play()
+
+if WindUI and typeof(WindUI.OnThemeChange)=="function"then
+WindUI.OnThemeChange(function()
+if ai.Color then
+dprint"Theme changed → reapplying tag contrast"
+ApplyContrast()
+end
+end)
+end
+
+
+function ai.SetTitle(an,ao)
+ai.Title=ao
+ak.Text=ao
+end
+
+function ai.SetColor(an,ao)
+ai.Color=ao
+dprint("SetColor →",typeof(ao)=="table"and"gradient"or ao:ToHex())
+
+if typeof(ao)=="table"then
+
+if not al then
+al=ac("UIGradient",{Parent=am})
+end
+for ap,aq in next,ao do
+al[ap]=aq
+end
+ad(am,0.1,{ImageColor3=Color3.new(1,1,1)}):Play()
 else
-if ak then
-ak:Destroy()
+
+if al then
+al:Destroy()
+al=nil
 end
-ad(aj,.06,{TextColor3=ab.GetTextColorForHSB(an)}):Play()
-if ai then
-ad(ai.ImageLabel,.06,{ImageColor3=ab.GetTextColorForHSB(an)}):Play()
-end
-ad(al,.06,{ImageColor3=an}):Play()
-end
+ad(am,0.1,{ImageColor3=ao}):Play()
 end
 
-
-return ah
+ApplyContrast()
 end
 
+return ai
+end
 
 return aa end function a.w()
+
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
 
