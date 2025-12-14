@@ -50,11 +50,12 @@ jobs:
       - name: Update main_example.lua with PR loadstring
         id: updated_example
         run: |
-          LS="${{ steps.loadstring.outputs.value }}"
+          RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.event.pull_request.head.sha }}/dist/main.lua"
+          LOADSTRING="loadstring(game:HttpGet(\"$RAW_URL\"))()"
           EXAMPLE_FILE="main_example.lua"
-          sed -i 's|loadstring(game:HttpGet(".*"))()|'"$LS"'|' "$EXAMPLE_FILE"
+          
+          sed -i "s|loadstring(game:HttpGet(\".*\"))()|$LOADSTRING|g" "$EXAMPLE_FILE"
           cat "$EXAMPLE_FILE" > updated_example.txt
-          echo "file=updated_example.txt" >> $GITHUB_OUTPUT
 
       - name: Comment build result in PR
         uses: actions/github-script@v7
@@ -63,7 +64,6 @@ jobs:
             const fs = require("fs")
             const updated = fs.readFileSync("updated_example.txt", "utf8")
             const loadstring = `${{ steps.loadstring.outputs.value }}`
-            
             const prNumber = context.payload.pull_request.number
 
             github.rest.issues.createComment({
@@ -73,16 +73,22 @@ jobs:
               body: [
                 "### WindUI PR Build",
                 "",
-                "**Loadstring**",
+                `Built from commit: \`${context.payload.pull_request.head.sha}\``,
+                "",
+                "<details>",
+                "<summary>Loadstring (click to expand)</summary>",
+                "",
                 "```lua",
                 loadstring,
                 "```",
+                "</details>",
                 "",
-                "**Example (main_example.lua with updated PR loadstring)**",
+                "<details>",
+                "<summary>Example: main_example.lua with updated loadstring (click to expand)</summary>",
+                "",
                 "```lua",
                 updated,
                 "```",
-                "",
-                `Built from commit: \`${context.payload.pull_request.head.sha}\``
+                "</details>"
               ].join("\n")
             })
