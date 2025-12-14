@@ -7,6 +7,9 @@ on:
 jobs:
   build-pr:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout PR code
@@ -47,7 +50,7 @@ jobs:
         run: |
           LS="${{ steps.loadstring.outputs.value }}"
           EXAMPLE_FILE="main_example.lua"
-          sed -i 's|loadstring(game:HttpGet(".*"))()|'$LS'|' "$EXAMPLE_FILE"
+          sed -i 's|loadstring(game:HttpGet(".*"))()|'"$LS"'|' "$EXAMPLE_FILE"
           cat "$EXAMPLE_FILE" > updated_example.txt
           echo "file=updated_example.txt" >> $GITHUB_OUTPUT
 
@@ -56,7 +59,7 @@ jobs:
         with:
           script: |
             const fs = require("fs")
-            const updated = fs.readFileSync("${{ steps.updated_example.outputs.file }}", "utf8")
+            const updated = fs.readFileSync("updated_example.txt", "utf8")
             const loadstring = `${{ steps.loadstring.outputs.value }}`
 
             github.rest.issues.createComment({
