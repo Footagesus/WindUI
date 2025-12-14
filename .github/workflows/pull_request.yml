@@ -3,6 +3,8 @@ name: Build WindUI (Pull Request)
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  pull_request_target:
+    types: [opened, synchronize, reopened]
 
 jobs:
   build-pr:
@@ -61,11 +63,13 @@ jobs:
             const fs = require("fs")
             const updated = fs.readFileSync("updated_example.txt", "utf8")
             const loadstring = `${{ steps.loadstring.outputs.value }}`
+            
+            const prNumber = context.payload.pull_request.number
 
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: prNumber,
               body: [
                 "### WindUI PR Build",
                 "",
