@@ -3,7 +3,7 @@
 return [[
 {
     "name": "windui",
-    "version": "1.6.62",
+    "version": "1.6.63",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Footagesus/WindUI",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",

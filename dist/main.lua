@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.62  |  2025-12-09  |  Roblox UI Library for scripts
+    v1.6.63  |  2025-12-14  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -175,15 +175,15 @@ White="#ffffff",
 Grey="#484848",
 },
 ThemeFallbacks=a.load'a',
-Shapes={
-Square="rbxassetid://82909646051652",
-["Square-Outline"]="rbxassetid://72946211851948",
+Shapes={Square=
+"rbxassetid://82909646051652",
+["Square-Outline"]="rbxassetid://72946211851948",Squircle=
 
-Squircle="rbxassetid://80999662900595",
-SquircleOutline="rbxassetid://117788349049947",
-["Squircle-Outline"]="rbxassetid://117817408534198",
+"rbxassetid://80999662900595",Squircleoutline=
+"rbxassetid://117788349049947",
+["Squircle-Outline"]="rbxassetid://117817408534198",SquircleOutline2=
 
-SquircleOutline2="rbxassetid://117817408534198",
+"rbxassetid://117817408534198",
 
 ["Shadow-sm"]="rbxassetid://84825982946844",
 
@@ -191,6 +191,9 @@ SquircleOutline2="rbxassetid://117817408534198",
 ["Squircle-BL-BR"]="rbxassetid://93853842912264",
 ["Squircle-TL-TR-Outline"]="rbxassetid://136702870075563",
 ["Squircle-BL-BR-Outline"]="rbxassetid://75035847706564",
+
+["Glass-Circle"]="rbxassetid://79047752995006",
+["Glass-Square"]="rbxassetid://95071123641270",
 }
 }
 
@@ -553,7 +556,7 @@ return p.Shapes[F]
 end
 
 local function getSliceCenterForType(F)
-return F~="Shadow-sm"and Rect.new(256
+return not table.find({"Shadow-sm","Glass-Circle","Glass-Square"},F)and Rect.new(256
 ,256
 ,256
 ,256
@@ -577,7 +580,7 @@ end
 end
 
 local function UpdateSliceScale(J)
-local L=u~="Shadow-sm"and(J/(256))or(J/512)
+local L=not table.find({"Shadow-sm","Glass-Circle","Glass-Square"},u)and(J/(256))or(J/512)
 F.SliceScale=math.max(L,0.0001)
 end
 
@@ -830,7 +833,7 @@ end
 function p.GetTextColorForHSB(v)
 local x=p.Color3ToHSB(v)local
 B, C, F=x.h, x.s, x.b
-if p.GetPerceivedBrightness(v)>0.68 then
+if p.GetPerceivedBrightness(v)>0.5 then
 return Color3.fromHSV(B/360,0,0.05)
 else
 return Color3.fromHSV(B/360,0,0.98)
@@ -1604,7 +1607,7 @@ New=a.load'g'.New
 return[[
 {
     "name": "windui",
-    "version": "1.6.62",
+    "version": "1.6.63",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Footagesus/WindUI",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
@@ -9077,7 +9080,7 @@ ImageColor3="TabBackground",
 },
 ImageTransparency=1,
 },{
-af.NewRoundFrame(ap.UICorner,"SquircleOutline",{
+af.NewRoundFrame(ap.UICorner,"Glass-Square",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="Text",
@@ -9085,19 +9088,19 @@ ImageColor3="Text",
 ImageTransparency=1,
 Name="Outline"
 },{
-ah("UIGradient",{
-Rotation=80,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-}),
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 af.NewRoundFrame(ap.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
