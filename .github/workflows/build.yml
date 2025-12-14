@@ -1,9 +1,8 @@
-name: Build WindUI
+name: Build WindUI (main)
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
+    branches: ["main"]
 
 jobs:
   build:
@@ -12,8 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v5
@@ -42,5 +39,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist/main.lua
-          git commit -m "[AUTO] Upload built main.lua" || echo "No changes to commit"
-          git push origin main
+          git commit -m "[AUTO] Upload built main.lua" || exit 0
+          git push

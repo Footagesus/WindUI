@@ -1,0 +1,81 @@
+name: Build WindUI (Pull Request)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Setup Lua
+        uses: leafo/gh-actions-lua@v11
+        with:
+          luaVersion: "5.1"
+
+      - name: Setup Aftman
+        uses: ok-nick/setup-aftman@v0.3.0
+
+      - name: Install Rojo, Lune and DarkLua
+        run: aftman install
+
+      - name: Run build
+        run: npm run build
+
+      - name: Generate loadstring
+        id: loadstring
+        run: |
+          RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.event.pull_request.head.sha }}/dist/main.lua"
+          echo "value=loadstring(game:HttpGet(\"$RAW_URL\"))()" >> $GITHUB_OUTPUT
+
+      - name: Update main_example.lua with PR loadstring
+        id: updated_example
+        run: |
+          LS="${{ steps.loadstring.outputs.value }}"
+          EXAMPLE_FILE="main_example.lua"
+          sed -i 's|loadstring(game:HttpGet(".*"))()|'$LS'|' "$EXAMPLE_FILE"
+          cat "$EXAMPLE_FILE" > updated_example.txt
+          echo "file=updated_example.txt" >> $GITHUB_OUTPUT
+
+      - name: Comment build result in PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs")
+            const updated = fs.readFileSync("${{ steps.updated_example.outputs.file }}", "utf8")
+            const loadstring = `${{ steps.loadstring.outputs.value }}`
+
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: [
+                "### WindUI PR Build",
+                "",
+                "**Loadstring**",
+                "```lua",
+                loadstring,
+                "```",
+                "",
+                "**Example (main_example.lua with updated PR loadstring)**",
+                "```lua",
+                updated,
+                "```",
+                "",
+                `Built from commit: \`${context.payload.pull_request.head.sha}\``
+              ].join("\n")
+            })
