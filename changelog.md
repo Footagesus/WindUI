@@ -1,22 +1,3 @@
-# 1.6.62
+# 1.6.63
 ## Changelog:
-- Added `IsTooltip` and `IsTextbox` and `Icons` to `Slider`
-- Added `IconColor` and `IconShape` to `Tab`
-- Added `IconSize` to `Toggle` element
-- Added Animation to `Toggle` element
-- Added `KeyValidator` to `KeySystem`
-- Added `WindUI:SetParent()`
-- Added `Topbar` to `Window` (Mac-style buttons and custom height)
-- Added Auto Load Config
-- Fixed `OpenButton` sizes (and others)
-- Fixed Toggle Icon
-- Fixed Section AutoHeight
-- Fixed Icons
-- Removed animation for themes (it causes lags)
-- Removed tween in themes (they lag)
-- Removed Outline in Tab
-- The Slider is now a little bigger
-- Small changes in the `Tooltip`
-- Some fixes in `Group` element
-- `Toggle` now smaller in size
-- More Fallbacks in Themes
+- Fixed Tag text color
