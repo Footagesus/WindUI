@@ -82,7 +82,7 @@ function TabModule.New(Config, UIScale)
         },
         ImageTransparency = 1,
     }, {
-        Creator.NewRoundFrame(Tab.UICorner, "SquircleOutline", {
+        Creator.NewRoundFrame(Tab.UICorner, "Glass-Square", { 
             Size = UDim2.new(1,0,1,0),
             ThemeTag = {
                 ImageColor3 = "Text",
@@ -90,19 +90,19 @@ function TabModule.New(Config, UIScale)
             ImageTransparency = 1, -- .85  
             Name = "Outline"
         }, {
-            New("UIGradient", {
-                Rotation = 80,
-                Color = ColorSequence.new({
-                    ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-                    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-                    ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
-                }),
-                Transparency = NumberSequence.new({
-                    NumberSequenceKeypoint.new(0.0, 0.1),
-                    NumberSequenceKeypoint.new(0.5, 1),
-                    NumberSequenceKeypoint.new(1.0, 0.1),
-                })
-            }),
+            -- New("UIGradient", {
+            --     Rotation = 80,
+            --     Color = ColorSequence.new({
+            --         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
+            --         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
+            --         ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
+            --     }),
+            --     Transparency = NumberSequence.new({
+            --         NumberSequenceKeypoint.new(0.0, 0.1),
+            --         NumberSequenceKeypoint.new(0.5, 1),
+            --         NumberSequenceKeypoint.new(1.0, 0.1),
+            --     })
+            -- }),
         }),
         Creator.NewRoundFrame(Tab.UICorner, "Squircle", {
             Size = UDim2.new(1,0,0,0),
@@ -112,7 +112,7 @@ function TabModule.New(Config, UIScale)
             },
             ImageTransparency = 1, -- .95
             Name = "Frame",
-        }, {
+    }, {
             New("UIListLayout", {
                 SortOrder = "LayoutOrder",
                 Padding = UDim.new(0,2+(Window.UIPadding/2)),
@@ -546,7 +546,7 @@ function TabModule:SelectTab(TabIndex)
             end
         end
         Tween(TabModule.Tabs[TabIndex].UIElements.Main, 0.15, {ImageTransparency = 0.93}):Play()
-        --Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0.85}):Play()
+        --Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0}):Play()
         Tween(TabModule.Tabs[TabIndex].UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0}):Play()
         if TabModule.Tabs[TabIndex].UIElements.Icon and not TabModule.Tabs[TabIndex].IconColor then
             Tween(TabModule.Tabs[TabIndex].UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.1}):Play()
