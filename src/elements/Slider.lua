@@ -341,7 +341,7 @@ function Element:New(Config)
                 Tween(Slider.UIElements.SliderIcon.Frame.Thumb, .24, { ImageTransparency = .85, Size = UDim2.new(0,(Config.Window.NewElements and (Slider.ThumbSize*2) or (Slider.ThumbSize))+8,0,Slider.ThumbSize+8) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
             if Tooltip then Tooltip:Open() end
-            print("piskaa")
+            --print("piskaa")
         end
     end)
     
