@@ -395,7 +395,7 @@ return function(Config)
                     BackgroundTransparency = 1,
                 }, {
                     New("TextLabel", {
-                        Text = Window.User.Anonymous and "Anonymous" or game.Players.LocalPlayer.DisplayName,
+                        Text = Window.User.Anonymous and "Anonymous" or Players.LocalPlayer.DisplayName,
                         TextSize = 17,
                         ThemeTag = {
                             TextColor3 = "Text",
@@ -409,7 +409,7 @@ return function(Config)
                         Name = "DisplayName"
                     }),
                     New("TextLabel", {
-                        Text = Window.User.Anonymous and "anonymous" or game.Players.LocalPlayer.Name,
+                        Text = Window.User.Anonymous and "anonymous" or Players.LocalPlayer.Name,
                         TextSize = 15,
                         TextTransparency = .6,
                         ThemeTag = {
@@ -455,8 +455,8 @@ return function(Config)
             if v ~= false then v = true end
             Window.User.Anonymous = v
             UserIcon.UserIcon.ImageLabel.Image = GetUserThumb()
-            UserIcon.UserIcon.Frame.DisplayName.Text = v and "Anonymous" or game.Players.LocalPlayer.DisplayName
-            UserIcon.UserIcon.Frame.UserName.Text = v and "anonymous" or game.Players.LocalPlayer.Name
+            UserIcon.UserIcon.Frame.DisplayName.Text = v and "Anonymous" or Players.LocalPlayer.DisplayName
+            UserIcon.UserIcon.Frame.UserName.Text = v and "anonymous" or Players.LocalPlayer.Name
         end
         
         if Window.User.Enabled then
