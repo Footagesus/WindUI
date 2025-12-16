@@ -107,6 +107,35 @@ function Tag:New(TagConfig, Parent)
         end
     end
     
+    function TagModule:SetIcon(icon)
+        TagModule.Icon = icon
+        
+        if icon then
+            TagIcon = Creator.Image(
+                icon,
+                icon,
+                0,
+                TagConfig.Window,
+                "Tag",
+                false
+            )
+            
+            TagIcon.Size = UDim2.new(0,TagModule.IconSize,0,TagModule.IconSize)
+            TagIcon.Parent = TagFrame
+            
+            if typeof(TagModule.Color) == "Color3" then
+                TagIcon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(TagModule.Color)
+            elseif typeof(TagModule.Color) == "table" then
+                TagIcon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Creator.GetAverageColor(BackgroundGradient))
+            end
+        else
+            if TagIcon then
+                TagIcon:Destroy()
+                TagIcon = nil
+            end
+        end
+    end
+    
     
     return TagModule
 end
