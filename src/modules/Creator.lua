@@ -753,10 +753,10 @@ function Creator.GetPerceivedBrightness(color)
 	return 0.299 * r + 0.587 * g + 0.114 * b
 end
 
-function Creator.GetTextColorForHSB(color)
+function Creator.GetTextColorForHSB(color, contrast)
     local hsb = Creator.Color3ToHSB(color)
 	local h, s, b = hsb.h, hsb.s, hsb.b
-	if Creator.GetPerceivedBrightness(color) > 0.5 then
+	if Creator.GetPerceivedBrightness(color) > (contrast or 0.5) then
 		return Color3.fromHSV(h / 360, 0, 0.05)
 	else
 		return Color3.fromHSV(h / 360, 0, 0.98)
