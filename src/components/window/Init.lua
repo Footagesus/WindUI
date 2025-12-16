@@ -2,6 +2,7 @@ local cloneref = (cloneref or clonereference or function(instance) return instan
 
 local UserInputService = cloneref(game:GetService("UserInputService"))
 local RunService = cloneref(game:GetService("RunService"))
+local Players = cloneref(game:GetService("Players"))
 
 local CurrentCamera = workspace.CurrentCamera
 
@@ -326,8 +327,8 @@ return function(Config)
     local UserIcon
     if Window.User then
         local function GetUserThumb()
-            local ImageId, _ = cloneref(game:GetService("Players")):GetUserThumbnailAsync(
-                Window.User.Anonymous and 1 or game.Players.LocalPlayer.UserId, 
+            local ImageId, _ = Players:GetUserThumbnailAsync(
+                Window.User.Anonymous and 1 or Players.LocalPlayer.UserId, 
                 Enum.ThumbnailType.HeadShot, 
                 Enum.ThumbnailSize.Size420x420
             )
