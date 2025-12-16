@@ -39,15 +39,21 @@ jobs:
         run: aftman install
 
       - name: Run build
-        run: npm run build
+        id: build
+        continue-on-error: true
+        run: |
+          npm run build 2>&1 | tee build.log
+          echo "status=$?" >> $GITHUB_OUTPUT
 
       - name: Generate loadstring
+        if: steps.build.outputs.status == '0'
         id: loadstring
         run: |
           RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.event.pull_request.head.sha }}/dist/main.lua"
           echo "value=loadstring(game:HttpGet(\"$RAW_URL\"))()" >> $GITHUB_OUTPUT
 
       - name: Update main_example.lua with PR loadstring
+        if: steps.build.outputs.status == '0'
         id: updated_example
         run: |
           RAW_URL="https://raw.githubusercontent.com/${{ github.repository }}/${{ github.event.pull_request.head.sha }}/dist/main.lua"
@@ -58,37 +64,82 @@ jobs:
           cat "$EXAMPLE_FILE" > updated_example.txt
 
       - name: Comment build result in PR
+        if: always()
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require("fs")
-            const updated = fs.readFileSync("updated_example.txt", "utf8")
-            const loadstring = `${{ steps.loadstring.outputs.value }}`
             const prNumber = context.payload.pull_request.number
+            const buildStatus = `${{ steps.build.outputs.status }}`
+            const commitSha = context.payload.pull_request.head.sha
+            
+            let body = []
+            
+            if (buildStatus === '0') {
+              // Success
+              const updated = fs.readFileSync("updated_example.txt", "utf8")
+              const loadstring = `${{ steps.loadstring.outputs.value }}`
+              
+              body = [
+                "## <img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/circle-check.svg' width='20' height='20' align='center' /> Build Successful",
+                "",
+                `<sub>Built from commit <code>${commitSha.substring(0, 7)}</code></sub>`,
+                "",
+                "---",
+                "",
+                "<details>",
+                "<summary><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg' width='16' height='16' align='center' /> <strong>Loadstring</strong></summary>",
+                "",
+                "```lua",
+                loadstring,
+                "```",
+                "",
+                "</details>",
+                "",
+                "<details>",
+                "<summary><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg' width='16' height='16' align='center' /> <strong>Updated Example</strong> <code>main_example.lua</code></summary>",
+                "",
+                "```lua",
+                updated,
+                "```",
+                "",
+                "</details>"
+              ]
+            } else {
+              // Failure
+              let buildLog = ''
+              try {
+                buildLog = fs.readFileSync("build.log", "utf8")
+                // Limit log size
+                if (buildLog.length > 5000) {
+                  buildLog = buildLog.substring(buildLog.length - 5000)
+                  buildLog = "...(truncated)\n" + buildLog
+                }
+              } catch (e) {
+                buildLog = "Could not read build log"
+              }
+              
+              body = [
+                "## <img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/circle-x.svg' width='20' height='20' align='center' /> Build Failed",
+                "",
+                `<sub>Failed at commit <code>${commitSha.substring(0, 7)}</code></sub>`,
+                "",
+                "---",
+                "",
+                "<details open>",
+                "<summary><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/alert-triangle.svg' width='16' height='16' align='center' /> <strong>Build Error Log</strong></summary>",
+                "",
+                "```",
+                buildLog,
+                "```",
+                "",
+                "</details>"
+              ]
+            }
 
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: prNumber,
-              body: [
-                "### WindUI PR Build",
-                "",
-                `Built from commit: \`${context.payload.pull_request.head.sha}\``,
-                "",
-                "<details>",
-                "<summary>Loadstring (click to expand)</summary>",
-                "",
-                "```lua",
-                loadstring,
-                "```",
-                "</details>",
-                "",
-                "<details>",
-                "<summary>Example: main_example.lua with updated loadstring (click to expand)</summary>",
-                "",
-                "```lua",
-                updated,
-                "```",
-                "</details>"
-              ].join("\n")
+              body: body.join("\n")
             })
