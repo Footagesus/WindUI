@@ -209,7 +209,7 @@ function TabModule.New(Config, UIScale)
             Icon.AnchorPoint = Vector2.new(0.5,0.5)
             Icon.Position = UDim2.new(0.5,0,0.5,0)
             Icon.ImageLabel.ImageTransparency = 0
-            Icon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Tab.IconColor)
+            Icon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Tab.IconColor, 0.68)
             TextOffset = -26-2-(Window.UIPadding/2)
             Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1,TextOffset,0,0)
         end
