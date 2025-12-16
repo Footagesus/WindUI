@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.63  |  2025-12-14  |  Roblox UI Library for scripts
+    v1.6.63  |  2025-12-16  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -830,13 +830,13 @@ local C=v.B
 return 0.299*x+0.587*B+0.114*C
 end
 
-function p.GetTextColorForHSB(v)
-local x=p.Color3ToHSB(v)local
-B, C, F=x.h, x.s, x.b
-if p.GetPerceivedBrightness(v)>0.5 then
-return Color3.fromHSV(B/360,0,0.05)
+function p.GetTextColorForHSB(v,x)
+local B=p.Color3ToHSB(v)local
+C, F, G=B.h, B.s, B.b
+if p.GetPerceivedBrightness(v)>(x or 0.5)then
+return Color3.fromHSV(C/360,0,0.05)
 else
-return Color3.fromHSV(B/360,0,0.98)
+return Color3.fromHSV(C/360,0,0.98)
 end
 end
 
@@ -3737,6 +3737,35 @@ ad(al,.06,{ImageColor3=an}):Play()
 end
 end
 
+function ah.SetIcon(am,an)
+ah.Icon=an
+
+if an then
+ai=ab.Image(
+an,
+an,
+0,
+af.Window,
+"Tag",
+false
+)
+
+ai.Size=UDim2.new(0,ah.IconSize,0,ah.IconSize)
+ai.Parent=al
+
+if typeof(ah.Color)=="Color3"then
+ai.ImageLabel.ImageColor3=ab.GetTextColorForHSB(ah.Color)
+elseif typeof(ah.Color)=="table"then
+ai.ImageLabel.ImageColor3=ab.GetTextColorForHSB(ab.GetAverageColor(ak))
+end
+else
+if ai then
+ai:Destroy()
+ai=nil
+end
+end
+end
+
 
 return ah
 end
@@ -5487,25 +5516,25 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 Name="Bar"
 },{
-ab.NewRoundFrame(an,"SquircleOutline2",{
+ab.NewRoundFrame(an,"Glass-Square",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
 Name="Highlight",
-ImageTransparency=.45,
+ImageTransparency=0.4,
 },{
-ac("UIGradient",{
-Rotation=60,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-}),
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 ao,
 ac("UIScale",{
@@ -6225,7 +6254,7 @@ if aj.Window.NewElements then
 af(ak.UIElements.SliderIcon.Frame.Thumb,.24,{ImageTransparency=.85,Size=UDim2.new(0,(aj.Window.NewElements and(ak.ThumbSize*2)or(ak.ThumbSize))+8,0,ak.ThumbSize+8)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 if aw then aw:Open()end
-print"piskaa"
+
 end
 end)
 
@@ -9207,7 +9236,7 @@ NumberSequenceKeypoint.new(1.0,0.1),
 as.AnchorPoint=Vector2.new(0.5,0.5)
 as.Position=UDim2.new(0.5,0,0.5,0)
 as.ImageLabel.ImageTransparency=0
-as.ImageLabel.ImageColor3=af.GetTextColorForHSB(ap.IconColor)
+as.ImageLabel.ImageColor3=af.GetTextColorForHSB(ap.IconColor,0.68)
 ar=-28-(Window.UIPadding/2)
 ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,ar,0,0)
 end
