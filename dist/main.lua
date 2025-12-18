@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.63  |  2025-12-16  |  Roblox UI Library for scripts
+    v1.6.63  |  2025-12-18  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -1918,52 +1918,52 @@ local aa=a.load'b'
 local ab=aa.New
 local ac=aa.Tween
 
+local ad
 
-
-local ad={
+local ae={
 Holder=nil,
 
 Parent=nil,
 }
 
-function ad.Init(ae,af)
-Window=ae
-ad.Parent=af
-return ad
+function ae.Init(af,ag)
+ad=af
+ae.Parent=ag
+return ae
 end
 
-function ad.Create(ae,af)
-local ag={
+function ae.Create(af,ag)
+local ah={
 UICorner=24,
 UIPadding=15,
 UIElements={}
 }
 
-if ae then ag.UIPadding=0 end
-if ae then ag.UICorner=26 end
+if af then ah.UIPadding=0 end
+if af then ah.UICorner=26 end
 
-af=af or"Dialog"
+ag=ag or"Dialog"
 
-if not ae then
-ag.UIElements.FullScreen=ab("Frame",{
+if not af then
+ah.UIElements.FullScreen=ab("Frame",{
 ZIndex=999,
 BackgroundTransparency=1,
 BackgroundColor3=Color3.fromHex"#000000",
 Size=UDim2.new(1,0,1,0),
 Active=false,
 Visible=false,
-Parent=ad.Parent or(Window and Window.UIElements and Window.UIElements.Main and Window.UIElements.Main.Main)
+Parent=ae.Parent or(ad and ad.UIElements and ad.UIElements.Main and ad.UIElements.Main.Main)
 },{
 ab("UICorner",{
-CornerRadius=UDim.new(0,Window.UICorner)
+CornerRadius=UDim.new(0,ad.UICorner)
 })
 })
 end
 
-ag.UIElements.Main=ab("Frame",{
+ah.UIElements.Main=ab("Frame",{
 Size=UDim2.new(0,280,0,0),
 ThemeTag={
-BackgroundColor3=af.."Background",
+BackgroundColor3=ag.."Background",
 },
 AutomaticSize="Y",
 BackgroundTransparency=1,
@@ -1971,24 +1971,24 @@ Visible=false,
 ZIndex=99999,
 },{
 ab("UIPadding",{
-PaddingTop=UDim.new(0,ag.UIPadding),
-PaddingLeft=UDim.new(0,ag.UIPadding),
-PaddingRight=UDim.new(0,ag.UIPadding),
-PaddingBottom=UDim.new(0,ag.UIPadding),
+PaddingTop=UDim.new(0,ah.UIPadding),
+PaddingLeft=UDim.new(0,ah.UIPadding),
+PaddingRight=UDim.new(0,ah.UIPadding),
+PaddingBottom=UDim.new(0,ah.UIPadding),
 })
 })
 
-ag.UIElements.MainContainer=aa.NewRoundFrame(ag.UICorner,"Squircle",{
+ah.UIElements.MainContainer=aa.NewRoundFrame(ah.UICorner,"Squircle",{
 Visible=false,
 
-ImageTransparency=ae and 0.15 or 0,
-Parent=ae and ad.Parent or ag.UIElements.FullScreen,
+ImageTransparency=af and 0.15 or 0,
+Parent=af and ae.Parent or ah.UIElements.FullScreen,
 Position=UDim2.new(0.5,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
 AutomaticSize="XY",
 ThemeTag={
-ImageColor3=af.."Background",
-ImageTransparency=af.."BackgroundTransparency",
+ImageColor3=ag.."Background",
+ImageTransparency=ag.."BackgroundTransparency",
 },
 ZIndex=9999,
 },{
@@ -1997,7 +1997,7 @@ ZIndex=9999,
 
 
 
-ag.UIElements.Main,
+ah.UIElements.Main,
 
 
 
@@ -2019,48 +2019,48 @@ ag.UIElements.Main,
 
 })
 
-function ag.Open(ah)
-if not ae then
-ag.UIElements.FullScreen.Visible=true
-ag.UIElements.FullScreen.Active=true
+function ah.Open(ai)
+if not af then
+ah.UIElements.FullScreen.Visible=true
+ah.UIElements.FullScreen.Active=true
 end
 
 task.spawn(function()
-ag.UIElements.MainContainer.Visible=true
+ah.UIElements.MainContainer.Visible=true
 
-if not ae then
-ac(ag.UIElements.FullScreen,0.1,{BackgroundTransparency=.3}):Play()
+if not af then
+ac(ah.UIElements.FullScreen,0.1,{BackgroundTransparency=.3}):Play()
 end
-ac(ag.UIElements.MainContainer,0.1,{ImageTransparency=0}):Play()
+ac(ah.UIElements.MainContainer,0.1,{ImageTransparency=0}):Play()
 
 
 task.spawn(function()
 task.wait(0.05)
-ag.UIElements.Main.Visible=true
+ah.UIElements.Main.Visible=true
 end)
 end)
 end
-function ag.Close(ah)
-if not ae then
-ac(ag.UIElements.FullScreen,0.1,{BackgroundTransparency=1}):Play()
-ag.UIElements.FullScreen.Active=false
+function ah.Close(ai)
+if not af then
+ac(ah.UIElements.FullScreen,0.1,{BackgroundTransparency=1}):Play()
+ah.UIElements.FullScreen.Active=false
 task.spawn(function()
 task.wait(.1)
-ag.UIElements.FullScreen.Visible=false
+ah.UIElements.FullScreen.Visible=false
 end)
 end
-ag.UIElements.Main.Visible=false
+ah.UIElements.Main.Visible=false
 
-ac(ag.UIElements.MainContainer,0.1,{ImageTransparency=1}):Play()
+ac(ah.UIElements.MainContainer,0.1,{ImageTransparency=1}):Play()
 
 
 
 task.spawn(function()
 task.wait(.1)
-if not ae then
-ag.UIElements.FullScreen:Destroy()
+if not af then
+ah.UIElements.FullScreen:Destroy()
 else
-ag.UIElements.MainContainer:Destroy()
+ah.UIElements.MainContainer:Destroy()
 end
 end)
 
@@ -2068,10 +2068,10 @@ return function()end
 end
 
 
-return ag
+return ah
 end
 
-return ad end function a.m()
+return ae end function a.m()
 local aa={}
 
 
@@ -10707,7 +10707,7 @@ AutomaticSize="XY",
 BackgroundTransparency=1,
 },{
 al("TextLabel",{
-Text=au.User.Anonymous and"Anonymous"or game.Players.LocalPlayer.DisplayName,
+Text=au.User.Anonymous and"Anonymous"or af.LocalPlayer.DisplayName,
 TextSize=17,
 ThemeTag={
 TextColor3="Text",
@@ -10721,7 +10721,7 @@ TextXAlignment="Left",
 Name="DisplayName"
 }),
 al("TextLabel",{
-Text=au.User.Anonymous and"anonymous"or game.Players.LocalPlayer.Name,
+Text=au.User.Anonymous and"anonymous"or af.LocalPlayer.Name,
 TextSize=15,
 TextTransparency=.6,
 ThemeTag={
@@ -10767,8 +10767,8 @@ function au.User.SetAnonymous(aC,aD)
 if aD~=false then aD=true end
 au.User.Anonymous=aD
 aB.UserIcon.ImageLabel.Image=GetUserThumb()
-aB.UserIcon.Frame.DisplayName.Text=aD and"Anonymous"or game.Players.LocalPlayer.DisplayName
-aB.UserIcon.Frame.UserName.Text=aD and"anonymous"or game.Players.LocalPlayer.Name
+aB.UserIcon.Frame.DisplayName.Text=aD and"Anonymous"or af.LocalPlayer.DisplayName
+aB.UserIcon.Frame.UserName.Text=aD and"anonymous"or af.LocalPlayer.Name
 end
 
 if au.User.Enabled then
