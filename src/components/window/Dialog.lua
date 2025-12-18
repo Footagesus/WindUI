@@ -2,7 +2,7 @@ local Creator = require("../../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
-local Winsow
+local Window
 
 local DialogModule = {
     Holder = nil,
