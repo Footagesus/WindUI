@@ -52,10 +52,9 @@ function Element:New(Config)
     
     local function FormatValue(val)
         if IsFloat then
-            return string.format("%.2f", val)
-        else
-            return tonumber(math.floor(val + 0.5))
+            return tonumber(string.format("%.2f", val))
         end
+        return math.floor(val + 0.5)
     end
     
     local function CalculateValue(rawValue)
