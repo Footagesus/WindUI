@@ -22,6 +22,8 @@ return {
     WindowTopbarIcon = "Icon",
     WindowTopbarButtonIcon = "Icon",
     
+    WindowSearchBarBackground = "Background",
+    
     TabBackground = "Hover",
     TabTitle = "Text",
     TabIcon = "Icon",
@@ -48,6 +50,8 @@ return {
     
     Checkbox = "Primary",
     CheckboxIcon = "White",
+    CheckboxBorder = "White",
+    CheckboxBorderTransparency = .75,
     
     Slider = "Primary",
     SliderThumb = "White",
@@ -58,4 +62,12 @@ return {
     TooltipText = "White",
     TooltipSecondary = "Primary",
     TooltipSecondaryText = "White",
+    
+    SectionBox = "White",
+    SectionBoxTransparency = .95,
+    SectionBoxBorder = "White",
+    SectionBoxBorderTransparency = .75,
+    
+    SearchBarBorder = "White",
+    SearchBarBorderTransparency = .75,
 }
