@@ -324,11 +324,11 @@ function TabModule.New(Config, UIScale)
 	
 	Tab.ContainerFrame = ContainerFrameCanvas
 	
-	Creator.AddSignal(Tab.UIElements.Main.MouseButton1Click, function()
-	    if not Tab.Locked then
-	        TabModule:SelectTab(TabIndex)
-	    end
-	end)
+    Creator.AddSignal(Tab.UIElements.Main.MouseButton1Click, function()
+        if not Tab.Locked then
+            TabModule:SelectTab(TabIndex)       
+        end
+    end)
 	
 	if Window.ScrollBarEnabled then
         CreateScrollSlider(Tab.UIElements.ContainerFrame, Tab.UIElements.ContainerFrameCanvas, Window, 3)

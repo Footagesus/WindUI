@@ -1881,6 +1881,33 @@ return function(Config)
             end
         end
     end
-
+    
+    
+    -- local Bindings = {
+    --     Title = function(v)
+    --         Window:SetTitle(v)
+    --     end,
+    --     Author = function(v)
+    --         Window:SetAuthor(v)
+    --     end,
+    --     Size = function(v)
+    --         Window:SetSize(v)
+    --     end,
+    --     HidePanelBackground  = function(v)
+    --         Window:SetPanelBackground(v)
+    --     end
+    -- }
+    
+    -- setmetatable(Window, {
+    --     __newindex = function(t, key, value)
+    --         rawset(t, key, value)
+    
+    --         local bind = bindings[key]
+    --         if bind then
+    --             bind(value)
+    --         end
+    --     end
+    -- })
+    
     return Window
 end
