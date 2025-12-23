@@ -94,7 +94,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
     local SearchFrame = Creator.NewRoundFrame(SearchBarModule.Radius, "Squircle", {
         Size = UDim2.new(1,0,1,0),
         ThemeTag = {
-            ImageColor3 = "Background",
+            ImageColor3 = "WindowSearchBarBackground",
         },
         ImageTransparency = 0,
     }, {
@@ -103,8 +103,10 @@ function SearchBar.new(TabModule, Parent, OnClose)
             BackgroundTransparency = 1,
             --AutomaticSize = "Y",
             Visible = false,
-            ImageColor3 = Color3.new(1,1,1),
-            ImageTransparency = .98,
+            ThemeTag = {
+                ImageColor3 = "White",
+            },
+            ImageTransparency = 1,
             Name = "Frame",
         }, {
             New("Frame", { -- topbar search
@@ -188,22 +190,17 @@ function SearchBar.new(TabModule, Parent, OnClose)
             Scale = .9, -- 1
         }),
         SearchFrame,
-        Creator.NewRoundFrame(SearchBarModule.Radius, "SquircleOutline2", {
+        Creator.NewRoundFrame(SearchBarModule.Radius, "Glass-0.7", {
             Size = UDim2.new(1,0,1,0),
+            BackgroundTransparency = 1,
+            --AutomaticSize = "Y",
+            --Visible = false,
             ThemeTag = {
-                ImageColor3 = "Outline",
+                ImageColor3 = "SearchBarBorder",
+                ImageTransparency = "SearchBarBorderTransparency",
             },
-            ImageTransparency = 1, -- .7
-        }, {
-            New("UIGradient", {
-                Rotation = 45,
-                Transparency = NumberSequence.new({
-                    NumberSequenceKeypoint.new(0, 0.55),
-                    NumberSequenceKeypoint.new(0.5, 0.8),
-                    NumberSequenceKeypoint.new(1, 0.6)
-                })
-            })
-        })
+            Name = "Outline",
+        }),
     })
     
     local function CreateSearchTab(Title, Desc, Icon, Parent, IsParent, Callback)
@@ -224,24 +221,24 @@ function SearchBar.new(TabModule, Parent, OnClose)
                 ImageTransparency = 1, -- .95
                 Name = "Main"
             }, {
-                Creator.NewRoundFrame(SearchBarModule.Radius-11, "SquircleOutline2", {
+                Creator.NewRoundFrame(SearchBarModule.Radius-11, "Glass-1", {
                     Size = UDim2.new(1,0,1,0),
                     Position = UDim2.new(0.5,0,0.5,0),
                     AnchorPoint = Vector2.new(0.5,0.5),
                     ThemeTag = {
-                        ImageColor3 = "Outline",
+                        ImageColor3 = "White",
                     },
-                    ImageTransparency = 1, -- .7
+                    ImageTransparency = 1, -- .75
                     Name = "Outline",
                 }, {
-                    New("UIGradient", {
-                        Rotation = 65,
-                        Transparency = NumberSequence.new({
-                            NumberSequenceKeypoint.new(0, 0.55),
-                            NumberSequenceKeypoint.new(0.5, 0.8),
-                            NumberSequenceKeypoint.new(1, 0.6)
-                        })
-                    }),
+                    -- New("UIGradient", {
+                    --     Rotation = 65,
+                    --     Transparency = NumberSequence.new({
+                    --         NumberSequenceKeypoint.new(0, 0.55),
+                    --         NumberSequenceKeypoint.new(0.5, 0.8),
+                    --         NumberSequenceKeypoint.new(1, 0.6)
+                    --     })
+                    -- }),
                     New("UIPadding", {
                         PaddingTop = UDim.new(0,SearchBarModule.Padding-2),
                         PaddingLeft = UDim.new(0,SearchBarModule.Padding),
@@ -350,7 +347,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
 
         Creator.AddSignal(Tab.Main.MouseEnter, function()
             Tween(Tab.Main, .04, {ImageTransparency = .95}):Play()
-            Tween(Tab.Main.Outline, .04, {ImageTransparency = .7}):Play()
+            Tween(Tab.Main.Outline, .04, {ImageTransparency = .75}):Play()
         end)
         Creator.AddSignal(Tab.Main.InputEnded, function()
             Tween(Tab.Main, .08, {ImageTransparency = 1}):Play()

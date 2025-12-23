@@ -82,7 +82,7 @@ function TabModule.New(Config, UIScale)
         },
         ImageTransparency = 1,
     }, {
-        Creator.NewRoundFrame(Tab.UICorner, "Glass-Square", { 
+        Creator.NewRoundFrame(Tab.UICorner, "Glass-1", { 
             Size = UDim2.new(1,0,1,0),
             ThemeTag = {
                 ImageColor3 = "Text",
@@ -183,27 +183,27 @@ function TabModule.New(Config, UIScale)
                 Parent = Tab.UIElements.Main.Frame
             }, {
                 Icon,
-                Creator.NewRoundFrame(Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2+(Window.UIPadding/4))) or 9999, "SquircleOutline", {
+                Creator.NewRoundFrame(Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2+(Window.UIPadding/4))) or 9999, "Glass-1.4", {
                     Size = UDim2.new(1,0,1,0),
                     ThemeTag = {
                         ImageColor3 = "White",
                     },
-                    ImageTransparency = .35,
+                    ImageTransparency = 0,
                     Name = "Outline"
                 }, {
-                    New("UIGradient", {
-                        Rotation = 45,
-                        Color = ColorSequence.new({
-                            ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-                            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-                            ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
-                        }),
-                        Transparency = NumberSequence.new({
-                            NumberSequenceKeypoint.new(0.0, 0.1),
-                            NumberSequenceKeypoint.new(0.5, 1),
-                            NumberSequenceKeypoint.new(1.0, 0.1),
-                        })
-                    }),
+                    -- New("UIGradient", {
+                    --     Rotation = 45,
+                    --     Color = ColorSequence.new({
+                    --         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
+                    --         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
+                    --         ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
+                    --     }),
+                    --     Transparency = NumberSequence.new({
+                    --         NumberSequenceKeypoint.new(0.0, 0.1),
+                    --         NumberSequenceKeypoint.new(0.5, 1),
+                    --         NumberSequenceKeypoint.new(1.0, 0.1),
+                    --     })
+                    -- }),
                 }),
             })
             Icon.AnchorPoint = Vector2.new(0.5,0.5)
