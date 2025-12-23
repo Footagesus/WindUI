@@ -1033,6 +1033,15 @@ return function(Config)
         WindowAuthor.Text = text
     end
     
+    function Window:SetSize(size)
+        if typeof(size) == "UDim2" then
+            Window.Size = size
+            
+            Tween(Window.UIElements.Main, 0.08, {Size = size}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+        end
+    end
+    
+    
     function Window:SetBackgroundImage(id)
         Window.UIElements.Main.Background.ImageLabel.Image = id
     end
@@ -1428,7 +1437,7 @@ return function(Config)
     local TabModule = TabModuleMain.Init(Window, Config.WindUI, Config.WindUI.TooltipGui)
     TabModule:OnChange(function(t) Window.CurrentTab = t end)
     
-    Window.TabModule = TabModuleMain
+    Window.TabModule = TabModule
     
     function Window:Tab(TabConfig)
         TabConfig.Parent = Window.UIElements.SideBar.Frame
@@ -1446,6 +1455,23 @@ return function(Config)
     function Window:IsResizable(v)
         Window.Resizable = v
         Window.CanResize = v
+    end
+    
+    function Window:SetPanelBackground(v)
+        if typeof(v) == "boolean" then
+            Window.HidePanelBackground = v
+            
+            Window.UIElements.MainBar.Background.Visible = v
+            
+            if TabModule then
+                for _, Container in next, TabModule.Containers do
+                    Container.ScrollingFrame.UIPadding.PaddingTop = UDim.new(0,Window.HidePanelBackground and 20 or 10)
+                    Container.ScrollingFrame.UIPadding.PaddingLeft = UDim.new(0,Window.HidePanelBackground and 20 or 10)
+                    Container.ScrollingFrame.UIPadding.PaddingRight = UDim.new(0,Window.HidePanelBackground and 20 or 10)
+                    Container.ScrollingFrame.UIPadding.PaddingBottom = UDim.new(0,Window.HidePanelBackground and 20 or 10)
+                end
+            end
+        end
     end
     
     function Window:Divider()
