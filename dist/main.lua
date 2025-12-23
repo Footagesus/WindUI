@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.63  |  2025-12-18  |  Roblox UI Library for scripts
+    v1.6.63  |  2025-12-23  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -38,6 +38,8 @@ WindowTopbarAuthor="Text",
 WindowTopbarIcon="Icon",
 WindowTopbarButtonIcon="Icon",
 
+WindowSearchBarBackground="Background",
+
 TabBackground="Hover",
 TabTitle="Text",
 TabIcon="Icon",
@@ -64,6 +66,8 @@ ToggleBar="White",
 
 Checkbox="Primary",
 CheckboxIcon="White",
+CheckboxBorder="White",
+CheckboxBorderTransparency=.75,
 
 Slider="Primary",
 SliderThumb="White",
@@ -74,6 +78,14 @@ Tooltip=Color3.fromHex"4C4C4C",
 TooltipText="White",
 TooltipSecondary="Primary",
 TooltipSecondaryText="White",
+
+SectionBox="White",
+SectionBoxTransparency=.95,
+SectionBoxBorder="White",
+SectionBoxBorderTransparency=.75,
+
+SearchBarBorder="White",
+SearchBarBorderTransparency=.75,
 }end function a.b()
 
 local b=(cloneref or clonereference or function(b)return b end)
@@ -179,7 +191,7 @@ Shapes={Square=
 "rbxassetid://82909646051652",
 ["Square-Outline"]="rbxassetid://72946211851948",Squircle=
 
-"rbxassetid://80999662900595",Squircleoutline=
+"rbxassetid://80999662900595",SquircleOutline=
 "rbxassetid://117788349049947",
 ["Squircle-Outline"]="rbxassetid://117817408534198",SquircleOutline2=
 
@@ -192,8 +204,9 @@ Shapes={Square=
 ["Squircle-TL-TR-Outline"]="rbxassetid://136702870075563",
 ["Squircle-BL-BR-Outline"]="rbxassetid://75035847706564",
 
-["Glass-Circle"]="rbxassetid://79047752995006",
-["Glass-Square"]="rbxassetid://95071123641270",
+["Glass-0.7"]="rbxassetid://79047752995006",
+["Glass-1"]="rbxassetid://97324581055162",
+["Glass-1.4"]="rbxassetid://95071123641270",
 }
 }
 
@@ -556,7 +569,7 @@ return p.Shapes[F]
 end
 
 local function getSliceCenterForType(F)
-return not table.find({"Shadow-sm","Glass-Circle","Glass-Square"},F)and Rect.new(256
+return not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},F)and Rect.new(256
 ,256
 ,256
 ,256
@@ -580,7 +593,7 @@ end
 end
 
 local function UpdateSliceScale(J)
-local L=not table.find({"Shadow-sm","Glass-Circle","Glass-Square"},u)and(J/(256))or(J/512)
+local L=not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},u)and(J/(256))or(J/512)
 F.SliceScale=math.max(L,0.0001)
 end
 
@@ -887,7 +900,7 @@ local e=b.Tween
 local f={
 Size=UDim2.new(0,300,1,-156),
 SizeLower=UDim2.new(0,300,1,-56),
-UICorner=13,
+UICorner=18,
 UIPadding=14,
 
 Holder=nil,
@@ -939,13 +952,13 @@ Background=g.Background,
 BackgroundImageTransparency=g.BackgroundImageTransparency,
 Duration=g.Duration or 5,
 Buttons=g.Buttons or{},
-CanClose=true,
+CanClose=g.CanClose~=false,
 UIElements={},
 Closed=false,
 }
-if h.CanClose==nil then
-h.CanClose=true
-end
+
+
+
 f.NotificationIndex=f.NotificationIndex+1
 f.Notifications[f.NotificationIndex]=h
 
@@ -1050,12 +1063,12 @@ TextWrapped=true,
 TextXAlignment="Left",
 RichText=true,
 BackgroundTransparency=1,
-TextSize=16,
+TextSize=18,
 ThemeTag={
 TextColor3="Text"
 },
 Text=h.Title,
-FontFace=Font.new(b.Font,Enum.FontWeight.Medium)
+FontFace=Font.new(b.Font,Enum.FontWeight.SemiBold)
 }),
 d("UIListLayout",{
 Padding=UDim.new(0,f.UIPadding/3)
@@ -1702,28 +1715,28 @@ ImageTransparency=1,
 Visible=not ak
 }),
 
-ab.NewRoundFrame(am,not ak and"SquircleOutline"or"SquircleOutline2",{
+ab.NewRoundFrame(am,not ak and"Glass-1"or"Glass-0.7",{
 ThemeTag={
-ImageColor3=ah~="White"and"Outline"or nil,
+ImageColor3="White",
 },
 Size=UDim2.new(1,0,1,0),
-ImageColor3=ah=="White"and Color3.new(0,0,0)or nil,
-ImageTransparency=ah=="Primary"and.95 or.85,
-Name="SquircleOutline",
+
+ImageTransparency=0.6,
+Name="Outline",
 },{
-ac("UIGradient",{
-Rotation=70,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-})
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 
 ab.NewRoundFrame(am,"Squircle",{
@@ -1841,12 +1854,12 @@ ImageColor3="Accent",
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=.97,
 }),
-ab.NewRoundFrame(am,"SquircleOutline",{
+ab.NewRoundFrame(am,"Glass-1",{
 ThemeTag={
 ImageColor3="Outline",
 },
 Size=UDim2.new(1,0,1,0),
-ImageTransparency=.95,
+ImageTransparency=.75,
 },{
 
 
@@ -3404,26 +3417,26 @@ ImageColor3="Accent",
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=.97,
 }),
-ab.NewRoundFrame(aj,"SquircleOutline",{
+ab.NewRoundFrame(aj,"Glass-1.4",{
 ThemeTag={
 ImageColor3="Outline",
 },
 Size=UDim2.new(1,0,1,0),
-ImageTransparency=.95,
+ImageTransparency=.75,
 },{
-ac("UIGradient",{
-Rotation=70,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-})
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 ab.NewRoundFrame(aj,"Squircle",{
 Size=UDim2.new(1,0,1,0),
@@ -3642,6 +3655,7 @@ Title=af.Title or"Tag",
 Icon=af.Icon,
 Color=af.Color or Color3.fromHex"#315dff",
 Radius=af.Radius or 999,
+Border=af.Border or false,
 
 TagFrame=nil,
 Height=26,
@@ -3698,17 +3712,31 @@ Parent=ag,
 ImageColor3=typeof(ah.Color)=="Color3"and ah.Color or Color3.new(1,1,1),
 },{
 ak,
+ab.NewRoundFrame(ah.Radius,"Glass-1",{
+Size=UDim2.new(1,0,1,0),
+ThemeTag={
+ImageColor3="White",
+},
+ImageTransparency=.75
+}),
+ac("Frame",{
+Size=UDim2.new(0,0,1,0),
+AutomaticSize="X",
+Name="Content",
+BackgroundTransparency=1,
+},{
+ai,
+aj,
 ac("UIPadding",{
 PaddingLeft=UDim.new(0,ah.Padding),
 PaddingRight=UDim.new(0,ah.Padding),
 }),
-ai,
-aj,
 ac("UIListLayout",{
 FillDirection="Horizontal",
 VerticalAlignment="Center",
 Padding=UDim.new(0,ah.Padding/1.5)
 })
+}),
 })
 
 
@@ -5516,7 +5544,7 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 Name="Bar"
 },{
-ab.NewRoundFrame(an,"Glass-Square",{
+ab.NewRoundFrame(an,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
 Name="Highlight",
@@ -5560,6 +5588,12 @@ else
 ad(aq.Frame,0.15,{
 Position=UDim2.new(0,2,0.5,0),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+end
+else
+if aw then
+aq.Frame.Position=UDim2.new(0,au-at-2,0.5,0)
+else
+aq.Frame.Position=UDim2.new(0,2,0.5,0)
 end
 end
 
@@ -5706,8 +5740,8 @@ end
 return aa end function a.D()
 local aa={}
 
-local ab=a.load'b'
-local ac=ab.New
+local ab=a.load'b'local ac=
+ab.New
 local ad=ab.Tween
 
 
@@ -5749,19 +5783,21 @@ ImageColor3="Checkbox",
 },
 ImageTransparency=1,
 }),
-ab.NewRoundFrame(al,"SquircleOutline",{
+ab.NewRoundFrame(al,"Glass-1.4",{
 Size=UDim2.new(1,0,1,0),
 Name="Stroke",
-ImageColor3=Color3.new(1,1,1),
-ImageTransparency=1,
+ThemeTag={
+ImageColor3="CheckboxBorder",
+ImageTransparency="CheckboxBorderTransparency",
+},
 },{
-ac("UIGradient",{
-Rotation=90,
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0,0),
-NumberSequenceKeypoint.new(1,1),
-}
-})
+
+
+
+
+
+
+
 }),
 
 am,
@@ -5965,10 +6001,9 @@ local as=ak.Step%1~=0
 
 local function FormatValue(at)
 if as then
-return string.format("%.2f",at)
-else
-return tonumber(math.floor(at+0.5))
+return tonumber(string.format("%.2f",at))
 end
+return math.floor(at+0.5)
 end
 
 local function CalculateValue(at)
@@ -6052,25 +6087,25 @@ ImageColor3="SliderThumb",
 },
 Name="Thumb",
 },{
-ad.NewRoundFrame(99,"SquircleOutline2",{
+ad.NewRoundFrame(99,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
 Name="Highlight",
-ImageTransparency=.45,
+ImageTransparency=.6,
 },{
-ae("UIGradient",{
-Rotation=60,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-}),
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 })
 })
@@ -6305,7 +6340,7 @@ ElementTable=ak,
 ParentConfig=aj,
 }
 
-ak.UIElements.Keybind=ah(ak.Value,nil,ak.KeybindFrame.UIElements.Main)
+ak.UIElements.Keybind=ah(ak.Value,nil,ak.KeybindFrame.UIElements.Main,nil,aj.Window.NewElements and 12 or 10)
 
 ak.UIElements.Keybind.Size=UDim2.new(
 0,24
@@ -6837,25 +6872,27 @@ Parent=an.UIElements.Menu.Frame.ScrollingFrame,
 ImageColor3=Color3.new(1,1,1),
 Active=not az.Locked,
 },{
-aj.NewRoundFrame(ao.MenuCorner-ao.MenuPadding,"SquircleOutline",{
+aj.NewRoundFrame(ao.MenuCorner-ao.MenuPadding,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
-ImageColor3=Color3.new(1,1,1),
+ThemeTag={
+ImageColor3="White",
+},
 ImageTransparency=1,
 Name="Highlight",
 },{
-ak("UIGradient",{
-Rotation=80,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-}),
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 ak("Frame",{
 Size=UDim2.new(1,0,1,0),
@@ -8479,12 +8516,16 @@ function ah.New(aj,ak)
 local al={
 __type="Section",
 Title=ak.Title or"Section",
+Desc=ak.Desc,
 Icon=ak.Icon,
 TextXAlignment=ak.TextXAlignment or"Left",
 TextSize=ak.TextSize or 19,
+DescTextSize=ak.DescTextSize or 16,
 Box=ak.Box or false,
+BoxBorder=ak.BoxBorder or false,
 FontWeight=ak.FontWeight or Enum.FontWeight.SemiBold,
 TextTransparency=ak.TextTransparency or 0.05,
+DescTextTransparency=ak.DescTextTransparency or 0.4,
 Opened=ak.Opened or false,
 UIElements={},
 
@@ -8539,19 +8580,33 @@ if al.Icon then
 al:SetIcon(al.Icon)
 end
 
-local ao=ae("TextLabel",{
+local ao=ae("Frame",{
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+},{
+ae("UIListLayout",{
+FillDirection="Vertical",
+HorizontalAlignment=al.TextXAlignment,
+VerticalAlignment="Center",
+})
+})
+
+local ap,aq
+
+function createTitle(ar,as)
+return ae("TextLabel",{
 BackgroundTransparency=1,
 TextXAlignment=al.TextXAlignment,
 AutomaticSize="Y",
-TextSize=al.TextSize,
-TextTransparency=al.TextTransparency,
+TextSize=as=="Title"and al.TextSize or al.DescTextSize,
+TextTransparency=as=="Title"and al.TextTransparency or al.DescTextTransparency,
 ThemeTag={
 TextColor3="Text",
 },
 FontFace=Font.new(aa.Font,al.FontWeight),
 
 
-Text=al.Title,
+Text=ar,
 Size=UDim2.new(
 1,
 0,
@@ -8559,32 +8614,49 @@ Size=UDim2.new(
 0
 ),
 TextWrapped=true,
+Parent=ao,
 })
+end
 
+ap=createTitle(al.Title,"Title")
+if al.Desc then
+aq=createTitle(al.Desc,"Desc")
+end
 
 local function UpdateTitleSize()
-local ap=0
+local ar=0
 if am then
-ap=ap-(al.IconSize+8)
+ar=ar-(al.IconSize+8)
 end
 if an.Visible then
-ap=ap-(al.IconSize+8)
+ar=ar-(al.IconSize+8)
 end
-ao.Size=UDim2.new(1,ap,0,0)
+ao.Size=UDim2.new(1,ar,0,0)
 end
 
 
-local ap=aa.NewRoundFrame(ak.Window.ElementConfig.UICorner,"Squircle",{
+local ar=aa.NewRoundFrame(ak.Window.ElementConfig.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 BackgroundTransparency=1,
 Parent=ak.Parent,
 ClipsDescendants=true,
 AutomaticSize="Y",
-ImageTransparency=al.Box and.93 or 1,
+ImageTransparency=1,
 ThemeTag={
-ImageColor3="Text",
+ImageTransparency=al.Box and"SectionBoxBackgroundTransparency"or nil,
+ImageColor3="SectionBoxBackground",
 },
 },{
+aa.NewRoundFrame(ak.Window.ElementConfig.UICorner,ak.Window.NewElements and"Glass-1"or"SquircleOutline",{
+Size=UDim2.new(1,0,1,0),
+
+ThemeTag={
+ImageTransparency="SectionBoxBorderTransparency",
+ImageColor3="SectionBoxBorder",
+},
+Visible=al.Box and al.BoxBorder,
+Name="Outline",
+}),
 ae("TextButton",{
 Size=UDim2.new(1,0,0,Expandable and 0 or al.HeaderSize),
 BackgroundTransparency=1,
@@ -8631,29 +8703,38 @@ VerticalAlignment="Top",
 
 
 
-al.ElementFrame=ap
+al.ElementFrame=ar
 
 
-local aq=ak.ElementsModule
+local as=ak.ElementsModule
 
-aq.Load(al,ap.Content,aq.Elements,ak.Window,ak.WindUI,function()
+as.Load(al,ar.Content,as.Elements,ak.Window,ak.WindUI,function()
 if not al.Expandable then
 al.Expandable=true
 an.Visible=true
 UpdateTitleSize()
 end
-end,aq,ak.UIScale,ak.Tab)
+end,as,ak.UIScale,ak.Tab)
 
 
 UpdateTitleSize()
 
-function al.SetTitle(ar,as)
-ao.Text=as
+function al.SetTitle(at,au)
+al.Title=au
+ap.Text=au
 end
 
-function al.Destroy(ar)
-for as,at in next,al.Elements do
-at:Destroy()
+function al.SetDesc(at,au)
+al.Desc=au
+if not aq then
+aq=createTitle(au,"Desc")
+end
+aq.Text=Title
+end
+
+function al.Destroy(at)
+for au,av in next,al.Elements do
+av:Destroy()
 end
 
 
@@ -8663,30 +8744,30 @@ end
 
 
 
-ap:Destroy()
+ar:Destroy()
 end
 
-function al.Open(ar)
+function al.Open(at)
 if al.Expandable then
 al.Opened=true
-af(ap,0.33,{
-Size=UDim2.new(ap.Size.X.Scale,ap.Size.X.Offset,0,al.HeaderSize+(ap.Content.AbsoluteSize.Y/ak.UIScale))
+af(ar,0.33,{
+Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,al.HeaderSize+(ar.Content.AbsoluteSize.Y/ak.UIScale))
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
-af(an.ImageLabel,0.1,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+af(an.ImageLabel,0.2,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 end
-function al.Close(ar)
+function al.Close(at)
 if al.Expandable then
 al.Opened=false
-af(ap,0.26,{
-Size=UDim2.new(ap.Size.X.Scale,ap.Size.X.Offset,0,al.HeaderSize)
+af(ar,0.26,{
+Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,al.HeaderSize)
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-af(an.ImageLabel,0.1,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+af(an.ImageLabel,0.2,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 end
 
-aa.AddSignal(ap.Top.MouseButton1Click,function()
+aa.AddSignal(ar.Top.MouseButton1Click,function()
 if al.Expandable then
 if al.Opened then
 al:Close()
@@ -8696,7 +8777,7 @@ end
 end
 end)
 
-aa.AddSignal(ap.Content.UIListLayout:GetPropertyChangedSignal"AbsoluteContentSize",function()
+aa.AddSignal(ar.Content.UIListLayout:GetPropertyChangedSignal"AbsoluteContentSize",function()
 if al.Opened then
 al:Open()
 end
@@ -8713,11 +8794,11 @@ if al.Expandable then
 
 
 
-ap.Size=UDim2.new(ap.Size.X.Scale,ap.Size.X.Offset,0,al.HeaderSize)
-ap.AutomaticSize="None"
-ap.Top.Size=UDim2.new(1,0,0,al.HeaderSize)
-ap.Top.AutomaticSize="None"
-ap.Content.Visible=true
+ar.Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,al.HeaderSize)
+ar.AutomaticSize="None"
+ar.Top.Size=UDim2.new(1,0,0,al.HeaderSize)
+ar.Top.AutomaticSize="None"
+ar.Content.Visible=true
 end
 if al.Opened then
 al:Open()
@@ -9109,7 +9190,7 @@ ImageColor3="TabBackground",
 },
 ImageTransparency=1,
 },{
-af.NewRoundFrame(ap.UICorner,"Glass-Square",{
+af.NewRoundFrame(ap.UICorner,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="Text",
@@ -9210,27 +9291,27 @@ ImageColor3=ap.IconColor,
 Parent=ap.UIElements.Main.Frame
 },{
 as,
-af.NewRoundFrame(ap.IconShape~="Circle"and(ap.UICorner+5-(2+(Window.UIPadding/4)))or 9999,"SquircleOutline",{
+af.NewRoundFrame(ap.IconShape~="Circle"and(ap.UICorner+5-(2+(Window.UIPadding/4)))or 9999,"Glass-1.4",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="White",
 },
-ImageTransparency=.35,
+ImageTransparency=0,
 Name="Outline"
 },{
-ah("UIGradient",{
-Rotation=45,
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0.0,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(0.5,Color3.fromRGB(255,255,255)),
-ColorSequenceKeypoint.new(1.0,Color3.fromRGB(255,255,255)),
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0.0,0.1),
-NumberSequenceKeypoint.new(0.5,1),
-NumberSequenceKeypoint.new(1.0,0.1),
-}
-}),
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 })
 as.AnchorPoint=Vector2.new(0.5,0.5)
@@ -9879,7 +9960,7 @@ PaddingBottom=UDim.new(0,an.Padding),
 local ar=af.NewRoundFrame(an.Radius,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
-ImageColor3="Background",
+ImageColor3="WindowSearchBarBackground",
 },
 ImageTransparency=0,
 },{
@@ -9888,8 +9969,10 @@ Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
 
 Visible=false,
-ImageColor3=Color3.new(1,1,1),
-ImageTransparency=.98,
+ThemeTag={
+ImageColor3="White",
+},
+ImageTransparency=1,
 Name="Frame",
 },{
 ah("Frame",{
@@ -9973,22 +10056,17 @@ ah("UIScale",{
 Scale=.9,
 }),
 ar,
-af.NewRoundFrame(an.Radius,"SquircleOutline2",{
+af.NewRoundFrame(an.Radius,"Glass-0.7",{
 Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+
+
 ThemeTag={
-ImageColor3="Outline",
+ImageColor3="SearchBarBorder",
+ImageTransparency="SearchBarBorderTransparency",
 },
-ImageTransparency=1,
-},{
-ah("UIGradient",{
-Rotation=45,
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0,0.55),
-NumberSequenceKeypoint.new(0.5,0.8),
-NumberSequenceKeypoint.new(1,0.6)
-}
-})
-})
+Name="Outline",
+}),
 })
 
 local function CreateSearchTab(au,av,aw,ax,ay,az)
@@ -10009,24 +10087,24 @@ ImageColor3="Text",
 ImageTransparency=1,
 Name="Main"
 },{
-af.NewRoundFrame(an.Radius-11,"SquircleOutline2",{
+af.NewRoundFrame(an.Radius-11,"Glass-1",{
 Size=UDim2.new(1,0,1,0),
 Position=UDim2.new(0.5,0,0.5,0),
 AnchorPoint=Vector2.new(0.5,0.5),
 ThemeTag={
-ImageColor3="Outline",
+ImageColor3="White",
 },
 ImageTransparency=1,
 Name="Outline",
 },{
-ah("UIGradient",{
-Rotation=65,
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0,0.55),
-NumberSequenceKeypoint.new(0.5,0.8),
-NumberSequenceKeypoint.new(1,0.6)
-}
-}),
+
+
+
+
+
+
+
+
 ah("UIPadding",{
 PaddingTop=UDim.new(0,an.Padding-2),
 PaddingLeft=UDim.new(0,an.Padding),
@@ -10135,7 +10213,7 @@ or(((an.Padding-2)*2)+aA.Main.Outline.Frame.Title.TextBounds.Y)
 
 af.AddSignal(aA.Main.MouseEnter,function()
 aj(aA.Main,.04,{ImageTransparency=.95}):Play()
-aj(aA.Main.Outline,.04,{ImageTransparency=.7}):Play()
+aj(aA.Main.Outline,.04,{ImageTransparency=.75}):Play()
 end)
 af.AddSignal(aA.Main.InputEnded,function()
 aj(aA.Main,.08,{ImageTransparency=1}):Play()
@@ -11345,6 +11423,15 @@ end
 g.Text=p
 end
 
+function au.SetSize(m,p)
+if typeof(p)=="UDim2"then
+au.Size=p
+
+am(au.UIElements.Main,0.08,{Size=p},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+end
+end
+
+
 function au.SetBackgroundImage(m,p)
 au.UIElements.Main.Background.ImageLabel.Image=p
 end
@@ -11740,7 +11827,7 @@ local u=a.load'V'
 local v=r.Init(au,as.WindUI,as.WindUI.TooltipGui)
 v:OnChange(function(x)au.CurrentTab=x end)
 
-au.TabModule=r
+au.TabModule=v
 
 function au.Tab(x,B)
 B.Parent=au.UIElements.SideBar.Frame
@@ -11758,6 +11845,23 @@ end
 function au.IsResizable(x,B)
 au.Resizable=B
 au.CanResize=B
+end
+
+function au.SetPanelBackground(x,B)
+if typeof(B)=="boolean"then
+au.HidePanelBackground=B
+
+au.UIElements.MainBar.Background.Visible=B
+
+if v then
+for C,F in next,v.Containers do
+F.ScrollingFrame.UIPadding.PaddingTop=UDim.new(0,au.HidePanelBackground and 20 or 10)
+F.ScrollingFrame.UIPadding.PaddingLeft=UDim.new(0,au.HidePanelBackground and 20 or 10)
+F.ScrollingFrame.UIPadding.PaddingRight=UDim.new(0,au.HidePanelBackground and 20 or 10)
+F.ScrollingFrame.UIPadding.PaddingBottom=UDim.new(0,au.HidePanelBackground and 20 or 10)
+end
+end
+end
 end
 
 function au.Divider(x)
@@ -12167,6 +12271,33 @@ end
 end
 end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 return au
 end end end
