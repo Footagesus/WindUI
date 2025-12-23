@@ -5,7 +5,7 @@ local Tween = Creator.Tween
 local NotificationModule = {
     Size = UDim2.new(0,300,1,-100-56),
     SizeLower = UDim2.new(0,300,1,-56),
-    UICorner = 13,
+    UICorner = 18,
     UIPadding = 14,
     --ButtonPadding = 9,
     Holder = nil,
@@ -57,13 +57,13 @@ function NotificationModule.New(Config)
         BackgroundImageTransparency = Config.BackgroundImageTransparency,
         Duration = Config.Duration or 5,
         Buttons = Config.Buttons or {},
-        CanClose = true,
+        CanClose = Config.CanClose ~= false,
         UIElements = {},
         Closed = false,
     }
-    if Notification.CanClose == nil then
+    --[[if Notification.CanClose == nil then
         Notification.CanClose = true
-    end
+    end--]]
     NotificationModule.NotificationIndex = NotificationModule.NotificationIndex + 1
     NotificationModule.Notifications[NotificationModule.NotificationIndex] = Notification
     
@@ -168,12 +168,12 @@ function NotificationModule.New(Config)
             TextXAlignment = "Left",
             RichText = true,
             BackgroundTransparency = 1,
-            TextSize = 16,
+            TextSize = 18,
             ThemeTag = {
                 TextColor3 = "Text"
             },
             Text = Notification.Title,
-            FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium)
+            FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold)
         }),
         New("UIListLayout", {
             Padding = UDim.new(0,NotificationModule.UIPadding/3)
