@@ -109,11 +109,22 @@ function Element:New(Config)
         Parent = Config.Parent,
         ClipsDescendants = true,
         AutomaticSize = "Y",
-        ImageTransparency = Section.Box and .93 or 1,
+        ImageTransparency = 1,
         ThemeTag = {
-            ImageColor3 = "Text",
+            ImageTransparency = Section.Box and "SectionBoxBackgroundTransparency" or nil,
+            ImageColor3 = "SectionBoxBackground",
         },
     }, {
+        Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, Config.Window.NewElements and "Glass-1" or "SquircleOutline", {
+            Size = UDim2.new(1,0,1,0),
+            --ImageTransparency = .75,
+            ThemeTag= {
+                ImageTransparency = "SectionBoxBorderTransparency",
+                ImageColor3 = "SectionBoxBorder",
+            },
+            Visible = Section.Box and Section.BoxBorder,
+            Name = "Outline",
+        }),
         New("TextButton", {
             Size = UDim2.new(1,0,0,Expandable and 0 or Section.HeaderSize),
             BackgroundTransparency = 1,

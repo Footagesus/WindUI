@@ -138,25 +138,25 @@ function Element:New(Config)
                 },
                 Name = "Thumb",
             }, {
-                Creator.NewRoundFrame(99, "SquircleOutline2", {
+                Creator.NewRoundFrame(99, "Glass-1", {
                     Size = UDim2.new(1,0,1,0),
                     ImageColor3 = Color3.new(1,1,1),
                     Name = "Highlight",
-                    ImageTransparency = .45,
+                    ImageTransparency = .6,
                 }, {
-                    New("UIGradient", {
-                        Rotation = 60,
-                        Color = ColorSequence.new({
-                            ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-                            ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-                            ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
-                        }),
-                        Transparency = NumberSequence.new({
-                            NumberSequenceKeypoint.new(0.0, 0.1),
-                            NumberSequenceKeypoint.new(0.5, 1),
-                            NumberSequenceKeypoint.new(1.0, 0.1),
-                        })
-                    }),
+                    -- New("UIGradient", {
+                    --     Rotation = 60,
+                    --     Color = ColorSequence.new({
+                    --         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
+                    --         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
+                    --         ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
+                    --     }),
+                    --     Transparency = NumberSequence.new({
+                    --         NumberSequenceKeypoint.new(0.0, 0.1),
+                    --         NumberSequenceKeypoint.new(0.5, 1),
+                    --         NumberSequenceKeypoint.new(1.0, 0.1),
+                    --     })
+                    -- }),
                 }),
             })
         })

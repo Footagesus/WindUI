@@ -41,7 +41,7 @@ function Element:New(Config)
         ParentConfig = Config,
     })
     
-    Keybind.UIElements.Keybind = CreateLabel(Keybind.Value, nil, Keybind.KeybindFrame.UIElements.Main)
+    Keybind.UIElements.Keybind = CreateLabel(Keybind.Value, nil, Keybind.KeybindFrame.UIElements.Main, nil, Config.Window.NewElements and 12 or 10)
     
     Keybind.UIElements.Keybind.Size = UDim2.new(
             0,
