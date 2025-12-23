@@ -66,8 +66,8 @@ local Window = WindUI:CreateWindow({
     Title = ".ftgs hub  |  WindUI Example",
     --Author = "by .ftgs • Footagesus",
     Folder = "ftgshub",
-    --Icon = "sfsymbols:macwindow",
-    IconSize = 22*2,
+    Icon = "solar:folder-2-bold-duotone",
+    --IconSize = 22*2,
     NewElements = true,
     --Size = UDim2.fromOffset(700,700),
     
@@ -90,6 +90,7 @@ local Window = WindUI:CreateWindow({
         Height = 44,
         ButtonsType = "Mac", -- Default or Mac
     },
+
     --[[
     KeySystem = {
         Title = "Key System Example  |  WindUI Example",
@@ -115,7 +116,8 @@ do
     Window:Tag({
         Title = "v" .. WindUI.Version,
         Icon = "github",
-        Color = Color3.fromHex("#1c1c1c")
+        Color = Color3.fromHex("#1c1c1c"),
+        Border = true,
     })
 end
 
@@ -413,7 +415,9 @@ do
     
     local OverviewSection1 = OverviewGroup3:Section({
         Title = "Section 1",
+        Desc = "Section exampleee",
         Box = true,
+        BoxBorder = true,
         Opened = true,
     })
     OverviewSection1:Button({ Title = "Button 1", Justify = "Center", Icon = "", Callback = function() print("clicked button 1") end })
@@ -427,6 +431,7 @@ do
     local OverviewSection2 = OverviewGroup3:Section({
         Title = "Section 2",
         Box = true,
+        BoxBorder = true,
         Opened = true,
     })
     OverviewSection2:Button({ Title = "Button 1", Justify = "Center", Icon = "", Callback = function() print("clicked button 1") end })
@@ -541,8 +546,32 @@ do
     ButtonTab:Space()
     
     ButtonTab:Button({
-        Title = "Button",
-        Desc = "Button example",
+        Title = "Notify Button",
+        --Desc = "Button example",
+        Callback = function()
+            WindUI:Notify({
+                Title = "Hello",
+                Content = "Welcome to the WindUI Example!",
+                Icon = "solar:bell-bold",
+                Duration = 5,
+                CanClose = false,
+            })
+        end
+    })
+    
+    
+    ButtonTab:Button({
+        Title = "Notify Button 2",
+        --Desc = "Button example",
+        Callback = function()
+            WindUI:Notify({
+                Title = "Hello",
+                Content = "Welcome to the WindUI Example!",
+                --Icon = "solar:bell-bold",
+                Duration = 5,
+                CanClose = false,
+            })
+        end
     })
     
     ButtonTab:Space()
@@ -972,11 +1001,23 @@ do -- config elements
     
     ConfigElementsTab:Toggle({
         Flag = "ToggleTest",
+        Title = "Toggle Panel Background",
+        --Desc = "Toggle Description",
+        --Icon = "house",
+        --Type = "Checkbox",
+        Value = not Window.HidePanelBackground,
+        Callback = function(state) 
+            Window:SetPanelBackground(state)
+        end
+    })
+    
+    ConfigElementsTab:Toggle({
+        Flag = "ToggleTest",
         Title = "Toggle",
         Desc = "Toggle Description",
         --Icon = "house",
         --Type = "Checkbox",
-        Default = false,
+        Value = false,
         Callback = function(state) 
             print("Toggle Activated" .. tostring(state))
         end
@@ -1012,7 +1053,7 @@ do -- config panel
     --     end
     -- })
 
-    ConfigTab:Space()
+    -- ConfigTab:Space()
 
     local AllConfigs = ConfigManager:AllConfigs()
     local DefaultValue = table.find(AllConfigs, ConfigName) and ConfigName or nil
@@ -1129,6 +1170,7 @@ end
 
 
 -- */ Using Nebula Icons /* --
+--[[
 do
     local NebulaIcons = loadstring(game:HttpGetAsync("https://raw.nebulasoftworks.xyz/nebula-icon-library-loader"))()
     
@@ -1146,3 +1188,4 @@ do
         Icon = "nebula:nebula",
     })
 end
+]]
