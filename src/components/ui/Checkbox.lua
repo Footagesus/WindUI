@@ -43,19 +43,21 @@ function Checkbox.New(Value, Icon, IconSize, Parent, Callback, Config)
             },
             ImageTransparency = 1, -- 0
         }),
-        Creator.NewRoundFrame(Radius, "SquircleOutline", {
+        Creator.NewRoundFrame(Radius, "Glass-1.4", {
             Size = UDim2.new(1,0,1,0),
             Name = "Stroke",
-            ImageColor3 = Color3.new(1,1,1),
-            ImageTransparency = 1, -- .95
+            ThemeTag = {
+                ImageColor3 = "CheckboxBorder",
+                ImageTransparency = "CheckboxBorderTransparency",
+            },
         }, {
-            New("UIGradient", {
-                Rotation = 90,
-                Transparency = NumberSequence.new({
-                    NumberSequenceKeypoint.new(0, 0),
-                    NumberSequenceKeypoint.new(1, 1),
-                })
-            })
+            -- New("UIGradient", {
+            --     Rotation = 90,
+            --     Transparency = NumberSequence.new({
+            --         NumberSequenceKeypoint.new(0, 0),
+            --         NumberSequenceKeypoint.new(1, 1),
+            --     })
+            -- })
         }),
         
         IconCheckboxFrame,

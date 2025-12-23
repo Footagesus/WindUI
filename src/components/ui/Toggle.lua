@@ -82,7 +82,7 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 Position = UDim2.new(0.5,0,0.5,0),
                 Name = "Bar"
             }, {
-                Creator.NewRoundFrame(Radius, "Glass-Square", {
+                Creator.NewRoundFrame(Radius, "Glass-1", {
                     Size = UDim2.new(1,0,1,0),
                     ImageColor3 = Color3.new(1,1,1),
                     Name = "Highlight",
@@ -126,6 +126,12 @@ function Toggle.New(Value, Icon, IconSize, Parent, Callback, NewElement, Config)
                 Tween(ToggleFrame.Frame, 0.15, {
                     Position = UDim2.new(0, 2, 0.5, 0),
                 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            end
+        else
+            if Toggled then
+                ToggleFrame.Frame.Position = UDim2.new(0, ToggleWidth - FrameWidth - 2, 0.5, 0)
+            else
+                ToggleFrame.Frame.Position = UDim2.new(0, 2, 0.5, 0)
             end
         end
     

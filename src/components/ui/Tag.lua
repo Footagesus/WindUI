@@ -12,6 +12,7 @@ function Tag:New(TagConfig, Parent)
         Icon = TagConfig.Icon,
         Color = TagConfig.Color or Color3.fromHex("#315dff"),
         Radius = TagConfig.Radius or 999,
+        Border = TagConfig.Border or false,
         
         TagFrame = nil,
         Height = 26,
@@ -68,17 +69,31 @@ function Tag:New(TagConfig, Parent)
         ImageColor3 = typeof(TagModule.Color) == "Color3" and TagModule.Color or Color3.new(1,1,1),
     }, {
         BackgroundGradient,
-        New("UIPadding", {
-            PaddingLeft = UDim.new(0,TagModule.Padding),
-            PaddingRight = UDim.new(0,TagModule.Padding),
+        Creator.NewRoundFrame(TagModule.Radius, "Glass-1", {
+            Size = UDim2.new(1,0,1,0),
+            ThemeTag = {
+                ImageColor3 = "White",
+            },
+            ImageTransparency = .75
         }),
-        TagIcon,
-        TagTitle,
-        New("UIListLayout", {
-            FillDirection = "Horizontal",
-            VerticalAlignment = "Center",
-            Padding = UDim.new(0,TagModule.Padding/1.5)
-        })
+        New("Frame", {
+            Size = UDim2.new(0,0,1,0),
+            AutomaticSize = "X",
+            Name = "Content",
+            BackgroundTransparency = 1,
+        }, {
+            TagIcon,
+            TagTitle,
+            New("UIPadding", {
+                PaddingLeft = UDim.new(0,TagModule.Padding),
+                PaddingRight = UDim.new(0,TagModule.Padding),
+            }),
+            New("UIListLayout", {
+                FillDirection = "Horizontal",
+                VerticalAlignment = "Center",
+                Padding = UDim.new(0,TagModule.Padding/1.5)
+            })
+        }),
     })
     
     

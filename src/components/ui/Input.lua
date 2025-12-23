@@ -59,12 +59,12 @@ function Input.New(Placeholder, Icon, Parent, Type, Callback, OnChange, Radius, 
                 Size = UDim2.new(1,0,1,0),
                 ImageTransparency = .97,
             }),
-            Creator.NewRoundFrame(Radius, "SquircleOutline", {
+            Creator.NewRoundFrame(Radius, "Glass-1", {
                 ThemeTag = {
                     ImageColor3 = "Outline",
                 },
                 Size = UDim2.new(1,0,1,0),
-                ImageTransparency = .95,
+                ImageTransparency = .75,
             }, {
                 -- New("UIGradient", {
                 --     Rotation = 70,

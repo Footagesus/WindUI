@@ -50,26 +50,26 @@ function Label.New(Text, Icon, Parent, IsPlaceholder, Radius)
                 Size = UDim2.new(1,0,1,0),
                 ImageTransparency = .97,
             }),
-            Creator.NewRoundFrame(Radius, "SquircleOutline", {
+            Creator.NewRoundFrame(Radius, "Glass-1.4", {
                 ThemeTag = {
                     ImageColor3 = "Outline",
                 },
                 Size = UDim2.new(1,0,1,0),
-                ImageTransparency = .95,
+                ImageTransparency = .75,
             }, {
-                New("UIGradient", {
-                    Rotation = 70,
-                    Color = ColorSequence.new({
-                        ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
-                        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
-                        ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
-                    }),
-                    Transparency = NumberSequence.new({
-                        NumberSequenceKeypoint.new(0.0, 0.1),
-                        NumberSequenceKeypoint.new(0.5, 1),
-                        NumberSequenceKeypoint.new(1.0, 0.1),
-                    })
-                })
+                -- New("UIGradient", {
+                --     Rotation = 70,
+                --     Color = ColorSequence.new({
+                --         ColorSequenceKeypoint.new(0.0, Color3.fromRGB(255, 255, 255)),
+                --         ColorSequenceKeypoint.new(0.5, Color3.fromRGB(255, 255, 255)),
+                --         ColorSequenceKeypoint.new(1.0, Color3.fromRGB(255, 255, 255)),
+                --     }),
+                --     Transparency = NumberSequence.new({
+                --         NumberSequenceKeypoint.new(0.0, 0.1),
+                --         NumberSequenceKeypoint.new(0.5, 1),
+                --         NumberSequenceKeypoint.new(1.0, 0.1),
+                --     })
+                -- })
             }),
             Creator.NewRoundFrame(Radius, "Squircle", {
                 Size = UDim2.new(1,0,1,0),
