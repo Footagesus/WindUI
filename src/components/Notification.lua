@@ -137,11 +137,11 @@ function NotificationModule.New(Config)
         })
     end
     
-    local Duration = New("Frame", {
+    local Duration = Creator.NewRoundFrame(NotificationModule.UICorner, "Squircle", {
         Size = UDim2.new(0,0,1,0),
-        BackgroundTransparency = .95,
         ThemeTag = {
-            BackgroundColor3 = "Text",
+            ImageTransparency = "NotificationDurationTransparency",
+            ImageColor3 = "NotificationDuration",
         },
         --Visible = false,
     })
@@ -211,14 +211,22 @@ function NotificationModule.New(Config)
         },
         --ZIndex = 20
     }, {
-        New("CanvasGroup", {
+        New("Frame", {
             Size = UDim2.new(1,0,1,0),
             BackgroundTransparency = 1,
+            Name = "DurationFrame",
         }, {
-            Duration,
-            New("UICorner", {
-                CornerRadius = UDim.new(0,NotificationModule.UICorner),
-            })
+            New("Frame", {
+                Size = UDim2.new(1,0,1,0), -- 0,0,1,0
+                BackgroundTransparency = 1,
+                ClipsDescendants = true,
+            }, {
+                Duration,
+            }),
+        
+            -- New("UICorner", {
+            --     CornerRadius = UDim.new(0,NotificationModule.UICorner),
+            -- })
     
         }),
         New("ImageLabel", {
@@ -267,7 +275,8 @@ function NotificationModule.New(Config)
         )}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         Tween(Main, 0.45, {Position = UDim2.new(0,0,1,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         if Notification.Duration then
-            Tween(Duration, Notification.Duration, {Size = UDim2.new(1,0,1,0)}, Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
+            Duration.Size = UDim2.new(0,Main.DurationFrame.AbsoluteSize.X,1,0)
+            Tween(Main.DurationFrame.Frame, Notification.Duration, {Size = UDim2.new(0,0,1,0)}, Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
             task.wait(Notification.Duration)
             Notification:Close()
         end
