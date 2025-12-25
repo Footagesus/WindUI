@@ -777,5 +777,8 @@ function Creator.GetAverageColor(gradient)
     return Color3.new(r/n, g/n, b/n)
 end
 
+function Creator:GenerateUniqueID()
+    return HttpService:GenerateGUID(false)
+end
 
 return Creator
