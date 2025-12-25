@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.63  |  2025-12-23  |  Roblox UI Library for scripts
+    v1.6.63  |  2025-12-25  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -83,9 +83,16 @@ SectionBox="White",
 SectionBoxTransparency=.95,
 SectionBoxBorder="White",
 SectionBoxBorderTransparency=.75,
+SectionBoxBackground="White",
+SectionBoxBackgroundTransparency=.95,
 
 SearchBarBorder="White",
 SearchBarBorderTransparency=.75,
+
+NotificationDuration="White",
+NotificationDurationTransparency=.95,
+
+DropdownTabBorder="White"
 }end function a.b()
 
 local b=(cloneref or clonereference or function(b)return b end)
@@ -1032,11 +1039,11 @@ Text="",
 })
 end
 
-local m=d("Frame",{
+local m=b.NewRoundFrame(f.UICorner,"Squircle",{
 Size=UDim2.new(0,0,1,0),
-BackgroundTransparency=.95,
 ThemeTag={
-BackgroundColor3="Text",
+ImageTransparency="NotificationDurationTransparency",
+ImageColor3="NotificationDuration",
 },
 
 })
@@ -1106,14 +1113,22 @@ ImageColor3="Background"
 },
 
 },{
-d("CanvasGroup",{
+d("Frame",{
 Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
+Name="DurationFrame",
+},{
+d("Frame",{
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+ClipsDescendants=true,
 },{
 m,
-d("UICorner",{
-CornerRadius=UDim.new(0,f.UICorner),
-})
+}),
+
+
+
+
 
 }),
 d("ImageLabel",{
@@ -1162,7 +1177,8 @@ r.AbsoluteSize.Y
 )},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 e(r,0.45,{Position=UDim2.new(0,0,1,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 if h.Duration then
-e(m,h.Duration,{Size=UDim2.new(1,0,1,0)},Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
+m.Size=UDim2.new(0,r.DurationFrame.AbsoluteSize.X,1,0)
+e(r.DurationFrame.Frame,h.Duration,{Size=UDim2.new(0,0,1,0)},Enum.EasingStyle.Linear,Enum.EasingDirection.InOut):Play()
 task.wait(h.Duration)
 h:Close()
 end
@@ -3743,6 +3759,8 @@ Padding=UDim.new(0,ah.Padding/1.5)
 function ah.SetTitle(am,an)
 ah.Title=an
 aj.Text=an
+
+return ah
 end
 
 function ah.SetColor(am,an)
@@ -3763,6 +3781,8 @@ ad(ai.ImageLabel,.06,{ImageColor3=ab.GetTextColorForHSB(an)}):Play()
 end
 ad(al,.06,{ImageColor3=an}):Play()
 end
+
+return ah
 end
 
 function ah.SetIcon(am,an)
@@ -3792,8 +3812,13 @@ ai:Destroy()
 ai=nil
 end
 end
+return ah
 end
 
+function ah.Destroy(am)
+al:Destroy()
+return ah
+end
 
 return ah
 end
@@ -5215,10 +5240,11 @@ aC:Destroy()
 end
 
 
-function ag.Lock(aE)
+function ag.Lock(aE,aF)
 aj=false
 as.Active=true
 as.Visible=true
+aq.Text=aF
 end
 
 function ag.Unlock(aE)
@@ -5377,6 +5403,7 @@ Color=ae.Color,
 Justify=ae.Justify or"Between",
 IconAlign=ae.IconAlign or"Right",
 Locked=ae.Locked or false,
+LockedTitle=ae.LockedTitle,
 Callback=ae.Callback or function()end,
 UIElements={}
 }
@@ -5437,7 +5464,7 @@ af.ButtonFrame:Colorize(af.UIElements.ButtonIcon.ImageLabel,"ImageColor3")
 function af.Lock(ah)
 af.Locked=true
 ag=false
-return af.ButtonFrame:Lock()
+return af.ButtonFrame:Lock(af.LockedTitle)
 end
 function af.Unlock(ah)
 af.Locked=false
@@ -5853,6 +5880,7 @@ __type="Toggle",
 Title=ah.Title or"Toggle",
 Desc=ah.Desc or nil,
 Locked=ah.Locked or false,
+LockedTitle=ah.LockedTitle,
 Value=ah.Value,
 Icon=ah.Icon or nil,
 IconSize=ah.IconSize or 23,
@@ -5888,7 +5916,7 @@ end
 function ai.Lock(ak)
 ai.Locked=true
 aj=false
-return ai.ToggleFrame:Lock()
+return ai.ToggleFrame:Lock(ai.LockedTitle)
 end
 function ai.Unlock(ak)
 ai.Locked=false
@@ -5966,6 +5994,7 @@ __type="Slider",
 Title=aj.Title or nil,
 Desc=aj.Desc or nil,
 Locked=aj.Locked or nil,
+LockedTitle=aj.LockedTitle,
 Value=aj.Value or{},
 Icons=aj.Icons or nil,
 IsTooltip=aj.IsTooltip or false,
@@ -6155,7 +6184,7 @@ end
 function ak.Lock(ax)
 ak.Locked=true
 ar=false
-return ak.SliderFrame:Lock()
+return ak.SliderFrame:Lock(ak.LockedTitle)
 end
 function ak.Unlock(ax)
 ak.Locked=false
@@ -6318,6 +6347,7 @@ __type="Keybind",
 Title=aj.Title or"Keybind",
 Desc=aj.Desc or nil,
 Locked=aj.Locked or false,
+LockedTitle=aj.LockedTitle,
 Value=aj.Value or"F",
 Callback=aj.Callback or function()end,
 CanChange=aj.CanChange or true,
@@ -6368,7 +6398,7 @@ end)
 function ak.Lock(am)
 ak.Locked=true
 al=false
-return ak.KeybindFrame:Lock()
+return ak.KeybindFrame:Lock(ak.LockedTitle)
 end
 function ak.Unlock(am)
 ak.Locked=false
@@ -6466,6 +6496,7 @@ Title=ai.Title or"Input",
 Desc=ai.Desc or nil,
 Type=ai.Type or"Input",
 Locked=ai.Locked or false,
+LockedTitle=ai.LockedTitle,
 InputIcon=ai.InputIcon or false,
 Placeholder=ai.Placeholder or"Enter Text...",
 Value=ai.Value or"",
@@ -6520,7 +6551,7 @@ Scale=1,
 function aj.Lock(am)
 aj.Locked=true
 ak=false
-return aj.InputFrame:Lock()
+return aj.InputFrame:Lock(aj.LockedTitle)
 end
 function aj.Unlock(am)
 aj.Locked=false
@@ -6845,6 +6876,7 @@ local az={
 Name=typeof(ay)=="table"and ay.Title or ay,
 Desc=typeof(ay)=="table"and ay.Desc or nil,
 Icon=typeof(ay)=="table"and ay.Icon or nil,
+IconSize=typeof(ay)=="table"and ay.IconSize or nil,
 Original=ay,
 Selected=false,
 Locked=typeof(ay)=="table"and ay.Locked or false,
@@ -6860,7 +6892,7 @@ am.Window.Folder,
 "Dropdown",
 true
 )
-aA.Size=UDim2.new(0,ao.TabIcon,0,ao.TabIcon)
+aA.Size=UDim2.new(0,az.IconSize or ao.TabIcon,0,az.IconSize or ao.TabIcon)
 aA.ImageLabel.ImageTransparency=aq=="Dropdown"and.2 or 0
 az.UIElements.TabIcon=aA
 end
@@ -6872,10 +6904,10 @@ Parent=an.UIElements.Menu.Frame.ScrollingFrame,
 ImageColor3=Color3.new(1,1,1),
 Active=not az.Locked,
 },{
-aj.NewRoundFrame(ao.MenuCorner-ao.MenuPadding,"Glass-1",{
+aj.NewRoundFrame(ao.MenuCorner-ao.MenuPadding,"Glass-1.4",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
-ImageColor3="White",
+ImageColor3="DropdownTabBorder",
 },
 ImageTransparency=1,
 Name="Highlight",
@@ -7239,6 +7271,7 @@ __type="Dropdown",
 Title=an.Title or"Dropdown",
 Desc=an.Desc or nil,
 Locked=an.Locked or false,
+LockedTitle=an.LockedTitle,
 Values=an.Values or{},
 MenuWidth=an.MenuWidth,
 Value=an.Value,
@@ -7257,6 +7290,9 @@ Width=150,
 
 if ao.Multi and not ao.Value then
 ao.Value={}
+end
+if ao.Values and typeof(ao.Value)=="number"then
+ao.Value=ao.Values[ao.Value]
 end
 
 local ap=true
@@ -7326,7 +7362,7 @@ Parent=ao.UIElements.Dropdown and ao.UIElements.Dropdown.Frame or ao.DropdownFra
 function ao.Lock(aq)
 ao.Locked=true
 ap=false
-return ao.DropdownFrame:Lock()
+return ao.DropdownFrame:Lock(ao.LockedTitle)
 end
 function ao.Unlock(aq)
 ao.Locked=false
@@ -8425,6 +8461,7 @@ __type="Colorpicker",
 Title=at.Title or"Colorpicker",
 Desc=at.Desc or nil,
 Locked=at.Locked or false,
+LockedTitle=at.LockedTitle,
 Default=at.Default or Color3.new(1,1,1),
 Callback=at.Callback or function()end,
 
@@ -8465,7 +8502,7 @@ ZIndex=2
 function au.Lock(aw)
 au.Locked=true
 av=false
-return au.ColorpickerFrame:Lock()
+return au.ColorpickerFrame:Lock(au.LockedTitle)
 end
 function au.Unlock(aw)
 au.Locked=false
@@ -10367,7 +10404,7 @@ aj(as.UIScale,.12,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Pla
 end)
 end
 
-function an.Close(au)
+function an.Close(au,av)
 task.spawn(function()
 am()
 ar.Frame.Visible=false
@@ -10375,11 +10412,12 @@ aj(as.UIScale,.12,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Pla
 
 task.wait(.12)
 as.Visible=false
+if av then as:Destroy()end
 end)
 end
 
 af.AddSignal(ap.TextButton.MouseButton1Click,function()
-an:Close()
+an:Close(true)
 end)
 
 an:Open()
@@ -10419,6 +10457,7 @@ Author=as.Author,
 Icon=as.Icon,
 IconSize=as.IconSize or 22,
 IconThemed=as.IconThemed,
+IconRadius=as.IconRadius or 0,
 Folder=as.Folder,
 Resizable=as.Resizable~=false,
 Background=as.Background,
@@ -11375,7 +11414,7 @@ Parent=au.UIElements.Main.Main.Topbar.Left,
 h=ak.Image(
 au.Icon,
 au.Title,
-0,
+au.IconRadius,
 au.Folder,
 "Window",
 true,
