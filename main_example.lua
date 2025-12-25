@@ -492,12 +492,14 @@ do
     ToggleTab:Toggle({
         Title = "Toggle",
         Locked = true,
+        LockedTitle = "This element is locked",
     })
     
     ToggleTab:Toggle({
         Title = "Toggle",
         Desc = "Toggle example",
         Locked = true,
+        LockedTitle = "This element is locked",
     })
 end
 
@@ -579,6 +581,7 @@ do
     ButtonTab:Button({
         Title = "Button",
         Locked = true,
+        LockedTitle = "This element is locked",
     })
     
     
@@ -586,6 +589,7 @@ do
         Title = "Button",
         Desc = "Button example",
         Locked = true,
+        LockedTitle = "This element is locked",
     })
 end
 
@@ -646,6 +650,7 @@ do
     InputTab:Input({
         Title = "Input",
         Locked = true,
+        LockedTitle = "This element is locked",
     })
     
     
@@ -653,6 +658,7 @@ do
         Title = "Input",
         Desc = "Input example",
         Locked = true,
+        LockedTitle = "This element is locked",
     })
 end
 
@@ -828,6 +834,35 @@ do
                 end
             },
         }
+    })
+    
+    DropdownTab:Space()
+    
+    DropdownTab:Dropdown({
+        Title = "Multi Dropdown",
+        Values = {
+            "Привет", "Hello", "Сәлем", "Bonjour"
+        },
+        Value = nil,
+        AllowNone = true,
+        Multi = true,
+        Callback = function(selectedValue)
+            print("Selected: " .. selectedValue)
+        end
+    })
+    
+    DropdownTab:Space()
+    
+    DropdownTab:Dropdown({
+        Title = "No Multi Dropdown (default",
+        Values = {
+            "Привет", "Hello", "Сәлем", "Bonjour"
+        },
+        Value = 1,
+        --AllowNone = true,
+        Callback = function(selectedValue)
+            print("Selected: " .. selectedValue)
+        end
     })
     
     DropdownTab:Space()
