@@ -5247,7 +5247,7 @@ function ag.Lock(aE,aF)
 aj=false
 as.Active=true
 as.Visible=true
-aq.Text=aF
+aq.Text=aF or"Title"
 end
 
 function ag.Unlock(aE)
