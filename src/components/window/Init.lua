@@ -29,6 +29,7 @@ return function(Config)
         Icon = Config.Icon,
         IconSize = Config.IconSize or 22,
         IconThemed = Config.IconThemed,
+        IconRadius = Config.IconRadius or 0,
         Folder = Config.Folder,
         Resizable = Config.Resizable ~= false,
         Background = Config.Background,
@@ -985,7 +986,7 @@ return function(Config)
             WindowIcon = Creator.Image(
                 Window.Icon,
                 Window.Title,
-                0,
+                Window.IconRadius,
                 Window.Folder,
                 "Window",
                 true,
