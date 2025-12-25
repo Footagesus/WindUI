@@ -501,7 +501,7 @@ function SearchBar.new(TabModule, Parent, OnClose)
         end)
     end
     
-    function SearchBarModule:Close()
+    function SearchBarModule:Close(IsDestroy)
         task.spawn(function()
             OnClose()
             SearchFrame.Frame.Visible = false
@@ -509,11 +509,12 @@ function SearchBar.new(TabModule, Parent, OnClose)
             
             task.wait(.12)
             SearchFrameContainer.Visible = false
+            if IsDestroy then SearchFrameContainer:Destroy() end
         end)
     end
     
     Creator.AddSignal(CloseButton.TextButton.MouseButton1Click, function()
-        SearchBarModule:Close()
+        SearchBarModule:Close(true)
     end)
     
     SearchBarModule:Open()
