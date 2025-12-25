@@ -9160,7 +9160,11 @@ local al=a.load'u'.New
 
 
 
+
+
 local am={
+
+
 Tabs={},
 Containers={},
 SelectedTab=nil,
@@ -9182,7 +9186,6 @@ end
 function am.New(an,ao)
 local ap={
 __type="Tab",
-ID=af:GenerateUniqueID(),
 Title=an.Title or"Tab",
 Desc=an.Desc,
 Icon=an.Icon,
@@ -9191,8 +9194,6 @@ IconShape=an.IconShape,
 IconThemed=an.IconThemed,
 Locked=an.Locked,
 ShowTabTitle=an.ShowTabTitle,
-After=an.After,
-Before=an.Before,
 Selected=false,
 Index=nil,
 Parent=an.Parent,
@@ -9216,7 +9217,6 @@ end
 
 am.TabCount=am.TabCount+1
 
-
 local aq=am.TabCount
 ap.Index=aq
 
@@ -9237,6 +9237,20 @@ ImageColor3="Text",
 },
 ImageTransparency=1,
 Name="Outline"
+},{
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 af.NewRoundFrame(ap.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
@@ -9271,6 +9285,8 @@ BackgroundTransparency=1,
 },{
 ah("UIPadding",{
 PaddingTop=UDim.new(0,ap.TitlePaddingY),
+
+
 PaddingBottom=UDim.new(0,ap.TitlePaddingY)
 })
 }),
@@ -9322,6 +9338,20 @@ ImageColor3="White",
 },
 ImageTransparency=0,
 Name="Outline"
+},{
+
+
+
+
+
+
+
+
+
+
+
+
+
 }),
 })
 as.AnchorPoint=Vector2.new(0.5,0.5)
@@ -9331,6 +9361,10 @@ as.ImageLabel.ImageColor3=af.GetTextColorForHSB(ap.IconColor,0.68)
 ar=-28-(Window.UIPadding/2)
 ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,ar,0,0)
 end
+
+
+
+
 
 au=af.Image(
 ap.Icon,
@@ -9344,6 +9378,10 @@ ap.IconThemed
 au.Size=UDim2.new(0,16,0,16)
 au.ImageLabel.ImageTransparency=not ap.Locked and 0 or.7
 ar=-30
+
+
+
+
 end
 
 ap.UIElements.ContainerFrame=ah("ScrollingFrame",{
@@ -9355,6 +9393,7 @@ CanvasSize=UDim2.new(0,0,0,0),
 AnchorPoint=Vector2.new(0,1),
 Position=UDim2.new(0,0,1,0),
 AutomaticCanvasSize="Y",
+
 ScrollingDirection="Y",
 },{
 ah("UIPadding",{
@@ -9369,6 +9408,10 @@ Padding=UDim.new(0,ap.Gap),
 HorizontalAlignment="Center",
 })
 })
+
+
+
+
 
 ap.UIElements.ContainerFrameCanvas=ah("Frame",{
 Size=UDim2.new(1,0,1,0),
@@ -9427,61 +9470,11 @@ Visible=ap.ShowTabTitle or false,
 am.Containers[aq]=ap.UIElements.ContainerFrameCanvas
 am.Tabs[aq]=ap
 
-ap.ContainerFrame=ap.UIElements.ContainerFrameCanvas
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ap.ContainerFrame=ContainerFrameCanvas
 
 af.AddSignal(ap.UIElements.Main.MouseButton1Click,function()
 if not ap.Locked then
-am:SelectTab(ap.Index)
+am:SelectTab(aq)
 end
 end)
 
@@ -9495,7 +9488,10 @@ local ax
 local ay=false
 
 
+
 if ap.Desc then
+
+
 af.AddSignal(ap.UIElements.Main.InputBegan,function()
 ay=true
 aw=task.spawn(function()
@@ -9516,6 +9512,7 @@ av:Open()
 end
 end)
 end)
+
 end
 
 af.AddSignal(ap.UIElements.Main.MouseEnter,function()
@@ -9545,12 +9542,15 @@ aj(ap.UIElements.Main.Frame,0.08,{ImageTransparency=1}):Play()
 end
 end)
 
+
+
 function ap.ScrollToTheElement(az,aA)
 ap.UIElements.ContainerFrame.ScrollingEnabled=false
 aj(ap.UIElements.ContainerFrame,.45,
 {
 CanvasPosition=Vector2.new(
 0,
+
 ap.Elements[aA].ElementFrame.AbsolutePosition.Y
 -ap.UIElements.ContainerFrame.AbsolutePosition.Y
 -ap.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset
@@ -9571,11 +9571,18 @@ end)
 return ap
 end
 
+
+
+
+
 local az=a.load'T'
 
 az.Load(ap,ap.UIElements.ContainerFrame,az.Elements,Window,WindUI,nil,az,ao)
 
+
+
 function ap.LockAll(aA)
+
 for aB,aC in next,Window.AllElements do
 if aC.Tab and aC.Tab.Index and aC.Tab.Index==ap.Index and aC.Lock then
 aC:Lock()
@@ -9616,39 +9623,6 @@ function ap.Select(aA)
 return am:SelectTab(ap.Index)
 end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 task.spawn(function()
 local aA=ah("Frame",{
 BackgroundTransparency=1,
@@ -9686,6 +9660,10 @@ FontFace=Font.new(af.Font,Enum.FontWeight.Medium),
 })
 })
 
+
+
+
+
 local aB
 aB=af.AddSignal(ap.UIElements.ContainerFrame.ChildAdded,function()
 aA.Visible=false
@@ -9700,78 +9678,44 @@ function am.OnChange(an,ao)
 am.OnChangeFunc=ao
 end
 
-function am.UpdateTabOrder(an)
-for ao,ap in ipairs(an.Tabs)do
-if ap and ap.UIElements.Main then
-ap.UIElements.Main.LayoutOrder=ao
-ap.Index=ao
-
-if ap.UIElements.ContainerFrameCanvas then
-an.Containers[ao]=ap.UIElements.ContainerFrameCanvas
-end
-end
-end
-end
-
 function am.SelectTab(an,ao)
-local ap
-if typeof(ao)=="number"then
-ap=am.Tabs[ao]
-elseif typeof(ao)=="string"then
-for aq,ar in next,am.Tabs do
-if ar.ID==ao then
-ap=ar
-break
-end
-end
-elseif typeof(ao)=="table"and ao.ID then
-for aq,ar in next,am.Tabs do
-if ar.ID==ao.ID then
-ap=ar
-break
-end
-end
-end
+if not am.Tabs[ao].Locked then
+am.SelectedTab=ao
 
-if not ap or ap.Locked then return end
+for ap,aq in next,am.Tabs do
+if not aq.Locked then
+aj(aq.UIElements.Main,0.15,{ImageTransparency=1}):Play()
 
-am.SelectedTab=ap.Index
+aj(aq.UIElements.Main.Frame.TextLabel,0.15,{TextTransparency=0.3}):Play()
+if aq.UIElements.Icon and not aq.IconColor then
+aj(aq.UIElements.Icon.ImageLabel,0.15,{ImageTransparency=0.4}):Play()
+end
+aq.Selected=false
+end
+end
+aj(am.Tabs[ao].UIElements.Main,0.15,{ImageTransparency=0.93}):Play()
 
-for aq,ar in ipairs(am.Tabs)do
-if not ar.Locked then
-aj(ar.UIElements.Main,0.15,{ImageTransparency=1}):Play()
-aj(ar.UIElements.Main.Frame.TextLabel,0.15,{TextTransparency=0.3}):Play()
-if ar.UIElements.Icon and not ar.IconColor then
-aj(ar.UIElements.Icon.ImageLabel,0.15,{ImageTransparency=0.4}):Play()
+aj(am.Tabs[ao].UIElements.Main.Frame.TextLabel,0.15,{TextTransparency=0}):Play()
+if am.Tabs[ao].UIElements.Icon and not am.Tabs[ao].IconColor then
+aj(am.Tabs[ao].UIElements.Icon.ImageLabel,0.15,{ImageTransparency=0.1}):Play()
 end
-ar.Selected=false
-end
-end
+am.Tabs[ao].Selected=true
 
-aj(ap.UIElements.Main,0.15,{ImageTransparency=0.93}):Play()
-aj(ap.UIElements.Main.Frame.TextLabel,0.15,{TextTransparency=0}):Play()
-if ap.UIElements.Icon and not ap.IconColor then
-aj(ap.UIElements.Icon.ImageLabel,0.15,{ImageTransparency=0.1}):Play()
-end
-ap.Selected=true
 
 task.spawn(function()
-for as,au in pairs(am.Containers)do
-au.AnchorPoint=Vector2.new(0,0.05)
-au.Visible=false
+for ar,as in next,am.Containers do
+as.AnchorPoint=Vector2.new(0,0.05)
+as.Visible=false
 end
-
-if am.Containers[ap.Index]then
-am.Containers[ap.Index].Visible=true
-aj(am.Containers[ap.Index],0.15,{AnchorPoint=Vector2.new(0,0)},Enum.EasingStyle.Quart,Enum.EasingDirection.Out):Play()
-end
+am.Containers[ao].Visible=true
+aj(am.Containers[ao],0.15,{AnchorPoint=Vector2.new(0,0)},Enum.EasingStyle.Quart,Enum.EasingDirection.Out):Play()
 end)
 
-am.OnChangeFunc(ap.Index)
+am.OnChangeFunc(ao)
+end
 end
 
 return am end function a.V()
-
 local aa={}
 
 
@@ -12398,7 +12342,7 @@ end
 
 
 return au
-end end function a.Z()
+end end end
 local aa={
 Window=nil,
 Theme=nil,
@@ -12777,1207 +12721,4 @@ end
 return aE
 end
 
-return aa end end
-
-
-
-
-
-
-
-local aa
-
-do
-local ae,af=pcall(function()
-return a.load'Z'
-end)
-
-if ae then
-aa=af
-else
-aa=loadstring(game:HttpGet"https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua")()
-end
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function createPopup()
-return aa:Popup{
-Title="Welcome to the WindUI!",
-Icon="bird",
-Content="Hello!",
-Buttons={
-{
-Title="Hahaha",
-Icon="bird",
-Variant="Tertiary"
-},
-{
-Title="Hahaha",
-Icon="bird",
-Variant="Tertiary"
-},
-{
-Title="Hahaha",
-Icon="bird",
-Variant="Tertiary"
-}
-}
-}
-end
-
-
-
-
-local ae=aa:CreateWindow{
-Title=".ftgs hub  |  WindUI Example",
-
-Folder="ftgshub",
-Icon="solar:folder-2-bold-duotone",
-
-NewElements=true,
-
-
-HideSearchBar=false,
-
-OpenButton={
-Title="Open .ftgs hub UI",
-CornerRadius=UDim.new(1,0),
-StrokeThickness=3,
-Enabled=true,
-Draggable=true,
-OnlyMobile=false,
-
-Color=ColorSequence.new(
-Color3.fromHex"#30FF6A",
-Color3.fromHex"#e7ff2f"
-)
-},
-Topbar={
-Height=44,
-ButtonsType="Mac",
-},
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
-
-
-
-
-do
-ae:Tag{
-Title="v"..aa.Version,
-Icon="github",
-Color=Color3.fromHex"#1c1c1c",
-Border=true,
-}
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-local af=Color3.fromHex"#7775F2"
-local ah=Color3.fromHex"#ECA201"
-local aj=Color3.fromHex"#10C550"
-local al=Color3.fromHex"#83889E"
-local am=Color3.fromHex"#257AF7"
-Color3.fromHex"#EF4F1D"
-
-
-
-local function parseJSON(ao,ap,aq,ar)
-ap=ap or 2
-aq=aq or 0
-ar=ar or{}
-
-local as=string.rep(" ",aq*ap)
-local au=string.rep(" ",(aq+1)*ap)
-
-if ao==nil then
-return"null"
-end
-
-local av=type(ao)
-
-if av=="table"then
-if ar[ao]then
-return"\"[Circular Reference]\""
-end
-
-ar[ao]=true
-
-local aw=true
-local ax=0
-
-for ay,az in pairs(ao)do
-if type(ay)=="number"and ay>ax then
-ax=ay
-end
-if type(ay)~="number"or ay<=0 or math.floor(ay)~=ay then
-aw=false
-break
-end
-end
-
-local aA=0
-for aB in pairs(ao)do
-aA=aA+1
-end
-if aA~=ax and aw then
-aw=false
-end
-
-if aA==0 then
-return"{}"
-end
-
-if aw then
-if aA==0 then
-return"[]"
-end
-
-local aC="[\n"
-
-for aD=1,ax do
-aC=aC..au..parseJSON(ao[aD],ap,aq+1,ar)
-if aD<ax then
-aC=aC..","
-end
-aC=aC.."\n"
-end
-
-aC=aC..as.."]"
-return aC
-else
-local aC="{\n"
-local aD=true
-
-local aE={}
-for aF in pairs(ao)do
-table.insert(aE,aF)
-end
-table.sort(aE,function(b,d)
-if type(b)==type(d)then
-return tostring(b)<tostring(d)
-else
-return type(b)<type(d)
-end
-end)
-
-for b,d in ipairs(aE)do
-local f=ao[d]
-if not aD then
-aC=aC..",\n"
-else
-aD=false
-end
-
-if type(d)=="string"then
-aC=aC..au.."\""..d.."\": "
-else
-aC=aC..au.."\""..tostring(d).."\": "
-end
-
-aC=aC..parseJSON(f,ap,aq+1,ar)
-end
-
-aC=aC.."\n"..as.."}"
-return aC
-end
-elseif av=="string"then
-local aw=ao:gsub("\\","\\\\")
-aw=aw:gsub("\"","\\\"")
-aw=aw:gsub("\n","\\n")
-aw=aw:gsub("\r","\\r")
-aw=aw:gsub("\t","\\t")
-
-return"\""..aw.."\""
-elseif av=="number"then
-return tostring(ao)
-elseif av=="boolean"then
-return ao and"true"or"false"
-elseif av=="function"then
-return"\"function\""
-else
-return"\""..av.."\""
-end
-end
-
-local function tableToClipboard(ao,ap)
-ap=ap or 4
-local aq=parseJSON(ao,ap)
-setclipboard(aq)
-return aq
-end
-
-
-
-do
-local ao=ae:Tab{
-Title="About WindUI",
-Desc="Description Example",
-Icon="solar:info-square-bold",
-IconColor=al,
-IconShape="Square",
-}
-
-local ap=ao:Section{
-Title="About WindUI",
-}
-
-ap:Image{
-Image="https://repository-images.githubusercontent.com/880118829/22c020eb-d1b1-4b34-ac4d-e33fd88db38d",
-AspectRatio="16:9",
-Radius=9,
-}
-
-ap:Space{Columns=3}
-
-ap:Section{
-Title="What is WindUI?",
-TextSize=24,
-FontWeight=Enum.FontWeight.SemiBold,
-}
-
-ap:Space()
-
-ap:Section{
-Title=[[WindUI is a stylish, open-source UI (User Interface) library specifically designed for Roblox Script Hubs.
-Developed by Footagesus (.ftgs, Footages).
-It aims to provide developers with a modern, customizable, and easy-to-use toolkit for creating visually appealing interfaces within Roblox.
-The project is primarily written in Lua (Luau), the scripting language used in Roblox.]],
-TextSize=18,
-TextTransparency=.35,
-FontWeight=Enum.FontWeight.Medium,
-}
-
-ao:Space{Columns=4}
-
-
-
-
-ao:Button{
-Title="Export WindUI JSON (copy)",
-Color=Color3.fromHex"#a2ff30",
-Justify="Center",
-IconAlign="Left",
-Icon="",
-Callback=function()
-tableToClipboard(aa)
-aa:Notify{
-Title="WindUI JSON",
-Content="Copied to Clipboard!"
-}
-end
-}
-ao:Space{Columns=1}
-
-
-ao:Button{
-Title="Destroy Window",
-Color=Color3.fromHex"#ff4830",
-Justify="Center",
-Icon="shredder",
-IconAlign="Left",
-Callback=function()
-ae:Destroy()
-end
-}
-end
-
-
-local ao=ae:Section{
-Title="Elements",
-}
-local ap=ae:Section{
-Title="Config Usage",
-}
-local aq=ae:Section{
-Title="Other",
-}
-
-
-
-
-
-do
-local ar=ao:Tab{
-Title="Overview",
-Icon="solar:home-2-bold",
-IconColor=al,
-IconShape="Square",
-}
-
-ar:Section{
-Title="Group's Example"
-}
-
-local as=ar:Group{}
-
-as:Button{Title="Button 1",Justify="Center",Icon="",Callback=function()print"clicked button 1"end}
-as:Space()
-as:Button{Title="Button 2",Justify="Center",Icon="",Callback=function()print"clicked button 2"end}
-
-ar:Space()
-
-local au=ar:Group{}
-
-au:Button{Title="Button 1",Justify="Center",Icon="",Callback=function()print"clicked button 1"end}
-au:Space()
-au:Toggle{Title="Toggle 2",Callback=function(av)print("clicked toggle 2:",av)end}
-au:Space()
-au:Colorpicker{Title="Colorpicker 3",Default=Color3.fromHex"#30ff6a",Callback=function(av)print(av)end}
-
-ar:Space()
-
-local av=ar:Group{}
-
-
-local aw=av:Section{
-Title="Section 1",
-Desc="Section exampleee",
-Box=true,
-BoxBorder=true,
-Opened=true,
-}
-aw:Button{Title="Button 1",Justify="Center",Icon="",Callback=function()print"clicked button 1"end}
-aw:Space()
-aw:Toggle{Title="Toggle 2",Callback=function(ax)print("clicked toggle 2:",ax)end}
-
-
-av:Space()
-
-
-local ax=av:Section{
-Title="Section 2",
-Box=true,
-BoxBorder=true,
-Opened=true,
-}
-ax:Button{Title="Button 1",Justify="Center",Icon="",Callback=function()print"clicked button 1"end}
-ax:Space()
-ax:Button{Title="Button 2",Justify="Center",Icon="",Callback=function()print"clicked button 2"end}
-
-
-
-end
-
-
-
-do
-local ar=ao:Tab{
-Title="Toggle",
-Icon="solar:check-square-bold",
-IconColor=aj,
-IconShape="Square",
-}
-
-
-ar:Toggle{
-Title="Toggle",
-}
-
-ar:Space()
-
-ar:Toggle{
-Title="Toggle",
-Desc="Toggle example"
-}
-
-ar:Space()
-
-local as=ar:Group()
-as:Toggle{}
-as:Space()
-as:Toggle{}
-
-ar:Space()
-
-ar:Toggle{
-Title="Checkbox",
-Type="Checkbox",
-}
-
-ar:Space()
-
-ar:Toggle{
-Title="Checkbox",
-Desc="Checkbox example",
-Type="Checkbox",
-}
-
-ar:Space()
-
-
-ar:Toggle{
-Title="Toggle",
-Locked=true,
-LockedTitle="This element is locked",
-}
-
-ar:Toggle{
-Title="Toggle",
-Desc="Toggle example",
-Locked=true,
-LockedTitle="This element is locked",
-}
-end
-
-
-
-do
-local ar=ao:Tab{
-Title="Button",
-Icon="solar:cursor-square-bold",
-IconColor=am,
-IconShape="Square",
-}
-
-
-local as
-as=ar:Button{
-Title="Highlight Button",
-Icon="mouse",
-Callback=function()
-print"clicked highlight"
-as:Highlight()
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Blue Button",
-Color=Color3.fromHex"#305dff",
-Icon="",
-Callback=function()
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Blue Button",
-Desc="With description",
-Color=Color3.fromHex"#305dff",
-Icon="",
-Callback=function()
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Notify Button",
-
-Callback=function()
-aa:Notify{
-Title="Hello",
-Content="Welcome to the WindUI Example!",
-Icon="solar:bell-bold",
-Duration=5,
-CanClose=false,
-}
-end
-}
-
-
-ar:Button{
-Title="Notify Button 2",
-
-Callback=function()
-aa:Notify{
-Title="Hello",
-Content="Welcome to the WindUI Example!",
-
-Duration=5,
-CanClose=false,
-}
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Button",
-Locked=true,
-LockedTitle="This element is locked",
-}
-
-
-ar:Button{
-Title="Button",
-Desc="Button example",
-Locked=true,
-LockedTitle="This element is locked",
-}
-end
-
-
-
-do
-local ar=ao:Tab{
-Title="Input",
-Icon="solar:password-minimalistic-input-bold",
-IconColor=af,
-IconShape="Square",
-}
-
-
-ar:Input{
-Title="Input",
-Icon="mouse"
-}
-
-ar:Space()
-
-
-ar:Input{
-Title="Input Textarea",
-Type="Textarea",
-Icon="mouse",
-}
-
-ar:Space()
-
-
-ar:Input{
-Title="Input Textarea",
-Type="Textarea",
-
-}
-
-ar:Space()
-
-
-ar:Input{
-Title="Input",
-Desc="Input example",
-}
-
-ar:Space()
-
-
-ar:Input{
-Title="Input Textarea",
-Desc="Input example",
-Type="Textarea",
-}
-
-ar:Space()
-
-
-ar:Input{
-Title="Input",
-Locked=true,
-LockedTitle="This element is locked",
-}
-
-
-ar:Input{
-Title="Input",
-Desc="Input example",
-Locked=true,
-LockedTitle="This element is locked",
-}
-end
-
-
-
-do
-local ar=ao:Tab{
-Title="Slider",
-Icon="solar:square-transfer-horizontal-bold",
-IconColor=aj,
-IconShape="Square",
-}
-
-ar:Section{
-Title="Default Slider with Tooltip and without textbox",
-TextSize=14,
-}
-
-ar:Slider{
-Title="Slider Example",
-Desc="Hahahahaha hello",
-IsTooltip=true,
-IsTextbox=false,
-Width=200,
-Step=1,
-Value={
-Min=0,
-Max=200,
-Default=100,
-},
-Callback=function(as)
-print(as)
-end
-}
-
-ar:Space()
-
-ar:Section{
-Title="Slider without description",
-TextSize=14,
-}
-
-ar:Slider{
-Title="Slider Example",
-Step=1,
-Width=200,
-Value={
-Min=0,
-Max=200,
-Default=100,
-},
-Callback=function(as)
-print(as)
-end
-}
-
-ar:Space()
-
-ar:Section{
-Title="Slider without titles",
-TextSize=14,
-}
-
-ar:Slider{
-IsTooltip=true,
-Step=1,
-Value={
-Min=0,
-Max=200,
-Default=100,
-},
-Callback=function(as)
-print(as)
-end
-}
-
-ar:Space()
-
-ar:Section{
-Title="Slider with icons ('from' only)",
-TextSize=14,
-}
-
-ar:Slider{
-IsTooltip=true,
-Step=1,
-Value={
-Min=0,
-Max=200,
-Default=100,
-},
-Icons={
-From="sfsymbols:sunMinFill",
-
-},
-Callback=function(as)
-print(as)
-end
-}
-
-ar:Space()
-
-ar:Section{
-Title="Slider with icons (from & to)",
-TextSize=14,
-}
-
-ar:Slider{
-IsTooltip=true,
-Step=1,
-Value={
-Min=0,
-Max=100,
-Default=50,
-},
-Icons={
-From="sfsymbols:sunMinFill",
-To="sfsymbols:sunMaxFill",
-},
-Callback=function(as)
-print(as)
-end
-}
-end
-
-
-
-do
-local ar=ao:Tab{
-Title="Dropdown",
-Icon="solar:hamburger-menu-bold",
-IconColor=ah,
-IconShape="Square",
-}
-
-
-ar:Dropdown{
-Title="Advanced Dropdown (example)",
-Values={
-{
-Title="New file",
-Desc="Create a new file",
-Icon="file-plus",
-Callback=function()
-print"Clicked 'New File'"
-end
-},
-{
-Title="Copy link",
-Desc="Copy the file link",
-Icon="copy",
-Callback=function()
-print"Clicked 'Copy link'"
-end
-},
-{
-Title="Edit file",
-Desc="Allows you to edit the file",
-Icon="file-pen",
-Callback=function()
-print"Clicked 'Edit file'"
-end
-},
-{
-Type="Divider",
-},
-{
-Title="Delete file",
-Desc="Permanently delete the file",
-Icon="trash",
-Callback=function()
-print"Clicked 'Delete file'"
-end
-},
-}
-}
-
-ar:Space()
-
-ar:Dropdown{
-Title="Multi Dropdown",
-Values={
-"Привет","Hello","Сәлем","Bonjour"
-},
-Value=nil,
-AllowNone=true,
-Multi=true,
-Callback=function(as)
-print("Selected: "..as)
-end
-}
-
-ar:Space()
-
-ar:Dropdown{
-Title="No Multi Dropdown (default",
-Values={
-"Привет","Hello","Сәлем","Bonjour"
-},
-Value=1,
-
-Callback=function(as)
-print("Selected: "..as)
-end
-}
-
-ar:Space()
-
-
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-do
-local ar=ap:Tab{
-Title="Config Elements",
-Icon="solar:file-text-bold",
-IconColor=am,
-IconShape=nil,
-}
-
-
-
-
-
-ar:Colorpicker{
-Flag="ColorpickerTest",
-Title="Colorpicker",
-Desc="Colorpicker Description",
-Default=Color3.fromRGB(0,255,0),
-Transparency=0,
-Locked=false,
-Callback=function(as)
-print("Background color: "..tostring(as))
-end
-}
-
-ar:Space()
-
-ar:Dropdown{
-Flag="DropdownTest",
-Title="Advanced Dropdown",
-Values={
-{
-Title="Category A",
-Icon="bird"
-},
-{
-Title="Category B",
-Icon="house"
-},
-{
-Title="Category C",
-Icon="droplet"
-},
-},
-Value="Category A",
-Callback=function(as)
-print("Category selected: "..as.Title.." with icon "..as.Icon)
-end
-}
-ar:Dropdown{
-Flag="DropdownTest2",
-Title="Advanced Dropdown 2",
-Values={
-{
-Title="Category A",
-Icon="bird"
-},
-{
-Title="Category B",
-Icon="house"
-},
-{
-Title="Category C",
-Icon="droplet",
-Locked=true,
-},
-},
-Value="Category A",
-Multi=true,
-Callback=function(as)
-local au={}
-for av,aw in ipairs(as)do
-table.insert(au,aw.Title)
-end
-print("Selected: "..table.concat(au,", "))
-end
-}
-
-
-ar:Space()
-
-ar:Input{
-Flag="InputTest",
-Title="Input",
-Desc="Input Description",
-Value="Default value",
-InputIcon="bird",
-Type="Input",
-Placeholder="Enter text...",
-Callback=function(as)
-print("Text entered: "..as)
-end
-}
-
-ar:Space()
-
-ar:Keybind{
-Flag="KeybindTest",
-Title="Keybind",
-Desc="Keybind to open ui",
-Value="G",
-Callback=function(as)
-ae:SetToggleKey(Enum.KeyCode[as])
-end
-}
-
-ar:Space()
-
-ar:Slider{
-Flag="SliderTest",
-Title="Slider",
-Step=1,
-Value={
-Min=20,
-Max=120,
-Default=70,
-},
-Callback=function(as)
-print(as)
-end
-}
-ar:Slider{
-Flag="SliderTest2",
-
-Icons={
-From="sfsymbols:sunMinFill",
-To="sfsymbols:sunMaxFill",
-},
-Step=1,
-IsTooltip=true,
-Value={
-Min=0,
-Max=100,
-Default=50,
-},
-Callback=function(as)
-print(as)
-end
-}
-
-ar:Space()
-
-ar:Toggle{
-Flag="ToggleTest",
-Title="Toggle Panel Background",
-
-
-
-Value=not ae.HidePanelBackground,
-Callback=function(as)
-ae:SetPanelBackground(as)
-end
-}
-
-ar:Toggle{
-Flag="ToggleTest",
-Title="Toggle",
-Desc="Toggle Description",
-
-
-Value=false,
-Callback=function(as)
-print("Toggle Activated"..tostring(as))
-end
-}
-end
-
-do
-local ar=ap:Tab{
-Title="Config Usage",
-Icon="solar:folder-with-files-bold",
-IconColor=af,
-IconShape=nil,
-}
-
-local as=ae.ConfigManager
-local au="default"
-
-local av=ar:Input{
-Title="Config Name",
-Icon="file-cog",
-Callback=function(av)
-au=av
-end
-}
-
-ar:Space()
-
-
-
-
-
-
-
-
-
-
-
-local aw=as:AllConfigs()
-local ax=table.find(aw,au)and au or nil
-
-local ay=ar:Dropdown{
-Title="All Configs",
-Desc="Select existing configs",
-Values=aw,
-Value=ax,
-Callback=function(ay)
-au=ay
-av:Set(ay)
-
-AutoLoadToggle:Set(as:GetConfig(au).AutoLoad or false)
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Save Config",
-Icon="",
-Justify="Center",
-Callback=function()
-ae.CurrentConfig=as:Config(au)
-if ae.CurrentConfig:Save()then
-aa:Notify{
-Title="Config Saved",
-Desc="Config '"..au.."' saved",
-Icon="check",
-}
-end
-
-ay:Refresh(as:AllConfigs())
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Load Config",
-Icon="",
-Justify="Center",
-Callback=function()
-ae.CurrentConfig=as:CreateConfig(au)
-if ae.CurrentConfig:Load()then
-aa:Notify{
-Title="Config Loaded",
-Desc="Config '"..au.."' loaded",
-Icon="refresh-cw",
-}
-end
-end
-}
-
-ar:Space()
-
-ar:Button{
-Title="Print AutoLoad Configs",
-Icon="",
-Justify="Center",
-Callback=function()
-print(HttpService:JSONDecode(as:GetAutoLoadConfigs()))
-end
-}
-end
-
-
-
-
-
-do
-local ar="ftgs-development-hub-1300692552005189632"
-local as="https://discord.com/api/v10/invites/"..ar.."?with_counts=true&with_expiration=true"
-
-local au=aa.cloneref(game:GetService"HttpService"):JSONDecode(aa.Creator.Request{
-Url=as,
-Method="GET",
-Headers={
-["User-Agent"]="WindUI/Example",Accept=
-"application/json"
-}
-}.Body)
-
-local av=aq:Tab{
-Title="Discord",
-}
-
-if au and au.guild then
-av:Section{
-Title="Join our Discord server!",
-TextSize=20,
-}
-av:Paragraph{
-Title=tostring(au.guild.name),
-Desc=tostring(au.guild.description),
-Image="https://cdn.discordapp.com/icons/"..au.guild.id.."/"..au.guild.icon..".png?size=1024",
-Thumbnail="https://cdn.discordapp.com/banners/1300692552005189632/35981388401406a4b7dffd6f447a64c4.png?size=512",
-ImageSize=48,
-Buttons={
-{
-Title="Copy link",
-Icon="link",
-Callback=function()
-setclipboard("https://discord.gg/"..ar)
-end
-}
-}
-}
-
-end
-end
+return aa
