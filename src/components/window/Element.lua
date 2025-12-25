@@ -617,10 +617,11 @@ return function(Config)
     end
     
     
-    function Element:Lock()
+    function Element:Lock(newtitle)
         CanHover = false
         Locked.Active = true
         Locked.Visible = true
+        LockedTitle.Text = newtitle
     end
     
     function Element:Unlock()

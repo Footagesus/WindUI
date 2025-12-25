@@ -13,6 +13,7 @@ function Element:New(Config)
         Title = Config.Title or "Toggle",
         Desc = Config.Desc or nil,
         Locked = Config.Locked or false,
+        LockedTitle = Config.LockedTitle,
         Value = Config.Value,
         Icon = Config.Icon or nil,
         IconSize = Config.IconSize or 23, -- from 26 to 0
@@ -48,7 +49,7 @@ function Element:New(Config)
     function Toggle:Lock()
         Toggle.Locked = true
         CanCallback = false
-        return Toggle.ToggleFrame:Lock()
+        return Toggle.ToggleFrame:Lock(Toggle.LockedTitle)
     end
     function Toggle:Unlock()
         Toggle.Locked = false

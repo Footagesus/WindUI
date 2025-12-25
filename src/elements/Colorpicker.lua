@@ -635,6 +635,7 @@ function Element:New(Config)
         Title = Config.Title or "Colorpicker",
         Desc = Config.Desc or nil,
         Locked = Config.Locked or false,
+        LockedTitle = Config.LockedTitle,
         Default = Config.Default or Color3.new(1,1,1),
         Callback = Config.Callback or function() end,
         --Window = Config.Window,
@@ -675,7 +676,7 @@ function Element:New(Config)
     function Colorpicker:Lock()
         Colorpicker.Locked = true
         CanCallback = false
-        return Colorpicker.ColorpickerFrame:Lock()
+        return Colorpicker.ColorpickerFrame:Lock(Colorpicker.LockedTitle)
     end
     function Colorpicker:Unlock()
         Colorpicker.Locked = false

@@ -17,6 +17,7 @@ function Element:New(Config)
         Title = Config.Title or nil,
         Desc = Config.Desc or nil,
         Locked = Config.Locked or nil,
+        LockedTitle = Config.LockedTitle,
         Value = Config.Value or {},
         Icons = Config.Icons or nil,
         IsTooltip = Config.IsTooltip or false,
@@ -206,7 +207,7 @@ function Element:New(Config)
     function Slider:Lock()
         Slider.Locked = true
         CanCallback = false
-        return Slider.SliderFrame:Lock()
+        return Slider.SliderFrame:Lock(Slider.LockedTitle)
     end
     function Slider:Unlock()
         Slider.Locked = false

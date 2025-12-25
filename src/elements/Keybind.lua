@@ -19,6 +19,7 @@ function Element:New(Config)
         Title = Config.Title or "Keybind",
         Desc = Config.Desc or nil,
         Locked = Config.Locked or false,
+        LockedTitle = Config.LockedTitle,
         Value = Config.Value or "F",
         Callback = Config.Callback or function() end,
         CanChange = Config.CanChange or true,
@@ -69,7 +70,7 @@ function Element:New(Config)
     function Keybind:Lock()
         Keybind.Locked = true
         CanCallback = false
-        return Keybind.KeybindFrame:Lock()
+        return Keybind.KeybindFrame:Lock(Keybind.LockedTitle)
     end
     function Keybind:Unlock()
         Keybind.Locked = false

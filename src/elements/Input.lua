@@ -18,6 +18,7 @@ function Element:New(Config)
         Desc = Config.Desc or nil,
         Type = Config.Type or "Input", -- Input or Textarea
         Locked = Config.Locked or false,
+        LockedTitle = Config.LockedTitle,
         InputIcon = Config.InputIcon or false,
         Placeholder = Config.Placeholder or "Enter Text...",
         Value = Config.Value or "",
@@ -72,7 +73,7 @@ function Element:New(Config)
     function Input:Lock()
         Input.Locked = true
         CanCallback = false
-        return Input.InputFrame:Lock()
+        return Input.InputFrame:Lock(Input.LockedTitle)
     end
     function Input:Unlock()
         Input.Locked = false
