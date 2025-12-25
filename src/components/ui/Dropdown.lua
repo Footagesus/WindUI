@@ -261,6 +261,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
                     Name = typeof(Tab) == "table" and Tab.Title or Tab,
                     Desc = typeof(Tab) == "table" and Tab.Desc or nil,
                     Icon = typeof(Tab) == "table" and Tab.Icon or nil,
+                    IconSize = typeof(Tab) == "table" and Tab.IconSize or nil,
                     Original = Tab,
                     Selected = false,
                     Locked = typeof(Tab) == "table" and Tab.Locked or false,
@@ -276,7 +277,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
                         "Dropdown",
                         true
                     )
-                    TabIcon.Size = UDim2.new(0,Element.TabIcon,0,Element.TabIcon)
+                    TabIcon.Size = UDim2.new(0,TabMain.IconSize or Element.TabIcon,0,TabMain.IconSize or Element.TabIcon)
                     TabIcon.ImageLabel.ImageTransparency = Type == "Dropdown" and .2 or 0
                     TabMain.UIElements.TabIcon = TabIcon
                 end
@@ -288,10 +289,10 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
                     ImageColor3 = Color3.new(1,1,1),
                     Active = not TabMain.Locked,
                 }, {
-                    Creator.NewRoundFrame(Element.MenuCorner - Element.MenuPadding, "Glass-1", {
+                    Creator.NewRoundFrame(Element.MenuCorner - Element.MenuPadding, "Glass-1.4", {
                         Size = UDim2.new(1,0,1,0),
                         ThemeTag = {
-                            ImageColor3 = "White",
+                            ImageColor3 = "DropdownTabBorder",
                         },
                         ImageTransparency = 1, -- .75
                         Name = "Highlight",
