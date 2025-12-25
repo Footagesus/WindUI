@@ -67,7 +67,14 @@ return {
     SectionBoxTransparency = .95,
     SectionBoxBorder = "White",
     SectionBoxBorderTransparency = .75,
+    SectionBoxBackground = "White",
+    SectionBoxBackgroundTransparency = .95,
     
     SearchBarBorder = "White",
     SearchBarBorderTransparency = .75,
+    
+    NotificationDuration = "White",
+    NotificationDurationTransparency = .95,
+    
+    DropdownTabBorder = "White"
 }
