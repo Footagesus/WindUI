@@ -100,6 +100,8 @@ function Tag:New(TagConfig, Parent)
     function TagModule:SetTitle(text)
         TagModule.Title = text
         TagTitle.Text = text
+        
+        return TagModule
     end
     
     function TagModule:SetColor(color)
@@ -120,6 +122,8 @@ function Tag:New(TagConfig, Parent)
             end
             Tween(TagFrame, .06, { ImageColor3 = color }):Play()
         end
+        
+        return TagModule
     end
     
     function TagModule:SetIcon(icon)
@@ -149,8 +153,13 @@ function Tag:New(TagConfig, Parent)
                 TagIcon = nil
             end
         end
+        return TagModule
     end
     
+    function TagModule:Destroy()
+        TagFrame:Destroy()
+        return TagModule
+    end
     
     return TagModule
 end
