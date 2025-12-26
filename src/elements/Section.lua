@@ -16,23 +16,24 @@ function Element:New(Config)
         Box = Config.Box or false,
         BoxBorder = Config.BoxBorder or false,
         FontWeight = Config.FontWeight or Enum.FontWeight.SemiBold,
+        DescFontWeight = Config.DescFontWeight or Enum.FontWeight.Medium,
         TextTransparency = Config.TextTransparency or 0.05,
         DescTextTransparency = Config.DescTextTransparency or 0.4,
         Opened = Config.Opened or false,
         UIElements = {},
-        
+
         HeaderSize = 42,
         IconSize = 20,
         Padding = 10,
-        
+
         Elements = {},
-        
+
         Expandable = false,
     }
-    
+
     local Icon
 
-    
+
     function Section:SetIcon(i)
         Section.Icon = i or nil
         if Icon then Icon:Destroy() end
@@ -48,7 +49,7 @@ function Element:New(Config)
             Icon.Size = UDim2.new(0,Section.IconSize,0,Section.IconSize)
         end
     end
-    
+
     local ChevronIconFrame = New("Frame", {
         Size = UDim2.new(0,Section.IconSize,0,Section.IconSize),
         BackgroundTransparency = 1,
@@ -80,12 +81,13 @@ function Element:New(Config)
             FillDirection = "Vertical",
             HorizontalAlignment = Section.TextXAlignment,
             VerticalAlignment = "Center",
+            Padding = UDim.new(0,4)
         })
     })
-    
+
     local TitleFrame, DescFrame
-    
-    function createTitle(Text, Type) 
+
+    local function createTitle(Text, Type) 
         return New("TextLabel", {
             BackgroundTransparency = 1,
             TextXAlignment = Section.TextXAlignment,
@@ -95,7 +97,7 @@ function Element:New(Config)
             ThemeTag = {
                 TextColor3 = "Text",
             },
-            FontFace = Font.new(Creator.Font, Section.FontWeight),
+            FontFace = Font.new(Creator.Font, Type == "Title" and Section.FontWeight or Section.DescFontWeight),
             --Parent = Config.Parent,
             --Size = UDim2.new(1,0,0,0),
             Text = Text,
@@ -109,12 +111,12 @@ function Element:New(Config)
             Parent = TitleContainer,
         })
     end
-    
+
     TitleFrame = createTitle(Section.Title, "Title")
     if Section.Desc then
         DescFrame = createTitle(Section.Desc, "Desc")
     end
-    
+
     local function UpdateTitleSize()
         local offset = 0
         if Icon then
@@ -125,8 +127,8 @@ function Element:New(Config)
         end
         TitleContainer.Size = UDim2.new(1, offset, 0, 0)
     end
-    
-    
+
+
     local Main = Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, "Squircle", {
         Size = UDim2.new(1,0,0,0),
         BackgroundTransparency = 1,
@@ -150,15 +152,17 @@ function Element:New(Config)
             Name = "Outline",
         }),
         New("TextButton", {
-            Size = UDim2.new(1,0,0,Expandable and 0 or Section.HeaderSize),
+            Size = UDim2.new(1,0,0,Section.Expandable and 0 or (not DescFrame and Section.HeaderSize or 0)),
             BackgroundTransparency = 1,
-            AutomaticSize = Expandable and nil or "Y" ,
+            AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or nil ,
             Text = "",
             Name = "Top",
         }, {
             Section.Box and New("UIPadding", {
+                PaddingTop = UDim.new(0,Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)),
                 PaddingLeft = UDim.new(0,Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)),
                 PaddingRight = UDim.new(0,Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)),
+                PaddingBottom = UDim.new(0,Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)),
             }) or nil,
             Icon,
             TitleContainer,
@@ -192,113 +196,121 @@ function Element:New(Config)
     })
 
     -- Section.UIElements.Main:GetPropertyChangedSignal("TextBounds"):Connect(function()
-    --     Section.UIElements.Main.Size = UDim2.new(1,0,0,Section.UIElements.Main.TextBounds.Y)
-    -- end)
-    
-    Section.ElementFrame = Main
-    
-    
-    local ElementsModule = Config.ElementsModule
-    
-    ElementsModule.Load(Section, Main.Content, ElementsModule.Elements, Config.Window, Config.WindUI, function()
-        if not Section.Expandable then
-            Section.Expandable = true
-            ChevronIconFrame.Visible = true
-            UpdateTitleSize()
+        --     Section.UIElements.Main.Size = UDim2.new(1,0,0,Section.UIElements.Main.TextBounds.Y)
+        -- end)
+
+        Section.ElementFrame = Main
+
+        if DescFrame then
+            Main.Top:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+                Main.Content.Position = UDim2.new(0,0,0,Main.Top.AbsoluteSize.Y/Config.UIScale)
+
+                if Section.Opened then Section:Open() else Section.Close() end 
+            end)
         end
-    end, ElementsModule, Config.UIScale, Config.Tab)
-    
-    
-    UpdateTitleSize()
-    
-    function Section:SetTitle(Title)
-        Section.Title = Title
-        TitleFrame.Text = Title
-    end
-    
-    function Section:SetDesc(Desc)
-        Section.Desc = Desc
-        if not DescFrame then
-            DescFrame = createTitle(Desc, "Desc")
+
+
+        local ElementsModule = Config.ElementsModule
+
+        ElementsModule.Load(Section, Main.Content, ElementsModule.Elements, Config.Window, Config.WindUI, function()
+            if not Section.Expandable then
+                Section.Expandable = true
+                ChevronIconFrame.Visible = true
+                UpdateTitleSize()
+            end
+        end, ElementsModule, Config.UIScale, Config.Tab)
+
+
+        UpdateTitleSize()
+
+        function Section:SetTitle(Title)
+            Section.Title = Title
+            TitleFrame.Text = Title
         end
-        DescFrame.Text = Title
-    end
-    
-    function Section:Destroy()
-        for _,element in next, Section.Elements do
-            element:Destroy()
+
+        function Section:SetDesc(Desc)
+            Section.Desc = Desc
+            if not DescFrame then
+                DescFrame = createTitle(Desc, "Desc")
+            end
+            DescFrame.Text = Desc
         end
-        
-        -- Section.UIElements.Main.AutomaticSize = "None"
-        -- Section.UIElements.Main.Size = UDim2.new(1,0,0,Section.UIElements.Main.TextBounds.Y)
-        
-        -- Tween(Section.UIElements.Main, .1, {TextTransparency = 1}):Play()
-        -- task.wait(.1)
-        -- Tween(Section.UIElements.Main, .15, {Size = UDim2.new(1,0,0,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
-        
-        Main:Destroy()
-    end
-    
-    function Section:Open()
-        if Section.Expandable then
-            Section.Opened = true
-            Tween(Main, 0.33, {
-                Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, Section.HeaderSize + (Main.Content.AbsoluteSize.Y/Config.UIScale))
-            }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-            
-            Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 180}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+
+        function Section:Destroy()
+            for _,element in next, Section.Elements do
+                element:Destroy()
+            end
+
+            -- Section.UIElements.Main.AutomaticSize = "None"
+            -- Section.UIElements.Main.Size = UDim2.new(1,0,0,Section.UIElements.Main.TextBounds.Y)
+
+            -- Tween(Section.UIElements.Main, .1, {TextTransparency = 1}):Play()
+            -- task.wait(.1)
+            -- Tween(Section.UIElements.Main, .15, {Size = UDim2.new(1,0,0,0)}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+
+            Main:Destroy()
         end
-    end
-    function Section:Close()
-        if Section.Expandable then
-            Section.Opened = false
-            Tween(Main, 0.26, {
-                Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, Section.HeaderSize)
-            }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-            Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-        end
-    end
-    
-    Creator.AddSignal(Main.Top.MouseButton1Click, function()
-        if Section.Expandable then
-            if Section.Opened then
-                Section:Close()
-            else
-                Section:Open()
+
+        function Section:Open()
+            if Section.Expandable then
+                Section.Opened = true
+                Tween(Main, 0.33, {
+                    Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
+                }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+
+                Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 180}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
         end
-    end)
-    
-    Creator.AddSignal(Main.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
-        if Section.Opened then
-            Section:Open()
+        function Section:Close()
+            if Section.Expandable then
+                Section.Opened = false
+                Tween(Main, 0.26, {
+                    Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
+                }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+            end
         end
-    end)
-    
-    task.spawn(function()
-        task.wait(0.02)
-        if Section.Expandable then
-            -- New("UIPadding", {
-            --     PaddingTop = UDim.new(0,4),
-            --     PaddingLeft = UDim.new(0,Section.Padding),
-            --     PaddingRight = UDim.new(0,Section.Padding),
-            --     PaddingBottom = UDim.new(0,2),
-                
-            --     Parent = Main.Top,
-            -- })
-            Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0,Section.HeaderSize)
-            Main.AutomaticSize = "None"
-            Main.Top.Size = UDim2.new(1,0,0,Section.HeaderSize)
-            Main.Top.AutomaticSize = "None"
-            Main.Content.Visible = true
-        end
-        if Section.Opened then
-            Section:Open()
-        end
-        
-    end)
-    
-    return Section.__type, Section
-end
 
-return Element
+        Creator.AddSignal(Main.Top.MouseButton1Click, function()
+            if Section.Expandable then
+                if Section.Opened then
+                    Section:Close()
+                else
+                    Section:Open()
+                end
+            end
+        end)
+
+        Creator.AddSignal(Main.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+            if Section.Opened then
+                Section:Open()
+            end
+        end)
+
+        task.spawn(function()
+            task.wait(0.02)
+            if Section.Expandable then
+                -- New("UIPadding", {
+                    --     PaddingTop = UDim.new(0,4),
+                    --     PaddingLeft = UDim.new(0,Section.Padding),
+                    --     PaddingRight = UDim.new(0,Section.Padding),
+                    --     PaddingBottom = UDim.new(0,2),
+
+                    --     Parent = Main.Top,
+                    -- })
+                    Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0,Main.Top.AbsoluteSize.Y/Config.UIScale)
+                    Main.AutomaticSize = "None"
+                    Main.Top.Size = UDim2.new(1,0,0,(not DescFrame and Section.HeaderSize or 0))
+                    Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or "None"
+                    Main.Content.Visible = true
+                end
+                if Section.Opened then
+                    Section:Open()
+                end
+
+            end)
+
+            return Section.__type, Section
+        end
+
+        return Element
