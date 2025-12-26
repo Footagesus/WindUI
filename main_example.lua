@@ -299,6 +299,7 @@ do
         Icon = "solar:info-square-bold",
         IconColor = Grey,
         IconShape = "Square",
+        Border = true,
     })
     
     local AboutSection = AboutTab:Section({
@@ -386,6 +387,7 @@ do
         Icon = "solar:home-2-bold",
         IconColor = Grey,
         IconShape = "Square",
+        Border = true,
     })
     
     local OverviewSection1 = OverviewTab:Section({
@@ -450,6 +452,7 @@ do
         Icon = "solar:check-square-bold",
         IconColor = Green,
         IconShape = "Square",
+        Border = true,
     })
     
     
@@ -511,6 +514,7 @@ do
         Icon = "solar:cursor-square-bold",
         IconColor = Blue,
         IconShape = "Square",
+        Border = true,
     })
     
     
@@ -601,6 +605,7 @@ do
         Icon = "solar:password-minimalistic-input-bold",
         IconColor = Purple,
         IconShape = "Square",
+        Border = true,
     })
     
     
@@ -670,6 +675,7 @@ do
         Icon = "solar:square-transfer-horizontal-bold",
         IconColor = Green,
         IconShape = "Square",
+        Border = true,
     })
     
     SliderTab:Section({
@@ -792,6 +798,7 @@ do
         Icon = "solar:hamburger-menu-bold",
         IconColor = Yellow,
         IconShape = "Square",
+        Border = true,
     })
     
     
@@ -899,6 +906,7 @@ do -- config elements
         Icon = "solar:file-text-bold",
         IconColor = Blue,
         IconShape = nil,
+        Border = true,
     })
     
     -- All elements are taken from the official documentation: https://footagesus.github.io/WindUI-Docs/docs
@@ -1065,6 +1073,7 @@ do -- config panel
         Icon = "solar:folder-with-files-bold",
         IconColor = Purple,
         IconShape = nil,
+        Border = true,
     })
 
     local ConfigManager = Window.ConfigManager
@@ -1175,6 +1184,7 @@ do
     
     local DiscordTab = OtherSection:Tab({
         Title = "Discord",
+        Border = true,
     })
     
     if Response and Response.guild then
