@@ -46,6 +46,7 @@ function TabModule.New(Config, UIScale)
         IconThemed = Config.IconThemed,
         Locked = Config.Locked,
         ShowTabTitle = Config.ShowTabTitle,
+        Border = Config.Border,
         Selected = false,
         Index = nil,
         Parent = Config.Parent,
@@ -177,7 +178,7 @@ function TabModule.New(Config, UIScale)
             TextOffset = -16-2-(Window.UIPadding/2)
             Tab.UIElements.Main.Frame.TextLabel.Size = UDim2.new(1,TextOffset,0,0)
         elseif Tab.IconColor then
-            local IconBG = Creator.NewRoundFrame(Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2+(Window.UIPadding/4))) or 9999, "Squircle", {
+            local _IconBG = Creator.NewRoundFrame(Tab.IconShape ~= "Circle" and (Tab.UICorner + 5 - (2+(Window.UIPadding/4))) or 9999, "Squircle", {
                 Size = UDim2.new(0,26,0,26),
                 ImageColor3 = Tab.IconColor,
                 Parent = Tab.UIElements.Main.Frame
@@ -393,8 +394,8 @@ function TabModule.New(Config, UIScale)
             Tween(Tab.UIElements.Main.Frame, 0.08, {ImageTransparency = 1}):Play()
         end
     end)
-    
-    
+
+
     
     function Tab:ScrollToTheElement(elemindex)
         Tab.UIElements.ContainerFrame.ScrollingEnabled = false
@@ -537,7 +538,9 @@ function TabModule:SelectTab(TabIndex)
         for _, TabObject in next, TabModule.Tabs do
             if not TabObject.Locked then
                 Tween(TabObject.UIElements.Main, 0.15, {ImageTransparency = 1}):Play()
-                --Tween(TabObject.UIElements.Main.Outline, 0.15, {ImageTransparency = 1}):Play()
+                if TabObject.Border then
+                    Tween(TabObject.UIElements.Main.Outline, 0.15, {ImageTransparency = 1}):Play()
+                end
                 Tween(TabObject.UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0.3}):Play()
                 if TabObject.UIElements.Icon and not TabObject.IconColor then
                     Tween(TabObject.UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.4}):Play()
@@ -546,7 +549,9 @@ function TabModule:SelectTab(TabIndex)
             end
         end
         Tween(TabModule.Tabs[TabIndex].UIElements.Main, 0.15, {ImageTransparency = 0.93}):Play()
-        --Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0}):Play()
+        if TabModule.Tabs[TabIndex].Border then
+            Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0.75}):Play()
+        end
         Tween(TabModule.Tabs[TabIndex].UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0}):Play()
         if TabModule.Tabs[TabIndex].UIElements.Icon and not TabModule.Tabs[TabIndex].IconColor then
             Tween(TabModule.Tabs[TabIndex].UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.1}):Play()
