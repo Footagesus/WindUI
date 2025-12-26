@@ -82,12 +82,12 @@ function TabModule.New(Config, UIScale)
         },
         ImageTransparency = 1,
     }, {
-        Creator.NewRoundFrame(Tab.UICorner, "Glass-1", { 
+        Creator.NewRoundFrame(Tab.UICorner, "Glass-1.4", { 
             Size = UDim2.new(1,0,1,0),
             ThemeTag = {
-                ImageColor3 = "Text",
+                ImageColor3 = "TabBorder",
             },
-            ImageTransparency = 1, -- .85  
+            ImageTransparency = 1, -- .7
             Name = "Outline"
         }, {
             -- New("UIGradient", {

@@ -63,6 +63,8 @@ return {
     TooltipSecondary = "Primary",
     TooltipSecondaryText = "White",
     
+    SectionExpandIcon = "White",
+    SectionExpandIconTransparency = .4,
     SectionBox = "White",
     SectionBoxTransparency = .95,
     SectionBoxBorder = "White",
@@ -73,8 +75,17 @@ return {
     SearchBarBorder = "White",
     SearchBarBorderTransparency = .75,
     
+    Notification = "Background",
+    NotificationTitle = "Text",
+    NotificationTitleTransparency = 0,
+    NotificationContent = "Text",
+    NotificationContentTransparency = .4,
     NotificationDuration = "White",
     NotificationDurationTransparency = .95,
+    NotificationBorder = "White",
+    NotificationBorderTransparency = .75,
     
-    DropdownTabBorder = "White"
+    DropdownTabBorder = "White",
+
+    TabBorder = "White",
 }

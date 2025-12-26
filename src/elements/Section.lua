@@ -61,17 +61,17 @@ function Element:New(Config)
             ImageRectSize = Creator.Icon("chevron-down")[2].ImageRectSize,
             ImageRectOffset = Creator.Icon("chevron-down")[2].ImageRectPosition,
             ThemeTag = {
-                ImageColor3 = "Icon",
+                ImageTransparency = "SectionExpandIconTransparency",
+                ImageColor3 = "SectionExpandIcon",
             },
-            ImageTransparency = .7,
         })
     })
-    
-    
+
+
     if Section.Icon then
         Section:SetIcon(Section.Icon)
     end
-    
+
     local TitleContainer = New("Frame", {
         Size = UDim2.new(1,0,1,0),
         BackgroundTransparency = 1,
@@ -142,7 +142,7 @@ function Element:New(Config)
         Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner, Config.Window.NewElements and "Glass-1" or "SquircleOutline", {
             Size = UDim2.new(1,0,1,0),
             --ImageTransparency = .75,
-            ThemeTag= {
+            ThemeTag = {
                 ImageTransparency = "SectionBoxBorderTransparency",
                 ImageColor3 = "SectionBoxBorder",
             },

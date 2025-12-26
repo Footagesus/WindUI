@@ -170,7 +170,8 @@ function NotificationModule.New(Config)
             BackgroundTransparency = 1,
             TextSize = 18,
             ThemeTag = {
-                TextColor3 = "Text"
+                TextColor3 = "NotificationTitle",
+                TextTransparency = "NotificationTitleTransparency",
             },
             Text = Notification.Title,
             FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold)
@@ -188,10 +189,11 @@ function NotificationModule.New(Config)
             TextXAlignment = "Left",
             RichText = true,
             BackgroundTransparency = 1,
-            TextTransparency = .4,
+            --TextTransparency = .4,
             TextSize = 15,
             ThemeTag = {
-                TextColor3 = "Text"
+                TextColor3 = "NotificationContent",
+                TextTransparency = "NotificationContentTransparency",
             },
             Text = Notification.Content,
             FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
@@ -207,10 +209,17 @@ function NotificationModule.New(Config)
         AutomaticSize = "Y",
         ImageTransparency = .05,
         ThemeTag = {
-            ImageColor3 = "Background"
+            ImageColor3 = "Notification"
         },
         --ZIndex = 20
     }, {
+        Creator.NewRoundFrame(NotificationModule.UICorner, "Glass-1", {
+            Size = UDim2.new(1,0,1,0),
+            ThemeTag = {
+                ImageColor3 = "NotificationBorder",
+                ImageTransparency = "NotificationBorderTransparency",
+            },
+        }),
         New("Frame", {
             Size = UDim2.new(1,0,1,0),
             BackgroundTransparency = 1,
