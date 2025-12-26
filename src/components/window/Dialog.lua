@@ -18,8 +18,8 @@ end
 
 function DialogModule.Create(Key, Type)
     local Dialog = {
-        UICorner = 24,
-        UIPadding = 15,
+        UICorner = 28,
+        UIPadding = 12,
         UIElements = {}
     }
     

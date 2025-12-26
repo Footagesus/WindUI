@@ -1505,7 +1505,7 @@ return function(Config)
             Content = DialogConfig.Content,
             Buttons = DialogConfig.Buttons or {},
             
-            TextPadding = 10,
+            TextPadding = 14,
         }
         local Dialog = DialogModule.Create(false)
         
@@ -1625,7 +1625,7 @@ return function(Config)
         local Buttons = {}
 
         for _,Button in next, DialogTable.Buttons do
-            local ButtonFrame = CreateButton(Button.Title, Button.Icon, Button.Callback, Button.Variant, ButtonsContent, Dialog, false)
+            local ButtonFrame = CreateButton(Button.Title, Button.Icon, Button.Callback, Button.Variant, ButtonsContent, Dialog, true)
             table.insert(Buttons, ButtonFrame)
         end
         
