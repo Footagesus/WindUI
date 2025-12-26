@@ -1686,31 +1686,38 @@ return function(Config)
         return Dialog
     end
     
-    
+    local ClickedClose = false
+
     Window:CreateTopbarButton("Close", "x", function()
-        if not Window.IgnoreAlerts then
-            Window:SetToTheCenter()
-            Window:Dialog({
-                --Icon = "trash-2",
-                Title = "Close Window",
-                Content = "Do you want to close this window? You will not be able to open it again.",
-                Buttons = {
-                    {
-                        Title = "Cancel",
-                        --Icon = "chevron-left",
-                        Callback = function() end,
-                        Variant = "Secondary",
-                    },
-                    {
-                        Title = "Close Window",
-                        --Icon = "chevron-down",
-                        Callback = function() Window:Destroy() end,
-                        Variant = "Primary",
+        if not ClickedClose then
+            if not Window.IgnoreAlerts then
+                ClickedClose = true
+                Window:SetToTheCenter()
+                Window:Dialog({
+                    --Icon = "trash-2",
+                    Title = "Close Window",
+                    Content = "Do you want to close this window? You will not be able to open it again.",
+                    Buttons = {
+                        {
+                            Title = "Cancel",
+                            --Icon = "chevron-left",
+                            Callback = function() ClickedClose = false end,
+                            Variant = "Secondary",
+                        },
+                        {
+                            Title = "Close Window",
+                            --Icon = "chevron-down",
+                            Callback = function() 
+                                ClickedClose = false
+                                Window:Destroy() 
+                            end,
+                            Variant = "Primary",
+                        }
                     }
-                }
-            })
-        else
-            Window:Destroy()
+                })
+            else    
+                Window:Destroy()
+            end
         end
     end, (Window.Topbar.ButtonsType == "Default" and 999 or 997), nil, Color3.fromHex("#F4695F"))
     
