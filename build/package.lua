@@ -3,7 +3,7 @@
 return [[
 {
     "name": "windui",
-    "version": "1.6.63",
+    "version": "1.6.64",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Footagesus/WindUI",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
@@ -30,4 +30,5 @@ return [[
         "chokidar-cli": "^3.0.0",
         "concurrently": "^9.2.0"
     }
-}]]
+}
+]]
