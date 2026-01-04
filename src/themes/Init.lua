@@ -15,6 +15,7 @@ return function(WindUI)
             Slider = Color3.fromHex("#0091FF"),
             Checkbox = Color3.fromHex("#0091FF"),
         },
+
         Light = {
             Name = "Light",
             
@@ -27,6 +28,7 @@ return function(WindUI)
             Button = Color3.fromHex("#18181b"),
             Icon = Color3.fromHex("#52525b"),
         },
+
         Rose = {
             Name = "Rose",
             
@@ -39,6 +41,7 @@ return function(WindUI)
             Button = Color3.fromHex("#e11d48"),
             Icon = Color3.fromHex("#fb7185"),
         },
+
         Plant = {
             Name = "Plant",
             
@@ -51,6 +54,7 @@ return function(WindUI)
             Button = Color3.fromHex("#16a34a"),
             Icon = Color3.fromHex("#4ade80"),
         },
+
         Red = {
             Name = "Red",
             
@@ -63,6 +67,7 @@ return function(WindUI)
             Button = Color3.fromHex("#dc2626"),
             Icon = Color3.fromHex("#ef4444"),
         },
+
         Indigo = {
             Name = "Indigo",
             
@@ -75,6 +80,7 @@ return function(WindUI)
             Button = Color3.fromHex("#4f46e5"),
             Icon = Color3.fromHex("#6366f1"),
         },
+
         Sky = {
             Name = "Sky",
             
@@ -87,6 +93,7 @@ return function(WindUI)
             Button = Color3.fromHex("#0284c7"),
             Icon = Color3.fromHex("#0ea5e9"),
         },
+
         Violet = {
             Name = "Violet",
             
@@ -99,6 +106,7 @@ return function(WindUI)
             Button = Color3.fromHex("#7c3aed"),
             Icon = Color3.fromHex("#8b5cf6"),
         },
+
         Amber = {
             Name = "Amber",
             
@@ -111,6 +119,7 @@ return function(WindUI)
             Button = Color3.fromHex("#d97706"),
             Icon = Color3.fromHex("#f59e0b"),
         },
+
         Emerald = {
             Name = "Emerald",
             
@@ -123,6 +132,7 @@ return function(WindUI)
             Button = Color3.fromHex("#059669"),
             Icon = Color3.fromHex("#10b981"),
         },
+
         Midnight = {
             Name = "Midnight",
             
@@ -135,6 +145,7 @@ return function(WindUI)
             Button = Color3.fromHex("#2563eb"),
             Icon = Color3.fromHex("#3b82f6"),
         },
+
         Crimson = {
             Name = "Crimson",
             
@@ -147,6 +158,7 @@ return function(WindUI)
             Button = Color3.fromHex("#991b1b"),
             Icon = Color3.fromHex("#dc2626"),
         },
+
         MonokaiPro = {
             Name = "Monokai Pro",
             
@@ -159,6 +171,7 @@ return function(WindUI)
             Button = Color3.fromHex("#ab9df2"),
             Icon = Color3.fromHex("#a9dc76"),
         },
+
         CottonCandy = {
             Name = "Cotton Candy",
             
@@ -171,6 +184,24 @@ return function(WindUI)
             Button = Color3.fromHex("#d946ef"),
             Icon = Color3.fromHex("#06b6d4"),
         },
+
+        LightningWare = {
+            Name = "Mellowsi",
+
+            Accent = Color3.fromHex("#342A1E"),
+            Dialog = Color3.fromHex("#291C13"),
+            Outline = Color3.fromHex("#6B5A45"),
+            Text = Color3.fromHex("#F5EBDD"),
+            Placeholder = Color3.fromHex("#9C8A73"),
+            Background = Color3.fromHex("#1C1002"),
+            Button = Color3.fromHex("#342A1E"),
+            Icon = Color3.fromHex("#C9B79C"),
+
+            Toggle = Color3.fromHex("#C9A24D"),
+            Slider = Color3.fromHex("#C9A24D"),
+            Checkbox = Color3.fromHex("#C9A24D"),
+        },
+
         Rainbow = {
             Name = "Rainbow",
             
@@ -179,25 +210,20 @@ return function(WindUI)
                 ["33"]  = { Color = Color3.fromHex("#00ffff"), Transparency = 0 },
                 ["66"]  = { Color = Color3.fromHex("#0080ff"), Transparency = 0 }, 
                 ["100"] = { Color = Color3.fromHex("#8000ff"), Transparency = 0 },
-            }, {
-                Rotation = 45,
-            }),
-        
+            }, { Rotation = 45 }),
+
             Dialog = WindUI:Gradient({
                 ["0"]   = { Color = Color3.fromHex("#ff0080"), Transparency = 0 }, 
                 ["25"]  = { Color = Color3.fromHex("#8000ff"), Transparency = 0 },
                 ["50"]  = { Color = Color3.fromHex("#0080ff"), Transparency = 0 },
                 ["75"]  = { Color = Color3.fromHex("#00ff80"), Transparency = 0 },
                 ["100"] = { Color = Color3.fromHex("#ff8000"), Transparency = 0 },
-            }, {
-                Rotation = 135,
-            }),
-        
+            }, { Rotation = 135 }),
+
             Outline = Color3.fromHex("#ffffff"),
             Text = Color3.fromHex("#ffffff"),
-        
             Placeholder = Color3.fromHex("#00ff80"),
-        
+
             Background = WindUI:Gradient({
                 ["0"]   = { Color = Color3.fromHex("#ff0040"), Transparency = 0 },
                 ["20"]  = { Color = Color3.fromHex("#ff4000"), Transparency = 0 },
@@ -205,20 +231,16 @@ return function(WindUI)
                 ["60"]  = { Color = Color3.fromHex("#00ff40"), Transparency = 0 },
                 ["80"]  = { Color = Color3.fromHex("#0040ff"), Transparency = 0 },
                 ["100"] = { Color = Color3.fromHex("#4000ff"), Transparency = 0 },
-            }, {
-                Rotation = 90,
-            }),
-        
+            }, { Rotation = 90 }),
+
             Button = WindUI:Gradient({
                 ["0"]   = { Color = Color3.fromHex("#ff0080"), Transparency = 0 },
                 ["25"]  = { Color = Color3.fromHex("#ff8000"), Transparency = 0 },
                 ["50"]  = { Color = Color3.fromHex("#ffff00"), Transparency = 0 },
                 ["75"]  = { Color = Color3.fromHex("#80ff00"), Transparency = 0 },
                 ["100"] = { Color = Color3.fromHex("#00ffff"), Transparency = 0 },
-            }, {
-                Rotation = 60,
-            }),
-        
+            }, { Rotation = 60 }),
+
             Icon = Color3.fromHex("#ffffff"),
         },
     }
