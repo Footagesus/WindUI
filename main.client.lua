@@ -89,6 +89,7 @@ local Window = WindUI:CreateWindow({
         Enabled = true, -- enable or disable openbutton
         Draggable = true,
         OnlyMobile = false,
+        Scale = 0.5,
         
         Color = ColorSequence.new( -- gradient
             Color3.fromHex("#30FF6A"), 
@@ -1186,3 +1187,67 @@ do
     end
 end
 
+
+local Tabs = {
+    ExampleTab = Window:Tab({
+        Title = "Example Tab",
+        Icon = "bird",
+    })
+}
+
+local dropdownA
+
+local LargeListA = {
+    "All",  "Item A2",  "Item A3",  "Item A4",  "Item A5",
+    "Item A6",  "Item A7",  "Item A8",  "Item A9",  "Item A10",
+    "Item A11", "Item A12", "Item A13", "Item A14", "Item A15",
+    "Item A16", "Item A17", "Item A18", "Item A19", "Item A20",
+    "Item A21", "Item A22", "Item A23", "Item A24", "Item A25",
+    "Item A26", "Item A27", "Item A28", "Item A29", "Item A30",
+    "Item A31", "Item A32", "Item A33", "Item A34", "Item A35",
+    "Item A36", "Item A37", "Item A38", "Item A39", "Item A40",
+    "Item A41", "Item A42", "Item A43", "Item A44", "Item A45",
+    "Item A46", "Item A47", "Item A48", "Item A49", "Item A50",
+    "Item A51", "Item A52", "Item A53", "Item A54", "Item A55",
+    "Item A56", "Item A57", "Item A58", "Item A59", "Item A60",
+    "Item A61", "Item A62", "Item A63", "Item A64", "Item A65",
+    "Item A66", "Item A67", "Item A68", "Item A69", "Item A70",
+    "Item A71", "Item A72", "Item A73", "Item A74", "Item A75",
+    "Item A76", "Item A77", "Item A78", "Item A79", "Item A80",
+    "Item A81", "Item A82", "Item A83", "Item A84", "Item A85",
+    "Item A86", "Item A87", "Item A88", "Item A89", "Item A90",
+    "Item A91", "Item A92", "Item A93", "Item A94", "Item A95",
+    "Item A96", "Item A97", "Item A98", "Item A99", "Item A100"
+}
+
+local LargeListB = {
+    "Data B1", "Data B2", "Data B3", "Data B4", "Data B5",
+    "Data B6", "Data B7", "Data B8", "Data B9", "Data B10",
+}
+
+Tabs.ExampleTab:Dropdown({
+    Title = "Main Category",
+    Values = { "All", "Other Option" },
+    Value = "All",
+    Callback = function(option)
+        if dropdownA then
+            task.spawn(function()
+                if option == "All" then
+                    dropdownA:Refresh(LargeListA)
+                else
+                    dropdownA:Refresh(LargeListB)
+                end
+
+                dropdownA:Select({ "All" })
+            end)
+        end
+    end,
+})
+
+dropdownA = Tabs.ExampleTab:Dropdown({
+    Title = "Target",
+    Values = LargeListA,
+    Multi = true,
+    Value = { "All" },
+    Callback = function(option) end,
+})
