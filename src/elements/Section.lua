@@ -205,7 +205,7 @@ function Element:New(Config)
             Main.Top:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
                 Main.Content.Position = UDim2.new(0,0,0,Main.Top.AbsoluteSize.Y/Config.UIScale)
 
-                if Section.Opened then Section:Open() else Section.Close() end 
+                if Section.Opened then Section:Open(true) else Section.Close(true) end 
             end)
         end
 
@@ -251,23 +251,33 @@ function Element:New(Config)
             Main:Destroy()
         end
 
-        function Section:Open()
+        function Section:Open(IsNotAnim)
             if Section.Expandable then
                 Section.Opened = true
-                Tween(Main, 0.33, {
-                    Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
-                }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-
-                Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 180}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                if IsNotAnim then
+                    Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
+                    ChevronIconFrame.ImageLabel.Rotation = 180
+                else
+                    Tween(Main, 0.33, {
+                        Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y)/Config.UIScale + (Main.Content.AbsoluteSize.Y/Config.UIScale))
+                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+    
+                    Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 180}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                end
             end
         end
-        function Section:Close()
+        function Section:Close(IsNotAnim)
             if Section.Expandable then
                 Section.Opened = false
-                Tween(Main, 0.26, {
-                    Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
-                }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                if IsNotAnim then
+                    Main.Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
+                    ChevronIconFrame.ImageLabel.Rotation = 0
+                else
+                    Tween(Main, 0.26, {
+                        Size = UDim2.new(Main.Size.X.Scale,Main.Size.X.Offset,0, (Main.Top.AbsoluteSize.Y/Config.UIScale))
+                    }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                    Tween(ChevronIconFrame.ImageLabel, 0.2, {Rotation = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                end
             end
         end
 
@@ -283,7 +293,7 @@ function Element:New(Config)
 
         Creator.AddSignal(Main.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
             if Section.Opened then
-                Section:Open()
+                Section:Open(true)
             end
         end)
 
