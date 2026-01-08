@@ -14,13 +14,23 @@ local Element = {
 local CreateLabel = require("../components/ui/Label").New
 
 function Element:New(Config)
+    local function NormalizeKeyCode(value)
+        if typeof(value) == "EnumItem" then
+            return value.Name
+        elseif type(value) == "string" then
+            return value
+        else
+            return "F"
+        end
+    end
+
     local Keybind = {
         __type = "Keybind",
         Title = Config.Title or "Keybind",
         Desc = Config.Desc or nil,
         Locked = Config.Locked or false,
         LockedTitle = Config.LockedTitle,
-        Value = Config.Value or "F",
+        Value = NormalizeKeyCode(Config.Value) or "F",
         Callback = Config.Callback or function() end,
         CanChange = Config.CanChange or true,
         Picking = false,
@@ -79,8 +89,9 @@ function Element:New(Config)
     end
     
     function Keybind:Set(v)
-        Keybind.Value = v
-        Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = v
+        local normalizedValue = NormalizeKeyCode(v)
+        Keybind.Value = normalizedValue
+        Keybind.UIElements.Keybind.Frame.Frame.TextLabel.Text = normalizedValue
     end
     
     if Keybind.Locked then
