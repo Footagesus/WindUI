@@ -65,7 +65,17 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: Check Discord webhook
+              id: check_webhook
+              run: |
+                  if [ -n "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
+                    echo "has_webhook=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "has_webhook=false" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Send Discord Webhook
+              if: steps.check_webhook.outputs.has_webhook == 'true'
               uses: tsickert/discord-webhook@v1.3.0
               with:
                   webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
@@ -87,4 +97,3 @@ jobs:
                           }
                         ]
                       }
-              if: ${{ secrets.DISCORD_WEBHOOK_URL != '' }}
