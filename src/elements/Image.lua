@@ -30,35 +30,37 @@ function Element:New(Config)
         "Image",
         false
     )
-    MainImage.Parent = Config.Parent
-    MainImage.Size = UDim2.new(1,0,0,0)
-    MainImage.BackgroundTransparency = 1
-    
-    -- local MainImage = New("ImageLabel", {
-    --     Parent = Config.Parent,
-    --     Size = UDim2.new(1, 0, 0, 0),
-    --     Image = ,
-    --     BackgroundTransparency = 1,
-    -- }, {
-    --     New("UICorner", {
-    --         CornerRadius = UDim.new(0,ImageModule.Radius)
-    --     })
-    -- })
-    
-    local aspectRatio = ParseAspectRatio(ImageModule.AspectRatio)
-    local aspectRatioConstraint = nil
-    
-    if aspectRatio then
-        aspectRatioConstraint = New("UIAspectRatioConstraint", {
-            Parent = MainImage,
-            AspectRatio = aspectRatio,
-            AspectType = "ScaleWithParentSize",
-            DominantAxis = "Width"
-        })
-    end
-    
-    function ImageModule:Destroy()
-        MainImage:Destroy()
+    if MainImage and MainImage.Parent then
+        MainImage.Parent = Config.Parent
+        MainImage.Size = UDim2.new(1,0,0,0)
+        MainImage.BackgroundTransparency = 1
+        
+        -- local MainImage = New("ImageLabel", {
+        --     Parent = Config.Parent,
+        --     Size = UDim2.new(1, 0, 0, 0),
+        --     Image = ,
+        --     BackgroundTransparency = 1,
+        -- }, {
+        --     New("UICorner", {
+        --         CornerRadius = UDim.new(0,ImageModule.Radius)
+        --     })
+        -- })
+        
+        local aspectRatio = ParseAspectRatio(ImageModule.AspectRatio)
+        local aspectRatioConstraint = nil
+        
+        if aspectRatio then
+            aspectRatioConstraint = New("UIAspectRatioConstraint", {
+                Parent = MainImage,
+                AspectRatio = aspectRatio,
+                AspectType = "ScaleWithParentSize",
+                DominantAxis = "Width"
+            })
+        end
+        
+        function ImageModule:Destroy()
+            MainImage:Destroy()
+        end
     end
     
     return ImageModule.__type, ImageModule
