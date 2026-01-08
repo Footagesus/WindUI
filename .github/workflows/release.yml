@@ -1,0 +1,90 @@
+name: Create Release
+
+on:
+    push:
+        tags:
+            - "*.*.*"
+
+permissions:
+    contents: write
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Get version from tag
+              id: version
+              run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+            - name: Get commit hash
+              id: commit
+              run: echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+            - name: Get release notes
+              id: release_notes
+              run: |
+                  # Extract release notes from changelog.md
+                  VERSION="${{ steps.version.outputs.version }}"
+                  # Get content between version header and next version header (or end of file)
+                  NOTES=$(awk "/^# ${VERSION}$/,/^# [0-9]+\.[0-9]+\.[0-9]+$/ {print}" changelog.md | head -n -1 | tail -n +2)
+                  # Escape for JSON
+                  NOTES="${NOTES//'%'/'%25'}"
+                  NOTES="${NOTES//$'\n'/'%0A'}"
+                  NOTES="${NOTES//$'\r'/'%0D'}"
+                  echo "notes<<EOF" >> $GITHUB_OUTPUT
+                  echo "$NOTES" >> $GITHUB_OUTPUT
+                  echo "EOF" >> $GITHUB_OUTPUT
+
+            - name: Check if main.lua exists
+              id: check_file
+              run: |
+                  if [ -f "dist/main.lua" ]; then
+                    echo "exists=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "exists=false" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Create Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  tag_name: ${{ steps.version.outputs.version }}
+                  name: New release ${{ steps.version.outputs.version }}
+                  body: |
+                      ${{ steps.release_notes.outputs.notes }}
+
+                      **Build Hash:** `${{ steps.commit.outputs.hash }}`
+                  files: ${{ steps.check_file.outputs.exists == 'true' && 'dist/main.lua' || '' }}
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Send Discord Webhook
+              uses: tsickert/discord-webhook@v1.3.0
+              with:
+                  webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
+                  payload: |
+                      {
+                        "embeds": [
+                          {
+                            "author": {
+                              "name": "Footagesus/WindUI",
+                              "icon_url": "https://raw.githubusercontent.com/Footagesus/WindUI/main/docs/logo.png"
+                            },
+                            "title": "New release: ${{ steps.version.outputs.version }}",
+                            "description": "${{ steps.release_notes.outputs.notes }}",
+                            "footer": {
+                              "text": "Commit hash: ${{ steps.commit.outputs.hash }}"
+                            },
+                            "color": 3211114,
+                            "url": "https://github.com/Footagesus/WindUI/releases/tag/${{ steps.version.outputs.version }}"
+                          }
+                        ]
+                      }
+              if: ${{ secrets.DISCORD_WEBHOOK_URL != '' }}
