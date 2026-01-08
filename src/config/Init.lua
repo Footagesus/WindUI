@@ -1,6 +1,7 @@
 local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
 
+local RunService = cloneref(game:GetService("RunService"))
 local HttpService = cloneref(game:GetService("HttpService"))
 
 local Window 
@@ -98,16 +99,17 @@ function ConfigManager:Init(WindowTable)
         warn("[ WindUI.ConfigManager ] Window.Folder is not specified.")
         return false
     end
+    if RunService:IsStudio() then
+        warn("[ WindUI.ConfigManager ] The config system doesn't work in the studio.")
+        return false
+    end
     
     Window = WindowTable
     ConfigManager.Folder = Window.Folder
     ConfigManager.Path = "WindUI/" .. tostring(ConfigManager.Folder) .. "/config/"
     
-    if not isfolder("WindUI/" .. ConfigManager.Folder) then
-        makefolder("WindUI/" .. ConfigManager.Folder)
-        if not isfolder("WindUI/" .. ConfigManager.Folder .. "/config/") then
-            makefolder("WindUI/" .. ConfigManager.Folder .. "/config/")
-        end
+    if not isfolder(ConfigManager.Path) then
+        makefolder(ConfigManager.Path)
     end
     
     local files = ConfigManager:AllConfigs()
@@ -119,6 +121,24 @@ function ConfigManager:Init(WindowTable)
     end
     
     return ConfigManager
+end
+
+function ConfigManager:SetPath(customPath)
+    if not customPath then
+        warn("[ WindUI.ConfigManager ] Custom path is not specified.")
+        return false
+    end
+    
+    ConfigManager.Path = customPath
+    if not customPath:match("/$") then
+        ConfigManager.Path = customPath .. "/"
+    end
+    
+    if not isfolder(ConfigManager.Path) then
+        makefolder(ConfigManager.Path)
+    end
+    
+    return true
 end
 
 function ConfigManager:CreateConfig(configFilename, autoload)
