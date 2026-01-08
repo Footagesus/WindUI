@@ -36,7 +36,7 @@ function Element:New(ElementConfig)
           
 
         for _,Button in next, ElementConfig.Buttons do  
-            local ButtonFrame = CreateButton(Button.Title, Button.Icon, Button.Callback, "White", ButtonsContainer, nil, nil, ElementConfig.Window.NewElements and 12 or 10)  
+            local ButtonFrame = CreateButton(Button.Title, Button.Icon, Button.Callback, "White", ButtonsContainer, nil, nil, ElementConfig.Window.NewElements and 999 or 10)  
             ButtonFrame.Size = UDim2.new(1,0,0,38)  
             --ButtonFrame.AutomaticSize = "X"  
         end
