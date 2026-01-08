@@ -44,7 +44,7 @@ return function(Config)
         MinSize = Config.MinSize or Vector2.new(560, 350),
         MaxSize = Config.MaxSize or Vector2.new(850, 560),
     
-        TopBarButtonIconSize = Config.TopBarButtonIconSize or 16,
+        TopBarButtonIconSize = Config.TopBarButtonIconSize ,
         
         ToggleKey = Config.ToggleKey,
         ElementsRadius = Config.ElementsRadius,
@@ -98,6 +98,8 @@ return function(Config)
     
     Window.UICorner = Window.Radius
     
+    Window.TopBarButtonIconSize = Window.TopBarButtonIconSize or (Window.Topbar.ButtonsType == "Mac" and 11 or 16)
+
     Window.ElementConfig = {
         UIPadding = (Window.NewElements and 10 or 13),
         UICorner = Window.ElementsRadius or (Window.NewElements and 23 or 12),
@@ -115,7 +117,7 @@ return function(Config)
         Window.Topbar = { Height = 52, ButtonsType = "Default" }
     end
     
-    if Window.Folder then
+    if not RunService:IsStudio() and Window.Folder then
         if not isfolder("WindUI/" .. Window.Folder) then
             makefolder("WindUI/" .. Window.Folder)
         end
@@ -821,7 +823,7 @@ return function(Config)
         end)
     end
     
-    function Window:CreateTopbarButton(Name, Icon, Callback, LayoutOrder, IconThemed, Color)
+    function Window:CreateTopbarButton(Name, Icon, Callback, LayoutOrder, IconThemed, Color, IconSize)
         local IconFrame = Creator.Image(
             Icon,
             Icon,
@@ -832,7 +834,7 @@ return function(Config)
             IconThemed,
             "WindowTopbarButtonIcon"
         )
-        IconFrame.Size = Window.Topbar.ButtonsType == "Default" and UDim2.new(0,Window.TopBarButtonIconSize,0,Window.TopBarButtonIconSize) or UDim2.new(0,0,0,0)
+        IconFrame.Size = Window.Topbar.ButtonsType == "Default" and UDim2.new(0,IconSize or Window.TopBarButtonIconSize,0,IconSize or Window.TopBarButtonIconSize) or UDim2.new(0,0,0,0)
         IconFrame.AnchorPoint = Vector2.new(0.5,0.5)
         IconFrame.Position = UDim2.new(0.5,0,0.5,0)
         IconFrame.ImageLabel.ImageTransparency = Window.Topbar.ButtonsType == "Default" and 0 or 1
@@ -906,10 +908,10 @@ return function(Config)
             else
                 --Tween(Button, .1, {Size = UDim2.new(0,14+8,0,14+8)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
                 Tween(IconFrame.ImageLabel, .1, {ImageTransparency = 0}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-                Tween(IconFrame, .1, {Size = UDim2.new(0,11,0,11)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+                Tween(IconFrame, .1, {Size = UDim2.new(0,IconSize or Window.TopBarButtonIconSize,0,IconSize or Window.TopBarButtonIconSize)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
             end
         end)
-        Creator.AddSignal(Button.MouseLeave, function()
+        Creator.AddSignal(Button.InputEnded, function()
             if Window.Topbar.ButtonsType == "Default" then
                 Tween(Button, .1, {ImageTransparency = 1}):Play()
                 Tween(Button.Outline, .1, {ImageTransparency = 1}):Play()
@@ -1064,9 +1066,9 @@ return function(Config)
     local iconCopy = Creator.Icon("minimize")
     local iconSquare = Creator.Icon("maximize")
     
-    local FullscreenButton = Window:CreateTopbarButton("Fullscreen", "maximize", function() 
+    local FullscreenButton = Window:CreateTopbarButton("Fullscreen", Window.Topbar.ButtonsType == "Mac" and "rbxassetid://127426072704909" or "maximize", function() 
         Window:ToggleFullscreen()
-    end, (Window.Topbar.ButtonsType == "Default" and 998 or 999), nil, Color3.fromHex("#60C762"))
+    end, (Window.Topbar.ButtonsType == "Default" and 998 or 999), true, Color3.fromHex("#60C762"), Window.Topbar.ButtonsType == "Mac" and 9 or nil)
     
     function Window:ToggleFullscreen()
         local isFullscreen = Window.IsFullscreen
