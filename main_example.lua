@@ -1,7 +1,7 @@
 --[[
     WindUI Example 
 
-    moved to main.client.lua
+    example moved to main.client.lua
 ]]
 
 
