@@ -1,3 +1,4 @@
+local RunService = game:GetService("RunService")
 local WindUI = {
     Window = nil,
     Theme = nil,
@@ -252,13 +253,15 @@ WindUI:SetLanguage(Creator.Language)
 function WindUI:CreateWindow(Config)
     local CreateWindow = require("./components/window/Init")
     
-    if not isfolder("WindUI") then
-        makefolder("WindUI")
-    end
-    if Config.Folder then
-        makefolder(Config.Folder)
-    else
-        makefolder(Config.Title)
+    if not RunService:IsStudio() then
+        if not isfolder("WindUI") then
+            makefolder("WindUI")
+        end
+        if Config.Folder then
+            makefolder(Config.Folder)
+        else
+            makefolder(Config.Title)
+        end
     end
     
     Config.WindUI = WindUI
