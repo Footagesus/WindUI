@@ -1,11 +1,13 @@
+local cloneref = (cloneref or clonereference or function(instance) return instance end)
+
+
 local UserInputService = cloneref(game:GetService("UserInputService"))
-local RunService= cloneref(game:GetService("RunService"))
+local RunService = cloneref(game:GetService("RunService"))
 
 local Creator = require("../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
-local cloneref = (cloneref or clonereference or function(instance) return instance end)
 
 local Element = {}
 
