@@ -74,7 +74,13 @@ function OpenButton.New(Window)
         Active = true,
         Visible = false,
     })
-    local Button = New("TextButton", {
+
+
+    local UIScale = New("UIScale", {
+        Scale = 1,
+    })
+
+    local Button = New("Frame", {
         Size = UDim2.new(0,0,0,44),
         AutomaticSize = "X",
         Parent = Container,
@@ -83,9 +89,7 @@ function OpenButton.New(Window)
         ZIndex = 99,
         BackgroundColor3 = Color3.new(0,0,0),
     }, {
-        New("UIScale", {
-            Scale = 1,
-        }),
+        UIScale,
 	    New("UICorner", {
             CornerRadius = UDim.new(1,0)
         }),
@@ -188,6 +192,10 @@ function OpenButton.New(Window)
         Container.Visible = v
     end
     
+    function OpenButtonMain:SetScale(scale)
+        UIScale.Scale = scale
+    end
+    
     function OpenButtonMain:Edit(OpenButtonConfig)
         local OpenButtonModule = {
             Title = OpenButtonConfig.Title,
@@ -199,6 +207,7 @@ function OpenButton.New(Window)
             OnlyMobile = OpenButtonConfig.OnlyMobile,
             CornerRadius = OpenButtonConfig.CornerRadius or UDim.new(1, 0),
             StrokeThickness = OpenButtonConfig.StrokeThickness or 2,
+            Scale = OpenButtonConfig.Scale or 1,
             Color = OpenButtonConfig.Color 
                 or ColorSequence.new(Color3.fromHex("40c9ff"), Color3.fromHex("e81cff")),
         }
@@ -264,6 +273,8 @@ function OpenButton.New(Window)
         Button.UICorner.CornerRadius = OpenButtonModule.CornerRadius
         Button.TextButton.UICorner.CornerRadius = UDim.new(OpenButtonModule.CornerRadius.Scale, OpenButtonModule.CornerRadius.Offset-4)
         Button.UIStroke.Thickness = OpenButtonModule.StrokeThickness
+        
+        OpenButtonMain:SetScale(OpenButtonModule.Scale)
     end
 
     return OpenButtonMain
