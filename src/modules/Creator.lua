@@ -11,10 +11,16 @@ local RenderStepped = RunService.Heartbeat
 
 local IconsURL = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
-local Icons = loadstring(
-    game.HttpGetAsync and game:HttpGetAsync(IconsURL)
-    or HttpService:GetAsync(IconsURL) --studio
-)()
+local Icons
+if RunService:IsStudio() then
+    Icons = require("./Icons")
+else
+    Icons = loadstring(
+        game.HttpGetAsync and game:HttpGetAsync(IconsURL)
+        or HttpService:GetAsync(IconsURL) --studio
+    )()
+end
+
 Icons.SetIconsType("lucide")
 
 local WindUI
@@ -682,12 +688,12 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
         local FileName = "WindUI/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
         local success, response = pcall(function()
             task.spawn(function()
-                local response = Creator.Request({
+                local response = Creator.Request and Creator.Request({
                     Url = Img,
                     Method = "GET",
-                }).Body
+                }).Body or {}
                 
-                writefile(FileName, response)
+                if not RunService:IsStudio() then writefile(FileName, response) end
                 --ImageFrame.ImageLabel.Image = getcustomasset(FileName)
                 
                 local assetSuccess, asset = pcall(getcustomasset, FileName)
@@ -702,7 +708,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
             end)
         end)
         if not success then
-            warn("[ WindUI.Creator ]  '" .. identifyexecutor() .. "' doesnt support the URL Images. Error: " .. response)
+            warn("[ WindUI.Creator ]  '" .. identifyexecutor() or "Studio" .. "' doesnt support the URL Images. Error: " .. response)
             
             ImageFrame:Destroy()
         end
