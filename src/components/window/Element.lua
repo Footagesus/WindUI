@@ -134,10 +134,14 @@ return function(Config)
         Justify = Config.Justify or "Between", -- Center or Between
         UIPadding = Config.Window.ElementConfig.UIPadding,
         UICorner = Config.Window.ElementConfig.UICorner,
+        Size = Config.Size or "Default", -- Small, Default, Large
         UIElements = {},
         
         Index = Config.Index
     }
+
+    local AddPaddingX = Element.Size == "Small" and -4 or Element.Size == "Large" and 4 or 0
+    local AddPaddingY = Element.Size == "Small" and -4 or Element.Size == "Large" and 4 or 0
     
     local ImageSize = Element.ImageSize
     local ThumbnailSize = Element.ThumbnailSize
@@ -259,10 +263,10 @@ return function(Config)
                 Name = "TitleFrame",
             }, {
                 New("UIPadding", {
-                    PaddingTop = UDim.new(0,Config.Window.NewElements and Element.UIPadding/2 or 0),
-                    PaddingLeft = UDim.new(0,Config.Window.NewElements and Element.UIPadding/2 or 0),
-                    PaddingRight = UDim.new(0,Config.Window.NewElements and Element.UIPadding/2 or 0),
-                    PaddingBottom = UDim.new(0,Config.Window.NewElements and Element.UIPadding/2 or 0),
+                    PaddingTop = UDim.new(0,(Config.Window.NewElements and Element.UIPadding/2 or 0) + AddPaddingY),
+                    PaddingLeft = UDim.new(0,(Config.Window.NewElements and Element.UIPadding/2 or 0) + AddPaddingX),
+                    PaddingRight = UDim.new(0,(Config.Window.NewElements and Element.UIPadding/2 or 0) + AddPaddingX),
+                    PaddingBottom = UDim.new(0,(Config.Window.NewElements and Element.UIPadding/2 or 0) + AddPaddingY),
                 }),
                 New("UIListLayout", {
                     Padding = UDim.new(0,6),
