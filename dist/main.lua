@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-01-08  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-01-23  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -88,158 +88,161 @@ function d.SetIconsType(e)
 d.IconsType=e
 end
 
-function d.Init(e,f)
-d.New=e
-d.IconThemeTag=f
+local e
+function d.Init(f,g)
+d.New=f
+d.IconThemeTag=g
 
+e=f
 return d
 end
 
-function d.Icon(e,f,g)
-g=g~=false
-local h,i=parseIconString(e)
+function d.Icon(f,g,h)
+h=h~=false
+local i,j=parseIconString(f)
 
-local j=h or f or d.IconsType
-local l=i
+local l=i or g or d.IconsType
+local m=j
 
-local m=d.Icons[j]
+local p=d.Icons[l]
 
-if m and m.Icons and m.Icons[l]then
+if p and p.Icons and p.Icons[m]then
 return{
-m.Spritesheets[tostring(m.Icons[l].Image)],
-m.Icons[l],
+p.Spritesheets[tostring(p.Icons[m].Image)],
+p.Icons[m],
 }
-elseif m and m[l]and string.find(m[l],"rbxassetid://")then
-return g and{
-m[l],
+elseif p and p[m]and string.find(p[m],"rbxassetid://")then
+return h and{
+p[m],
 {ImageRectSize=Vector2.new(0,0),ImageRectPosition=Vector2.new(0,0)}
-}or m[l]
+}or p[m]
 end
 return nil
 end
 
-function d.GetIcon(e,f)
-return d.Icon(e,f,false)
+function d.GetIcon(f,g)
+return d.Icon(f,g,false)
 end
 
 
-function d.Icon2(e,f,g)
-return d.Icon(e,f,true)
+function d.Icon2(f,g,h)
+return d.Icon(f,g,true)
 end
 
-function d.Image(e)
-local f={
-Icon=e.Icon or nil,
-Type=e.Type,
-Colors=e.Colors or{(d.IconThemeTag or Color3.new(1,1,1)),Color3.new(1,1,1)},
-Transparency=e.Transparency or{0,0},
-Size=e.Size or UDim2.new(0,24,0,24),
+function d.Image(f)
+local g={
+Icon=f.Icon or nil,
+Type=f.Type,
+Colors=f.Colors or{(d.IconThemeTag or Color3.new(1,1,1)),Color3.new(1,1,1)},
+Transparency=f.Transparency or{0,0},
+Size=f.Size or UDim2.new(0,24,0,24),
 
 IconFrame=nil,
 }
 
-local g={}
 local h={}
+local i={}
 
-for i,j in next,f.Colors do
-g[i]={
-ThemeTag=typeof(j)=="string"and j,
-Color=typeof(j)=="Color3"and j,
+for j,l in next,g.Colors do
+h[j]={
+ThemeTag=typeof(l)=="string"and l,
+Color=typeof(l)=="Color3"and l,
 }
 end
 
-for i,j in next,f.Transparency do
-h[i]={
-ThemeTag=typeof(j)=="string"and j,
-Value=typeof(j)=="number"and j,
+for j,l in next,g.Transparency do
+i[j]={
+ThemeTag=typeof(l)=="string"and l,
+Value=typeof(l)=="number"and l,
 }
 end
 
 
-local i=d.Icon2(f.Icon,f.Type)
-local j=typeof(i)=="string"and string.find(i,'rbxassetid://')
+local j=d.Icon2(g.Icon,g.Type)
+local l=typeof(j)=="string"and string.find(j,'rbxassetid://')
 
 if d.New then
-local l=d.New
+local m=e or d.New
 
 
 
-local m=l("ImageLabel",{
-Size=f.Size,
+local p=m("ImageLabel",{
+Size=g.Size,
 BackgroundTransparency=1,
-ImageColor3=g[1].Color or nil,
-ImageTransparency=h[1].Value or nil,
-ThemeTag=g[1].ThemeTag and{
-ImageColor3=g[1].ThemeTag,
-ImageTransparency=h[1].ThemeTag,
+ImageColor3=h[1].Color or nil,
+ImageTransparency=i[1].Value or nil,
+ThemeTag=h[1].ThemeTag and{
+ImageColor3=h[1].ThemeTag,
+ImageTransparency=i[1].ThemeTag,
 },
-Image=j and i or i[1],
-ImageRectSize=j and nil or i[2].ImageRectSize,
-ImageRectOffset=j and nil or i[2].ImageRectPosition,
+Image=l and j or j[1],
+ImageRectSize=l and nil or j[2].ImageRectSize,
+ImageRectOffset=l and nil or j[2].ImageRectPosition,
 })
 
 
-if not j and i[2].Parts then
-for p,r in next,i[2].Parts do
-local u=d.Icon(r,f.Type)
+if not l and j[2].Parts then
+for r,u in next,j[2].Parts do
+local v=d.Icon(u,g.Type)
 
-l("ImageLabel",{
+m("ImageLabel",{
 Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
-ImageColor3=g[1+p].Color or nil,
-ImageTransparency=h[1+p].Value or nil,
-ThemeTag=g[1+p].ThemeTag and{
-ImageColor3=g[1+p].ThemeTag,
-ImageTransparency=h[1+p].ThemeTag,
+ImageColor3=h[1+r].Color or nil,
+ImageTransparency=i[1+r].Value or nil,
+ThemeTag=h[1+r].ThemeTag and{
+ImageColor3=h[1+r].ThemeTag,
+ImageTransparency=i[1+r].ThemeTag,
 },
-Image=u[1],
-ImageRectSize=u[2].ImageRectSize,
-ImageRectOffset=u[2].ImageRectPosition,
-Parent=m,
+Image=v[1],
+ImageRectSize=v[2].ImageRectSize,
+ImageRectOffset=v[2].ImageRectPosition,
+Parent=p,
 })
 end
 end
 
-f.IconFrame=m
+g.IconFrame=p
 else
-local l=Instance.new"ImageLabel"
-l.Size=f.Size
-l.BackgroundTransparency=1
-l.ImageColor3=g[1].Color
-l.ImageTransparency=h[1].Value or nil
-l.Image=j and i or i[1]
-l.ImageRectSize=j and nil or i[2].ImageRectSize
-l.ImageRectOffset=j and nil or i[2].ImageRectPosition
+local m=Instance.new"ImageLabel"
+m.Size=g.Size
+m.BackgroundTransparency=1
+m.ImageColor3=h[1].Color
+m.ImageTransparency=i[1].Value or nil
+m.Image=l and j or j[1]
+m.ImageRectSize=l and nil or j[2].ImageRectSize
+m.ImageRectOffset=l and nil or j[2].ImageRectPosition
 
 
-if not j and i[2].Parts then
-for m,p in next,i[2].Parts do
-local r=d.Icon(p,f.Type)
+if not l and j[2].Parts then
+for p,r in next,j[2].Parts do
+local u=d.Icon(r,g.Type)
 
-local u=Instance.New"ImageLabel"
-u.Size=UDim2.new(1,0,1,0)
-u.BackgroundTransparency=1
-u.ImageColor3=g[1+m].Color
-u.ImageTransparency=h[1+m].Value or nil
-u.Image=r[1]
-u.ImageRectSize=r[2].ImageRectSize
-u.ImageRectOffset=r[2].ImageRectPosition
-u.Parent=l
+local v=Instance.New"ImageLabel"
+v.Size=UDim2.new(1,0,1,0)
+v.BackgroundTransparency=1
+v.ImageColor3=h[1+p].Color
+v.ImageTransparency=i[1+p].Value or nil
+v.Image=u[1]
+v.ImageRectSize=u[2].ImageRectSize
+v.ImageRectOffset=u[2].ImageRectPosition
+v.Parent=m
 end
 end
 
-f.IconFrame=l
+g.IconFrame=m
 end
 
 
-return f
+return g
 end
 
 return d end function a.b()
+
 return{
 
 
-Primary=Color3.fromHex"#0091FF",
+Primary="Icon",
 
 White=Color3.new(1,1,1),
 Black=Color3.new(0,0,0),
@@ -249,6 +252,9 @@ Dialog="Accent",
 Background="Accent",
 BackgroundTransparency=0,
 Hover="Text",
+
+PanelBackground="White",
+PanelBackgroundTransparency=.95,
 
 WindowBackground="Background",
 
@@ -263,8 +269,21 @@ WindowTopbarButtonIcon="Icon",
 WindowSearchBarBackground="Background",
 
 TabBackground="Hover",
+TabBackgroundHover="Hover",
+TabBackgroundHoverTransparency=.97,
+TabBackgroundActive="Hover",
+TabBackgroundActiveTransparency=0.93,
+TabText="Text",
+TabTextTransparency=0.3,
+TabTextTransparencyActive=0,
 TabTitle="Text",
 TabIcon="Icon",
+TabIconTransparency=0.4,
+TabIconTransparencyActive=0.1,
+TabBorderTransparency=1,
+TabBorderTransparencyActive=0.75,
+TabBorder="White",
+
 
 ElementBackground="Text",
 ElementTitle="Text",
@@ -291,10 +310,12 @@ CheckboxIcon="White",
 CheckboxBorder="White",
 CheckboxBorderTransparency=.75,
 
+SliderIcon="Icon",
+
 Slider="Primary",
 SliderThumb="White",
-SliderIconFrom=Color3.fromHex"#908F95",
-SliderIconTo=Color3.fromHex"#908F95",
+SliderIconFrom="SliderIcon",
+SliderIconTo="SliderIcon",
 
 Tooltip=Color3.fromHex"4C4C4C",
 TooltipText="White",
@@ -325,7 +346,8 @@ NotificationBorderTransparency=.75,
 
 DropdownTabBorder="White",
 
-TabBorder="White",
+LabelBackground="White",
+LabelBackgroundTransparency=.95,
 }end function a.c()
 
 
@@ -342,7 +364,7 @@ d.Heartbeat
 local j="https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
 local l
-if d:IsStudio()then
+if d:IsStudio()or not writefile then
 l=a.load'a'
 else
 l=loadstring(
@@ -624,80 +646,112 @@ return nil
 end
 
 function p.AddThemeObject(r,u)
+if p.Objects[r]then
+for v,x in pairs(u)do
+p.Objects[r].Properties[v]=x
+end
+else
 p.Objects[r]={Object=r,Properties=u}
+end
+
 p.UpdateTheme(r,false)
 return r
 end
 
 function p.AddLangObject(r)
 local u=p.LocalizationObjects[r]
+if not u then return end
+
 local v=u.Object
-local x=currentObjTranslationId
-p.UpdateLang(v,x)
+
+p.SetLangForObject(r)
+
 return v
 end
 
-function p.UpdateTheme(r,u)
-local function ApplyTheme(v)
-for x,z in pairs(v.Properties or{})do
-local A=p.GetThemeProperty(z,p.Theme)
-if A~=nil then
-if typeof(A)=="Color3"then
-local B=v.Object:FindFirstChild"WindUIGradient"
-if B then
-B:Destroy()
+function p.UpdateTheme(r,u,v,x,z,A)
+local function ApplyTheme(B)
+for C,F in pairs(B.Properties or{})do
+local G=p.GetThemeProperty(F,p.Theme)
+if G~=nil then
+if typeof(G)=="Color3"then
+local H=B.Object:FindFirstChild"LibraryGradient"
+if H then
+H:Destroy()
 end
 
-if not u then
-v.Object[x]=A
+if v then
+p.Tween(
+B.Object,
+x or 0.2,
+{[C]=G},
+z or Enum.EasingStyle.Quint,
+A or Enum.EasingDirection.Out
+):Play()
+elseif u then
+p.Tween(B.Object,0.08,{[C]=G}):Play()
 else
-p.Tween(v.Object,0.08,{[x]=A}):Play()
+B.Object[C]=G
 end
-elseif typeof(A)=="table"and A.Color and A.Transparency then
-v.Object[x]=Color3.new(1,1,1)
+elseif typeof(G)=="table"and G.Color and G.Transparency then
+B.Object[C]=Color3.new(1,1,1)
 
-local B=v.Object:FindFirstChild"WindUIGradient"
-if not B then
-B=Instance.new"UIGradient"
-B.Name="WindUIGradient"
-B.Parent=v.Object
+local H=B.Object:FindFirstChild"LibraryGradient"
+if not H then
+H=Instance.new"UIGradient"
+H.Name="LibraryGradient"
+H.Parent=B.Object
 end
 
-B.Color=A.Color
-B.Transparency=A.Transparency
+H.Color=G.Color
+H.Transparency=G.Transparency
 
-for C,F in pairs(A)do
-if C~="Color"and C~="Transparency"and B[C]~=nil then
-B[C]=F
+for J,L in pairs(G)do
+if J~="Color"and J~="Transparency"and H[J]~=nil then
+H[J]=L
 end
 end
-elseif typeof(A)=="number"then
-if not u then
-v.Object[x]=A
+elseif typeof(G)=="number"then
+if v then
+p.Tween(
+B.Object,
+x or 0.2,
+{[C]=G},
+z or Enum.EasingStyle.Quint,
+A or Enum.EasingDirection.Out
+):Play()
+elseif u then
+p.Tween(B.Object,0.08,{[C]=G}):Play()
 else
-p.Tween(v.Object,0.08,{[x]=A}):Play()
+B.Object[C]=G
 end
 end
 else
 
-local B=v.Object:FindFirstChild"WindUIGradient"
-if B then
-B:Destroy()
+local H=B.Object:FindFirstChild"LibraryGradient"
+if H then
+H:Destroy()
 end
 end
 end
 end
 
 if r then
-local v=p.Objects[r]
-if v then
-ApplyTheme(v)
+local B=p.Objects[r]
+if B then
+ApplyTheme(B)
 end
 else
-for v,x in pairs(p.Objects)do
-ApplyTheme(x)
+for B,C in pairs(p.Objects)do
+ApplyTheme(C)
 end
 end
+end
+
+
+function p.SetThemeTag(r,u,v,x,z)
+p.AddThemeObject(r,u)
+p.UpdateTheme(r,false,true,v,x,z)
 end
 
 function p.SetLangForObject(r)
@@ -1023,7 +1077,7 @@ Url=v,
 Method="GET",
 }.Body or{}
 
-if not d:IsStudio()then writefile(J,L)end
+if not d:IsStudio()and writefile then writefile(J,L)end
 
 
 local M,N=pcall(getcustomasset,J)
@@ -3497,7 +3551,14 @@ Icon=Color3.fromHex"#a1a1aa",
 Toggle=Color3.fromHex"#33C759",
 Slider=Color3.fromHex"#0091FF",
 Checkbox=Color3.fromHex"#0091FF",
+
+PanelBackground=Color3.fromHex"#FFFFFF",
+PanelBackgroundTransparency=0.95,
+
+SliderIcon=Color3.fromHex"#908F95",
+Primary=Color3.fromHex"#0091FF",
 },
+
 Light={
 Name="Light",
 
@@ -3506,10 +3567,26 @@ Dialog=Color3.fromHex"#f4f4f5",
 Outline=Color3.fromHex"#09090b",
 Text=Color3.fromHex"#000000",
 Placeholder=Color3.fromHex"#555555",
-Background=Color3.fromHex"#e4e4e7",
+Background=Color3.fromHex"#e9e9e9",
 Button=Color3.fromHex"#18181b",
 Icon=Color3.fromHex"#52525b",
+Toggle=Color3.fromHex"#33C759",
+Slider=Color3.fromHex"#0091FF",
+Checkbox=Color3.fromHex"#0091FF",
+
+TabBackground=Color3.fromHex"#ffffff",
+TabBackgroundHover=Color3.fromHex"#ffffff",
+TabBackgroundHoverTransparency=0.5,
+TabBackgroundActive=Color3.fromHex"#ffffff",
+TabBackgroundActiveTransparency=0,
+
+PanelBackground=Color3.fromHex"#FFFFFF",
+PanelBackgroundTransparency=0,
+
+LabelBackground=Color3.fromHex"#ffffff",
+LabelBackgroundTransparency=0,
 },
+
 Rose={
 Name="Rose",
 
@@ -3519,9 +3596,10 @@ Outline=Color3.fromHex"#fecdd3",
 Text=Color3.fromHex"#fdf2f8",
 Placeholder=Color3.fromHex"#d67aa6",
 Background=Color3.fromHex"#1f0308",
-Button=Color3.fromHex"#e11d48",
+Button=Color3.fromHex"#e95f74",
 Icon=Color3.fromHex"#fb7185",
 },
+
 Plant={
 Name="Plant",
 
@@ -3534,6 +3612,7 @@ Background=Color3.fromHex"#0a1b0f",
 Button=Color3.fromHex"#16a34a",
 Icon=Color3.fromHex"#4ade80",
 },
+
 Red={
 Name="Red",
 
@@ -3546,6 +3625,7 @@ Background=Color3.fromHex"#1c0606",
 Button=Color3.fromHex"#dc2626",
 Icon=Color3.fromHex"#ef4444",
 },
+
 Indigo={
 Name="Indigo",
 
@@ -3558,18 +3638,27 @@ Background=Color3.fromHex"#0f0a2e",
 Button=Color3.fromHex"#4f46e5",
 Icon=Color3.fromHex"#6366f1",
 },
+
 Sky={
 Name="Sky",
 
-Accent=Color3.fromHex"#0369a1",
-Dialog=Color3.fromHex"#0c4a6e",
-Outline=Color3.fromHex"#bae6fd",
-Text=Color3.fromHex"#f0f9ff",
-Placeholder=Color3.fromHex"#4fb6d9",
-Background=Color3.fromHex"#041f2e",
-Button=Color3.fromHex"#0284c7",
-Icon=Color3.fromHex"#0ea5e9",
+Accent=Color3.fromHex"#00d4ff",
+Dialog=Color3.fromHex"#0a4d66",
+Outline=Color3.fromHex"#4dd9ff",
+Text=Color3.fromHex"#e6f7ff",
+Placeholder=Color3.fromHex"#66b3cc",
+Background=Color3.fromHex"#051a26",
+Button=Color3.fromHex"#00a8cc",
+Icon=Color3.fromHex"#2db8d9",
+
+Toggle=Color3.fromHex"#00d9d9",
+Slider=Color3.fromHex"#00d4ff",
+Checkbox=Color3.fromHex"#00d4ff",
+
+PanelBackground=Color3.fromHex"#0d3a47",
+PanelBackgroundTransparency=0.8,
 },
+
 Violet={
 Name="Violet",
 
@@ -3582,18 +3671,63 @@ Background=Color3.fromHex"#1e0a3e",
 Button=Color3.fromHex"#7c3aed",
 Icon=Color3.fromHex"#8b5cf6",
 },
+
 Amber={
 Name="Amber",
 
-Accent=Color3.fromHex"#b45309",
-Dialog=Color3.fromHex"#451a03",
-Outline=Color3.fromHex"#fde68a",
-Text=Color3.fromHex"#fffbeb",
-Placeholder=Color3.fromHex"#d1a326",
-Background=Color3.fromHex"#1c1003",
-Button=Color3.fromHex"#d97706",
+Accent=aa:Gradient({
+["0"]={Color=Color3.fromHex"#b45309",Transparency=0},
+["100"]={Color=Color3.fromHex"#d97706",Transparency=0},
+},{Rotation=45}),
+
+Dialog=aa:Gradient({
+["0"]={Color=Color3.fromHex"#451a03",Transparency=0},
+["100"]={Color=Color3.fromHex"#6b2e05",Transparency=0},
+},{Rotation=90}),
+
+Outline=aa:Gradient({
+["0"]={Color=Color3.fromHex"#fde68a",Transparency=0},
+["100"]={Color=Color3.fromHex"#fcd34d",Transparency=0},
+},{Rotation=45}),
+
+Text=aa:Gradient({
+["0"]={Color=Color3.fromHex"#fffbeb",Transparency=0},
+["100"]={Color=Color3.fromHex"#fff7ed",Transparency=0},
+},{Rotation=45}),
+
+Placeholder=aa:Gradient({
+["0"]={Color=Color3.fromHex"#d1a326",Transparency=0},
+["100"]={Color=Color3.fromHex"#fbbf24",Transparency=0},
+},{Rotation=45}),
+
+Background=aa:Gradient({
+["0"]={Color=Color3.fromHex"#1c1003",Transparency=0},
+["100"]={Color=Color3.fromHex"#3f210d",Transparency=0},
+},{Rotation=90}),
+
+Button=aa:Gradient({
+["0"]={Color=Color3.fromHex"#d97706",Transparency=0},
+["100"]={Color=Color3.fromHex"#f59e0b",Transparency=0},
+},{Rotation=45}),
+
 Icon=Color3.fromHex"#f59e0b",
+
+Toggle=aa:Gradient({
+["0"]={Color=Color3.fromHex"#d97706",Transparency=0},
+["100"]={Color=Color3.fromHex"#f59e0b",Transparency=0},
+},{Rotation=45}),
+
+Slider=Color3.fromHex"#d97706",
+
+Checkbox=aa:Gradient({
+["0"]={Color=Color3.fromHex"#d97706",Transparency=0},
+["100"]={Color=Color3.fromHex"#fbbf24",Transparency=0},
+},{Rotation=45}),
+
+PanelBackground=Color3.fromHex"#FFFFFF",
+PanelBackgroundTransparency=0.95,
 },
+
 Emerald={
 Name="Emerald",
 
@@ -3606,6 +3740,7 @@ Background=Color3.fromHex"#011411",
 Button=Color3.fromHex"#059669",
 Icon=Color3.fromHex"#10b981",
 },
+
 Midnight={
 Name="Midnight",
 
@@ -3616,8 +3751,10 @@ Text=Color3.fromHex"#dbeafe",
 Placeholder=Color3.fromHex"#2f74d1",
 Background=Color3.fromHex"#0a0f1e",
 Button=Color3.fromHex"#2563eb",
-Icon=Color3.fromHex"#3b82f6",
+Primary=Color3.fromHex"#2563eb",
+Icon=Color3.fromHex"#5591f4",
 },
+
 Crimson={
 Name="Crimson",
 
@@ -3630,6 +3767,7 @@ Background=Color3.fromHex"#0c0404",
 Button=Color3.fromHex"#991b1b",
 Icon=Color3.fromHex"#dc2626",
 },
+
 MonokaiPro={
 Name="Monokai Pro",
 
@@ -3641,7 +3779,12 @@ Placeholder=Color3.fromHex"#6f6f6f",
 Background=Color3.fromHex"#191622",
 Button=Color3.fromHex"#ab9df2",
 Icon=Color3.fromHex"#a9dc76",
+
+Metadata={
+PullRequest=23,
+}
 },
+
 CottonCandy={
 Name="Cotton Candy",
 
@@ -3652,8 +3795,31 @@ Text=Color3.fromHex"#fdf2f8",
 Placeholder=Color3.fromHex"#8a5fd3",
 Background=Color3.fromHex"#1a0b2e",
 Button=Color3.fromHex"#d946ef",
+Slider=Color3.fromHex"#d946ef",
 Icon=Color3.fromHex"#06b6d4",
 },
+
+Mellowsi={
+Name="Mellowsi",
+
+Accent=Color3.fromHex"#342A1E",
+Dialog=Color3.fromHex"#291C13",
+Outline=Color3.fromHex"#6B5A45",
+Text=Color3.fromHex"#F5EBDD",
+Placeholder=Color3.fromHex"#9C8A73",
+Background=Color3.fromHex"#1C1002",
+Button=Color3.fromHex"#342A1E",
+Icon=Color3.fromHex"#C9B79C",
+
+Toggle=Color3.fromHex"#a9873f",
+Slider=Color3.fromHex"#C9A24D",
+Checkbox=Color3.fromHex"#C9A24D",
+
+Metadata={
+PullRequest=52,
+}
+},
+
 Rainbow={
 Name="Rainbow",
 
@@ -3662,9 +3828,7 @@ Accent=aa:Gradient({
 ["33"]={Color=Color3.fromHex"#00ffff",Transparency=0},
 ["66"]={Color=Color3.fromHex"#0080ff",Transparency=0},
 ["100"]={Color=Color3.fromHex"#8000ff",Transparency=0},
-},{
-Rotation=45,
-}),
+},{Rotation=45}),
 
 Dialog=aa:Gradient({
 ["0"]={Color=Color3.fromHex"#ff0080",Transparency=0},
@@ -3672,13 +3836,10 @@ Dialog=aa:Gradient({
 ["50"]={Color=Color3.fromHex"#0080ff",Transparency=0},
 ["75"]={Color=Color3.fromHex"#00ff80",Transparency=0},
 ["100"]={Color=Color3.fromHex"#ff8000",Transparency=0},
-},{
-Rotation=135,
-}),
+},{Rotation=135}),
 
 Outline=Color3.fromHex"#ffffff",
 Text=Color3.fromHex"#ffffff",
-
 Placeholder=Color3.fromHex"#00ff80",
 
 Background=aa:Gradient({
@@ -3688,9 +3849,7 @@ Background=aa:Gradient({
 ["60"]={Color=Color3.fromHex"#00ff40",Transparency=0},
 ["80"]={Color=Color3.fromHex"#0040ff",Transparency=0},
 ["100"]={Color=Color3.fromHex"#4000ff",Transparency=0},
-},{
-Rotation=90,
-}),
+},{Rotation=90}),
 
 Button=aa:Gradient({
 ["0"]={Color=Color3.fromHex"#ff0080",Transparency=0},
@@ -3698,14 +3857,13 @@ Button=aa:Gradient({
 ["50"]={Color=Color3.fromHex"#ffff00",Transparency=0},
 ["75"]={Color=Color3.fromHex"#80ff00",Transparency=0},
 ["100"]={Color=Color3.fromHex"#00ffff",Transparency=0},
-},{
-Rotation=60,
-}),
+},{Rotation=60}),
 
 Icon=Color3.fromHex"#ffffff",
 },
 }
 end end function a.v()
+
 local aa={}
 
 local ab=a.load'c'
@@ -3782,8 +3940,12 @@ ImageTransparency=.75,
 ab.NewRoundFrame(aj,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 Name="Frame",
-ImageColor3=Color3.new(1,1,1),
-ImageTransparency=.95
+ThemeTag={
+ImageColor3="LabelBackground",
+ImageTransparency="LabelBackgroundTransparency",
+},
+
+
 },{
 ac("UIPadding",{
 PaddingLeft=UDim.new(0,12),
@@ -4251,7 +4413,7 @@ if not ag.Folder then
 warn"[ WindUI.ConfigManager ] Window.Folder is not specified."
 return false
 end
-if ab:IsStudio()then
+if ab:IsStudio()or not writefile then
 warn"[ WindUI.ConfigManager ] The config system doesn't work in the studio."
 return false
 end
@@ -5113,22 +5275,26 @@ Parent=af.Parent,
 Justify=af.Justify or"Between",
 UIPadding=af.Window.ElementConfig.UIPadding,
 UICorner=af.Window.ElementConfig.UICorner,
+Size=af.Size or"Default",
 UIElements={},
 
 Index=af.Index
 }
 
-local ah=ag.ImageSize
-local ai=ag.ThumbnailSize
-local aj=true
+local ah=ag.Size=="Small"and-4 or ag.Size=="Large"and 4 or 0
+local ai=ag.Size=="Small"and-4 or ag.Size=="Large"and 4 or 0
+
+local aj=ag.ImageSize
+local ak=ag.ThumbnailSize
+local al=true
 
 
-local ak=0
+local am=0
 
-local al
-local am
+local an
+local ao
 if ag.Thumbnail then
-al=aa.Image(
+an=aa.Image(
 ag.Thumbnail,
 ag.Title,
 af.Window.NewElements and ag.UICorner-11 or(ag.UICorner-4),
@@ -5137,10 +5303,10 @@ af.Window.Folder,
 false,
 ag.IconThemed
 )
-al.Size=UDim2.new(1,0,0,ai)
+an.Size=UDim2.new(1,0,0,ak)
 end
 if ag.Image then
-am=aa.Image(
+ao=aa.Image(
 ag.Image,
 ag.Title,
 af.Window.NewElements and ag.UICorner-11 or(ag.UICorner-4),
@@ -5151,50 +5317,50 @@ not ag.Color and true or false,
 "ElementIcon"
 )
 if typeof(ag.Color)=="string"then
-am.ImageLabel.ImageColor3=GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
+ao.ImageLabel.ImageColor3=GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 elseif typeof(ag.Color)=="Color3"then
-am.ImageLabel.ImageColor3=GetTextColorForHSB(ag.Color)
+ao.ImageLabel.ImageColor3=GetTextColorForHSB(ag.Color)
 end
 
-am.Size=UDim2.new(0,ah,0,ah)
+ao.Size=UDim2.new(0,aj,0,aj)
 
-ak=ah
+am=aj
 end
 
-local function CreateText(an,ao)
-local ap=typeof(ag.Color)=="string"
+local function CreateText(ap,aq)
+local ar=typeof(ag.Color)=="string"
 and GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 or typeof(ag.Color)=="Color3"
 and GetTextColorForHSB(ag.Color)
 
 return ab("TextLabel",{
 BackgroundTransparency=1,
-Text=an or"",
-TextSize=ao=="Desc"and 15 or 17,
+Text=ap or"",
+TextSize=aq=="Desc"and 15 or 17,
 TextXAlignment="Left",
 ThemeTag={
-TextColor3=not ag.Color and("Element"..ao)or nil,
+TextColor3=not ag.Color and("Element"..aq)or nil,
 },
-TextColor3=ag.Color and ap or nil,
-TextTransparency=ao=="Desc"and.3 or 0,
+TextColor3=ag.Color and ar or nil,
+TextTransparency=aq=="Desc"and.3 or 0,
 TextWrapped=true,
 Size=UDim2.new(ag.Justify=="Between"and 1 or 0,0,0,0),
 AutomaticSize=ag.Justify=="Between"and"Y"or"XY",
-FontFace=Font.new(aa.Font,ao=="Desc"and Enum.FontWeight.Medium or Enum.FontWeight.SemiBold)
+FontFace=Font.new(aa.Font,aq=="Desc"and Enum.FontWeight.Medium or Enum.FontWeight.SemiBold)
 })
 end
 
-local an=CreateText(ag.Title,"Title")
-local ao=CreateText(ag.Desc,"Desc")
+local ap=CreateText(ag.Title,"Title")
+local aq=CreateText(ag.Desc,"Desc")
 if not ag.Title or ag.Title==""then
-ao.Visible=false
+aq.Visible=false
 end
 if not ag.Desc or ag.Desc==""then
-ao.Visible=false
+aq.Visible=false
 end
 
-ag.UIElements.Title=an
-ag.UIElements.Desc=ao
+ag.UIElements.Title=ap
+ag.UIElements.Desc=aq
 
 ag.UIElements.Container=ab("Frame",{
 Size=UDim2.new(1,0,1,0),
@@ -5207,7 +5373,7 @@ FillDirection="Vertical",
 VerticalAlignment="Center",
 HorizontalAlignment=ag.Justify=="Between"and"Left"or"Center",
 }),
-al,
+an,
 ab("Frame",{
 Size=UDim2.new(
 ag.Justify=="Between"and 1 or 0,
@@ -5225,23 +5391,23 @@ FillDirection="Horizontal",
 VerticalAlignment=af.Window.NewElements and(ag.Justify=="Between"and"Top"or"Center")or"Center",
 HorizontalAlignment=ag.Justify~="Between"and ag.Justify or"Center",
 }),
-am,
+ao,
 ab("Frame",{
 BackgroundTransparency=1,
 AutomaticSize=ag.Justify=="Between"and"Y"or"XY",
 Size=UDim2.new(
 ag.Justify=="Between"and 1 or 0,
-ag.Justify=="Between"and(am and-ak-ag.UIPadding or-ak)or 0,
+ag.Justify=="Between"and(ao and-am-ag.UIPadding or-am)or 0,
 1,
 0
 ),
 Name="TitleFrame",
 },{
 ab("UIPadding",{
-PaddingTop=UDim.new(0,af.Window.NewElements and ag.UIPadding/2 or 0),
-PaddingLeft=UDim.new(0,af.Window.NewElements and ag.UIPadding/2 or 0),
-PaddingRight=UDim.new(0,af.Window.NewElements and ag.UIPadding/2 or 0),
-PaddingBottom=UDim.new(0,af.Window.NewElements and ag.UIPadding/2 or 0),
+PaddingTop=UDim.new(0,(af.Window.NewElements and ag.UIPadding/2 or 0)+ai),
+PaddingLeft=UDim.new(0,(af.Window.NewElements and ag.UIPadding/2 or 0)+ah),
+PaddingRight=UDim.new(0,(af.Window.NewElements and ag.UIPadding/2 or 0)+ah),
+PaddingBottom=UDim.new(0,(af.Window.NewElements and ag.UIPadding/2 or 0)+ai),
 }),
 ab("UIListLayout",{
 Padding=UDim.new(0,6),
@@ -5249,8 +5415,8 @@ FillDirection="Vertical",
 VerticalAlignment="Center",
 HorizontalAlignment="Left",
 }),
-an,
-ao
+ap,
+aq
 }),
 })
 })
@@ -5260,7 +5426,7 @@ ao
 
 
 
-local ap=aa.Image(
+local ar=aa.Image(
 "lock",
 "lock",
 0,
@@ -5268,11 +5434,11 @@ af.Window.Folder,
 "Lock",
 false
 )
-ap.Size=UDim2.new(0,20,0,20)
-ap.ImageLabel.ImageColor3=Color3.new(1,1,1)
-ap.ImageLabel.ImageTransparency=.4
+ar.Size=UDim2.new(0,20,0,20)
+ar.ImageLabel.ImageColor3=Color3.new(1,1,1)
+ar.ImageLabel.ImageTransparency=.4
 
-local aq=ab("TextLabel",{
+local as=ab("TextLabel",{
 Text="Locked",
 TextSize=18,
 FontFace=Font.new(aa.Font,Enum.FontWeight.Medium),
@@ -5282,7 +5448,7 @@ TextColor3=Color3.new(1,1,1),
 TextTransparency=.05,
 })
 
-local ar=ab("Frame",{
+local at=ab("Frame",{
 Size=UDim2.new(1,ag.UIPadding*2,1,ag.UIPadding*2),
 BackgroundTransparency=1,
 AnchorPoint=Vector2.new(0.5,0.5),
@@ -5290,13 +5456,13 @@ Position=UDim2.new(0.5,0,0.5,0),
 ZIndex=9999999,
 })
 
-local as,at=ac(ag.UICorner,"Squircle",{
+local au,av=ac(ag.UICorner,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=.25,
 ImageColor3=Color3.new(0,0,0),
 Visible=false,
 Active=false,
-Parent=ar,
+Parent=at,
 },{
 ab("UIListLayout",{
 FillDirection="Horizontal",
@@ -5304,34 +5470,17 @@ VerticalAlignment="Center",
 HorizontalAlignment="Center",
 Padding=UDim.new(0,8)
 }),
-ap,aq
+ar,as
 },nil,true)
 
-local au,av=ac(ag.UICorner,"Squircle-Outline",{
+local aw,ax=ac(ag.UICorner,"Squircle-Outline",{
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=1,
 Active=false,
 ThemeTag={
 ImageColor3="Text",
 },
-Parent=ar,
-},{
-ab("UIListLayout",{
-FillDirection="Horizontal",
-VerticalAlignment="Center",
-HorizontalAlignment="Center",
-Padding=UDim.new(0,8)
-}),
-},nil,true)
-
-local aw,ax=ac(ag.UICorner,"Squircle",{
-Size=UDim2.new(1,0,1,0),
-ImageTransparency=1,
-Active=false,
-ThemeTag={
-ImageColor3="Text",
-},
-Parent=ar,
+Parent=at,
 },{
 ab("UIListLayout",{
 FillDirection="Horizontal",
@@ -5341,15 +5490,32 @@ Padding=UDim.new(0,8)
 }),
 },nil,true)
 
-
-local ay,az=ac(ag.UICorner,"Squircle-Outline",{
+local ay,az=ac(ag.UICorner,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=1,
 Active=false,
 ThemeTag={
 ImageColor3="Text",
 },
-Parent=ar,
+Parent=at,
+},{
+ab("UIListLayout",{
+FillDirection="Horizontal",
+VerticalAlignment="Center",
+HorizontalAlignment="Center",
+Padding=UDim.new(0,8)
+}),
+},nil,true)
+
+
+local aA,aB=ac(ag.UICorner,"Squircle-Outline",{
+Size=UDim2.new(1,0,1,0),
+ImageTransparency=1,
+Active=false,
+ThemeTag={
+ImageColor3="Text",
+},
+Parent=at,
 },{
 ab("UIListLayout",{
 FillDirection="Horizontal",
@@ -5371,42 +5537,42 @@ NumberSequenceKeypoint.new(0.5,0.3),
 NumberSequenceKeypoint.new(0.75,0.9),
 NumberSequenceKeypoint.new(1,1)
 },
-}),
-},nil,true)
-
-local aA,aB=ac(ag.UICorner,"Squircle",{
-Size=UDim2.new(1,0,1,0),
-ImageTransparency=1,
-Active=false,
-ThemeTag={
-ImageColor3="Text",
-},
-Parent=ar,
-},{
-ab("UIGradient",{
-Name="HoverGradient",
-Color=ColorSequence.new{
-ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
-ColorSequenceKeypoint.new(0.5,Color3.new(1,1,1)),
-ColorSequenceKeypoint.new(1,Color3.new(1,1,1))
-},
-Transparency=NumberSequence.new{
-NumberSequenceKeypoint.new(0,1),
-NumberSequenceKeypoint.new(0.25,0.9),
-NumberSequenceKeypoint.new(0.5,0.3),
-NumberSequenceKeypoint.new(0.75,0.9),
-NumberSequenceKeypoint.new(1,1)
-},
-}),
-ab("UIListLayout",{
-FillDirection="Horizontal",
-VerticalAlignment="Center",
-HorizontalAlignment="Center",
-Padding=UDim.new(0,8)
 }),
 },nil,true)
 
 local b,d=ac(ag.UICorner,"Squircle",{
+Size=UDim2.new(1,0,1,0),
+ImageTransparency=1,
+Active=false,
+ThemeTag={
+ImageColor3="Text",
+},
+Parent=at,
+},{
+ab("UIGradient",{
+Name="HoverGradient",
+Color=ColorSequence.new{
+ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
+ColorSequenceKeypoint.new(0.5,Color3.new(1,1,1)),
+ColorSequenceKeypoint.new(1,Color3.new(1,1,1))
+},
+Transparency=NumberSequence.new{
+NumberSequenceKeypoint.new(0,1),
+NumberSequenceKeypoint.new(0.25,0.9),
+NumberSequenceKeypoint.new(0.5,0.3),
+NumberSequenceKeypoint.new(0.75,0.9),
+NumberSequenceKeypoint.new(1,1)
+},
+}),
+ab("UIListLayout",{
+FillDirection="Horizontal",
+VerticalAlignment="Center",
+HorizontalAlignment="Center",
+Padding=UDim.new(0,8)
+}),
+},nil,true)
+
+local f,g=ac(ag.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 ImageTransparency=ag.Color and.05 or.93,
@@ -5426,7 +5592,7 @@ and ag.Color
 )or nil
 },{
 ag.UIElements.Container,
-ar,
+at,
 ab("UIPadding",{
 PaddingTop=UDim.new(0,ag.UIPadding),
 PaddingLeft=UDim.new(0,ag.UIPadding),
@@ -5435,49 +5601,49 @@ PaddingBottom=UDim.new(0,ag.UIPadding),
 }),
 },true,true)
 
-ag.UIElements.Main=b
-ag.UIElements.Locked=as
+ag.UIElements.Main=f
+ag.UIElements.Locked=au
 
 if ag.Hover then
-aa.AddSignal(b.MouseEnter,function()
-if aj then
-ad(b,.12,{ImageTransparency=ag.Color and.15 or.9}):Play()
-ad(aA,.12,{ImageTransparency=.9}):Play()
-ad(ay,.12,{ImageTransparency=.8}):Play()
-aa.AddSignal(b.MouseMoved,function(f,g)
-aA.HoverGradient.Offset=Vector2.new(((f-b.AbsolutePosition.X)/b.AbsoluteSize.X)-0.5,0)
-ay.HoverGradient.Offset=Vector2.new(((f-b.AbsolutePosition.X)/b.AbsoluteSize.X)-0.5,0)
+aa.AddSignal(f.MouseEnter,function()
+if al then
+ad(f,.12,{ImageTransparency=ag.Color and.15 or.9}):Play()
+ad(b,.12,{ImageTransparency=.9}):Play()
+ad(aA,.12,{ImageTransparency=.8}):Play()
+aa.AddSignal(f.MouseMoved,function(h,j)
+b.HoverGradient.Offset=Vector2.new(((h-f.AbsolutePosition.X)/f.AbsoluteSize.X)-0.5,0)
+aA.HoverGradient.Offset=Vector2.new(((h-f.AbsolutePosition.X)/f.AbsoluteSize.X)-0.5,0)
 end)
 end
 end)
-aa.AddSignal(b.InputEnded,function()
-if aj then
-ad(b,.12,{ImageTransparency=ag.Color and.05 or.93}):Play()
+aa.AddSignal(f.InputEnded,function()
+if al then
+ad(f,.12,{ImageTransparency=ag.Color and.05 or.93}):Play()
+ad(b,.12,{ImageTransparency=1}):Play()
 ad(aA,.12,{ImageTransparency=1}):Play()
-ad(ay,.12,{ImageTransparency=1}):Play()
 end
 end)
 end
 
-function ag.SetTitle(f,g)
-ag.Title=g
-an.Text=g
+function ag.SetTitle(h,j)
+ag.Title=j
+ap.Text=j
 end
 
-function ag.SetDesc(f,g)
-ag.Desc=g
-ao.Text=g or""
-if not g then
-ao.Visible=false
-elseif not ao.Visible then
-ao.Visible=true
+function ag.SetDesc(h,j)
+ag.Desc=j
+aq.Text=j or""
+if not j then
+aq.Visible=false
+elseif not aq.Visible then
+aq.Visible=true
 end
 end
 
 
-function ag.Colorize(f,g,h)
+function ag.Colorize(h,j,l)
 if ag.Color then
-g[h]=typeof(ag.Color)=="string"
+j[l]=typeof(ag.Color)=="string"
 and GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 or typeof(ag.Color)=="Color3"
 and GetTextColorForHSB(ag.Color)
@@ -5486,16 +5652,16 @@ end
 end
 
 if af.ElementTable then
-aa.AddSignal(an:GetPropertyChangedSignal"Text",function()
-if ag.Title~=an.Text then
-ag:SetTitle(an.Text)
-af.ElementTable.Title=an.Text
+aa.AddSignal(ap:GetPropertyChangedSignal"Text",function()
+if ag.Title~=ap.Text then
+ag:SetTitle(ap.Text)
+af.ElementTable.Title=ap.Text
 end
 end)
-aa.AddSignal(ao:GetPropertyChangedSignal"Text",function()
-if ag.Desc~=ao.Text then
-ag:SetDesc(ao.Text)
-af.ElementTable.Desc=ao.Text
+aa.AddSignal(aq:GetPropertyChangedSignal"Text",function()
+if ag.Desc~=aq.Text then
+ag:SetDesc(aq.Text)
+af.ElementTable.Desc=aq.Text
 end
 end)
 end
@@ -5504,18 +5670,18 @@ end
 
 
 
-function ag.SetThumbnail(f,g,h)
-ag.Thumbnail=g
-if h then
-ag.ThumbnailSize=h
-ai=h
+function ag.SetThumbnail(h,j,l)
+ag.Thumbnail=j
+if l then
+ag.ThumbnailSize=l
+ak=l
 end
 
-if al then
-if g then
-al:Destroy()
-al=aa.Image(
-g,
+if an then
+if j then
+an:Destroy()
+an=aa.Image(
+j,
 ag.Title,
 ag.UICorner-3,
 af.Window.Folder,
@@ -5523,19 +5689,19 @@ af.Window.Folder,
 false,
 ag.IconThemed
 )
-al.Size=UDim2.new(1,0,0,ai)
-al.Parent=ag.UIElements.Container
-local j=ag.UIElements.Container:FindFirstChild"UIListLayout"
+an.Size=UDim2.new(1,0,0,ak)
+an.Parent=ag.UIElements.Container
+local m=ag.UIElements.Container:FindFirstChild"UIListLayout"
+if m then
+an.LayoutOrder=-1
+end
+else
+an.Visible=false
+end
+else
 if j then
-al.LayoutOrder=-1
-end
-else
-al.Visible=false
-end
-else
-if g then
-al=aa.Image(
-g,
+an=aa.Image(
+j,
 ag.Title,
 ag.UICorner-3,
 af.Window.Folder,
@@ -5543,26 +5709,26 @@ af.Window.Folder,
 false,
 ag.IconThemed
 )
-al.Size=UDim2.new(1,0,0,ai)
-al.Parent=ag.UIElements.Container
-local j=ag.UIElements.Container:FindFirstChild"UIListLayout"
+an.Size=UDim2.new(1,0,0,ak)
+an.Parent=ag.UIElements.Container
+local m=ag.UIElements.Container:FindFirstChild"UIListLayout"
+if m then
+an.LayoutOrder=-1
+end
+end
+end
+end
+
+function ag.SetImage(h,j,l)
+ag.Image=j
+if l then
+ag.ImageSize=l
+aj=l
+end
+
 if j then
-al.LayoutOrder=-1
-end
-end
-end
-end
-
-function ag.SetImage(f,g,h)
-ag.Image=g
-if h then
-ag.ImageSize=h
-ah=h
-end
-
-if g then
-am=aa.Image(
-g,
+ao=aa.Image(
+j,
 ag.Title,
 ag.UICorner-3,
 af.Window.Folder,
@@ -5571,46 +5737,46 @@ not ag.Color and true or false
 )
 
 if typeof(ag.Color)=="string"then
-am.ImageLabel.ImageColor3=GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
+ao.ImageLabel.ImageColor3=GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 elseif typeof(ag.Color)=="Color3"then
-am.ImageLabel.ImageColor3=GetTextColorForHSB(ag.Color)
+ao.ImageLabel.ImageColor3=GetTextColorForHSB(ag.Color)
 end
 
-am.Visible=true
+ao.Visible=true
 
-am.Size=UDim2.new(0,ah,0,ah)
-ak=ah
+ao.Size=UDim2.new(0,aj,0,aj)
+am=aj
 
 else
-if am then
-am.Visible=true
+if ao then
+ao.Visible=true
 end
-ak=0
-end
-
-ag.UIElements.Container.TitleFrame.TitleFrame.Size=UDim2.new(1,-ak,1,0)
+am=0
 end
 
-function ag.Destroy(f)
-b:Destroy()
+ag.UIElements.Container.TitleFrame.TitleFrame.Size=UDim2.new(1,-am,1,0)
+end
+
+function ag.Destroy(h)
+f:Destroy()
 end
 
 
-function ag.Lock(f,g)
-aj=false
-as.Active=true
-as.Visible=true
-aq.Text=g or"Locked"
+function ag.Lock(h,j)
+al=false
+au.Active=true
+au.Visible=true
+as.Text=j or"Locked"
 end
 
-function ag.Unlock(f)
-aj=true
-as.Active=false
-as.Visible=false
+function ag.Unlock(h)
+al=true
+au.Active=false
+au.Visible=false
 end
 
-function ag.Highlight(f)
-local g=ab("UIGradient",{
+function ag.Highlight(h)
+local j=ab("UIGradient",{
 Color=ColorSequence.new{
 ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
 ColorSequenceKeypoint.new(0.5,Color3.new(1,1,1)),
@@ -5625,10 +5791,10 @@ NumberSequenceKeypoint.new(1,1)
 },
 Rotation=0,
 Offset=Vector2.new(-1,0),
-Parent=au
+Parent=aw
 })
 
-local h=ab("UIGradient",{
+local l=ab("UIGradient",{
 Color=ColorSequence.new{
 ColorSequenceKeypoint.new(0,Color3.new(1,1,1)),
 ColorSequenceKeypoint.new(0.5,Color3.new(1,1,1)),
@@ -5643,47 +5809,47 @@ NumberSequenceKeypoint.new(1,1)
 },
 Rotation=0,
 Offset=Vector2.new(-1,0),
-Parent=aw
+Parent=ay
 })
 
-au.ImageTransparency=0.65
-aw.ImageTransparency=0.88
+aw.ImageTransparency=0.65
+ay.ImageTransparency=0.88
 
-ad(g,0.75,{
+ad(j,0.75,{
 Offset=Vector2.new(1,0)
 }):Play()
 
-ad(h,0.75,{
+ad(l,0.75,{
 Offset=Vector2.new(1,0)
 }):Play()
 
 
 task.spawn(function()
 task.wait(.75)
-au.ImageTransparency=1
 aw.ImageTransparency=1
-g:Destroy()
-h:Destroy()
+ay.ImageTransparency=1
+j:Destroy()
+l:Destroy()
 end)
 end
 
 
-function ag.UpdateShape(f)
+function ag.UpdateShape(h)
 if af.Window.NewElements then
-local g
+local j
 if af.ParentConfig.ParentType=="Group"then
-g="Squircle"
+j="Squircle"
 else
-g=getElementPosition(f.Elements,ag.Index)
+j=getElementPosition(h.Elements,ag.Index)
 end
 
-if g and b then
-d:SetType(g)
-at:SetType(g)
-ax:SetType(g)
-av:SetType(g.."-Outline")
-aB:SetType(g)
-az:SetType(g.."-Outline")
+if j and f then
+g:SetType(j)
+av:SetType(j)
+az:SetType(j)
+ax:SetType(j.."-Outline")
+d:SetType(j)
+aB:SetType(j.."-Outline")
 end
 end
 end
@@ -5784,6 +5950,7 @@ Tab=ae.Tab,
 Index=ae.Index,
 ElementTable=af,
 ParentConfig=ae,
+Size=ae.Size,
 }
 
 
@@ -8182,6 +8349,10 @@ an.Set(ap)
 al.Code=ap
 end
 
+function al.Set(ao,ap)
+return al.SetCode(ap)
+end
+
 function al.Destroy(ao)
 an.Destroy()
 al=nil
@@ -8221,7 +8392,7 @@ local aw={
 __type="Colorpicker",
 Title=at.Title,
 Desc=at.Desc,
-Default=at.Default,
+Default=at.Value or at.Default,
 Callback=at.Callback,
 Transparency=at.Transparency,
 UIElements=at.UIElements,
@@ -9544,16 +9715,15 @@ local ae=game.Players.LocalPlayer:GetMouse()
 
 local af=a.load'c'
 local ah=af.New
-local aj=af.Tween
 
-local ak=a.load'A'.New
-local al=a.load'w'.New
-
+local aj=a.load'A'.New
+local ak=a.load'w'.New
 
 
 
 
-local am={
+
+local al={
 
 
 Tabs={},
@@ -9563,32 +9733,32 @@ TabCount=0,
 ToolTipParent=nil,
 TabHighlight=nil,
 
-OnChangeFunc=function(am)end
+OnChangeFunc=function(al)end
 }
 
-function am.Init(an,ao,ap,aq)
-Window=an
-WindUI=ao
-am.ToolTipParent=ap
-am.TabHighlight=aq
-return am
+function al.Init(am,an,ao,ap)
+Window=am
+WindUI=an
+al.ToolTipParent=ao
+al.TabHighlight=ap
+return al
 end
 
-function am.New(an,ao)
-local ap={
+function al.New(am,an)
+local ao={
 __type="Tab",
-Title=an.Title or"Tab",
-Desc=an.Desc,
-Icon=an.Icon,
-IconColor=an.IconColor,
-IconShape=an.IconShape,
-IconThemed=an.IconThemed,
-Locked=an.Locked,
-ShowTabTitle=an.ShowTabTitle,
-Border=an.Border,
+Title=am.Title or"Tab",
+Desc=am.Desc,
+Icon=am.Icon,
+IconColor=am.IconColor,
+IconShape=am.IconShape,
+IconThemed=am.IconThemed,
+Locked=am.Locked,
+ShowTabTitle=am.ShowTabTitle,
+Border=am.Border,
 Selected=false,
 Index=nil,
-Parent=an.Parent,
+Parent=am.Parent,
 UIElements={},
 Elements={},
 ContainerFrame=nil,
@@ -9601,28 +9771,28 @@ TabPaddingY=3+(Window.UIPadding/2),
 TitlePaddingY=0,
 }
 
-if ap.IconShape then
-ap.TabPaddingX=2+(Window.UIPadding/4)
-ap.TabPaddingY=2+(Window.UIPadding/4)
-ap.TitlePaddingY=2+(Window.UIPadding/4)
+if ao.IconShape then
+ao.TabPaddingX=2+(Window.UIPadding/4)
+ao.TabPaddingY=2+(Window.UIPadding/4)
+ao.TitlePaddingY=2+(Window.UIPadding/4)
 end
 
-am.TabCount=am.TabCount+1
+al.TabCount=al.TabCount+1
 
-local aq=am.TabCount
-ap.Index=aq
+local ap=al.TabCount
+ao.Index=ap
 
-ap.UIElements.Main=af.NewRoundFrame(ap.UICorner,"Squircle",{
+ao.UIElements.Main=af.NewRoundFrame(ao.UICorner,"Squircle",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,-7,0,0),
 AutomaticSize="Y",
-Parent=an.Parent,
+Parent=am.Parent,
 ThemeTag={
 ImageColor3="TabBackground",
 },
 ImageTransparency=1,
 },{
-af.NewRoundFrame(ap.UICorner,"Glass-1.4",{
+af.NewRoundFrame(ao.UICorner,"Glass-1.4",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="TabBorder",
@@ -9644,7 +9814,7 @@ Name="Outline"
 
 
 }),
-af.NewRoundFrame(ap.UICorner,"Squircle",{
+af.NewRoundFrame(ao.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 ThemeTag={
@@ -9660,11 +9830,11 @@ FillDirection="Horizontal",
 VerticalAlignment="Center",
 }),
 ah("TextLabel",{
-Text=ap.Title,
+Text=ao.Title,
 ThemeTag={
 TextColor3="TabTitle"
 },
-TextTransparency=not ap.Locked and 0.4 or.7,
+TextTransparency=not ao.Locked and 0.4 or.7,
 TextSize=15,
 Size=UDim2.new(1,0,0,0),
 FontFace=Font.new(af.Font,Enum.FontWeight.Medium),
@@ -9676,54 +9846,54 @@ TextXAlignment="Left",
 BackgroundTransparency=1,
 },{
 ah("UIPadding",{
-PaddingTop=UDim.new(0,ap.TitlePaddingY),
+PaddingTop=UDim.new(0,ao.TitlePaddingY),
 
 
-PaddingBottom=UDim.new(0,ap.TitlePaddingY)
+PaddingBottom=UDim.new(0,ao.TitlePaddingY)
 })
 }),
 ah("UIPadding",{
-PaddingTop=UDim.new(0,ap.TabPaddingY),
-PaddingLeft=UDim.new(0,ap.TabPaddingX),
-PaddingRight=UDim.new(0,ap.TabPaddingX),
-PaddingBottom=UDim.new(0,ap.TabPaddingY),
+PaddingTop=UDim.new(0,ao.TabPaddingY),
+PaddingLeft=UDim.new(0,ao.TabPaddingX),
+PaddingRight=UDim.new(0,ao.TabPaddingX),
+PaddingBottom=UDim.new(0,ao.TabPaddingY),
 })
 }),
 },true)
 
-local ar=0
+local aq=0
+local ar
 local as
-local at
 
-if ap.Icon then
-as=af.Image(
-ap.Icon,
-ap.Icon..":"..ap.Title,
+if ao.Icon then
+ar=af.Image(
+ao.Icon,
+ao.Icon..":"..ao.Title,
 0,
 Window.Folder,
-ap.__type,
-ap.IconColor and false or true,
-ap.IconThemed,
+ao.__type,
+ao.IconColor and false or true,
+ao.IconThemed,
 "TabIcon"
 )
-as.Size=UDim2.new(0,16,0,16)
-if ap.IconColor then
-as.ImageLabel.ImageColor3=ap.IconColor
+ar.Size=UDim2.new(0,16,0,16)
+if ao.IconColor then
+ar.ImageLabel.ImageColor3=ao.IconColor
 end
-if not ap.IconShape then
-as.Parent=ap.UIElements.Main.Frame
-ap.UIElements.Icon=as
-as.ImageLabel.ImageTransparency=not ap.Locked and 0 or.7
-ar=-18-(Window.UIPadding/2)
-ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,ar,0,0)
-elseif ap.IconColor then
-af.NewRoundFrame(ap.IconShape~="Circle"and(ap.UICorner+5-(2+(Window.UIPadding/4)))or 9999,"Squircle",{
+if not ao.IconShape then
+ar.Parent=ao.UIElements.Main.Frame
+ao.UIElements.Icon=ar
+ar.ImageLabel.ImageTransparency=not ao.Locked and 0 or.7
+aq=-18-(Window.UIPadding/2)
+ao.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,aq,0,0)
+elseif ao.IconColor then
+af.NewRoundFrame(ao.IconShape~="Circle"and(ao.UICorner+5-(2+(Window.UIPadding/4)))or 9999,"Squircle",{
 Size=UDim2.new(0,26,0,26),
-ImageColor3=ap.IconColor,
-Parent=ap.UIElements.Main.Frame
+ImageColor3=ao.IconColor,
+Parent=ao.UIElements.Main.Frame
 },{
-as,
-af.NewRoundFrame(ap.IconShape~="Circle"and(ap.UICorner+5-(2+(Window.UIPadding/4)))or 9999,"Glass-1.4",{
+ar,
+af.NewRoundFrame(ao.IconShape~="Circle"and(ao.UICorner+5-(2+(Window.UIPadding/4)))or 9999,"Glass-1.4",{
 Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="White",
@@ -9746,38 +9916,38 @@ Name="Outline"
 
 }),
 })
-as.AnchorPoint=Vector2.new(0.5,0.5)
-as.Position=UDim2.new(0.5,0,0.5,0)
-as.ImageLabel.ImageTransparency=0
-as.ImageLabel.ImageColor3=af.GetTextColorForHSB(ap.IconColor,0.68)
-ar=-28-(Window.UIPadding/2)
-ap.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,ar,0,0)
+ar.AnchorPoint=Vector2.new(0.5,0.5)
+ar.Position=UDim2.new(0.5,0,0.5,0)
+ar.ImageLabel.ImageTransparency=0
+ar.ImageLabel.ImageColor3=af.GetTextColorForHSB(ao.IconColor,0.68)
+aq=-28-(Window.UIPadding/2)
+ao.UIElements.Main.Frame.TextLabel.Size=UDim2.new(1,aq,0,0)
 end
 
 
 
 
 
-at=af.Image(
-ap.Icon,
-ap.Icon..":"..ap.Title,
+as=af.Image(
+ao.Icon,
+ao.Icon..":"..ao.Title,
 0,
 Window.Folder,
-ap.__type,
+ao.__type,
 true,
-ap.IconThemed
+ao.IconThemed
 )
-at.Size=UDim2.new(0,16,0,16)
-at.ImageLabel.ImageTransparency=not ap.Locked and 0 or.7
-ar=-30
+as.Size=UDim2.new(0,16,0,16)
+as.ImageLabel.ImageTransparency=not ao.Locked and 0 or.7
+aq=-30
 
 
 
 
 end
 
-ap.UIElements.ContainerFrame=ah("ScrollingFrame",{
-Size=UDim2.new(1,0,1,ap.ShowTabTitle and-((Window.UIPadding*2.4)+12)or 0),
+ao.UIElements.ContainerFrame=ah("ScrollingFrame",{
+Size=UDim2.new(1,0,1,ao.ShowTabTitle and-((Window.UIPadding*2.4)+12)or 0),
 BackgroundTransparency=1,
 ScrollBarThickness=0,
 ElasticBehavior="Never",
@@ -9796,7 +9966,7 @@ PaddingBottom=UDim.new(0,not Window.HidePanelBackground and 20 or 10),
 }),
 ah("UIListLayout",{
 SortOrder="LayoutOrder",
-Padding=UDim.new(0,ap.Gap),
+Padding=UDim.new(0,ao.Gap),
 HorizontalAlignment="Center",
 })
 })
@@ -9805,29 +9975,29 @@ HorizontalAlignment="Center",
 
 
 
-ap.UIElements.ContainerFrameCanvas=ah("Frame",{
+ao.UIElements.ContainerFrameCanvas=ah("Frame",{
 Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
 Visible=false,
 Parent=Window.UIElements.MainBar,
 ZIndex=5,
 },{
-ap.UIElements.ContainerFrame,
+ao.UIElements.ContainerFrame,
 ah("Frame",{
 Size=UDim2.new(1,0,0,((Window.UIPadding*2.4)+12)),
 BackgroundTransparency=1,
-Visible=ap.ShowTabTitle or false,
+Visible=ao.ShowTabTitle or false,
 Name="TabTitle"
 },{
-at,
+as,
 ah("TextLabel",{
-Text=ap.Title,
+Text=ao.Title,
 ThemeTag={
 TextColor3="Text"
 },
 TextSize=20,
 TextTransparency=.1,
-Size=UDim2.new(1,-ar,1,0),
+Size=UDim2.new(1,-aq,1,0),
 FontFace=Font.new(af.Font,Enum.FontWeight.SemiBold),
 TextTruncate="AtEnd",
 RichText=true,
@@ -9855,171 +10025,173 @@ ThemeTag={
 BackgroundColor3="Text"
 },
 Position=UDim2.new(0,0,0,((Window.UIPadding*2.4)+12)),
-Visible=ap.ShowTabTitle or false,
+Visible=ao.ShowTabTitle or false,
 })
 })
 
-am.Containers[aq]=ap.UIElements.ContainerFrameCanvas
-am.Tabs[aq]=ap
+al.Containers[ap]=ao.UIElements.ContainerFrameCanvas
+al.Tabs[ap]=ao
 
-ap.ContainerFrame=ContainerFrameCanvas
+ao.ContainerFrame=ao.UIElements.ContainerFrameCanvas
 
-af.AddSignal(ap.UIElements.Main.MouseButton1Click,function()
-if not ap.Locked then
-am:SelectTab(aq)
+af.AddSignal(ao.UIElements.Main.MouseButton1Click,function()
+if not ao.Locked then
+al:SelectTab(ap)
 end
 end)
 
 if Window.ScrollBarEnabled then
-al(ap.UIElements.ContainerFrame,ap.UIElements.ContainerFrameCanvas,Window,3)
+ak(ao.UIElements.ContainerFrame,ao.UIElements.ContainerFrameCanvas,Window,3)
 end
 
+local at
 local au
 local av
-local aw
-local ax=false
+local aw=false
 
 
 
-if ap.Desc then
+if ao.Desc then
 
 
-af.AddSignal(ap.UIElements.Main.InputBegan,function()
-ax=true
-av=task.spawn(function()
+af.AddSignal(ao.UIElements.Main.InputBegan,function()
+aw=true
+au=task.spawn(function()
 task.wait(0.35)
-if ax and not au then
-au=ak(ap.Desc,am.ToolTipParent,true)
-au.Container.AnchorPoint=Vector2.new(0.5,0.5)
+if aw and not at then
+at=aj(ao.Desc,al.ToolTipParent,true)
+at.Container.AnchorPoint=Vector2.new(0.5,0.5)
 
 local function updatePosition()
-if au then
-au.Container.Position=UDim2.new(0,ae.X,0,ae.Y-4)
+if at then
+at.Container.Position=UDim2.new(0,ae.X,0,ae.Y-4)
 end
 end
 
 updatePosition()
-aw=ae.Move:Connect(updatePosition)
-au:Open()
+av=ae.Move:Connect(updatePosition)
+at:Open()
 end
 end)
 end)
 
 end
 
-af.AddSignal(ap.UIElements.Main.MouseEnter,function()
-if not ap.Locked then
-aj(ap.UIElements.Main.Frame,0.08,{ImageTransparency=.97}):Play()
+af.AddSignal(ao.UIElements.Main.MouseEnter,function()
+if not ao.Locked then
+af.SetThemeTag(ao.UIElements.Main.Frame,{
+ImageTransparency="TabBackgroundHoverTransparency",
+ImageColor3="TabBackgroundHover",
+},0.08)
 end
 end)
-af.AddSignal(ap.UIElements.Main.InputEnded,function()
-if ap.Desc then
-ax=false
-if av then
-task.cancel(av)
-av=nil
-end
-if aw then
-aw:Disconnect()
-aw=nil
-end
+af.AddSignal(ao.UIElements.Main.InputEnded,function()
+if ao.Desc then
+aw=false
 if au then
-au:Close()
+task.cancel(au)
 au=nil
 end
+if av then
+av:Disconnect()
+av=nil
+end
+if at then
+at:Close()
+at=nil
+end
 end
 
-if not ap.Locked then
-aj(ap.UIElements.Main.Frame,0.08,{ImageTransparency=1}):Play()
+if not ao.Locked then
+af.SetThemeTag(ao.UIElements.Main.Frame,{
+ImageTransparency="TabBorderTransparency"
+},0.08)
 end
 end)
 
 
 
-function ap.ScrollToTheElement(ay,az)
-ap.UIElements.ContainerFrame.ScrollingEnabled=false
-aj(ap.UIElements.ContainerFrame,.45,
-{
+function ao.ScrollToTheElement(ax,ay)
+ao.UIElements.ContainerFrame.ScrollingEnabled=false
+
+af.Tween(ao.UIElements.ContainerFrame,0.45,{
 CanvasPosition=Vector2.new(
 0,
-
-ap.Elements[az].ElementFrame.AbsolutePosition.Y
--ap.UIElements.ContainerFrame.AbsolutePosition.Y
--ap.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset
+ao.Elements[ay].ElementFrame.AbsolutePosition.Y
+-ao.UIElements.ContainerFrame.AbsolutePosition.Y
+-ao.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset
 )
-},
-Enum.EasingStyle.Quint,Enum.EasingDirection.Out
-):Play()
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 task.spawn(function()
-task.wait(.48)
+task.wait(0.48)
 
-if ap.Elements[az].Highlight then
-ap.Elements[az]:Highlight()
-ap.UIElements.ContainerFrame.ScrollingEnabled=true
+if ao.Elements[ay].Highlight then
+ao.Elements[ay]:Highlight()
 end
+ao.UIElements.ContainerFrame.ScrollingEnabled=true
 end)
 
-return ap
+return ao
 end
 
 
 
 
 
-local ay=a.load'V'
+local ax=a.load'V'
 
-ay.Load(ap,ap.UIElements.ContainerFrame,ay.Elements,Window,WindUI,nil,ay,ao)
+ax.Load(ao,ao.UIElements.ContainerFrame,ax.Elements,Window,WindUI,nil,ax,an)
 
 
 
-function ap.LockAll(az)
+function ao.LockAll(ay)
+
+for az,aA in next,Window.AllElements do
+if aA.Tab and aA.Tab.Index and aA.Tab.Index==ao.Index and aA.Lock then
+aA:Lock()
+end
+end
+end
+function ao.UnlockAll(ay)
+for az,aA in next,Window.AllElements do
+if aA.Tab and aA.Tab.Index and aA.Tab.Index==ao.Index and aA.Unlock then
+aA:Unlock()
+end
+end
+end
+function ao.GetLocked(ay)
+local az={}
 
 for aA,aB in next,Window.AllElements do
-if aB.Tab and aB.Tab.Index and aB.Tab.Index==ap.Index and aB.Lock then
-aB:Lock()
+if aB.Tab and aB.Tab.Index and aB.Tab.Index==ao.Index and aB.Locked==true then
+table.insert(az,aB)
 end
 end
+
+return az
 end
-function ap.UnlockAll(az)
+function ao.GetUnlocked(ay)
+local az={}
+
 for aA,aB in next,Window.AllElements do
-if aB.Tab and aB.Tab.Index and aB.Tab.Index==ap.Index and aB.Unlock then
-aB:Unlock()
-end
-end
-end
-function ap.GetLocked(az)
-local aA={}
-
-for aB,b in next,Window.AllElements do
-if b.Tab and b.Tab.Index and b.Tab.Index==ap.Index and b.Locked==true then
-table.insert(aA,b)
+if aB.Tab and aB.Tab.Index and aB.Tab.Index==ao.Index and aB.Locked==false then
+table.insert(az,aB)
 end
 end
 
-return aA
-end
-function ap.GetUnlocked(az)
-local aA={}
-
-for aB,b in next,Window.AllElements do
-if b.Tab and b.Tab.Index and b.Tab.Index==ap.Index and b.Locked==false then
-table.insert(aA,b)
-end
+return az
 end
 
-return aA
-end
-
-function ap.Select(az)
-return am:SelectTab(ap.Index)
+function ao.Select(ay)
+return al:SelectTab(ao.Index)
 end
 
 task.spawn(function()
-local az=ah("Frame",{
+local ay=ah("Frame",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,0,1,-Window.UIElements.Main.Main.Topbar.AbsoluteSize.Y),
-Parent=ap.UIElements.ContainerFrame
+Parent=ao.UIElements.ContainerFrame
 },{
 ah("UIListLayout",{
 Padding=UDim.new(0,8),
@@ -10056,62 +10228,87 @@ FontFace=Font.new(af.Font,Enum.FontWeight.Medium),
 
 
 
-local aA
-aA=af.AddSignal(ap.UIElements.ContainerFrame.ChildAdded,function()
-az.Visible=false
-aA:Disconnect()
+local az
+az=af.AddSignal(ao.UIElements.ContainerFrame.ChildAdded,function()
+ay.Visible=false
+az:Disconnect()
 end)
 end)
 
-return ap
+return ao
 end
 
-function am.OnChange(an,ao)
-am.OnChangeFunc=ao
+function al.OnChange(am,an)
+al.OnChangeFunc=an
 end
 
-function am.SelectTab(an,ao)
-if not am.Tabs[ao].Locked then
-am.SelectedTab=ao
+function al.SelectTab(am,an)
+if not al.Tabs[an].Locked then
+al.SelectedTab=an
 
-for ap,aq in next,am.Tabs do
-if not aq.Locked then
-aj(aq.UIElements.Main,0.15,{ImageTransparency=1}):Play()
-if aq.Border then
-aj(aq.UIElements.Main.Outline,0.15,{ImageTransparency=1}):Play()
+for ao,ap in next,al.Tabs do
+if not ap.Locked then
+af.SetThemeTag(ap.UIElements.Main,{
+ImageTransparency="TabBorderTransparency"
+},0.15)
+if ap.Border then
+af.SetThemeTag(ap.UIElements.Main.Outline,{
+ImageTransparency="TabBorderTransparency"
+},0.15)
 end
-aj(aq.UIElements.Main.Frame.TextLabel,0.15,{TextTransparency=0.3}):Play()
-if aq.UIElements.Icon and not aq.IconColor then
-aj(aq.UIElements.Icon.ImageLabel,0.15,{ImageTransparency=0.4}):Play()
+af.SetThemeTag(ap.UIElements.Main.Frame.TextLabel,{
+TextTransparency="TabTextTransparency"
+},0.15)
+if ap.UIElements.Icon and not ap.IconColor then
+af.SetThemeTag(ap.UIElements.Icon.ImageLabel,{
+ImageTransparency="TabIconTransparency"
+},0.15)
 end
-aq.Selected=false
+ap.Selected=false
 end
 end
-aj(am.Tabs[ao].UIElements.Main,0.15,{ImageTransparency=0.93}):Play()
-if am.Tabs[ao].Border then
-aj(am.Tabs[ao].UIElements.Main.Outline,0.15,{ImageTransparency=0.75}):Play()
+af.SetThemeTag(al.Tabs[an].UIElements.Main,{
+ImageTransparency="TabBackgroundActiveTransparency"
+},0.15)
+if al.Tabs[an].Border then
+af.SetThemeTag(al.Tabs[an].UIElements.Main.Outline,{
+ImageTransparency="TabBorderTransparencyActive"
+},0.15)
 end
-aj(am.Tabs[ao].UIElements.Main.Frame.TextLabel,0.15,{TextTransparency=0}):Play()
-if am.Tabs[ao].UIElements.Icon and not am.Tabs[ao].IconColor then
-aj(am.Tabs[ao].UIElements.Icon.ImageLabel,0.15,{ImageTransparency=0.1}):Play()
+af.SetThemeTag(al.Tabs[an].UIElements.Main.Frame.TextLabel,{
+TextTransparency="TabTextTransparencyActive"
+},0.15)
+if al.Tabs[an].UIElements.Icon and not al.Tabs[an].IconColor then
+af.SetThemeTag(al.Tabs[an].UIElements.Icon.ImageLabel,{
+ImageTransparency="TabIconTransparencyActive"
+},0.15)
 end
-am.Tabs[ao].Selected=true
-
+al.Tabs[an].Selected=true
 
 task.spawn(function()
-for ap,aq in next,am.Containers do
-aq.AnchorPoint=Vector2.new(0,0.05)
-aq.Visible=false
+for ao,ap in next,al.Containers do
+ap.AnchorPoint=Vector2.new(0,0.05)
+ap.Visible=false
 end
-am.Containers[ao].Visible=true
-aj(am.Containers[ao],0.15,{AnchorPoint=Vector2.new(0,0)},Enum.EasingStyle.Quart,Enum.EasingDirection.Out):Play()
+al.Containers[an].Visible=true
+local ao=game:GetService"TweenService"
+
+local ap=TweenInfo.new(
+0.15,
+Enum.EasingStyle.Quart,
+Enum.EasingDirection.Out
+)
+local aq=ao:Create(al.Containers[an],ap,{
+AnchorPoint=Vector2.new(0,0)
+})
+aq:Play()
 end)
 
-am.OnChangeFunc(ao)
+al.OnChangeFunc(an)
 end
 end
 
-return am end function a.X()
+return al end function a.X()
 
 local aa={}
 
@@ -10945,7 +11142,7 @@ if au.Topbar=={}then
 au.Topbar={Height=52,ButtonsType="Default"}
 end
 
-if not af:IsStudio()and au.Folder then
+if not af:IsStudio()and au.Folder and writefile then
 if not isfolder("WindUI/"..au.Folder)then
 makefolder("WindUI/"..au.Folder)
 end
@@ -11106,9 +11303,13 @@ BackgroundTransparency=1,
 },{
 al.NewRoundFrame(au.UICorner-(au.UIPadding/2),"Squircle",{
 Size=UDim2.new(1,0,1,0),
-ImageColor3=Color3.new(1,1,1),
+ThemeTag={
+ImageColor3="PanelBackground",
+ImageTransparency="PanelBackgroundTransparency",
+},
+
+
 ZIndex=3,
-ImageTransparency=.95,
 Name="Background",
 Visible=not au.HidePanelBackground
 }),
@@ -12150,7 +12351,7 @@ at.WindUI.Transparent=A
 
 au.UIElements.Main.Background.ImageTransparency=A and at.WindUI.TransparencyValue or 0
 
-au.UIElements.MainBar.Background.ImageTransparency=A and 0.97 or 0.95
+
 
 end
 
@@ -12269,6 +12470,7 @@ local B=z.Init(au,at.WindUI,at.WindUI.TooltipGui)
 B:OnChange(function(C)au.CurrentTab=C end)
 
 au.TabModule=B
+
 
 function au.Tab(C,F)
 F.Parent=au.UIElements.SideBar.Frame
@@ -12907,7 +13109,6 @@ if ae.OnThemeChangeFunction then
 ae.OnThemeChangeFunction(ay)
 end
 
-
 return ae.Themes[ay]
 end
 return nil
@@ -12949,7 +13150,6 @@ end
 end
 
 
-
 function ae.Gradient(ax,ay,az)
 local aA={}
 local aB={}
@@ -12958,19 +13158,26 @@ for b,d in next,ay do
 local f=tonumber(b)
 if f then
 f=math.clamp(f/100,0,1)
-table.insert(aA,ColorSequenceKeypoint.new(f,d.Color))
-table.insert(aB,NumberSequenceKeypoint.new(f,d.Transparency or 0))
+
+local g=d.Color
+if typeof(g)=="string"and string.sub(g,1,1)=="#"then
+g=Color3.fromHex(g)
+end
+
+local h=d.Transparency or 0
+
+table.insert(aA,ColorSequenceKeypoint.new(f,g))
+table.insert(aB,NumberSequenceKeypoint.new(f,h))
 end
 end
 
 table.sort(aA,function(b,d)return b.Time<d.Time end)
 table.sort(aB,function(b,d)return b.Time<d.Time end)
 
-
 if#aA<2 then
-error"ColorSequence requires at least 2 keypoints"
+table.insert(aA,ColorSequenceKeypoint.new(1,aA[1].Value))
+table.insert(aB,NumberSequenceKeypoint.new(1,aB[1].Value))
 end
-
 
 local b={
 Color=ColorSequence.new(aA),
@@ -13005,7 +13212,7 @@ ae:SetLanguage(ap.Language)
 function ae.CreateWindow(ax,ay)
 local az=a.load'_'
 
-if not aa:IsStudio()then
+if not aa:IsStudio()and writefile then
 if not isfolder"WindUI"then
 makefolder"WindUI"
 end
