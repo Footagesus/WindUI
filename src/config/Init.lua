@@ -99,7 +99,7 @@ function ConfigManager:Init(WindowTable)
         warn("[ WindUI.ConfigManager ] Window.Folder is not specified.")
         return false
     end
-    if RunService:IsStudio() then
+    if RunService:IsStudio() or not writefile then
         warn("[ WindUI.ConfigManager ] The config system doesn't work in the studio.")
         return false
     end

@@ -49,6 +49,10 @@ function Element:New(Config)
         CodeElement.Set(code)
         Code.Code = code
     end
+
+    function Code:Set(code)
+        return Code.SetCode(code)
+    end
     
     function Code:Destroy()
         CodeElement.Destroy()

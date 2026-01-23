@@ -74,8 +74,12 @@ function Label.New(Text, Icon, Parent, IsPlaceholder, Radius)
             Creator.NewRoundFrame(Radius, "Squircle", {
                 Size = UDim2.new(1,0,1,0),
                 Name = "Frame",
-                ImageColor3 = Color3.new(1,1,1),
-                ImageTransparency = .95
+                ThemeTag = {
+                    ImageColor3 = "LabelBackground",
+                    ImageTransparency = "LabelBackgroundTransparency",
+                },
+                -- ImageColor3 = Color3.new(1,1,1),
+                -- ImageTransparency = .95
             }, {
                 New("UIPadding", {
                     PaddingLeft = UDim.new(0,12),

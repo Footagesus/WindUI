@@ -2,10 +2,10 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
-if not RunService:IsStudio() then
-    warn("[Icons] This loader only works in Studio!")
-    return
-end
+-- if not RunService:IsStudio() and writefile then
+--     warn("[Icons] This loader only works in Studio!")
+--     return
+-- end
 
 print("[Icons] Loading icons from GitHub...")
 

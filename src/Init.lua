@@ -150,11 +150,10 @@ function WindUI:SetTheme(Value)
     if WindUI.Themes[Value] then
         WindUI.Theme = WindUI.Themes[Value]
         Creator.SetTheme(WindUI.Themes[Value])
-        
+
         if WindUI.OnThemeChangeFunction then
             WindUI.OnThemeChangeFunction(Value)
         end
-        --Creator.UpdateTheme()
         
         return WindUI.Themes[Value]
     end
@@ -197,7 +196,6 @@ function WindUI:ToggleAcrylic(Value)
 end
 
 
-
 function WindUI:Gradient(stops, props)
     local colorSequence = {}
     local transparencySequence = {}
@@ -206,19 +204,26 @@ function WindUI:Gradient(stops, props)
         local position = tonumber(posStr)
         if position then
             position = math.clamp(position / 100, 0, 1)
-            table.insert(colorSequence, ColorSequenceKeypoint.new(position, stop.Color))
-            table.insert(transparencySequence, NumberSequenceKeypoint.new(position, stop.Transparency or 0))
+
+            local color = stop.Color
+            if typeof(color) == "string" and string.sub(color, 1, 1) == "#" then
+                color = Color3.fromHex(color)
+            end
+
+            local transparency = stop.Transparency or 0
+
+            table.insert(colorSequence, ColorSequenceKeypoint.new(position, color))
+            table.insert(transparencySequence, NumberSequenceKeypoint.new(position, transparency))
         end
     end
 
     table.sort(colorSequence, function(a, b) return a.Time < b.Time end)
     table.sort(transparencySequence, function(a, b) return a.Time < b.Time end)
 
-
     if #colorSequence < 2 then
-        error("ColorSequence requires at least 2 keypoints")
+        table.insert(colorSequence, ColorSequenceKeypoint.new(1, colorSequence[1].Value))
+        table.insert(transparencySequence, NumberSequenceKeypoint.new(1, transparencySequence[1].Value))
     end
-
 
     local gradientData = {
         Color = ColorSequence.new(colorSequence),
@@ -253,7 +258,7 @@ WindUI:SetLanguage(Creator.Language)
 function WindUI:CreateWindow(Config)
     local CreateWindow = require("./components/window/Init")
     
-    if not RunService:IsStudio() then
+    if not RunService:IsStudio() and writefile then
         if not isfolder("WindUI") then
             makefolder("WindUI")
         end

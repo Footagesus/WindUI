@@ -5,7 +5,6 @@ local Mouse = game.Players.LocalPlayer:GetMouse()
 
 local Creator = require("../../modules/Creator")
 local New = Creator.New
-local Tween = Creator.Tween
 
 local CreateToolTip = require("../ui/Tooltip").New
 local CreateScrollSlider = require("../ui/ScrollSlider").New
@@ -323,7 +322,7 @@ function TabModule.New(Config, UIScale)
     TabModule.Containers[TabIndex] = Tab.UIElements.ContainerFrameCanvas
 	TabModule.Tabs[TabIndex] = Tab
 	
-	Tab.ContainerFrame = ContainerFrameCanvas
+	Tab.ContainerFrame = Tab.UIElements.ContainerFrameCanvas
 	
     Creator.AddSignal(Tab.UIElements.Main.MouseButton1Click, function()
         if not Tab.Locked then
@@ -370,7 +369,10 @@ function TabModule.New(Config, UIScale)
     
     Creator.AddSignal(Tab.UIElements.Main.MouseEnter, function()
         if not Tab.Locked then
-            Tween(Tab.UIElements.Main.Frame, 0.08, {ImageTransparency = .97}):Play()
+            Creator.SetThemeTag(Tab.UIElements.Main.Frame, {
+                ImageTransparency = "TabBackgroundHoverTransparency",
+                ImageColor3 = "TabBackgroundHover",
+            }, 0.08)
         end
     end)
     Creator.AddSignal(Tab.UIElements.Main.InputEnded, function()
@@ -391,7 +393,9 @@ function TabModule.New(Config, UIScale)
         end
         
         if not Tab.Locked then
-            Tween(Tab.UIElements.Main.Frame, 0.08, {ImageTransparency = 1}):Play()
+            Creator.SetThemeTag(Tab.UIElements.Main.Frame, {
+                ImageTransparency = "TabBorderTransparency"
+            }, 0.08)
         end
     end)
 
@@ -399,26 +403,23 @@ function TabModule.New(Config, UIScale)
     
     function Tab:ScrollToTheElement(elemindex)
         Tab.UIElements.ContainerFrame.ScrollingEnabled = false
-        Tween(Tab.UIElements.ContainerFrame, .45, 
-            { 
-                CanvasPosition = Vector2.new(
-                    0, -- X
-                    
-                    Tab.Elements[elemindex].ElementFrame.AbsolutePosition.Y 
-                    - Tab.UIElements.ContainerFrame.AbsolutePosition.Y  
-                    - Tab.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset -- Y
-                ) 
-            }, 
-            Enum.EasingStyle.Quint, Enum.EasingDirection.Out
-        ):Play()
+
+        Creator.Tween(Tab.UIElements.ContainerFrame, 0.45, {
+            CanvasPosition = Vector2.new(
+                0,
+                Tab.Elements[elemindex].ElementFrame.AbsolutePosition.Y 
+                - Tab.UIElements.ContainerFrame.AbsolutePosition.Y  
+                - Tab.UIElements.ContainerFrame.UIPadding.PaddingTop.Offset
+            ) 
+        }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
         
         task.spawn(function()
-            task.wait(.48)
+            task.wait(0.48)
             
             if Tab.Elements[elemindex].Highlight then
                 Tab.Elements[elemindex]:Highlight()
-                Tab.UIElements.ContainerFrame.ScrollingEnabled = true
             end
+            Tab.UIElements.ContainerFrame.ScrollingEnabled = true
         end)
         
         return Tab
@@ -537,27 +538,42 @@ function TabModule:SelectTab(TabIndex)
         
         for _, TabObject in next, TabModule.Tabs do
             if not TabObject.Locked then
-                Tween(TabObject.UIElements.Main, 0.15, {ImageTransparency = 1}):Play()
+                Creator.SetThemeTag(TabObject.UIElements.Main, {
+                    ImageTransparency = "TabBorderTransparency"
+                }, 0.15)
                 if TabObject.Border then
-                    Tween(TabObject.UIElements.Main.Outline, 0.15, {ImageTransparency = 1}):Play()
+                    Creator.SetThemeTag(TabObject.UIElements.Main.Outline, {
+                        ImageTransparency = "TabBorderTransparency"
+                    }, 0.15)
                 end
-                Tween(TabObject.UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0.3}):Play()
+                Creator.SetThemeTag(TabObject.UIElements.Main.Frame.TextLabel, {
+                    TextTransparency = "TabTextTransparency"
+                }, 0.15)
                 if TabObject.UIElements.Icon and not TabObject.IconColor then
-                    Tween(TabObject.UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.4}):Play()
+                    Creator.SetThemeTag(TabObject.UIElements.Icon.ImageLabel, {
+                        ImageTransparency = "TabIconTransparency"
+                    }, 0.15)
                 end
                 TabObject.Selected = false
             end
         end
-        Tween(TabModule.Tabs[TabIndex].UIElements.Main, 0.15, {ImageTransparency = 0.93}):Play()
+        Creator.SetThemeTag(TabModule.Tabs[TabIndex].UIElements.Main, {
+            ImageTransparency = "TabBackgroundActiveTransparency"
+        }, 0.15)
         if TabModule.Tabs[TabIndex].Border then
-            Tween(TabModule.Tabs[TabIndex].UIElements.Main.Outline, 0.15, {ImageTransparency = 0.75}):Play()
+            Creator.SetThemeTag(TabModule.Tabs[TabIndex].UIElements.Main.Outline, {
+                ImageTransparency = "TabBorderTransparencyActive"
+            }, 0.15)
         end
-        Tween(TabModule.Tabs[TabIndex].UIElements.Main.Frame.TextLabel, 0.15, {TextTransparency = 0}):Play()
+        Creator.SetThemeTag(TabModule.Tabs[TabIndex].UIElements.Main.Frame.TextLabel, {
+            TextTransparency = "TabTextTransparencyActive"
+        }, 0.15)
         if TabModule.Tabs[TabIndex].UIElements.Icon and not TabModule.Tabs[TabIndex].IconColor then
-            Tween(TabModule.Tabs[TabIndex].UIElements.Icon.ImageLabel, 0.15, {ImageTransparency = 0.1}):Play()
+            Creator.SetThemeTag(TabModule.Tabs[TabIndex].UIElements.Icon.ImageLabel, {
+                ImageTransparency = "TabIconTransparencyActive"
+            }, 0.15)
         end
         TabModule.Tabs[TabIndex].Selected = true
-        
         
         task.spawn(function()
             for _, ContainerObject in next, TabModule.Containers do
@@ -565,7 +581,17 @@ function TabModule:SelectTab(TabIndex)
                 ContainerObject.Visible = false
             end
             TabModule.Containers[TabIndex].Visible = true
-            Tween(TabModule.Containers[TabIndex], 0.15, {AnchorPoint = Vector2.new(0,0)}, Enum.EasingStyle.Quart, Enum.EasingDirection.Out):Play()
+            local TweenService = game:GetService("TweenService")
+
+            local tweenInfo = TweenInfo.new(
+                0.15,
+                Enum.EasingStyle.Quart,
+                Enum.EasingDirection.Out
+            )
+            local tween = TweenService:Create(TabModule.Containers[TabIndex], tweenInfo, {
+                AnchorPoint = Vector2.new(0,0)
+            })
+            tween:Play()
         end)
         
         TabModule.OnChangeFunc(TabIndex)

@@ -12,7 +12,7 @@ local RenderStepped = RunService.Heartbeat
 local IconsURL = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
 local Icons
-if RunService:IsStudio() then
+if RunService:IsStudio() or not writefile then
     Icons = require("./Icons")
 else
     Icons = loadstring(
@@ -294,42 +294,60 @@ function Creator.GetThemeProperty(Property, Theme)
 end
 
 function Creator.AddThemeObject(Object, Properties)
-    Creator.Objects[Object] = { Object = Object, Properties = Properties }
+    if Creator.Objects[Object] then
+        for prop, value in pairs(Properties) do
+            Creator.Objects[Object].Properties[prop] = value
+        end
+    else
+        Creator.Objects[Object] = { Object = Object, Properties = Properties }
+    end
+    
     Creator.UpdateTheme(Object, false)
     return Object
 end
 
 function Creator.AddLangObject(idx)
     local currentObj = Creator.LocalizationObjects[idx]
+    if not currentObj then return end
+
     local Object = currentObj.Object
-    local TranslationId = currentObjTranslationId
-    Creator.UpdateLang(Object, TranslationId)
+
+    Creator.SetLangForObject(idx)
+
     return Object
 end
 
-function Creator.UpdateTheme(TargetObject, isTween)
+function Creator.UpdateTheme(TargetObject, isTween, isTweenTarget, Duration, EasingStyle, EasingDirection)
     local function ApplyTheme(objData)
         for Property, ColorKey in pairs(objData.Properties or {}) do
             local value = Creator.GetThemeProperty(ColorKey, Creator.Theme)
             if value ~= nil then
                 if typeof(value) == "Color3" then
-                    local gradient = objData.Object:FindFirstChild("WindUIGradient")
+                    local gradient = objData.Object:FindFirstChild("LibraryGradient")
                     if gradient then
                         gradient:Destroy()
                     end
                     
-                    if not isTween then
-                        objData.Object[Property] = value
-                    else
+                    if isTweenTarget then
+                        Creator.Tween(
+                            objData.Object, 
+                            Duration or 0.2, 
+                            { [Property] = value }, 
+                            EasingStyle or Enum.EasingStyle.Quint, 
+                            EasingDirection or Enum.EasingDirection.Out
+                        ):Play()
+                    elseif isTween then
                         Creator.Tween(objData.Object, 0.08, { [Property] = value }):Play()
+                    else
+                        objData.Object[Property] = value
                     end
                 elseif typeof(value) == "table" and value.Color and value.Transparency then
                     objData.Object[Property] = Color3.new(1, 1, 1)
                     
-                    local gradient = objData.Object:FindFirstChild("WindUIGradient")
+                    local gradient = objData.Object:FindFirstChild("LibraryGradient")
                     if not gradient then
                         gradient = Instance.new("UIGradient")
-                        gradient.Name = "WindUIGradient"
+                        gradient.Name = "LibraryGradient"
                         gradient.Parent = objData.Object
                     end
                     
@@ -342,15 +360,23 @@ function Creator.UpdateTheme(TargetObject, isTween)
                         end
                     end
                 elseif typeof(value) == "number" then
-                    if not isTween then
-                        objData.Object[Property] = value
-                    else
+                    if isTweenTarget then
+                        Creator.Tween(
+                            objData.Object, 
+                            Duration or 0.2, 
+                            { [Property] = value }, 
+                            EasingStyle or Enum.EasingStyle.Quint, 
+                            EasingDirection or Enum.EasingDirection.Out
+                        ):Play()
+                    elseif isTween then
                         Creator.Tween(objData.Object, 0.08, { [Property] = value }):Play()
+                    else
+                        objData.Object[Property] = value
                     end
                 end
             else
 
-                local gradient = objData.Object:FindFirstChild("WindUIGradient")
+                local gradient = objData.Object:FindFirstChild("LibraryGradient")
                 if gradient then
                     gradient:Destroy()
                 end
@@ -368,6 +394,12 @@ function Creator.UpdateTheme(TargetObject, isTween)
             ApplyTheme(objData)
         end
     end
+end
+
+
+function Creator.SetThemeTag(Object, ThemeTag, Duration, EasingStyle, EasingDirection)
+    Creator.AddThemeObject(Object, ThemeTag)
+    Creator.UpdateTheme(Object, false, true, Duration, EasingStyle, EasingDirection)
 end
 
 function Creator.SetLangForObject(index)
@@ -693,7 +725,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
                     Method = "GET",
                 }).Body or {}
                 
-                if not RunService:IsStudio() then writefile(FileName, response) end
+                if not RunService:IsStudio() and writefile then writefile(FileName, response) end
                 --ImageFrame.ImageLabel.Image = getcustomasset(FileName)
                 
                 local assetSuccess, asset = pcall(getcustomasset, FileName)

@@ -117,7 +117,7 @@ return function(Config)
         Window.Topbar = { Height = 52, ButtonsType = "Default" }
     end
     
-    if not RunService:IsStudio() and Window.Folder then
+    if not RunService:IsStudio() and Window.Folder and writefile then
         if not isfolder("WindUI/" .. Window.Folder) then
             makefolder("WindUI/" .. Window.Folder)
         end
@@ -278,9 +278,13 @@ return function(Config)
     }, {
         Creator.NewRoundFrame(Window.UICorner-(Window.UIPadding/2), "Squircle", {
             Size = UDim2.new(1,0,1,0),
-            ImageColor3 = Color3.new(1,1,1),
+            ThemeTag = {
+                ImageColor3 = "PanelBackground",
+                ImageTransparency = "PanelBackgroundTransparency",
+            },
+            -- ImageColor3 = Color3.new(1,1,1),
+            -- ImageTransparency = .95,
             ZIndex = 3,
-            ImageTransparency = .95,
             Name = "Background",
             Visible = not Window.HidePanelBackground
         }),
@@ -1322,7 +1326,7 @@ return function(Config)
         
         Window.UIElements.Main.Background.ImageTransparency = Value and Config.WindUI.TransparencyValue or 0
         -- Window.UIElements.Main.Background.ImageLabel.ImageTransparency = Value and Config.WindUI.TransparencyValue or 0
-        Window.UIElements.MainBar.Background.ImageTransparency = Value and 0.97 or 0.95
+        --Window.UIElements.MainBar.Background.ImageTransparency = Value and 0.97 or 0.95
         
     end
     
@@ -1441,6 +1445,7 @@ return function(Config)
     TabModule:OnChange(function(t) Window.CurrentTab = t end)
     
     Window.TabModule = TabModule
+
     
     function Window:Tab(TabConfig)
         TabConfig.Parent = Window.UIElements.SideBar.Frame

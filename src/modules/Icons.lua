@@ -72,10 +72,12 @@ function IconModule.SetIconsType(iconType)
     IconModule.IconsType = iconType  
 end  
   
-function IconModule.Init(New, IconThemeTag)  
-    IconModule.New = New  
+local New 
+function IconModule.Init(_New, IconThemeTag)  
+    IconModule.New = _New  
     IconModule.IconThemeTag = IconThemeTag  
       
+    New = _New
     return IconModule  
 end  
 
@@ -144,7 +146,7 @@ function IconModule.Image(IconConfig)
     local isrbxassetid = typeof(IconLabel) == "string" and string.find(IconLabel, 'rbxassetid://')
     
     if IconModule.New then  
-        local New = IconModule.New  
+        local New = New or IconModule.New  
           
           
           

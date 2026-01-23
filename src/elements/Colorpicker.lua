@@ -26,7 +26,7 @@ function Element:Colorpicker(Config, Window, OnApply)
         __type = "Colorpicker",
         Title = Config.Title,
         Desc = Config.Desc,
-        Default = Config.Default,
+        Default = Config.Value or Config.Default,
         Callback = Config.Callback,
         Transparency = Config.Transparency,
         UIElements = Config.UIElements,

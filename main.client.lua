@@ -76,6 +76,7 @@ local Window = WindUI:CreateWindow({
     --Author = "by .ftgs • Footagesus",
     Folder = "ftgshub",
     Icon = "solar:folder-2-bold-duotone",
+    --Theme = "Mellowsi",
     --IconSize = 22*2,
     NewElements = true,
     --Size = UDim2.fromOffset(700,700),
@@ -842,7 +843,7 @@ end
 
 
 -- */  Config Usage  /* --
-if not RunService:IsStudio() then
+if not RunService:IsStudio() and writefile and printidentity() then
     do -- config elements
         local ConfigElementsTab = ConfigUsageSection:Tab({
             Title = "Config Elements",
@@ -1152,7 +1153,7 @@ do
                 }
             }
         })
-    elseif RunService:IsStudio() then
+    elseif RunService:IsStudio() or not writefile then
         DiscordTab:Paragraph({
             Title = "Discord API is not available in Studio mode.",
             TextSize = 20,
