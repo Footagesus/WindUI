@@ -1,7 +1,8 @@
+
 return {
     -- More soon!
     
-    Primary = Color3.fromHex("#0091FF"),
+    Primary = "Icon",
     
     White = Color3.new(1,1,1),
     Black = Color3.new(0,0,0),
@@ -11,6 +12,9 @@ return {
     Background = "Accent",
     BackgroundTransparency = 0,
     Hover = "Text",
+
+    PanelBackground = "White",
+    PanelBackgroundTransparency = .95,
     
     WindowBackground = "Background",
     
@@ -25,8 +29,21 @@ return {
     WindowSearchBarBackground = "Background",
     
     TabBackground = "Hover",
+    TabBackgroundHover = "Hover",
+    TabBackgroundHoverTransparency = .97,
+    TabBackgroundActive = "Hover",
+    TabBackgroundActiveTransparency = 0.93,
+    TabText = "Text",
+    TabTextTransparency = 0.3,
+    TabTextTransparencyActive = 0,
     TabTitle = "Text",
     TabIcon = "Icon",
+    TabIconTransparency = 0.4,
+    TabIconTransparencyActive = 0.1,
+    TabBorderTransparency = 1,
+    TabBorderTransparencyActive = 0.75,
+    TabBorder = "White",
+
     
     ElementBackground = "Text",
     ElementTitle = "Text",
@@ -53,10 +70,12 @@ return {
     CheckboxBorder = "White",
     CheckboxBorderTransparency = .75,
     
+    SliderIcon = "Icon",
+
     Slider = "Primary",
     SliderThumb = "White",
-    SliderIconFrom = Color3.fromHex("#908F95"),
-    SliderIconTo = Color3.fromHex("#908F95"),
+    SliderIconFrom = "SliderIcon",
+    SliderIconTo = "SliderIcon",
     
     Tooltip = Color3.fromHex("4C4C4C"),
     TooltipText = "White",
@@ -87,5 +106,6 @@ return {
     
     DropdownTabBorder = "White",
 
-    TabBorder = "White",
+    LabelBackground = "White",
+    LabelBackgroundTransparency = .95,
 }
