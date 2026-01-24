@@ -1,5 +1,3 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Tab = require(ReplicatedStorage.WindUI.components.window.Tab)
 --[[
     WindUI Example 2
 ]]
