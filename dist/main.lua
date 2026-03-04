@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-02-24  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-04  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -1794,63 +1794,73 @@ return X end function a.g()
 
 
 
-
-
-
-local aa=(cloneref or clonereference or function(aa)return aa end)
+local aa=(cloneref or clonereference or function(aa)
+return aa
+end)
 
 local ab=aa(game:GetService"HttpService")
 local ac={}
 
-
-
 function ac.New(ad)
-local ae=gethwid or function()return aa(game:GetService"Players").LocalPlayer.UserId end
+local ae=gethwid or function()
+return aa(game:GetService"Players").LocalPlayer.UserId
+end
 local af,ag=request or http_request or syn_request,setclipboard or toclipboard
 
 function ValidateKey(ah)
-local ai="https://pandadevelopment.net/v2_validation?key="..tostring(ah).."&service="..tostring(ad).."&hwid="..tostring(ae())
+local ai="https://new.pandadevelopment.net/api/v1/keys/validate"
 
+local aj={
+ServiceID=ad,
+HWID=tostring(ae()),
+Key=tostring(ah),
+}
 
-local aj,ak=pcall(function()
+local ak=ab:JSONEncode(aj)
+local al,am=pcall(function()
 return af{
 Url=ai,
-Method="GET",
-Headers={["User-Agent"]="Roblox/Exploit"}
+Method="POST",
+Headers={
+["User-Agent"]="Roblox/Exploit",
+["Content-Type"]="application/json",
+},
+Body=ak,
 }
 end)
 
-if aj and ak then
-if ak.Success then
-local al,am=pcall(function()
-return ab:JSONDecode(ak.Body)
+if al and am then
+if am.Success then
+local an,ao=pcall(function()
+return ab:JSONDecode(am.Body)
 end)
 
-if al and am then
-if am.V2_Authentication and am.V2_Authentication=="success"then
-
+if an and ao then
+if ao.Authenticated_Status and ao.Authenticated_Status=="Success"then
 return true,"Authenticated"
 else
-local an=am.Key_Information.Notes or"Unknown reason"
-
-return false,"Authentication failed: "..an
+local ap=ao.Note or"Unknown reason"
+return false,"Authentication failed: "..ap
 end
 else
-
 return false,"JSON decode error"
 end
 else
-warn("[Pelinda Ov2.5] HTTP request was not successful. Code: "..tostring(ak.StatusCode).." Message: "..ak.StatusMessage)
-return false,"HTTP request failed: "..ak.StatusMessage
+warn(
+" HTTP request was not successful. Code: "
+..tostring(am.StatusCode)
+.." Message: "
+..am.StatusMessage
+)
+return false,"HTTP request failed: "..am.StatusMessage
 end
 else
-
 return false,"Request pcall error"
 end
 end
 
 function GetKeyLink()
-return"https://pandadevelopment.net/getkey?service="..tostring(ad).."&hwid="..tostring(ae())
+return"https://new.pandadevelopment.net/getkey/"..tostring(ad).."?hwid="..tostring(ae())
 end
 
 function CopyLink()
@@ -1859,11 +1869,12 @@ end
 
 return{
 Verify=ValidateKey,
-Copy=CopyLink
+Copy=CopyLink,
 }
 end
 
 return ac end function a.h()
+
 
 
 
