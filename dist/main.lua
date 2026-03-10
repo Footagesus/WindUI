@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-09  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-10  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2064,14 +2064,12 @@ local ab=a.load'c'
 local ac=ab.New
 local ad=ab.Tween
 
-function aa.New(ae,af,ag,ah,ai,aj,ak,al,am)
+function aa.New(ae,af,ag,ah,ai,aj,ak,al)
 ah=ah or"Primary"
-local an=al or(not ak and 10 or 99)
-local ao=false
-
-local ap
+local am=al or(not ak and 10 or 99)
+local an
 if af and af~=""then
-ap=ac("ImageLabel",{
+an=ac("ImageLabel",{
 Image=ab.Icon(af)[1],
 ImageRectSize=ab.Icon(af)[2].ImageRectSize,
 ImageRectOffset=ab.Icon(af)[2].ImageRectPosition,
@@ -2085,16 +2083,13 @@ ImageColor3=ah~="White"and"Icon"or nil,
 })
 end
 
-local aq=ac("TextButton",{
+local ao=ac("TextButton",{
 Size=UDim2.new(0,0,1,0),
 AutomaticSize="X",
-
+Parent=ai,
 BackgroundTransparency=1,
-Position=UDim2.new(0.5,0,0.5,0),
-AnchorPoint=Vector2.new(0.5,0.5),
 },{
-ac"UIScale",
-ab.NewRoundFrame(an,"Squircle",{
+ab.NewRoundFrame(am,"Squircle",{
 ThemeTag={
 ImageColor3=ah~="White"and"Button"or nil,
 },
@@ -2104,7 +2099,7 @@ Name="Squircle",
 ImageTransparency=ah=="Primary"and 0 or ah=="White"and 0 or 1,
 }),
 
-ab.NewRoundFrame(an,"Squircle",{
+ab.NewRoundFrame(am,"Squircle",{
 
 
 
@@ -2114,7 +2109,7 @@ Name="Special",
 ImageTransparency=ah=="Secondary"and 0.95 or 1,
 }),
 
-ab.NewRoundFrame(an,"Shadow-sm",{
+ab.NewRoundFrame(am,"Shadow-sm",{
 
 
 
@@ -2128,7 +2123,7 @@ ImageTransparency=1,
 Visible=not ak,
 }),
 
-ab.NewRoundFrame(an,not ak and"Glass-1"or"Glass-0.7",{
+ab.NewRoundFrame(am,not ak and"Glass-1"or"Glass-0.7",{
 ThemeTag={
 ImageColor3="White",
 },
@@ -2152,7 +2147,7 @@ Name="Outline",
 
 }),
 
-ab.NewRoundFrame(an,"Squircle",{
+ab.NewRoundFrame(am,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 Name="Frame",
 ThemeTag={
@@ -2171,7 +2166,7 @@ Padding=UDim.new(0,8),
 VerticalAlignment="Center",
 HorizontalAlignment="Center",
 }),
-ap,
+an,
 ac("TextLabel",{
 BackgroundTransparency=1,
 FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
@@ -2188,31 +2183,13 @@ TextSize=18,
 }),
 })
 
-local ar=ac("Frame",{
-AutomaticSize="X",
-Size=UDim2.new(0,0,1,0),
-BackgroundTransparency=1,
-Parent=ai,
-},{
-aq,
-})
-
-ab.AddSignal(aq.MouseEnter,function()
-ad(aq.Frame,0.047,{ImageTransparency=0.95}):Play()
+ab.AddSignal(ao.MouseEnter,function()
+ad(ao.Frame,0.047,{ImageTransparency=0.95}):Play()
 end)
-ab.AddSignal(aq.MouseLeave,function()
-ad(aq.Frame,0.047,{ImageTransparency=1}):Play()
+ab.AddSignal(ao.MouseLeave,function()
+ad(ao.Frame,0.047,{ImageTransparency=1}):Play()
 end)
-
-
-
-
-
-
-
-
-
-ab.AddSignal(aq.MouseButton1Up,function()
+ab.AddSignal(ao.MouseButton1Up,function()
 if aj then
 aj:Close()()
 end
@@ -2221,19 +2198,7 @@ ab.SafeCallback(ag)
 end
 end)
 
-ab.AddSignal(aq:GetPropertyChangedSignal"AbsoluteSize",function()
-if not ao then
-ar.Size=UDim2.new(
-0,
-aq.AbsoluteSize.X/aj.WindUI.UIScale,
-0,
-aq.AbsoluteSize.Y/aj.WindUI.UIScale
-)
-ar.AutomaticSize="None"
-end
-end)
-
-return aq
+return ao
 end
 
 return aa end function a.m()
