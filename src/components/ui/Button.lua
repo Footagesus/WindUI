@@ -4,11 +4,9 @@ local Creator = require("../../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
-function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius, ScaleOnHover)
+function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius)
 	Variant = Variant or "Primary"
 	local Radius = Radius or (not FullRounded and 10 or 99)
-	local IsHovering = false
-
 	local IconButtonFrame
 	if Icon and Icon ~= "" then
 		IconButtonFrame = New("ImageLabel", {
@@ -28,12 +26,9 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 	local ButtonFrame = New("TextButton", {
 		Size = UDim2.new(0, 0, 1, 0),
 		AutomaticSize = "X",
-		-- Parent = Parent,
+		Parent = Parent,
 		BackgroundTransparency = 1,
-		Position = UDim2.new(0.5, 0, 0.5, 0),
-		AnchorPoint = Vector2.new(0.5, 0.5),
 	}, {
-		New("UIScale"),
 		Creator.NewRoundFrame(Radius, "Squircle", {
 			ThemeTag = {
 				ImageColor3 = Variant ~= "White" and "Button" or nil,
@@ -128,48 +123,18 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 		}),
 	})
 
-	local Container = New("Frame", {
-		AutomaticSize = "X",
-		Size = UDim2.new(0, 0, 1, 0),
-		BackgroundTransparency = 1,
-		Parent = Parent,
-	}, {
-		ButtonFrame,
-	})
-
 	Creator.AddSignal(ButtonFrame.MouseEnter, function()
 		Tween(ButtonFrame.Frame, 0.047, { ImageTransparency = 0.95 }):Play()
 	end)
 	Creator.AddSignal(ButtonFrame.MouseLeave, function()
 		Tween(ButtonFrame.Frame, 0.047, { ImageTransparency = 1 }):Play()
 	end)
-	-- Creator.AddSignal(ButtonFrame.MouseButton1Down, function()
-	-- 	IsHovering = true
-	-- 	Tween(ButtonFrame.UIScale, 0.15, { Scale = 0.95 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-	-- end)
-	-- Creator.AddSignal(ButtonFrame.InputEnded, function()
-	-- 	Tween(ButtonFrame.UIScale, 0.15, { Scale = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
-	-- 	task.wait(0.15)
-	-- 	IsHovering = false
-	-- end)
 	Creator.AddSignal(ButtonFrame.MouseButton1Up, function()
 		if Dialog then --idk
 			Dialog:Close()()
 		end
 		if Callback then
 			Creator.SafeCallback(Callback)
-		end
-	end)
-
-	Creator.AddSignal(ButtonFrame:GetPropertyChangedSignal("AbsoluteSize"), function()
-		if not IsHovering then
-			Container.Size = UDim2.new(
-				0,
-				ButtonFrame.AbsoluteSize.X / Dialog.WindUI.UIScale,
-				0,
-				ButtonFrame.AbsoluteSize.Y / Dialog.WindUI.UIScale
-			)
-			Container.AutomaticSize = "None"
 		end
 	end)
 
