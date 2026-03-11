@@ -57,7 +57,7 @@ local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 local GUIParent = gethui and gethui() or (CoreGui or Players.LocalPlayer:WaitForChild("PlayerGui"))
 
 local UIScaleObj = New("UIScale", {
-	Scale = WindUI.Scale,
+	Scale = WindUI.UIScale,
 })
 
 WindUI.UIScaleObj = UIScaleObj
@@ -115,6 +115,7 @@ function WindUI:SetParent(parent)
 	WindUI.ScreenGui.Parent = parent
 	WindUI.NotificationGui.Parent = parent
 	WindUI.DropdownGui.Parent = parent
+	WindUI.TooltipGui.Parent = parent
 end
 math.clamp(WindUI.TransparencyValue, 0, 1)
 
@@ -168,7 +169,7 @@ function WindUI:GetTransparency()
 	return WindUI.Transparent or false
 end
 function WindUI:GetWindowSize()
-	return Window.UIElements.Main.Size
+	return WindUI.Window.UIElements.Main.Size
 end
 function WindUI:Localization(LocalizationConfig)
 	return WindUI.LocalizationModule:New(LocalizationConfig, Creator)
