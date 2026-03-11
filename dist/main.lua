@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-10  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-11  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2041,8 +2041,7 @@ return[[
         "live": "python -m http.server 8642",
         "watch": "chokidar . -i 'node_modules' -i 'dist' -i 'build' -c 'npm run dev --'",
         "live-build": "concurrently \"npm run live\" \"npm run watch --\"",
-        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build",
-        "updater": "python updater/main.py"
+        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build"
     },
     "keywords": [
         "ui-library",
@@ -13232,7 +13231,7 @@ local at=protectgui or(syn and syn.protect_gui)or function()end
 local au=gethui and gethui()or(ak or aj.LocalPlayer:WaitForChild"PlayerGui")
 
 local av=aq("UIScale",{
-Scale=ae.Scale,
+Scale=ae.UIScale,
 })
 
 ae.UIScaleObj=av
@@ -13290,6 +13289,7 @@ function ae.SetParent(aw,ax)
 ae.ScreenGui.Parent=ax
 ae.NotificationGui.Parent=ax
 ae.DropdownGui.Parent=ax
+ae.TooltipGui.Parent=ax
 end
 math.clamp(ae.TransparencyValue,0,1)
 
@@ -13343,7 +13343,7 @@ function ae.GetTransparency(ax)
 return ae.Transparent or false
 end
 function ae.GetWindowSize(ax)
-return Window.UIElements.Main.Size
+return ae.Window.UIElements.Main.Size
 end
 function ae.Localization(ax,ay)
 return ae.LocalizationModule:New(ay,ap)
