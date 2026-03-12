@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-11  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-12  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2041,7 +2041,8 @@ return[[
         "live": "python -m http.server 8642",
         "watch": "chokidar . -i 'node_modules' -i 'dist' -i 'build' -c 'npm run dev --'",
         "live-build": "concurrently \"npm run live\" \"npm run watch --\"",
-        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build"
+        "example-live-build": "INPUT_FILE=main_example.lua npm run live-build",
+        "updater": "python updater/main.py"
     },
     "keywords": [
         "ui-library",
