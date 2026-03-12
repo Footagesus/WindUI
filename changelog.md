@@ -21,3 +21,5 @@
 - Now Themes looks good
 - Moved from `Code:SetCode(code: string)` to `Code:Set(code: string)`
 - Updated `main_example.lua` to use `main.client.lua`
+
+-# i started updating this version 3 months ago
