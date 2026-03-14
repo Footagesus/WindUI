@@ -1,5 +1,3 @@
-local RunService = game:GetService("RunService")
-
 local WindUI = {
 	Window = nil,
 	Theme = nil,
@@ -33,6 +31,7 @@ WindUI.cloneref = cloneref
 local HttpService = cloneref(game:GetService("HttpService"))
 local Players = cloneref(game:GetService("Players"))
 local CoreGui = cloneref(game:GetService("CoreGui"))
+local RunService = cloneref(game:GetService("RunService"))
 
 local LocalPlayer = Players.LocalPlayer or nil
 
@@ -43,18 +42,18 @@ end
 
 local KeySystem = require("./components/KeySystem")
 
-local ServicesModule = WindUI.Services
-
 local Creator = WindUI.Creator
 
 local New = Creator.New
-local Tween = Creator.Tween
+
+--local Tween = Creator.Tween
+--local ServicesModule = WindUI.Services
 
 local Acrylic = require("./utils/Acrylic/Init")
 
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
-local GUIParent = gethui and gethui() or (CoreGui or Players.LocalPlayer:WaitForChild("PlayerGui"))
+local GUIParent = gethui and gethui() or (CoreGui or LocalPlayer:WaitForChild("PlayerGui"))
 
 local UIScaleObj = New("UIScale", {
 	Scale = WindUI.UIScale,
@@ -112,10 +111,18 @@ ProtectGui(WindUI.TooltipGui)
 Creator.Init(WindUI)
 
 function WindUI:SetParent(parent)
-	WindUI.ScreenGui.Parent = parent
-	WindUI.NotificationGui.Parent = parent
-	WindUI.DropdownGui.Parent = parent
-	WindUI.TooltipGui.Parent = parent
+	if WindUI.ScreenGui then
+		WindUI.ScreenGui.Parent = parent
+	end
+	if WindUI.NotificationGui then
+		WindUI.NotificationGui.Parent = parent
+	end
+	if WindUI.DropdownGui then
+		WindUI.DropdownGui.Parent = parent
+	end
+	if WindUI.TooltipGui then
+		WindUI.TooltipGui.Parent = parent
+	end
 end
 math.clamp(WindUI.TransparencyValue, 0, 1)
 
