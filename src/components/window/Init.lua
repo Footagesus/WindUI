@@ -569,13 +569,14 @@ return function(Config)
 			.. "/assets/."
 			.. Creator.SanitizeFilename(BGImageUrl)
 			.. GetImageExtension(BGImageUrl)
-		if not isfile(imagePath) then
+		if isfile and not isfile(imagePath) then
 			local success, result = pcall(function()
-				local response = Creator.Request({
-					Url = BGImageUrl,
-					Method = "GET",
-					Headers = { ["User-Agent"] = "Roblox/Exploit" },
-				})
+				-- local response = Creator.Request({
+				-- 	Url = BGImageUrl,
+				-- 	Method = "GET",
+				-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
+				-- })
+				local response = game.HttpGet and game:HttpGet(BGImageUrl)
 				writefile(imagePath, response.Body)
 			end)
 			if not success then
