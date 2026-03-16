@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-14  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-16  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -11651,13 +11651,14 @@ local l=au.Folder
 .."/assets/."
 ..al.SanitizeFilename(j)
 ..GetImageExtension(j)
-if not isfile(l)then
+if isfile and not isfile(l)then
 local m,p=pcall(function()
-local m=al.Request{
-Url=j,
-Method="GET",
-Headers={["User-Agent"]="Roblox/Exploit"},
-}
+
+
+
+
+
+local m=game.HttpGet and game:HttpGet(j)
 writefile(l,m.Body)
 end)
 if not m then
