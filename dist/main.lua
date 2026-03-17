@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-16  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-17  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2526,7 +2526,6 @@ return af end function a.o()
 
 local aa={}
 
-
 local ab=a.load'c'
 local ac=ab.New
 local ad=ab.Tween
@@ -2535,7 +2534,7 @@ local ae=a.load'l'.New
 local af=a.load'm'.New
 
 function aa.new(ag,ah,ai,aj)
-local ak=a.load'n'.Init(nil,ag.WindUI.ScreenGui.KeySystem)
+local ak=a.load'n'.Init(nil,ag.WindUI,ag.WindUI.ScreenGui.KeySystem)
 local al=ak.Create(true)
 
 local am={}
@@ -2555,15 +2554,8 @@ al.UIElements.Main.Size=UDim2.new(0,ap,0,0)
 local aq
 
 if ag.Icon then
-
-aq=ab.Image(
-ag.Icon,
-ag.Title..":"..ag.Icon,
-0,
-"Temp",
-"KeySystem",
-ag.IconThemed
-)
+aq=
+ab.Image(ag.Icon,ag.Title..":"..ag.Icon,0,"Temp","KeySystem",ag.IconThemed)
 aq.Size=UDim2.new(0,24,0,24)
 aq.LayoutOrder=-1
 end
@@ -2576,7 +2568,7 @@ FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
 ThemeTag={
 TextColor3="Text",
 },
-TextSize=20
+TextSize=20,
 })
 
 local as=ac("TextLabel",{
@@ -2590,7 +2582,7 @@ FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
 ThemeTag={
 TextColor3="Text",
 },
-TextSize=16
+TextSize=16,
 })
 
 local at=ac("Frame",{
@@ -2600,9 +2592,10 @@ AutomaticSize="XY",
 ac("UIListLayout",{
 Padding=UDim.new(0,14),
 FillDirection="Horizontal",
-VerticalAlignment="Center"
+VerticalAlignment="Center",
 }),
-aq,ar
+aq,
+ar,
 })
 
 local au=ac("Frame",{
@@ -2615,7 +2608,8 @@ BackgroundTransparency=1,
 
 
 
-at,as,
+at,
+as,
 })
 
 local av=af("Enter Key","key",nil,"Input",function(av)
@@ -2631,7 +2625,7 @@ FontFace=Font.new(ab.Font,Enum.FontWeight.Medium),
 TextXAlignment="Left",
 Text=ag.KeySystem.Note,
 TextSize=18,
-TextTransparency=.4,
+TextTransparency=0.4,
 ThemeTag={
 TextColor3="Text",
 },
@@ -2653,10 +2647,9 @@ Size=UDim2.new(0,0,1,0),
 ac("UIListLayout",{
 Padding=UDim.new(0,9),
 FillDirection="Horizontal",
+}),
+}),
 })
-})
-})
-
 
 local ay
 if ag.KeySystem.Thumbnail and ag.KeySystem.Thumbnail.Image then
@@ -2681,12 +2674,12 @@ BackgroundTransparency=1,
 Size=UDim2.new(0,ao,1,-12),
 Position=UDim2.new(0,6,0,6),
 Parent=al.UIElements.Main,
-ScaleType="Crop"
+ScaleType="Crop",
 },{
 az,
 ac("UICorner",{
 CornerRadius=UDim.new(0,20),
-})
+}),
 })
 end
 
@@ -2695,7 +2688,7 @@ ac("Frame",{
 Size=UDim2.new(1,ay and-ao or 0,1,0),
 Position=UDim2.new(0,ay and ao or 0,0,0),
 BackgroundTransparency=1,
-Parent=al.UIElements.Main
+Parent=al.UIElements.Main,
 },{
 ac("Frame",{
 
@@ -2715,7 +2708,7 @@ PaddingTop=UDim.new(0,16),
 PaddingLeft=UDim.new(0,16),
 PaddingRight=UDim.new(0,16),
 PaddingBottom=UDim.new(0,16),
-})
+}),
 }),
 })
 
@@ -2758,7 +2751,7 @@ Size=UDim2.new(0,1,1,0),
 ThemeTag={
 ImageColor3="Text",
 },
-ImageTransparency=.9,
+ImageTransparency=0.9,
 })
 
 ac("Frame",{
@@ -2771,17 +2764,10 @@ d,
 ac("UIPadding",{
 PaddingLeft=UDim.new(0,5),
 PaddingRight=UDim.new(0,5),
-})
+}),
 })
 
-local f=ab.Image(
-"chevron-down",
-"chevron-down",
-0,
-"Temp",
-"KeySystem",
-true
-)
+local f=ab.Image("chevron-down","chevron-down",0,"Temp","KeySystem",true)
 
 f.Size=UDim2.new(1,0,1,0)
 
@@ -2790,7 +2776,7 @@ Size=UDim2.new(0,21,0,21),
 Parent=b.Frame,
 BackgroundTransparency=1,
 },{
-f
+f,
 })
 
 local g=ab.NewRoundFrame(15,"Squircle",{
@@ -2809,7 +2795,7 @@ PaddingBottom=UDim.new(0,5),
 ac("UIListLayout",{
 FillDirection="Vertical",
 Padding=UDim.new(0,5),
-})
+}),
 })
 
 local h=ac("Frame",{
@@ -2818,9 +2804,9 @@ Size=UDim2.new(0,aA,0,0),
 ClipsDescendants=true,
 AnchorPoint=Vector2.new(1,0),
 Parent=b,
-Position=UDim2.new(1,0,1,15)
+Position=UDim2.new(1,0,1,15),
 },{
-g
+g,
 })
 
 ac("TextLabel",{
@@ -2841,7 +2827,7 @@ PaddingTop=UDim.new(0,10),
 PaddingLeft=UDim.new(0,10),
 PaddingRight=UDim.new(0,10),
 PaddingBottom=UDim.new(0,10),
-})
+}),
 })
 
 for j,l in next,ag.KeySystem.API do
@@ -2919,12 +2905,12 @@ AutomaticSize="Y",
 TextWrapped=true,
 Visible=l.Desc and true or false,
 TextXAlignment="Left",
-})
-})
+}),
+}),
 },true)
 
 ab.AddSignal(v.MouseEnter,function()
-ad(v,0.08,{ImageTransparency=.95}):Play()
+ad(v,0.08,{ImageTransparency=0.95}):Play()
 end)
 ab.AddSignal(v.InputEnded,function()
 ad(v,0.08,{ImageTransparency=1}):Play()
@@ -2942,21 +2928,32 @@ end
 
 ab.AddSignal(b.MouseButton1Click,function()
 if not aB then
-ad(h,.3,{Size=UDim2.new(0,aA,0,g.AbsoluteSize.Y+1)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(f,.3,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(
+h,
+0.3,
+{Size=UDim2.new(0,aA,0,g.AbsoluteSize.Y+1)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+ad(f,0.3,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
-ad(h,.25,{Size=UDim2.new(0,aA,0,0)},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(f,.25,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(
+h,
+0.25,
+{Size=UDim2.new(0,aA,0,0)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+ad(f,0.25,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 aB=not aB
 end)
-
 end
 
 local function handleSuccess(aA)
 al:Close()()
 writefile((ag.Folder or"Temp").."/"..ah..".key",tostring(aA))
-task.wait(.4)
+task.wait(0.4)
 ai(true)
 end
 
@@ -2972,7 +2969,7 @@ if ag.KeySystem.SaveKey then
 handleSuccess(aA)
 else
 al:Close()()
-task.wait(.4)
+task.wait(0.4)
 ai(true)
 end
 else
@@ -2983,8 +2980,7 @@ Icon="triangle-alert",
 }
 end
 elseif not ag.KeySystem.API then
-local b=type(ag.KeySystem.Key)=="table"
-and table.find(ag.KeySystem.Key,aA)
+local b=type(ag.KeySystem.Key)=="table"and table.find(ag.KeySystem.Key,aA)
 or ag.KeySystem.Key==aA
 
 if b then
@@ -2992,7 +2988,7 @@ if ag.KeySystem.SaveKey then
 handleSuccess(aA)
 else
 al:Close()()
-task.wait(.4)
+task.wait(0.4)
 ai(true)
 end
 end
@@ -3035,6 +3031,7 @@ al:Open()
 end
 
 return aa end function a.p()
+
 
 
 
