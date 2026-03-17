@@ -7,7 +7,7 @@
     <img src="docs/banner-light.webp" alt="WindUI Banner">
 </picture>-->
 
-<img src="docs/banner-new.webp" alt="WindUI Banner">
+<img src="docs/WindUI – Themes.png" alt="WindUI Banner">
 
 > [!WARNING]
 > This WindUI was not inspired by, and the name has nothing to do with UI Frameworks
