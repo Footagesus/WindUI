@@ -8,6 +8,7 @@ local cloneref = (cloneref or clonereference or function(instance)
 end)
 local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 local RunService = cloneref(game:GetService("RunService"))
+local Players = cloneref(game:GetService("Players"))
 
 local WindUI
 
@@ -49,7 +50,11 @@ local Tab3 = Window:Tab({
 	TabTitleAlign = "Right",
 })
 
-local Players = cloneref(game:GetService("Players"))
+local PlayerParagraph = Tab:Paragraph({
+	Title = "...",
+	Desc = "...",
+	Image = Players:GetUserThumbnailAsync(1, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420),
+})
 
 local PlayersTable = {}
 
@@ -57,7 +62,9 @@ function RefreshPlayersTable()
 	PlayersTable = {}
 	for _, Player in next, Players:GetChildren() do
 		table.insert(PlayersTable, {
-			Title = Player.Name .. "_Test12312123123123123123123123123",
+			Title = Player.DisplayName,
+			_Name = Player.Name,
+			_UserId = Player.UserId,
 			Icon = Players:GetUserThumbnailAsync(
 				Player.UserId,
 				Enum.ThumbnailType.HeadShot,
@@ -74,7 +81,11 @@ local Dropdown = Tab:Dropdown({
 	Values = {},
 	Value = nil,
 	Callback = function(selectedplayer)
-		print("Selected Player:", selectedplayer)
+		print("Selected Player:", selectedplayer.Title)
+
+		PlayerParagraph:SetTitle(selectedplayer.Title)
+		PlayerParagraph:SetDesc(selectedplayer._Name)
+		PlayerParagraph:SetImage(selectedplayer.Icon)
 	end,
 })
 
