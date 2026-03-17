@@ -11706,13 +11706,14 @@ local l=au.Folder
 .."/assets/."
 ..al.SanitizeFilename(j)
 ..GetImageExtension(j)
-if not isfile(l)then
+if isfile and not isfile(l)then
 local m,p=pcall(function()
-local m=al.Request{
-Url=j,
-Method="GET",
-Headers={["User-Agent"]="Roblox/Exploit"},
-}
+
+
+
+
+
+local m=game.HttpGet and game:HttpGet(j)
 writefile(l,m.Body)
 end)
 if not m then
