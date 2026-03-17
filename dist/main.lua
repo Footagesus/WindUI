@@ -9825,6 +9825,8 @@ IconThemed=an.IconThemed,
 Locked=an.Locked,
 ShowTabTitle=an.ShowTabTitle,
 TabTitleAlign=an.TabTitleAlign or"Left",
+CustomEmptyPage=(an.CustomEmptyPage and next(an.CustomEmptyPage)~=nil)and an.CustomEmptyPage
+or{Icon="lucide:frown",IconSize=48,Title="This tab is Empty",Desc=nil},
 Border=an.Border,
 Selected=false,
 Index=nil,
@@ -10266,7 +10268,15 @@ return am:SelectTab(ap.Index)
 end
 
 task.spawn(function()
-local az=aj("Frame",{
+local az
+if ap.CustomEmptyPage.Icon then
+az=
+ah.Image(ap.CustomEmptyPage.Icon,ap.CustomEmptyPage.Icon,0,"Temp","EmptyPage",true)
+az.Size=
+UDim2.fromOffset(ap.CustomEmptyPage.IconSize or 48,ap.CustomEmptyPage.IconSize or 48)
+end
+
+local aA=aj("Frame",{
 BackgroundTransparency=1,
 Size=UDim2.new(1,0,1,-Window.UIElements.Main.Main.Topbar.AbsoluteSize.Y),
 Parent=ap.UIElements.ContainerFrame,
@@ -10278,20 +10288,22 @@ VerticalAlignment="Center",
 HorizontalAlignment="Center",
 FillDirection="Vertical",
 }),
-aj("ImageLabel",{
-Size=UDim2.new(0,48,0,48),
-Image=ah.Icon"frown"[1],
-ImageRectOffset=ah.Icon"frown"[2].ImageRectPosition,
-ImageRectSize=ah.Icon"frown"[2].ImageRectSize,
-ThemeTag={
-ImageColor3="Icon",
-},
-BackgroundTransparency=1,
-ImageTransparency=0.6,
-}),
-aj("TextLabel",{
+
+
+
+
+
+
+
+
+
+
+
+az,
+ap.CustomEmptyPage.Title
+and aj("TextLabel",{
 AutomaticSize="XY",
-Text="This tab is empty",
+Text=ap.CustomEmptyPage.Title,
 ThemeTag={
 TextColor3="Text",
 },
@@ -10299,17 +10311,31 @@ TextSize=18,
 TextTransparency=0.5,
 BackgroundTransparency=1,
 FontFace=Font.new(ah.Font,Enum.FontWeight.Medium),
-}),
+})
+or nil,
+ap.CustomEmptyPage.Desc
+and aj("TextLabel",{
+AutomaticSize="XY",
+Text=ap.CustomEmptyPage.Desc,
+ThemeTag={
+TextColor3="Text",
+},
+TextSize=15,
+TextTransparency=0.65,
+BackgroundTransparency=1,
+FontFace=Font.new(ah.Font,Enum.FontWeight.Regular),
+})
+or nil,
 })
 
 
 
 
 
-local aA
-aA=ah.AddSignal(ap.UIElements.ContainerFrame.ChildAdded,function()
-az.Visible=false
-aA:Disconnect()
+local aB
+aB=ah.AddSignal(ap.UIElements.ContainerFrame.ChildAdded,function()
+aA.Visible=false
+aB:Disconnect()
 end)
 end)
 
@@ -11680,14 +11706,13 @@ local l=au.Folder
 .."/assets/."
 ..al.SanitizeFilename(j)
 ..GetImageExtension(j)
-if isfile and not isfile(l)then
+if not isfile(l)then
 local m,p=pcall(function()
-
-
-
-
-
-local m=game.HttpGet and game:HttpGet(j)
+local m=al.Request{
+Url=j,
+Method="GET",
+Headers={["User-Agent"]="Roblox/Exploit"},
+}
 writefile(l,m.Body)
 end)
 if not m then

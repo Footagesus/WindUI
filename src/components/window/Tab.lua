@@ -48,6 +48,8 @@ function TabModule.New(Config, UIScale)
 		Locked = Config.Locked,
 		ShowTabTitle = Config.ShowTabTitle,
 		TabTitleAlign = Config.TabTitleAlign or "Left",
+		CustomEmptyPage = (Config.CustomEmptyPage and next(Config.CustomEmptyPage) ~= nil) and Config.CustomEmptyPage
+			or { Icon = "lucide:frown", IconSize = 48, Title = "This tab is Empty", Desc = nil },
 		Border = Config.Border,
 		Selected = false,
 		Index = nil,
@@ -489,6 +491,14 @@ function TabModule.New(Config, UIScale)
 	end
 
 	task.spawn(function()
+		local EmptyPageIcon
+		if Tab.CustomEmptyPage.Icon then
+			EmptyPageIcon =
+				Creator.Image(Tab.CustomEmptyPage.Icon, Tab.CustomEmptyPage.Icon, 0, "Temp", "EmptyPage", true)
+			EmptyPageIcon.Size =
+				UDim2.fromOffset(Tab.CustomEmptyPage.IconSize or 48, Tab.CustomEmptyPage.IconSize or 48)
+		end
+
 		local Empty = New("Frame", {
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1, 0, 1, -Window.UIElements.Main.Main.Topbar.AbsoluteSize.Y),
@@ -501,28 +511,44 @@ function TabModule.New(Config, UIScale)
 				HorizontalAlignment = "Center",
 				FillDirection = "Vertical",
 			}),
-			New("ImageLabel", {
-				Size = UDim2.new(0, 48, 0, 48),
-				Image = Creator.Icon("frown")[1],
-				ImageRectOffset = Creator.Icon("frown")[2].ImageRectPosition,
-				ImageRectSize = Creator.Icon("frown")[2].ImageRectSize,
-				ThemeTag = {
-					ImageColor3 = "Icon",
-				},
-				BackgroundTransparency = 1,
-				ImageTransparency = 0.6,
-			}),
-			New("TextLabel", {
-				AutomaticSize = "XY",
-				Text = "This tab is empty",
-				ThemeTag = {
-					TextColor3 = "Text",
-				},
-				TextSize = 18,
-				TextTransparency = 0.5,
-				BackgroundTransparency = 1,
-				FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-			}),
+			-- New("ImageLabel", {
+			-- 	Size = UDim2.new(0, 48, 0, 48),
+			-- 	Image = Creator.Icon("frown")[1],
+			-- 	ImageRectOffset = Creator.Icon("frown")[2].ImageRectPosition,
+			-- 	ImageRectSize = Creator.Icon("frown")[2].ImageRectSize,
+			-- 	ThemeTag = {
+			-- 		ImageColor3 = "Icon",
+			-- 	},
+			-- 	BackgroundTransparency = 1,
+			-- 	ImageTransparency = 0.6,
+			-- }),
+			EmptyPageIcon,
+			Tab.CustomEmptyPage.Title
+					and New("TextLabel", { -- Title
+						AutomaticSize = "XY",
+						Text = Tab.CustomEmptyPage.Title,
+						ThemeTag = {
+							TextColor3 = "Text",
+						},
+						TextSize = 18,
+						TextTransparency = 0.5,
+						BackgroundTransparency = 1,
+						FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+					})
+				or nil,
+			Tab.CustomEmptyPage.Desc
+					and New("TextLabel", { -- Desc
+						AutomaticSize = "XY",
+						Text = Tab.CustomEmptyPage.Desc,
+						ThemeTag = {
+							TextColor3 = "Text",
+						},
+						TextSize = 15,
+						TextTransparency = 0.65,
+						BackgroundTransparency = 1,
+						FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
+					})
+				or nil,
 		})
 
 		-- Empty.TextLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()

@@ -527,11 +527,11 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 		-- local maxWidth = Dropdown.MenuWidth or 0
 		-- if maxWidth == 0 then
-		-- 	for _, tabmain in next, Dropdown.Tabs do
-		-- 		if tabmain.UIElements.TabItem.Frame.UIListLayout then
-		-- 			maxWidth = math.max(maxWidth, tabmain.UIElements.TabItem.Frame.UIListLayout.AbsoluteContentSize.X)
-		-- 		end
-		-- 	end
+		--     for _, tabmain in next, Dropdown.Tabs do
+		--         if tabmain.UIElements.TabItem.Frame.UIListLayout then
+		--             maxWidth = math.max(maxWidth, tabmain.UIElements.TabItem.Frame.UIListLayout.AbsoluteContentSize.X)
+		--         end
+		--     end
 		-- end
 
 		Dropdown.UIElements.MenuCanvas.Size = UDim2.new(

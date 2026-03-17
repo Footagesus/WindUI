@@ -233,8 +233,26 @@ TabSettings:Dropdown({
 	end,
 })
 
+local Toggle = TabSettings:Toggle({
+	Title = "Toggle Window Transparency",
+	Value = Window.Transparent,
+	Callback = function(v)
+		Window:ToggleTransparency(v)
+	end,
+})
+
 local Section = Tab1:Section({
 	TItle = "Hi1",
 	Icon = "rbxassetid://77799629590713",
 	IconThemed = true,
+})
+
+local EmptyTab = Window:Tab({
+	Title = "Custom empty page tab",
+
+	CustomEmptyPage = {
+		Icon = "lucide:smile",
+		Title = "This is a cool empty tab",
+		Desc = "I like it. its so great tab with cool 'custom empty page'",
+	},
 })
