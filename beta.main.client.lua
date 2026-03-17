@@ -54,6 +54,7 @@ local PlayerParagraph = Tab:Paragraph({
 	Title = "...",
 	Desc = "...",
 	Image = Players:GetUserThumbnailAsync(1, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420),
+	--Color = Color3.fromHex("#30ff6a"),
 })
 
 local PlayersTable = {}
