@@ -1,5 +1,4 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local Image = require(ReplicatedStorage.WindUI.elements.Image)
 local Creator = require("../../modules/Creator")
 local New = Creator.New
 local NewRoundFrame = Creator.NewRoundFrame
