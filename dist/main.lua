@@ -9803,6 +9803,7 @@ IconShape=an.IconShape,
 IconThemed=an.IconThemed,
 Locked=an.Locked,
 ShowTabTitle=an.ShowTabTitle,
+TabTitleAlign=an.TabTitleAlign or"Left",
 Border=an.Border,
 Selected=false,
 Index=nil,
@@ -9818,6 +9819,14 @@ TabPaddingX=4+(Window.UIPadding/2),
 TabPaddingY=3+(Window.UIPadding/2),
 TitlePaddingY=0,
 }
+
+
+
+
+
+
+
+
 
 if ap.IconShape then
 ap.TabPaddingX=2+(Window.UIPadding/4)
@@ -10044,13 +10053,14 @@ TextColor3="Text",
 },
 TextSize=20,
 TextTransparency=0.1,
-Size=UDim2.new(1,-ar,1,0),
+Size=UDim2.new(0,0,1,0),
 FontFace=Font.new(ah.Font,Enum.FontWeight.SemiBold),
-TextTruncate="AtEnd",
+
 RichText=true,
 LayoutOrder=2,
 TextXAlignment="Left",
 BackgroundTransparency=1,
+AutomaticSize="X",
 }),
 aj("UIPadding",{
 PaddingTop=UDim.new(0,20),
@@ -10063,6 +10073,7 @@ SortOrder="LayoutOrder",
 Padding=UDim.new(0,10),
 FillDirection="Horizontal",
 VerticalAlignment="Center",
+HorizontalAlignment=ap.TabTitleAlign,
 }),
 }),
 aj("Frame",{
