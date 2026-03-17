@@ -34,6 +34,19 @@ local Window = WindUI:CreateWindow({
 
 local Tab = Window:Tab({
 	Title = "Tab 1",
+	ShowTabTitle = true,
+})
+
+local Tab2 = Window:Tab({
+	Title = "Tab 2",
+	ShowTabTitle = true,
+	TabTitleAlign = "Center",
+})
+
+local Tab3 = Window:Tab({
+	Title = "Tab 3",
+	ShowTabTitle = true,
+	TabTitleAlign = "Right",
 })
 
 local Players = cloneref(game:GetService("Players"))
@@ -44,7 +57,7 @@ function RefreshPlayersTable()
 	PlayersTable = {}
 	for _, Player in next, Players:GetChildren() do
 		table.insert(PlayersTable, {
-			Title = Player.Name,
+			Title = Player.Name .. "_Test12312123123123123123123123123",
 			Icon = Players:GetUserThumbnailAsync(
 				Player.UserId,
 				Enum.ThumbnailType.HeadShot,
@@ -70,3 +83,23 @@ Dropdown:Refresh(RefreshPlayersTable())
 Players.ChildAdded:Connect(function()
 	Dropdown:Refresh(RefreshPlayersTable())
 end)
+
+-- tab 2
+
+local Values = {
+	"Value 1",
+	"Value 2",
+	"Value 3",
+	"Value 4",
+	"Value 5",
+}
+
+local Dropdown2
+Dropdown2 = Tab2:Dropdown({
+	Title = "Select Values",
+	Values = Values,
+	Value = "Value 1",
+	Callback = function(selectedvalue)
+		print("Selected Value:", selectedvalue)
+	end,
+})
