@@ -103,3 +103,23 @@ Dropdown2 = Tab2:Dropdown({
 		print("Selected Value:", selectedvalue)
 	end,
 })
+
+local Section1 = Tab3:Section({
+	Title = "Section Example",
+})
+
+local Group1 = Section1:Group() --HStack
+
+local Button = Group1:Button({
+	Title = "Button example 1",
+	Callback = function()
+		print("clicked")
+	end,
+})
+
+local Button = Group1:Button({
+	Title = "Button example 2",
+	Callback = function()
+		print("clicked")
+	end,
+})
