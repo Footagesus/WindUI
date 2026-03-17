@@ -47,6 +47,7 @@ function TabModule.New(Config, UIScale)
 		IconThemed = Config.IconThemed,
 		Locked = Config.Locked,
 		ShowTabTitle = Config.ShowTabTitle,
+		TabTitleAlign = Config.TabTitleAlign or "Left",
 		Border = Config.Border,
 		Selected = false,
 		Index = nil,
@@ -62,6 +63,14 @@ function TabModule.New(Config, UIScale)
 		TabPaddingY = 3 + (Window.UIPadding / 2),
 		TitlePaddingY = 0,
 	}
+
+	-- if Tab.TabTitleAlign == "Left" then
+	-- 	Tab.TabTitleAlign = "Top"
+	-- elseif Tab.TabTitleAlign == "Right" then
+	-- 	Tab.TabTitleAlign = "Bottom"
+	-- elseif Tab.TabTitleAlign == "Center" then
+	-- 	Tab.TabTitleAlign = "Center"
+	-- end
 
 	if Tab.IconShape then
 		Tab.TabPaddingX = 2 + (Window.UIPadding / 4)
@@ -288,13 +297,14 @@ function TabModule.New(Config, UIScale)
 				},
 				TextSize = 20,
 				TextTransparency = 0.1,
-				Size = UDim2.new(1, -TextOffset, 1, 0),
+				Size = UDim2.new(0, 0, 1, 0),
 				FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
-				TextTruncate = "AtEnd",
+				--TextTruncate = "AtEnd",
 				RichText = true,
 				LayoutOrder = 2,
 				TextXAlignment = "Left",
 				BackgroundTransparency = 1,
+				AutomaticSize = "X",
 			}),
 			New("UIPadding", {
 				PaddingTop = UDim.new(0, 20),
@@ -307,6 +317,7 @@ function TabModule.New(Config, UIScale)
 				Padding = UDim.new(0, 10),
 				FillDirection = "Horizontal",
 				VerticalAlignment = "Center",
+				HorizontalAlignment = Tab.TabTitleAlign,
 			}),
 		}),
 		New("Frame", {
