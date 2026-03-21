@@ -506,7 +506,7 @@ return function(Config)
 	local BGVideo = typeof(Window.Background) == "string" and string.match(Window.Background, "^video:(.+)") or nil
 	local BGImageUrl = typeof(Window.Background) == "string"
 			and not BGVideo
-			and string.match(Window.Background, "^https?://.+")
+			and string.match(Window.Background, "^(https?://.+|rbx%w+://.+)")
 		or nil
 
 	local function GetImageExtension(url)
@@ -596,7 +596,7 @@ return function(Config)
 		BGImage = New("ImageLabel", {
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1, 0, 1, 0),
-			Image = customAsset,
+			Image = customAsset or BGImageUrl,
 			ImageTransparency = 0,
 			ScaleType = "Crop",
 		}, {
