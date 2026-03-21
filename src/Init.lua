@@ -66,6 +66,7 @@ WindUI.ScreenGui = New("ScreenGui", {
 	Parent = GUIParent,
 	IgnoreGuiInset = true,
 	ScreenInsets = "None",
+	DisplayOrder = -99999,
 }, {
 
 	New("Folder", {
