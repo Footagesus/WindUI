@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-21  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-22  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -354,8 +354,9 @@ LabelBackground="White",
 LabelBackgroundTransparency=.95,
 }end function a.c()
 
-
-local b=(cloneref or clonereference or function(b)return b end)
+local b=(cloneref or clonereference or function(b)
+return b
+end)
 
 local d=b(game:GetService"RunService")
 local e=b(game:GetService"UserInputService")
@@ -372,8 +373,7 @@ if d:IsStudio()or not writefile then
 l=a.load'a'
 else
 l=loadstring(
-game.HttpGetAsync and game:HttpGetAsync(j)
-or h:GetAsync(j)
+game.HttpGetAsync and game:HttpGetAsync(j)or h:GetAsync(j)
 )()
 end
 
@@ -414,7 +414,8 @@ Text="",
 RichText=true,
 TextColor3=Color3.new(1,1,1),
 TextSize=14,
-},TextButton={
+},
+TextButton={
 BackgroundColor3=Color3.new(1,1,1),
 BorderSizePixel=0,
 Text="",
@@ -449,7 +450,7 @@ BorderSizePixel=0,
 },
 VideoFrame={
 BorderSizePixel=0,
-}
+},
 },
 Colors={
 Red="#e53935",
@@ -480,7 +481,8 @@ Shapes={Square=
 ["Glass-0.7"]="rbxassetid://79047752995006",
 ["Glass-1"]="rbxassetid://97324581055162",
 ["Glass-1.4"]="rbxassetid://95071123641270",
-}
+},
+ThemeChangeCallbacks={},
 }
 
 function p.Init(r)
@@ -538,8 +540,12 @@ table.insert(x,NumberSequenceKeypoint.new(B,A.Transparency or 0))
 end
 end
 
-table.sort(v,function(z,A)return z.Time<A.Time end)
-table.sort(x,function(z,A)return z.Time<A.Time end)
+table.sort(v,function(z,A)
+return z.Time<A.Time
+end)
+table.sort(x,function(z,A)
+return z.Time<A.Time
+end)
 
 if#v<2 then
 error"ColorSequence requires at least 2 keypoints"
@@ -560,8 +566,13 @@ return z
 end
 
 function p.SetTheme(r)
+local u=p.Theme
 p.Theme=r
 p.UpdateTheme(nil,false)
+
+for v,x in next,p.ThemeChangeCallbacks do
+p.SafeCallback(x,r,u)
+end
 end
 
 function p.AddFontObject(r)
@@ -580,7 +591,9 @@ function p.GetThemeProperty(r,u)
 local function getValue(v,x)
 local z=x[v]
 
-if z==nil then return nil end
+if z==nil then
+return nil
+end
 
 if typeof(z)=="string"and string.sub(z,1,1)=="#"then
 return Color3.fromHex(z)
@@ -664,7 +677,9 @@ end
 
 function p.AddLangObject(r)
 local u=p.LocalizationObjects[r]
-if not u then return end
+if not u then
+return
+end
 
 local v=u.Object
 
@@ -731,7 +746,6 @@ B.Object[C]=G
 end
 end
 else
-
 local H=B.Object:FindFirstChild"LibraryGradient"
 if H then
 H:Destroy()
@@ -752,7 +766,6 @@ end
 end
 end
 
-
 function p.SetThemeTag(r,u,v,x,z)
 p.AddThemeObject(r,u)
 p.UpdateTheme(r,false,true,v,x,z)
@@ -761,7 +774,9 @@ end
 function p.SetLangForObject(r)
 if p.Localization and p.Localization.Enabled then
 local u=p.LocalizationObjects[r]
-if not u then return end
+if not u then
+return
+end
 
 local v=u.Object
 local x=u.TranslationId
@@ -770,7 +785,10 @@ local z=p.Localization.Translations[p.Language]
 if z and z[x]then
 v.Text=z[x]
 else
-local A=p.Localization and p.Localization.Translations and p.Localization.Translations.en or nil
+local A=p.Localization
+and p.Localization.Translations
+and p.Localization.Translations.en
+or nil
 if A and A[x]then
 v.Text=A[x]
 else
@@ -794,7 +812,7 @@ end
 
 table.insert(p.LocalizationObjects,{
 TranslationId=x,
-Object=u
+Object=u,
 })
 p.SetLangForObject(#p.LocalizationObjects)
 end
@@ -874,12 +892,9 @@ return p.Shapes[B]
 end
 
 local function getSliceCenterForType(B)
-return not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},B)and Rect.new(256
-,256
-,256
-,256
-
-)or Rect.new(512,512,512,512)
+return not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},B)
+and Rect.new(256,256,256,256)
+or Rect.new(512,512,512,512)
 end
 
 local B=p.New(z and"ImageButton"or"ImageLabel",{
@@ -888,7 +903,7 @@ ScaleType="Slice",
 SliceCenter=getSliceCenterForType(u),
 SliceScale=1,
 BackgroundTransparency=1,
-ThemeTag=v.ThemeTag and v.ThemeTag
+ThemeTag=v.ThemeTag and v.ThemeTag,
 },x)
 
 for C,F in pairs(v or{})do
@@ -898,7 +913,9 @@ end
 end
 
 local function UpdateSliceScale(C)
-local F=not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},u)and(C/(256))or(C/512)
+local F=not table.find({"Shadow-sm","Glass-0.7","Glass-1","Glass-1.4"},u)
+and(C/(256))
+or(C/512)
 B.SliceScale=math.max(F,0.0001)
 end
 
@@ -947,13 +964,11 @@ function p.SetDraggable(v)
 p.CanDraggable=v
 end
 
-
-
 function p.Drag(v,x,z)
 local A
 local B,C,F
 local G={
-CanDraggable=true
+CanDraggable=true,
 }
 
 if not x or typeof(x)~="table"then
@@ -961,18 +976,29 @@ x={v}
 end
 
 local function update(H)
-if not B or not G.CanDraggable then return end
+if not B or not G.CanDraggable then
+return
+end
 
 local J=H.Position-C
-p.Tween(v,0.02,{Position=UDim2.new(
-F.X.Scale,F.X.Offset+J.X,
-F.Y.Scale,F.Y.Offset+J.Y
-)}):Play()
+p.Tween(v,0.02,{
+Position=UDim2.new(
+F.X.Scale,
+F.X.Offset+J.X,
+F.Y.Scale,
+F.Y.Offset+J.Y
+),
+}):Play()
 end
 
 for H,J in pairs(x)do
 J.InputBegan:Connect(function(L)
-if(L.UserInputType==Enum.UserInputType.MouseButton1 or L.UserInputType==Enum.UserInputType.Touch)and G.CanDraggable then
+if
+(
+L.UserInputType==Enum.UserInputType.MouseButton1
+or L.UserInputType==Enum.UserInputType.Touch
+)and G.CanDraggable
+then
 if A==nil then
 A=J
 B=true
@@ -999,7 +1025,10 @@ end)
 
 J.InputChanged:Connect(function(L)
 if B and A==J then
-if L.UserInputType==Enum.UserInputType.MouseMovement or L.UserInputType==Enum.UserInputType.Touch then
+if
+L.UserInputType==Enum.UserInputType.MouseMovement
+or L.UserInputType==Enum.UserInputType.Touch
+then
 update(L)
 end
 end
@@ -1008,7 +1037,10 @@ end
 
 e.InputChanged:Connect(function(H)
 if B and A~=nil then
-if H.UserInputType==Enum.UserInputType.MouseMovement or H.UserInputType==Enum.UserInputType.Touch then
+if
+H.UserInputType==Enum.UserInputType.MouseMovement
+or H.UserInputType==Enum.UserInputType.Touch
+then
 update(H)
 end
 end
@@ -1021,9 +1053,7 @@ end
 return G
 end
 
-
 l.Init(r,"Icon")
-
 
 function p.SanitizeFilename(v)
 local x=v:match"([^/]+)$"or v
@@ -1052,13 +1082,13 @@ Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
 ScaleType="Crop",
 ThemeTag=(p.Icon(v)or F)and{
-ImageColor3=C and(G or"Icon")or nil
+ImageColor3=C and(G or"Icon")or nil,
 }or nil,
 },{
 r("UICorner",{
-CornerRadius=UDim.new(0,z)
-})
-})
+CornerRadius=UDim.new(0,z),
+}),
+}),
 })
 if p.Icon(v)then
 H.ImageLabel:Destroy()
@@ -1068,27 +1098,37 @@ Icon=v,
 Size=UDim2.new(1,0,1,0),
 Colors={
 (C and(G or"Icon")or false),
-"Button"
-}
+"Button",
+},
 }.IconFrame
 J.Parent=H
 elseif string.find(v,"http")then
 local J="WindUI/"..A.."/assets/."..B.."-"..x..".png"
 local L,M=pcall(function()
 task.spawn(function()
-local L=p.Request and p.Request{
+local L=p.Request
+and p.Request{
 Url=v,
 Method="GET",
-}.Body or{}
+}.Body
+or{}
 
-if not d:IsStudio()and writefile then writefile(J,L)end
+if not d:IsStudio()and writefile then
+writefile(J,L)
+end
 
 
 local M,N=pcall(getcustomasset,J)
 if M then
 H.ImageLabel.Image=N
 else
-warn(string.format("[ WindUI.Creator ] Failed to load custom asset '%s': %s",J,tostring(N)))
+warn(
+string.format(
+"[ WindUI.Creator ] Failed to load custom asset '%s': %s",
+J,
+tostring(N)
+)
+)
 H:Destroy()
 
 return
@@ -1096,7 +1136,10 @@ end
 end)
 end)
 if not L then
-warn("[ WindUI.Creator ]  '"..identifyexecutor()or"Studio".."' doesnt support the URL Images. Error: "..M)
+warn(
+"[ WindUI.Creator ]  '"..identifyexecutor()
+or"Studio".."' doesnt support the URL Images. Error: "..M
+)
 
 H:Destroy()
 end
@@ -1108,8 +1151,6 @@ end
 
 return H
 end
-
-
 
 function p.Color3ToHSB(v)
 local x,z,A=v.R,v.G,v.B
@@ -1137,7 +1178,7 @@ local J=B
 return{
 h=math.floor(G+0.5),
 s=H,
-b=J
+b=J,
 }
 end
 
@@ -1173,6 +1214,21 @@ end
 
 function p.GenerateUniqueID(v)
 return h:GenerateGUID(false)
+end
+
+function p.OnThemeChange(v,x)
+if typeof(x)~="function"then
+return
+end
+
+local z=h:GenerateGUID(false)
+p.ThemeChangeCallbacks[z]=x
+
+return{
+Disconnect=function()
+p.ThemeChangeCallbacks[z]=nil
+end,
+}
 end
 
 return p end function a.d()
@@ -4189,11 +4245,9 @@ end
 return aa end function a.x()
 local aa={}
 
-
 local ab=a.load'c'
 local ac=ab.New
 local ad=ab.Tween
-
 
 function aa.New(ae,af,ag)
 local ah={
@@ -4212,17 +4266,13 @@ IconSize=16,
 
 local ai
 if ah.Icon then
-ai=ab.Image(
-ah.Icon,
-ah.Icon,
-0,
-af.Window,
-"Tag",
-false
-)
+ai=ab.Image(ah.Icon,ah.Icon,0,af.Window,"Tag",false)
 
 ai.Size=UDim2.new(0,ah.IconSize,0,ah.IconSize)
-ai.ImageLabel.ImageColor3=typeof(ah.Color)=="Color3"and ab.GetTextColorForHSB(ah.Color)or nil
+ai.ImageLabel.ImageColor3=typeof(ah.Color)=="Color3"
+and ab.GetTextColorForHSB(ah.Color)
+or typeof(ah.Color)=="string"
+and(ab.GetTextColorForHSB(ab.GetThemeProperty(ah.Color,ab.Theme)))
 end
 
 local aj=ac("TextLabel",{
@@ -4231,13 +4281,14 @@ AutomaticSize="XY",
 TextSize=ah.TextSize,
 FontFace=Font.new(ab.Font,Enum.FontWeight.SemiBold),
 Text=ah.Title,
-TextColor3=typeof(ah.Color)=="Color3"and ab.GetTextColorForHSB(ah.Color)or nil,
+TextColor3=typeof(ah.Color)=="Color3"and ab.GetTextColorForHSB(ah.Color)or typeof(
+ah.Color
+)=="string"and(ab.GetTextColorForHSB(ab.GetThemeProperty(ah.Color,ab.Theme))),
 })
 
 local ak
 
 if typeof(ah.Color)=="table"then
-
 ak=ac"UIGradient"
 for al,am in next,ah.Color do
 ak[al]=am
@@ -4249,13 +4300,16 @@ ai.ImageLabel.ImageColor3=ab.GetTextColorForHSB(ab.GetAverageColor(ak))
 end
 end
 
-
-
 local al=ab.NewRoundFrame(ah.Radius,"Squircle",{
 AutomaticSize="X",
 Size=UDim2.new(0,0,0,ah.Height),
 Parent=ag,
-ImageColor3=typeof(ah.Color)=="Color3"and ah.Color or Color3.new(1,1,1),
+ImageColor3=typeof(ah.Color)=="Color3"and ah.Color
+or typeof(ah.Color)=="table"and Color3.new(1,1,1)
+or nil,
+ThemeTag=typeof(ah.Color)=="string"and{
+ImageColor3=ah.Color,
+},
 },{
 ak,
 ab.NewRoundFrame(ah.Radius,"Glass-1",{
@@ -4263,7 +4317,7 @@ Size=UDim2.new(1,0,1,0),
 ThemeTag={
 ImageColor3="White",
 },
-ImageTransparency=.75
+ImageTransparency=0.75,
 }),
 ac("Frame",{
 Size=UDim2.new(0,0,1,0),
@@ -4280,11 +4334,10 @@ PaddingRight=UDim.new(0,ah.Padding),
 ac("UIListLayout",{
 FillDirection="Horizontal",
 VerticalAlignment="Center",
-Padding=UDim.new(0,ah.Padding/1.5)
-})
+Padding=UDim.new(0,ah.Padding/1.5),
+}),
 }),
 })
-
 
 function ah.SetTitle(am,an)
 ah.Title=an
@@ -4297,19 +4350,21 @@ function ah.SetColor(am,an)
 ah.Color=an
 if typeof(an)=="table"then
 local ao=ab.GetAverageColor(an)
-ad(aj,.06,{TextColor3=ab.GetTextColorForHSB(ao)}):Play()
+ad(aj,0.06,{TextColor3=ab.GetTextColorForHSB(ao)}):Play()
 local ap=al:FindFirstChildOfClass"UIGradient"or ac("UIGradient",{Parent=al})
-for aq,ar in next,an do ap[aq]=ar end
-ad(al,.06,{ImageColor3=Color3.new(1,1,1)}):Play()
+for aq,ar in next,an do
+ap[aq]=ar
+end
+ad(al,0.06,{ImageColor3=Color3.new(1,1,1)}):Play()
 else
 if ak then
 ak:Destroy()
 end
-ad(aj,.06,{TextColor3=ab.GetTextColorForHSB(an)}):Play()
+ad(aj,0.06,{TextColor3=ab.GetTextColorForHSB(an)}):Play()
 if ai then
-ad(ai.ImageLabel,.06,{ImageColor3=ab.GetTextColorForHSB(an)}):Play()
+ad(ai.ImageLabel,0.06,{ImageColor3=ab.GetTextColorForHSB(an)}):Play()
 end
-ad(al,.06,{ImageColor3=an}):Play()
+ad(al,0.06,{ImageColor3=an}):Play()
 end
 
 return ah
@@ -4319,14 +4374,7 @@ function ah.SetIcon(am,an)
 ah.Icon=an
 
 if an then
-ai=ab.Image(
-an,
-an,
-0,
-af.Window,
-"Tag",
-false
-)
+ai=ab.Image(an,an,0,af.Window,"Tag",false)
 
 ai.Size=UDim2.new(0,ah.IconSize,0,ah.IconSize)
 ai.Parent=al
@@ -4350,11 +4398,17 @@ al:Destroy()
 return ah
 end
 
+ab:OnThemeChange(function(am,an)
+aj.TextColor3=ab.GetTextColorForHSB(ab.GetThemeProperty(ah.Color,ab.Theme))
+ai.ImageLabel.ImageColor3=
+ab.GetTextColorForHSB(ab.GetThemeProperty(ah.Color,ab.Theme))
+end)
+
 return ah
 end
 
-
 return aa end function a.y()
+
 local aa=(cloneref or clonereference or function(aa)return aa end)
 
 
@@ -11853,7 +11907,7 @@ ax,
 
 
 }),
-UIStroke,
+
 aw,
 ay,
 az,
@@ -12919,7 +12973,8 @@ end
 local O=am("UIListLayout",{
 Padding=UDim.new(0,6),
 FillDirection="Horizontal",
-HorizontalAlignment="Right",
+HorizontalAlignment="Center",
+HorizontalFlex="Fill",
 })
 
 local P=am("Frame",{
@@ -12944,60 +12999,61 @@ for R,S in next,H.Buttons do
 local T=
 ap(S.Title,S.Icon,S.Callback,S.Variant,P,J,true)
 table.insert(Q,T)
+T.Size=UDim2.new(1,0,1,0)
 end
 
-local function CheckButtonsOverflow()
-O.FillDirection=Enum.FillDirection.Horizontal
-O.HorizontalAlignment=Enum.HorizontalAlignment.Right
-O.VerticalAlignment=Enum.VerticalAlignment.Center
-P.AutomaticSize=Enum.AutomaticSize.None
 
-for R,S in ipairs(Q)do
-S.Size=UDim2.new(0,0,1,0)
-S.AutomaticSize=Enum.AutomaticSize.X
-end
 
-wait()
 
-local R=O.AbsoluteContentSize.X/at.WindUI.UIScale
-local S=P.AbsoluteSize.X/at.WindUI.UIScale
 
-if R>S then
-O.FillDirection=Enum.FillDirection.Vertical
-O.HorizontalAlignment=Enum.HorizontalAlignment.Right
-O.VerticalAlignment=Enum.VerticalAlignment.Bottom
-P.AutomaticSize=Enum.AutomaticSize.Y
 
-for T,U in ipairs(Q)do
-U.Size=UDim2.new(1,0,0,40)
-U.AutomaticSize=Enum.AutomaticSize.None
-end
-else
-local T=S-R
-if T>0 then
-local U
-local V=math.huge
 
-for W,X in ipairs(Q)do
-local Y=X.AbsoluteSize.X/at.WindUI.UIScale
-if Y<V then
-V=Y
-U=X
-end
-end
 
-if U then
-U.Size=UDim2.new(0,V+T,1,0)
-U.AutomaticSize=Enum.AutomaticSize.None
-end
-end
-end
-end
 
-al.AddSignal(J.UIElements.Main:GetPropertyChangedSignal"AbsoluteSize",CheckButtonsOverflow)
-CheckButtonsOverflow()
 
-wait()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 J:Open()
 
 return J
@@ -13044,6 +13100,7 @@ function au.Tag(G,H)
 if au.UIElements.Main.Main.Topbar.Center.Visible==false then
 au.UIElements.Main.Main.Topbar.Center.Visible=true
 end
+H.Window=au
 return ar:New(H,au.UIElements.Main.Main.Topbar.Center)
 end
 
