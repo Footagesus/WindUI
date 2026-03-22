@@ -41,6 +41,11 @@ local Window = WindUI:CreateWindow({
 	Acrylic = true,
 })
 
+local Tag = Window:Tag({
+	Title = "Hi my tag",
+	Color = "Text",
+})
+
 local TopbarButton1 = Window.Topbar:Button({
 	Name = "Print to console",
 	Icon = "sfsymbols:printerFill",
