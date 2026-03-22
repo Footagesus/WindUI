@@ -703,7 +703,7 @@ return function(Config)
 			--     Scale = 0.95,
 			-- }),
 		}),
-		UIStroke,
+		--UIStroke,
 		UICorner,
 		FullScreenIcon,
 		FullScreenBlur,
@@ -1769,7 +1769,8 @@ return function(Config)
 		local ButtonsLayout = New("UIListLayout", {
 			Padding = UDim.new(0, 6),
 			FillDirection = "Horizontal",
-			HorizontalAlignment = "Right",
+			HorizontalAlignment = "Center",
+			HorizontalFlex = "Fill",
 		})
 
 		local ButtonsContent = New("Frame", {
@@ -1794,6 +1795,7 @@ return function(Config)
 			local ButtonFrame =
 				CreateButton(Button.Title, Button.Icon, Button.Callback, Button.Variant, ButtonsContent, Dialog, true)
 			table.insert(Buttons, ButtonFrame)
+			ButtonFrame.Size = UDim2.new(1, 0, 1, 0)
 		end
 
 		local function CheckButtonsOverflow()
@@ -1844,10 +1846,10 @@ return function(Config)
 			end
 		end
 
-		Creator.AddSignal(Dialog.UIElements.Main:GetPropertyChangedSignal("AbsoluteSize"), CheckButtonsOverflow)
-		CheckButtonsOverflow()
+		-- Creator.AddSignal(Dialog.UIElements.Main:GetPropertyChangedSignal("AbsoluteSize"), CheckButtonsOverflow)
+		-- CheckButtonsOverflow()
 
-		wait()
+		-- wait()
 		Dialog:Open()
 
 		return Dialog
@@ -1894,6 +1896,7 @@ return function(Config)
 		if Window.UIElements.Main.Main.Topbar.Center.Visible == false then
 			Window.UIElements.Main.Main.Topbar.Center.Visible = true
 		end
+		TagConfig.Window = Window
 		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center)
 	end
 
