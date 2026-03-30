@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-03-24  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-03-30  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -286,6 +286,7 @@ TabBorder="White",
 
 
 ElementBackground="Text",
+ElementBackgroundTransparency=.93,
 ElementTitle="Text",
 ElementDesc="Text",
 ElementIcon="Icon",
@@ -3657,6 +3658,9 @@ Primary=Color3.fromHex"#0091FF",
 
 LabelBackground=Color3.fromHex"#000000",
 LabelBackgroundTransparency=0.83,
+
+ElementBackground=Color3.fromHex"#2A2A2C",
+ElementBackgroundTransparency=0,
 },
 
 Light={
@@ -5677,13 +5681,14 @@ Padding=UDim.new(0,8),
 local f,g=ac(ag.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
-ImageTransparency=ag.Color and 0.05 or 0.93,
+ImageTransparency=ag.Color and 0.05 or nil,
 
 
 
 Parent=af.Parent,
 ThemeTag={
 ImageColor3=not ag.Color and"ElementBackground"or nil,
+ImageTransparency=not ag.Color and"ElementBackgroundTransparency"or nil,
 },
 ImageColor3=ag.Color and(typeof(ag.Color)=="string"and Color3.fromHex(
 aa.Colors[ag.Color]
@@ -6119,7 +6124,44 @@ local ad=ab.Tween
 local ae=game:GetService"UserInputService"
 
 function aa.New(af,ag,ah,ai,aj,ak,al)
-local am={}
+local am={
+GlassSpritesheet={
+Id="rbxassetid://77297718671545",
+MirroredId="rbxassetid://92258969882244",
+Size=Vector2.new(102,128),
+Total=80,
+Cols=10,
+}
+}
+
+function am.GetGlassFrame(an,ao:number):(string,Vector2,Vector2)
+local ap=am.GlassSpritesheet
+local aq:number
+
+if ao<=0.3 then
+aq=math.floor((ao/0.3)*(ap.Total-1))
+elseif ao<0.7 then
+aq=ap.Total-1
+else
+aq=math.floor(((ao-0.7)/0.3)*(ap.Total-1))
+end
+
+aq=math.clamp(aq,0,ap.Total-1)
+
+local ar=ao>=0.7
+if ar then
+aq=(ap.Total-1)-aq
+end
+
+local as=ar and ap.MirroredId or ap.Id
+
+return as,
+ap.Size,
+Vector2.new(
+(aq%ap.Cols)*ap.Size.X,
+math.floor(aq/ap.Cols)*ap.Size.Y
+)
+end
 
 local an=12
 local ao
@@ -6187,18 +6229,16 @@ Name="Frame",
 ab.NewRoundFrame(an,"Squircle",{
 Size=UDim2.new(1,0,1,0),
 ImageTransparency=0,
-ThemeTag={
-ImageColor3="ToggleBar",
-},
+
 AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 Name="Bar"
 },{
-ab.NewRoundFrame(an,"Glass-1",{
+ab.NewRoundFrame(an,"Glass-1.4",{
 Size=UDim2.new(1,0,1,0),
 ImageColor3=Color3.new(1,1,1),
 Name="Highlight",
-ImageTransparency=0.4,
+ImageTransparency=1,
 },{
 
 
@@ -6213,6 +6253,39 @@ ImageTransparency=0.4,
 
 
 
+ab.NewRoundFrame(an,"Squircle",{
+Size=UDim2.new(1,0,1,0),
+Name="GlassBackground",
+ImageTransparency=0,
+ThemeTag={
+ImageColor3="ElementBackground",
+},
+ZIndex=-1,
+}),
+ac("ImageLabel",{
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+Name="Glass",
+ImageTransparency=0,
+},{
+ac("UICorner",{
+CornerRadius=UDim.new(1,0),
+})
+}),
+ab.NewRoundFrame(an,"Glass-1.4",{
+Size=UDim2.new(1,0,1,0),
+ImageColor3=Color3.new(1,1,1),
+Name="Highlight",
+ImageTransparency=0.4,
+}),
+ab.NewRoundFrame(an,"Squircle",{
+Size=UDim2.new(1,0,1,0),
+Name="BarOverlay",
+ThemeTag={
+ImageColor3="ToggleBar",
+},
+ZIndex=999,
+})
 }),
 ao,
 ac("UIScale",{
@@ -6234,10 +6307,14 @@ if aw then
 ad(aq.Frame,0.15,{
 Position=UDim2.new(0,au-at-2,0.5,0),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.15)
+ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 else
 ad(aq.Frame,0.15,{
 Position=UDim2.new(0,2,0.5,0),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.15)
+ad(aq.Frame.Bar.Highlight.Glass,0.15,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 else
 if aw then
@@ -6251,22 +6328,38 @@ if aw then
 ad(aq.Layer,0.1,{
 ImageTransparency=0,
 }):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Toggle"},0.1)
+ad(aq.Frame.Bar.Highlight.Glass,0.1,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ao then
 ad(ao,0.1,{
 ImageTransparency=0,
 }):Play()
 end
+
+local az,aA,aB=am:GetGlassFrame(1)
+
+aq.Frame.Bar.Highlight.Glass.Image=az
+aq.Frame.Bar.Highlight.Glass.ImageRectSize=aA
+aq.Frame.Bar.Highlight.Glass.ImageRectOffset=aB
 else
 ad(aq.Layer,0.1,{
 ImageTransparency=1,
 }):Play()
+ab.SetThemeTag(aq.Frame.Bar.Highlight.Glass,{ImageColor3="Text"},0.1)
+ad(aq.Frame.Bar.Highlight.Glass,0.1,{ImageTransparency=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ao then
 ad(ao,0.1,{
 ImageTransparency=1,
 }):Play()
 end
+
+local az,aA,aB=am:GetGlassFrame(0)
+
+aq.Frame.Bar.Highlight.Glass.Image=az
+aq.Frame.Bar.Highlight.Glass.ImageRectSize=aA
+aq.Frame.Bar.Highlight.Glass.ImageRectOffset=aB
 end
 
 ax=ax~=false
@@ -6289,7 +6382,7 @@ local aA=aq.Frame.Position.X.Offset
 local aB=false
 
 ad(aq.Frame.Bar.UIScale,0.28,{Scale=1.5},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(aq.Frame.Bar,0.28,{ImageTransparency=.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(aq.Frame.Bar.Highlight.BarOverlay,0.28,{ImageTransparency=.93},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if ar then
 ar:Disconnect()
@@ -6304,7 +6397,7 @@ end
 local d=math.abs(b.Position.X-ay)
 local f=math.abs(b.Position.Y-az)
 
-if f>d and f>10 then
+if f>d and f>30 then
 aB=true
 al.Window.IsToggleDragging=false
 
@@ -6322,14 +6415,20 @@ Position=UDim2.new(0,aA,0.5,0)
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 ad(aq.Frame.Bar.UIScale,0.23,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(aq.Frame.Bar,0.23,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(aq.Frame.Bar.Highlight.BarOverlay,0.23,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 return
 end
 
 local g=b.Position.X-ay
-local h=math.max(2,math.min(aA+g,au-at-2))local j=
+local h=math.max(2,math.min(aA+g,au-at-2))
 
-(aq.Frame.Position.X.Offset-2)/(au-at-4)
+local j=(h-2)/(au-at-4)
+
+local l,m,p=am:GetGlassFrame(j)
+
+aq.Frame.Bar.Highlight.Glass.Image=l
+aq.Frame.Bar.Highlight.Glass.ImageRectSize=m
+aq.Frame.Bar.Highlight.Glass.ImageRectOffset=p
 
 ad(aq.Frame,0.05,{
 Position=UDim2.new(0,h,0.5,0)
@@ -6378,7 +6477,7 @@ ax:Set(j,true,false)
 end
 
 ad(aq.Frame.Bar.UIScale,0.23,{Scale=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-ad(aq.Frame.Bar,0.23,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+ad(aq.Frame.Bar.Highlight.BarOverlay,0.23,{ImageTransparency=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 end)
 end
