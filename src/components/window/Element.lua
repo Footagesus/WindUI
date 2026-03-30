@@ -439,13 +439,14 @@ return function(Config)
 	local Main, MainTable = NewRoundFrame(Element.UICorner, "Squircle", {
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = "Y",
-		ImageTransparency = Element.Color and 0.05 or 0.93,
+		ImageTransparency = Element.Color and 0.05 or nil,
 		--Text = "",
 		--TextTransparency = 1,
 		--AutoButtonColor = false,
 		Parent = Config.Parent,
 		ThemeTag = {
 			ImageColor3 = not Element.Color and "ElementBackground" or nil,
+			ImageTransparency = not Element.Color and "ElementBackgroundTransparency" or nil,
 		},
 		ImageColor3 = Element.Color and (typeof(Element.Color) == "string" and Color3.fromHex(
 			Creator.Colors[Element.Color]
