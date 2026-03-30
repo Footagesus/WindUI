@@ -46,6 +46,7 @@ return {
 
     
     ElementBackground = "Text",
+    ElementBackgroundTransparency = .93,
     ElementTitle = "Text",
     ElementDesc = "Text",
     ElementIcon = "Icon",
