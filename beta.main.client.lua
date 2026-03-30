@@ -31,6 +31,8 @@ end
 
 local Window = WindUI:CreateWindow({
 	Title = "Beta",
+	NewElements = true,
+	Theme = "Dark",
 })
 
 local Tab = Window:Tab({
@@ -133,5 +135,21 @@ local Button = Group1:Button({
 	Title = "Button example 2",
 	Callback = function()
 		print("clicked")
+	end,
+})
+
+
+
+
+
+local CoolTab = Window:Tab({
+	Title = "Cool Tab",
+})
+
+CoolTab:Toggle({
+	Title = "Toggle Example",
+	Value = true,
+	Callback = function(value)
+		print("Toggle Value:", value)
 	end,
 })
