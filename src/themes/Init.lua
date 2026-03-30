@@ -24,6 +24,9 @@ return function(WindUI)
 			--WindowTopbarButtonIcon = Color3.fromHex("#ffffff"),
 			LabelBackground = Color3.fromHex("#000000"),
 			LabelBackgroundTransparency = 0.83,
+
+			ElementBackground = Color3.fromHex("#2A2A2C"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Light = {
