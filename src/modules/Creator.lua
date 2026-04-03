@@ -25,7 +25,8 @@ Icons.SetIconsType("lucide")
 
 local WindUI
 
-local Creator = {
+local Creator
+Creator = {
 	Font = "rbxassetid://12187365364",
 	Localization = nil,
 	CanDraggable = true,
@@ -104,7 +105,7 @@ local Creator = {
 		White = "#ffffff",
 		Grey = "#484848",
 	},
-	ThemeFallbacks = require("../themes/Fallbacks"),
+	ThemeFallbacks = nil,
 	Shapes = {
 		["Square"] = "rbxassetid://82909646051652",
 		["Square-Outline"] = "rbxassetid://72946211851948",
@@ -131,6 +132,8 @@ local Creator = {
 
 function Creator.Init(WindUITable)
 	WindUI = WindUITable
+
+	Creator.ThemeFallbacks = require("../themes/Fallbacks")(Creator)
 end
 
 function Creator.AddSignal(Signal, Function)
@@ -256,7 +259,7 @@ function Creator.GetThemeProperty(Property, Theme)
 		end
 
 		if typeof(value) == "function" then
-			return value()
+			return value(themeTable) 
 		end
 
 		return value
@@ -306,7 +309,7 @@ function Creator.GetThemeProperty(Property, Theme)
 	return nil
 end
 
-function Creator.AddThemeObject(Object, Properties)
+function Creator.AddThemeObject(Object, Properties, skipUpdate)
 	if Creator.Objects[Object] then
 		for prop, value in pairs(Properties) do
 			Creator.Objects[Object].Properties[prop] = value
@@ -315,7 +318,9 @@ function Creator.AddThemeObject(Object, Properties)
 		Creator.Objects[Object] = { Object = Object, Properties = Properties }
 	end
 
-	Creator.UpdateTheme(Object, false)
+	if not skipUpdate then
+		Creator.UpdateTheme(Object, false)
+	end
 	return Object
 end
 
@@ -746,7 +751,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 			},
 		}).IconFrame
 		IconLabel.Parent = ImageFrame
-	elseif string.find(Img, "http") then
+	elseif string.find(Img, "http") and not string.find(Img, "roblox.com") then
 		local FileName = "WindUI/" .. Folder .. "/assets/." .. Type .. "-" .. Name .. ".png"
 		local success, response = pcall(function()
 			task.spawn(function()
@@ -873,6 +878,32 @@ function Creator:OnThemeChange(callback)
 			Creator.ThemeChangeCallbacks[id] = nil
 		end,
 	}
+end
+
+function Creator:AddColor(base, add, weight)
+	weight = math.clamp(weight or 1, 0, 1)
+	if typeof(add) == "string" then add = Color3.fromHex(add) end
+
+	return function(theme)
+		local baseColor
+		if typeof(base) == "string" and string.sub(base, 1, 1) ~= "#" then
+			baseColor = Creator.GetThemeProperty(base, theme)
+		elseif typeof(base) == "string" then
+			baseColor = Color3.fromHex(base)
+		else
+			baseColor = base
+		end
+
+		if not baseColor or typeof(baseColor) ~= "Color3" then
+			return nil
+		end
+
+		return Color3.new(
+			math.clamp(baseColor.R + add.R * weight, 0, 1),
+			math.clamp(baseColor.G + add.G * weight, 0, 1),
+			math.clamp(baseColor.B + add.B * weight, 0, 1)
+		)
+	end
 end
 
 return Creator
