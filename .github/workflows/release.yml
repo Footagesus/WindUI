@@ -1,99 +1,101 @@
-name: Create Release
+# .github/workflows/release.yml
+name: Release
 
 on:
     push:
         tags:
-            - "*.*.*"
-
-permissions:
-    contents: write
+            - "*"
 
 jobs:
     release:
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
 
         steps:
-            - name: Checkout repository
+            - name: Checkout
               uses: actions/checkout@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
               with:
-                  fetch-depth: 0
+                  node-version: "20"
+
+            - name: Install dependencies
+              run: npm install
+
+            - name: Build
+              run: npm run build
 
             - name: Get version from tag
               id: version
               run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-            - name: Get commit hash
-              id: commit
-              run: echo "hash=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-            - name: Get release notes
-              id: release_notes
+            - name: Get changelog
+              id: changelog
               run: |
-                  # Extract release notes from changelog.md
-                  VERSION="${{ steps.version.outputs.version }}"
-                  # Get content between version header and next version header (or end of file)
-                  NOTES=$(awk "/^# ${VERSION}$/,/^# [0-9]+\.[0-9]+\.[0-9]+$/ {print}" changelog.md | head -n -1 | tail -n +2)
-                  # Escape for JSON
-                  NOTES="${NOTES//'%'/'%25'}"
-                  NOTES="${NOTES//$'\n'/'%0A'}"
-                  NOTES="${NOTES//$'\r'/'%0D'}"
-                  echo "notes<<EOF" >> $GITHUB_OUTPUT
-                  echo "$NOTES" >> $GITHUB_OUTPUT
-                  echo "EOF" >> $GITHUB_OUTPUT
-
-            - name: Check if main.lua exists
-              id: check_file
-              run: |
-                  if [ -f "dist/main.lua" ]; then
-                    echo "exists=true" >> $GITHUB_OUTPUT
+                  if [ -f changelog.md ]; then
+                    content=$(tail -n +2 changelog.md | sed '/^$/d' | head -c 10000)
+                    echo "content<<EOF" >> $GITHUB_OUTPUT
+                    echo "$content" >> $GITHUB_OUTPUT
+                    echo "EOF" >> $GITHUB_OUTPUT
                   else
-                    echo "exists=false" >> $GITHUB_OUTPUT
+                    echo "content=No changelog provided." >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Get main file from package.json
+              id: package
+              run: |
+                  if [ -f package.json ]; then
+                    main=$(cat package.json | python3 -c "import sys,json; print(json.load(sys.stdin).get('main','main.lua'))")
+                    echo "main=$main" >> $GITHUB_OUTPUT
+                  else
+                    echo "main=main.lua" >> $GITHUB_OUTPUT
                   fi
 
             - name: Create Release
-              uses: softprops/action-gh-release@v1
+              uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ steps.version.outputs.version }}
-                  name: New release ${{ steps.version.outputs.version }}
-                  body: |
-                      ${{ steps.release_notes.outputs.notes }}
-
-                      **Build Hash:** `${{ steps.commit.outputs.hash }}`
-                  files: ${{ steps.check_file.outputs.exists == 'true' && 'dist/main.lua' || '' }}
+                  name: ${{ steps.version.outputs.version }}
+                  body: ${{ steps.changelog.content }}
                   draft: false
                   prerelease: false
+                  files: ${{ steps.package.outputs.main }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Check Discord webhook
-              id: check_webhook
+            - name: Send Discord notification
+              if: ${{ env.DISCORD_WEBHOOK != '' }}
+              env:
+                  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+                  DISCORD_ROLE_ID: ${{ secrets.DISCORD_ROLE_ID }}
               run: |
-                  if [ -n "${{ secrets.DISCORD_WEBHOOK_URL }}" ]; then
-                    echo "has_webhook=true" >> $GITHUB_OUTPUT
+                  VERSION="${{ steps.version.outputs.version }}"
+                  URL="https://github.com/${{ github.repository }}/releases/tag/$VERSION"
+                  CONTENT=$(cat changelog.md | tail -n +2 | head -c 1000)
+                  DESCRIPTION=$(echo "$CONTENT" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read()))")
+
+                  # Пинг роли только если DISCORD_ROLE_ID задан
+                  if [ -n "$DISCORD_ROLE_ID" ]; then
+                    MENTION="\"<@&$DISCORD_ROLE_ID>\""
                   else
-                    echo "has_webhook=false" >> $GITHUB_OUTPUT
+                    MENTION="null"
                   fi
 
-            - name: Send Discord Webhook
-              if: steps.check_webhook.outputs.has_webhook == 'true'
-              uses: tsickert/discord-webhook@v1.3.0
-              with:
-                  webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }}
-                  payload: |
-                      {
-                        "embeds": [
-                          {
-                            "author": {
-                              "name": "Footagesus/WindUI",
-                              "icon_url": "https://raw.githubusercontent.com/Footagesus/WindUI/main/docs/logo.png"
-                            },
-                            "title": "New release: ${{ steps.version.outputs.version }}",
-                            "description": "${{ steps.release_notes.outputs.notes }}",
-                            "footer": {
-                              "text": "Commit hash: ${{ steps.commit.outputs.hash }}"
-                            },
-                            "color": 3211114,
-                            "url": "https://github.com/Footagesus/WindUI/releases/tag/${{ steps.version.outputs.version }}"
-                          }
-                        ]
-                      }
+                  curl -s -X POST "$DISCORD_WEBHOOK" \
+                    -H "Content-Type: application/json" \
+                    -d "{
+                      \"content\": $MENTION,
+                      \"embeds\": [{
+                        \"title\": \"New release: $VERSION\",
+                        \"description\": $DESCRIPTION,
+                        \"color\": 3211114,
+                        \"url\": \"$URL\",
+                        \"author\": {
+                          \"name\": \"${{ github.repository }}\",
+                          \"url\": \"https://github.com/${{ github.repository }}\",
+                          \"icon_url\": \"https://raw.githubusercontent.com/Footagesus/WindUI/main/docs/logo.png\"
+                        }
+                      }]
+                    }"
