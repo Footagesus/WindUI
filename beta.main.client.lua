@@ -6,6 +6,7 @@ local CacheableContentProvider = game:GetService("CacheableContentProvider")
 local cloneref = (cloneref or clonereference or function(instance)
 	return instance
 end)
+local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
 local ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 local RunService = cloneref(game:GetService("RunService"))
 local Players = cloneref(game:GetService("Players"))
@@ -33,6 +34,9 @@ local Window = WindUI:CreateWindow({
 	Title = "Beta",
 	NewElements = true,
 	Theme = "Dark",
+	Size = UDim2.new(0, 850, 0, 500),
+	MinSize = Vector2.new(650, 400),
+	MaxSize = Vector2.new(1000, 700),
 })
 
 local Tab = Window:Tab({
@@ -94,7 +98,11 @@ local Dropdown = Tab:Dropdown({
 
 Dropdown:Refresh(RefreshPlayersTable())
 
+-- autp update players list when player joins/leaves
 Players.ChildAdded:Connect(function()
+	Dropdown:Refresh(RefreshPlayersTable())
+end)
+Players.ChildRemoved:Connect(function()
 	Dropdown:Refresh(RefreshPlayersTable())
 end)
 
@@ -151,5 +159,141 @@ CoolTab:Toggle({
 	Value = true,
 	Callback = function(value)
 		print("Toggle Value:", value)
+	end,
+})
+
+CoolTab:Slider({
+	Title = "Slider Example",
+	Value = {
+        Min = 0,
+        Max = 100,
+        Default = 50
+    },
+	Width = 250,
+	IsTooltip = true,
+	Callback = function(value)
+		print("Slider Value:", value)
+	end,
+})
+
+
+-- tab 3
+
+local Tab3 = Window:Tab({
+	Title = "Tab 3",
+})
+
+local HStack = Tab3:HStack({AutoSpace = true})
+
+local VStackLeft = HStack:VStack()   -- left
+local VStackRight = HStack:VStack()  -- right
+local VStackThird = HStack:VStack()  -- third
+
+
+-- left
+VStackLeft:Paragraph({
+	Title = "[HIDDEN]" or Players.LocalPlayer.DisplayName,
+	Desc = "[HIDDEN]" or Players.LocalPlayer.Name,
+	Image = Players:GetUserThumbnailAsync(Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420),
+	ImageSize = 70
+})
+
+VStackLeft:Button({
+	Title = "Reset Character",
+	Callback = function()
+		Players.LocalPlayer.Character:BreakJoints()
+	end,
+})
+
+VStackLeft:Button({
+	Title = "Leave Game",
+	Callback = function()
+		Players.LocalPlayer:Kick("You left the game.")
+	end,
+})
+
+
+-- right
+
+local PlaceInfo = MarketplaceService:GetProductInfoAsync(game.PlaceId)
+
+VStackRight:Paragraph({
+	Title = PlaceInfo.Name,
+	Desc = PlaceInfo.Description or "Cool Place!!",
+	Image = "https://assetgame.roblox.com/Game/Tools/ThumbnailAsset.ashx?aid="..game.PlaceId .."&fmt=png&wd=420&ht=420",
+	ImageSize = 70
+})
+
+VStackRight:Button({
+	Title = "Copy Place ID",
+	Callback = function()
+		if setclipboard then
+			setclipboard(game.PlaceId)
+		else
+			print("Place ID:", game.PlaceId)
+		end
+	end,
+})
+
+VStackRight:Button({
+	Title = "Copy Game ID",
+	Callback = function()
+		if setclipboard then
+			setclipboard(game.GameId)
+		else
+			print("Game ID:", game.GameId)
+		end
+	end,
+})
+
+VStackRight:Button({
+	Title = "Copy Creator ID",
+	Callback = function()
+		if setclipboard then
+			setclipboard(PlaceInfo.Creator.Id)
+		else
+			print("Creator ID:", PlaceInfo.Creator.Id)
+		end
+	end,
+})
+
+VStackRight:Button({
+	Title = "Copy Creator Name",
+	Callback = function()
+		if setclipboard then
+			setclipboard(PlaceInfo.Creator.Name)
+		else
+			print("Creator Name:", PlaceInfo.Creator.Name)
+		end
+	end,
+})
+
+
+-- third
+
+-- create some elements pls
+
+VStackThird:Paragraph({
+	Title = "Paragraph in Third VStack",
+	Desc = "This is a paragraph inside the third VStack.",
+})
+
+VStackThird:Space()
+
+VStackThird:Button({
+	Title = "Button in Third VStack",
+	Callback = function()
+		print("Button in third VStack clicked!")
+		print("UI Size:", Window.Size)
+	end,
+})
+
+VStackThird:Space()
+
+VStackThird:Toggle({
+	Title = "Toggle in Third VStack",
+	Value = false,
+	Callback = function(value)
+		print("Toggle in third VStack value:", value)
 	end,
 })
