@@ -254,7 +254,7 @@ function WindUI:Popup(PopupConfig)
 	return require("./components/popup/Init").new(PopupConfig)
 end
 
-WindUI.Themes = require("./themes/Init")(WindUI)
+WindUI.Themes = require("./themes/Init")(WindUI, Creator)
 
 Creator.Themes = WindUI.Themes
 
