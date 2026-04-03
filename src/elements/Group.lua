@@ -6,7 +6,8 @@ local Element = {}
 function Element:New(Config)
     local GroupModule = {
         __type = "Group",
-        Elements = {}
+        Elements = {},
+        ElementFrame = nil,
     }
     
     local GroupFrame = New("Frame", {
@@ -19,9 +20,11 @@ function Element:New(Config)
             FillDirection = "Horizontal",
             HorizontalAlignment = "Center",
             --VerticalAlignment = "Center",
-            Padding = UDim.new(0, Config.Tab and Config.Tab.Gap or (Window.NewElements and 1 or 6))
+            Padding = UDim.new(0, Config.Tab and Config.Tab.Gap or (Config.Window.NewElements and 1 or 6))
         }),
     })
+
+    GroupModule.ElementFrame = GroupFrame
     
     local ElementsModule = Config.ElementsModule
     ElementsModule.Load(
