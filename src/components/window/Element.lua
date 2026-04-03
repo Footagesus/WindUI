@@ -468,7 +468,7 @@ return function(Config)
 	if Element.Hover then
 		Creator.AddSignal(Main.MouseEnter, function()
 			if CanHover then
-				Tween(Main, 0.12, { ImageTransparency = Element.Color and 0.15 or 0.9 }):Play()
+				--Tween(Main, 0.12, { ImageTransparency = Element.Color and 0.15 or 0.9 }):Play()
 				Tween(Hover, 0.12, { ImageTransparency = 0.9 }):Play()
 				Tween(HoverOutline, 0.12, { ImageTransparency = 0.8 }):Play()
 				Creator.AddSignal(Main.MouseMoved, function(x, y)
@@ -481,7 +481,7 @@ return function(Config)
 		end)
 		Creator.AddSignal(Main.InputEnded, function()
 			if CanHover then
-				Tween(Main, 0.12, { ImageTransparency = Element.Color and 0.05 or 0.93 }):Play()
+				--Tween(Main, 0.12, { ImageTransparency = Element.Color and 0.05 or 0.93 }):Play()
 				Tween(Hover, 0.12, { ImageTransparency = 1 }):Play()
 				Tween(HoverOutline, 0.12, { ImageTransparency = 1 }):Play()
 			end
