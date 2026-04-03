@@ -7,3 +7,6 @@ Fixed version of [1.6.64](https://github.com/Footagesus/WindUI/blob/8c68c3f221e1
 - Added `CustomEmptyPage` to `Tab`
 - Added `TabTitleAlign` to `Tab` (applies to `ShowTabTitle`)
 - Fix Dropdown Width
+- Added New Elements: HStack & VStack (Group == HStack)
+- Added Glass effect to toggle
+- Moved Toggle Click Hitbox
