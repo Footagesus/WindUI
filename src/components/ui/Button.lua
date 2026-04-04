@@ -36,7 +36,7 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 			ImageColor3 = Variant == "White" and Color3.new(1, 1, 1) or nil,
 			Size = UDim2.new(1, 0, 1, 0),
 			Name = "Squircle",
-			ImageTransparency = Variant == "Primary" and 0 or Variant == "White" and 0 or 1,
+			ImageTransparency = Variant == "Primary" and 0 or Variant == "White" and 0 or 0.9,
 		}),
 
 		Creator.NewRoundFrame(Radius, "Squircle", {
