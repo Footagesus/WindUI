@@ -181,6 +181,7 @@ return function(Config)
 			not Element.Color and true or false,
 			"ElementIcon"
 		)
+		--print(Creator.Colors[Element.Color])
 		if typeof(Element.Color) == "string" and not string.find(Element.Image, "rbxthumb") then
 			ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
 		elseif typeof(Element.Color) == "Color3" and not string.find(Element.Image, "rbxthumb") then
@@ -550,14 +551,17 @@ return function(Config)
 					false,
 					Element.IconThemed
 				)
-				ThumbnailFrame.Size = UDim2.new(1, 0, 0, ThumbnailSize)
-				ThumbnailFrame.Parent = Element.UIElements.Container
-				local layout = Element.UIElements.Container:FindFirstChild("UIListLayout")
-				if layout then
-					ThumbnailFrame.LayoutOrder = -1
+				if ThumbnailFrame then
+					ThumbnailFrame.Size = UDim2.new(1, 0, 0, ThumbnailSize)
+					ThumbnailFrame.Parent = Element.UIElements.Container
+					local layout = Element.UIElements.Container:FindFirstChild("UIListLayout")
+					if layout then
+						ThumbnailFrame.LayoutOrder = -1
+					end
 				end
 			else
 				ThumbnailFrame.Visible = false
+
 			end
 		else
 			if newThumbnail then
@@ -570,11 +574,13 @@ return function(Config)
 					false,
 					Element.IconThemed
 				)
-				ThumbnailFrame.Size = UDim2.new(1, 0, 0, ThumbnailSize)
-				ThumbnailFrame.Parent = Element.UIElements.Container
-				local layout = Element.UIElements.Container:FindFirstChild("UIListLayout")
-				if layout then
-					ThumbnailFrame.LayoutOrder = -1
+				if ThumbnailFrame then
+					ThumbnailFrame.Size = UDim2.new(1, 0, 0, ThumbnailSize)
+					ThumbnailFrame.Parent = Element.UIElements.Container
+					local layout = Element.UIElements.Container:FindFirstChild("UIListLayout")
+					if layout then
+						ThumbnailFrame.LayoutOrder = -1
+					end
 				end
 			end
 		end
@@ -588,8 +594,8 @@ return function(Config)
 		end
 
 		if newImage then
-			local OldImageParent = ImageFrame.Parent
-			ImageFrame:Destroy()
+			local OldImageParent = ImageFrame and ImageFrame.Parent or Element.UIElements.Container.TitleFrame
+			if ImageFrame then ImageFrame:Destroy() end
 
 			ImageFrame = Creator.Image(
 				newImage,
@@ -599,19 +605,21 @@ return function(Config)
 				"Image",
 				not Element.Color and true or false
 			)
+			if ImageFrame then 
+				if typeof(Element.Color) == "string" and not string.find(Element.Image, "rbxthumb") then
+					ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
+				elseif typeof(Element.Color) == "Color3" and not string.find(Element.Image, "rbxthumb") then
+					ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Element.Color)
+				end
 
-			if typeof(Element.Color) == "string" and not string.find(Element.Image, "rbxthumb") then
-				ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
-			elseif typeof(Element.Color) == "Color3" and not string.find(Element.Image, "rbxthumb") then
-				ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Element.Color)
+				
+				ImageFrame.Visible = true
+				ImageFrame.Parent = OldImageParent
+				ImageFrame.LayoutOrder = -99
+
+				ImageFrame.Size = UDim2.new(0, ImageSize, 0, ImageSize)
+				IconOffset = Element.ImageSize + Element.UIPadding
 			end
-
-			ImageFrame.Visible = true
-			ImageFrame.Parent = OldImageParent
-			ImageFrame.LayoutOrder = -99
-
-			ImageFrame.Size = UDim2.new(0, ImageSize, 0, ImageSize)
-			IconOffset = Element.ImageSize + Element.UIPadding
 		else
 			if ImageFrame then
 				ImageFrame.Visible = true
