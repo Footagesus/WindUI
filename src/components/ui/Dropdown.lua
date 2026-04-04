@@ -160,7 +160,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				Str = Str:sub(1, #Str - 2)
 			end
 		else
-			Str = typeof(Dropdown.Value) == "table" and Dropdown.Value.Title or Dropdown.Value or ""
+			Str = typeof(Dropdown.Value) == "table" and (Dropdown.Value.Title or Dropdown.Value[1]) or Dropdown.Value or ""
 		end
 
 		if Dropdown.UIElements.Dropdown then
