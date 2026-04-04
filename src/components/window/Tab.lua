@@ -445,7 +445,8 @@ function TabModule.New(Config, UIScale)
 		WindUI,
 		nil,
 		ElementsModule,
-		UIScale
+		UIScale,
+		Tab
 	)
 
 	function Tab:LockAll()
