@@ -1,4 +1,3 @@
-local CacheableContentProvider = game:GetService("CacheableContentProvider")
 --[[
     WindUI Example 2
 ]]
@@ -34,8 +33,8 @@ local Window = WindUI:CreateWindow({
 	Title = "Beta",
 	NewElements = true,
 	Theme = "Dark",
-	Size = UDim2.new(0, 850, 0, 500),
-	MinSize = Vector2.new(650, 400),
+	Size = UDim2.new(0, 840, 0, 500),
+	MinSize = Vector2.new(815, 400),
 	MaxSize = Vector2.new(1000, 700),
 })
 
@@ -281,9 +280,9 @@ VStackThird:Paragraph({
 VStackThird:Space()
 
 VStackThird:Button({
-	Title = "Button in Third VStack",
+	Title = "Print Window Size",
+	Icon = "app-window", 
 	Callback = function()
-		print("Button in third VStack clicked!")
 		print("UI Size:", Window.Size)
 	end,
 })
