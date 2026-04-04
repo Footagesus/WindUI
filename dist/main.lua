@@ -5491,7 +5491,7 @@ ag.IconThemed,
 not ag.Color and true or false,
 "ElementIcon"
 )
-print(aa.Colors[ag.Color])
+
 if typeof(ag.Color)=="string"and not string.find(ag.Image,"rbxthumb")then
 ao.ImageLabel.ImageColor3=GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 elseif typeof(ag.Color)=="Color3"and not string.find(ag.Image,"rbxthumb")then
