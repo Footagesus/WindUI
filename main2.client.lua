@@ -58,6 +58,11 @@ local Tab1 = Window:Tab({
 	IconThemed = true,
 })
 
+local Tab2 = Window:Tab({
+	Title = "hahahahah",
+	Icon = "user",
+})
+
 Tab1:Select()
 
 Tab1:Section({
