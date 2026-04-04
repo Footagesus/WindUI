@@ -61,7 +61,7 @@ function Checkbox.New(Value, Icon, IconSize, Parent, Callback, Config)
         }),
         
         IconCheckboxFrame,
-    })
+    }, true)
     
     function Checkbox:Set(Toggled)
         if Toggled then
