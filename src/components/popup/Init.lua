@@ -5,7 +5,7 @@ local New = Creator.New
 local Tween = Creator.Tween
 
 
-function PopupModule.new(PopupConfig)
+function PopupModule.new(PopupConfig, Parent)
     local Popup = {
         Title = PopupConfig.Title or "Dialog",
         Content = PopupConfig.Content,
@@ -17,8 +17,8 @@ function PopupModule.new(PopupConfig)
         IconSize = 22,
     }
     
-    local DialogInit = require("../window/Dialog").Init(nil, PopupConfig.WindUI.ScreenGui.Popups)
-    local Dialog = DialogInit.Create(true, "Popup")
+    local DialogInit = require("../window/Dialog")
+    local Dialog = DialogInit.Create(true, "Popup", PopupConfig.WindUI.Window, PopupConfig.WindUI, Parent)
     
     local ThumbnailSize = 200
     
