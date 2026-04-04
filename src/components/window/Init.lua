@@ -66,7 +66,7 @@ return function(Config)
 		DragFrameSize = 160,
 
 		Position = UDim2.new(0.5, 0, 0.5, 0),
-		UICorner = nil, -- Window.Radius (16)
+		UICorner = 16, -- Window.Radius (16)
 		UIPadding = 14,
 		UIElements = {},
 		CanDropdown = true,
@@ -1651,7 +1651,7 @@ return function(Config)
 		return MainDivider
 	end
 
-	local DialogModule = require("./Dialog").Init(Window, Config.WindUI, nil)
+	local DialogModule = require("./Dialog")
 	function Window:Dialog(DialogConfig)
 		local DialogTable = {
 			Title = DialogConfig.Title or "Dialog",
@@ -1661,7 +1661,7 @@ return function(Config)
 
 			TextPadding = 14,
 		}
-		local Dialog = DialogModule.Create(false)
+		local Dialog = DialogModule.Create(false, "Dialog", Window, Config.WindUI, Window.UIElements.Main.Main)
 
 		Dialog.UIElements.Main.Size = UDim2.new(0, DialogTable.Width, 0, 0)
 
@@ -1861,7 +1861,7 @@ return function(Config)
 		if not ClickedClose then
 			if not Window.IgnoreAlerts then
 				ClickedClose = true
-				Window:SetToTheCenter()
+				--Window:SetToTheCenter()
 				Window:Dialog({
 					--Icon = "trash-2",
 					Title = "Close Window",
