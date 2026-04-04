@@ -2,8 +2,8 @@ local Creator = require("../../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
-local Window
-local WindUI
+-- local Window
+-- local WindUI
 
 local DialogModule = {
 	Holder = nil,
@@ -11,14 +11,8 @@ local DialogModule = {
 	Parent = nil,
 }
 
-function DialogModule.Init(WindowTable, WindUITable, Parent)
-	Window = WindowTable
-	WindUI = WindUITable
-	DialogModule.Parent = Parent
-	return DialogModule
-end
 
-function DialogModule.Create(Key, Type)
+function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 	local Dialog = {
 		UICorner = 28,
 		UIPadding = 12,
@@ -93,7 +87,7 @@ function DialogModule.Create(Key, Type)
 		Visible = false, -- true
 		--GroupTransparency = 1, -- 0
 		ImageTransparency = Key and 0.15 or 0,
-		Parent = Key and DialogModule.Parent or Dialog.UIElements.FullScreen,
+		Parent = Parent or Dialog.UIElements.FullScreen,
 		Position = UDim2.new(0.5, 0, 0.5, 0),
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		AutomaticSize = "XY",
