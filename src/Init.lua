@@ -276,6 +276,7 @@ function WindUI:CreateWindow(Config)
 	end
 
 	Config.WindUI = WindUI
+	Config.Window = WindUI.Window
 	Config.Parent = WindUI.ScreenGui.Window
 
 	if WindUI.Window then
