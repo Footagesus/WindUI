@@ -12873,7 +12873,6 @@ end
 end)
 
 au.CanDropdown=true
-
 au.UIElements.Main.Visible=true
 task.spawn(function()
 task.wait(0.05)
@@ -12894,7 +12893,9 @@ end
 
 at.WindUI:ToggleAcrylic(false)
 
-au.UIElements.Main:WaitForChild"Main".Visible=false
+if au.UIElements.Main and au.UIElements.Main:WaitForChild"Main"then
+au.UIElements.Main.Main.Visible=false
+end
 
 au.CanDropdown=false
 au.Closed=true
