@@ -39,6 +39,15 @@ local Window = WindUI:CreateWindow({
 	Transparent = true,
 	ToggleKey = Enum.KeyCode.F,
 	Acrylic = true,
+
+	KeySystem = {
+		Title = "SUper key Sustem",
+		Note = "fejnighsrbefijdkamejsh",
+		KeyValidator = function(Key)
+			return Key == "HelloWorld"
+
+		end
+	},
 })
 
 local Tag = Window:Tag({
