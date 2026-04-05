@@ -1327,7 +1327,6 @@ return function(Config)
 			end)
 
 			Window.CanDropdown = true
-
 			Window.UIElements.Main.Visible = true
 			task.spawn(function()
 				task.wait(0.05)
@@ -1348,7 +1347,9 @@ return function(Config)
 
 		Config.WindUI:ToggleAcrylic(false)
 
-		Window.UIElements.Main:WaitForChild("Main").Visible = false
+		if Window.UIElements.Main and Window.UIElements.Main:WaitForChild("Main") then
+			Window.UIElements.Main.Main.Visible = false
+		end
 
 		Window.CanDropdown = false
 		Window.Closed = true
