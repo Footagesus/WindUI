@@ -29,6 +29,54 @@ do
 	end
 end
 
+
+--[[ local function LoadFont()
+	local FontUrl = "https://github.com/vercel/geist-font/raw/refs/heads/main/fonts/Geist/otf/Geist-SemiBold.otf"
+
+	if not isfile then
+		return
+	end
+
+	
+	local Response = WindUI.Creator.Request({
+		Url = FontUrl,
+		Method = "GET",
+	})
+	
+	if Response.Success then
+		local FontData = Response.Body
+		local FontPath = "WindUI/Geist-SemiBold.ttf"
+		
+		if writefile then
+			writefile(FontPath, FontData)
+
+			local json = {
+				name = "Geist",
+				faces = {
+					{
+						weight = 600,
+						style = "SemiBold",
+						src = getcustomasset(FontPath),
+					},
+					-- ...
+				}
+			}
+
+			--writefile("WindUI/Geist.json", game:GetService("HttpService"):JSONEncode(json))
+
+			--return getcustomasset("WindUI/Geist.json")
+			return game:GetService("HttpService"):JSONEncode(json)
+		end
+	end
+end 
+
+local Font = LoadFont()
+print(Font)
+WindUI:SetFont(Font)
+
+print(getcustomasset("rbxasset://fonts/families/GothamSSm.json"))
+]]
+
 local Window = WindUI:CreateWindow({
 	Title = "Beta",
 	NewElements = true,
