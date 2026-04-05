@@ -1,4 +1,3 @@
-# .github/workflows/release.yml
 name: Release
 
 on:
@@ -20,37 +19,59 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: "20"
+                  cache: "npm"
 
             - name: Install dependencies
               run: npm install
+
+            - name: Cache Aftman tool storage
+              uses: actions/cache@v4
+              id: aftman-cache
+              with:
+                  path: ~/.aftman/tool-storage
+                  key: aftman-${{ runner.os }}-${{ hashFiles('aftman.toml') }}
+                  restore-keys: |
+                      aftman-${{ runner.os }}-
+
+            - name: Install Aftman
+              run: |
+                  curl -fsSL \
+                    "https://github.com/LPGhatguy/aftman/releases/latest/download/aftman-linux.zip" \
+                    -o aftman.zip
+                  unzip -q aftman.zip -d aftman-bin
+                  ./aftman-bin/aftman self-install
+                  echo "$HOME/.aftman/bin" >> "$GITHUB_PATH"
+
+            - name: Install tools via Aftman
+              run: aftman install --no-trust-check
 
             - name: Build
               run: npm run build
 
             - name: Get version from tag
               id: version
-              run: echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+              run: echo "version=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
             - name: Get changelog
               id: changelog
               run: |
                   if [ -f changelog.md ]; then
                     content=$(tail -n +2 changelog.md | sed '/^$/d' | head -c 10000)
-                    echo "content<<EOF" >> $GITHUB_OUTPUT
-                    echo "$content" >> $GITHUB_OUTPUT
-                    echo "EOF" >> $GITHUB_OUTPUT
+                    echo "content<<EOF" >> "$GITHUB_OUTPUT"
+                    echo "$content"     >> "$GITHUB_OUTPUT"
+                    echo "EOF"          >> "$GITHUB_OUTPUT"
                   else
-                    echo "content=No changelog provided." >> $GITHUB_OUTPUT
+                    echo "content=No changelog provided." >> "$GITHUB_OUTPUT"
                   fi
 
             - name: Get main file from package.json
               id: package
               run: |
                   if [ -f package.json ]; then
-                    main=$(cat package.json | python3 -c "import sys,json; print(json.load(sys.stdin).get('main','main.lua'))")
-                    echo "main=$main" >> $GITHUB_OUTPUT
+                    main=$(python3 -c "import sys,json; print(json.load(open('package.json')).get('main','main.lua'))")
+                    echo "main=$main" >> "$GITHUB_OUTPUT"
                   else
-                    echo "main=main.lua" >> $GITHUB_OUTPUT
+                    echo "main=main.lua" >> "$GITHUB_OUTPUT"
                   fi
 
             - name: Create Release
@@ -58,7 +79,7 @@ jobs:
               with:
                   tag_name: ${{ steps.version.outputs.version }}
                   name: ${{ steps.version.outputs.version }}
-                  body: ${{ steps.changelog.content }}
+                  body: ${{ steps.changelog.outputs.content }}
                   draft: false
                   prerelease: false
                   files: ${{ steps.package.outputs.main }}
@@ -73,10 +94,13 @@ jobs:
               run: |
                   VERSION="${{ steps.version.outputs.version }}"
                   URL="https://github.com/${{ github.repository }}/releases/tag/$VERSION"
-                  CONTENT=$(cat changelog.md | tail -n +2 | head -c 1000)
+
+                  CONTENT=""
+                  if [ -f changelog.md ]; then
+                    CONTENT=$(tail -n +2 changelog.md | head -c 1000)
+                  fi
                   DESCRIPTION=$(echo "$CONTENT" | python3 -c "import sys,json; print(json.dumps(sys.stdin.read()))")
 
-                  # Пинг роли только если DISCORD_ROLE_ID задан
                   if [ -n "$DISCORD_ROLE_ID" ]; then
                     MENTION="\"<@&$DISCORD_ROLE_ID>\""
                   else
