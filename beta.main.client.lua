@@ -377,3 +377,14 @@ TestTab:Dropdown({
 		getgenv().im = somevalue[Value]
 	end
 })
+
+
+local ColorpickerTab = Window:Tab({
+	Title = "Colorpicker Test",
+})
+
+local Colorpicker = ColorpickerTab:Colorpicker({
+	Title = "Pick a color",
+	Default = Color3.fromRGB(255, 0, 0),
+	Transparency = 0,
+})

@@ -21,7 +21,7 @@ local Element = {
     --UIPadding = 8
 }
 
-function Element:Colorpicker(Config, Window, OnApply)
+function Element:Colorpicker(Config, Window, WindUI, OnApply)
     local Colorpicker = {
         __type = "Colorpicker",
         Title = Config.Title,
@@ -43,8 +43,8 @@ function Element:Colorpicker(Config, Window, OnApply)
 
 	Colorpicker:SetHSVFromRGB(Colorpicker.Default)
     
-    local ColorpickerModule = require("../components/window/Dialog").Init(Window)
-    local ColorpickerFrame = ColorpickerModule.Create()
+    local ColorpickerModule = require("../components/window/Dialog")
+    local ColorpickerFrame = ColorpickerModule.Create(nil, "Dialog", Window, WindUI, Window.UIElements.Main.Main)
     
     Colorpicker.ColorpickerFrame = ColorpickerFrame
     
@@ -704,7 +704,7 @@ function Element:New(Config)
     
     Creator.AddSignal(Colorpicker.UIElements.Colorpicker.MouseButton1Click, function()
         if CanCallback then
-            Element:Colorpicker(Colorpicker, Config.Window, function(color, transparency)
+            Element:Colorpicker(Colorpicker, Config.Window, Config.WindUI, function(color, transparency)
                 Colorpicker:Update(color, transparency)
                 Colorpicker.Default = color
                 Colorpicker.Transparency = transparency

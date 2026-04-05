@@ -97,11 +97,10 @@ function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 		},
 		ZIndex = 9999,
 	}, {
-		-- Creator.NewRoundFrame(Dialog.UICorner, "Squircle", {
-		--     ImageColor3 = Color3.new(0,0,0),
-		--     ImageTransparency = .8,
-		--     Size = UDim2.new(1,0,1,0)
-		-- }),
+		Creator.NewRoundFrame(Dialog.UICorner, "Glass-1", {
+		    ImageTransparency = 0.89,
+		    Size = UDim2.new(1,0,1,0)
+		}),
 		Dialog.UIElements.Main,
 
 		-- New("UIScale", {
