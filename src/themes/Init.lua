@@ -1,4 +1,4 @@
-return function(WindUI)
+return function(WindUI, Creator)
 	return {
 		Dark = {
 			Name = "Dark",
@@ -24,6 +24,9 @@ return function(WindUI)
 			--WindowTopbarButtonIcon = Color3.fromHex("#ffffff"),
 			LabelBackground = Color3.fromHex("#000000"),
 			LabelBackgroundTransparency = 0.83,
+
+			ElementBackground = Color3.fromHex("#2A2A2C"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Light = {
@@ -52,6 +55,9 @@ return function(WindUI)
 
 			LabelBackground = Color3.fromHex("#ffffff"),
 			LabelBackgroundTransparency = 0,
+
+			ElementBackground = Color3.fromHex("#EEEEEE"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Rose = {
@@ -65,6 +71,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#1f0308"),
 			Button = Color3.fromHex("#e95f74"),
 			Icon = Color3.fromHex("#fb7185"),
+
+			ElementBackground = Color3.fromHex("#381E23"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Plant = {
@@ -78,6 +87,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#0a1b0f"),
 			Button = Color3.fromHex("#16a34a"),
 			Icon = Color3.fromHex("#4ade80"),
+
+			ElementBackground = Color3.fromHex("#28342A"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Red = {
@@ -91,6 +103,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#1c0606"),
 			Button = Color3.fromHex("#dc2626"),
 			Icon = Color3.fromHex("#ef4444"),
+
+			ElementBackground = Color3.fromHex("#322221"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Indigo = {
@@ -104,6 +119,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#0f0a2e"),
 			Button = Color3.fromHex("#4f46e5"),
 			Icon = Color3.fromHex("#6366f1"),
+
+			ElementBackground = Color3.fromHex("#282543"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Sky = {
@@ -124,6 +142,9 @@ return function(WindUI)
 
 			PanelBackground = Color3.fromHex("#0d3a47"),
 			PanelBackgroundTransparency = 0.8,
+
+			ElementBackground = Color3.fromHex("#172E3B"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Violet = {
@@ -137,6 +158,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#1e0a3e"),
 			Button = Color3.fromHex("#7c3aed"),
 			Icon = Color3.fromHex("#8b5cf6"),
+
+			ElementBackground = Color3.fromHex("#342650"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Amber = {
@@ -193,6 +217,9 @@ return function(WindUI)
 
 			PanelBackground = Color3.fromHex("#FFFFFF"),
 			PanelBackgroundTransparency = 0.95,
+
+			ElementBackground = Color3.fromHex("#3A2E22"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Emerald = {
@@ -206,6 +233,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#011411"),
 			Button = Color3.fromHex("#059669"),
 			Icon = Color3.fromHex("#10b981"),
+
+			ElementBackground = Color3.fromHex("#202E2A"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Midnight = {
@@ -220,6 +250,9 @@ return function(WindUI)
 			Button = Color3.fromHex("#2563eb"),
 			Primary = Color3.fromHex("#2563eb"),
 			Icon = Color3.fromHex("#5591f4"),
+
+			ElementBackground = Color3.fromHex("#242836"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Crimson = {
@@ -233,6 +266,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#0c0404"),
 			Button = Color3.fromHex("#991b1b"),
 			Icon = Color3.fromHex("#dc2626"),
+
+			ElementBackground = Color3.fromHex("#251F1F"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		MonokaiPro = {
@@ -246,6 +282,9 @@ return function(WindUI)
 			Background = Color3.fromHex("#191622"),
 			Button = Color3.fromHex("#ab9df2"),
 			Icon = Color3.fromHex("#a9dc76"),
+
+			ElementBackground = Color3.fromHex("#323039"),
+			ElementBackgroundTransparency = 0,
 
 			Metadata = {
 				PullRequest = 23,
@@ -264,6 +303,9 @@ return function(WindUI)
 			Button = Color3.fromHex("#d946ef"),
 			Slider = Color3.fromHex("#d946ef"),
 			Icon = Color3.fromHex("#06b6d4"),
+
+			ElementBackground = Color3.fromHex("#312643"),
+			ElementBackgroundTransparency = 0,
 		},
 
 		Mellowsi = {
@@ -281,6 +323,9 @@ return function(WindUI)
 			Toggle = Color3.fromHex("#a9873f"),
 			Slider = Color3.fromHex("#C9A24D"),
 			Checkbox = Color3.fromHex("#C9A24D"),
+
+			ElementBackground = Color3.fromHex("#33291E"),
+			ElementBackgroundTransparency = 0,
 
 			Metadata = {
 				PullRequest = 52,

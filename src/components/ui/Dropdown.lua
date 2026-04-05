@@ -54,6 +54,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 			--Name = "CanvasGroup",
 			ClipsDescendants = true,
 			LayoutOrder = 999,
+			Name = "Frame",
 		}, {
 			New("UICorner", {
 				CornerRadius = UDim.new(0, Element.MenuCorner - Element.MenuPadding),
@@ -160,7 +161,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				Str = Str:sub(1, #Str - 2)
 			end
 		else
-			Str = typeof(Dropdown.Value) == "table" and Dropdown.Value.Title or Dropdown.Value or ""
+			Str = typeof(Dropdown.Value) == "table" and (Dropdown.Value.Title or Dropdown.Value[1]) or Dropdown.Value or ""
 		end
 
 		if Dropdown.UIElements.Dropdown then

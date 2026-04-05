@@ -14,6 +14,8 @@ return {
 		Space = require("./Space"),
 		Image = require("./Image"),
 		Group = require("./Group"),
+		HStack = require("./HStack"),
+		VStack = require("./VStack"),
 		--Video       = require("./Video"),
 	},
 	Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale, Tab)

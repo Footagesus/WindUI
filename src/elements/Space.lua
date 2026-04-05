@@ -6,7 +6,7 @@ local Element = {}
 function Element:New(Config)
     local MainSpace = New("Frame", {
         Parent = Config.Parent,
-        Size = Config.ParentType ~= "Group" and UDim2.new(1,-7,0,7*(Config.Columns or 1)) or UDim2.new(0,7*(Config.Columns or 1),0,0),
+        Size = not table.find({ "Group", "HStack" }, Config.ParentType) and UDim2.new(1,-7,0,7*(Config.Columns or 1)) or UDim2.new(0,7*(Config.Columns or 1),0,0),
         BackgroundTransparency = 1,
     })
     

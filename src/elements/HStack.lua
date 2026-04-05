@@ -4,13 +4,14 @@ local New = Creator.New
 local Element = {}
 
 function Element:New(Config)
-    local GroupModule = {
-        __type = "Group",
+    local HStackModule = {
+        __type = "HStack",
+        AutoSpace = Config.AutoSpace or false,
         Elements = {},
         ElementFrame = nil,
     }
     
-    local GroupFrame = New("Frame", {
+    local HStackFrame = New("Frame", {
         Size = UDim2.new(1,0,0,0),
         BackgroundTransparency = 1,
         AutomaticSize = "Y",
@@ -24,12 +25,12 @@ function Element:New(Config)
         }),
     })
 
-    GroupModule.ElementFrame = GroupFrame
+    HStackModule.ElementFrame = HStackFrame
     
     local ElementsModule = Config.ElementsModule
     ElementsModule.Load(
-        GroupModule, 
-        GroupFrame, 
+        HStackModule, 
+        HStackFrame, 
         ElementsModule.Elements,
         Config.Window, 
         Config.WindUI,
@@ -77,9 +78,22 @@ function Element:New(Config)
         Config.Tab
     )
     
+    if HStackModule.AutoSpace then
+        for name in next, ElementsModule.Elements do
+            if name ~= "Space" and name ~= "Divider" then
+                local original = HStackModule[name]
+                HStackModule[name] = function(self, config)
+                    if #HStackModule.Elements > 0 then
+                        HStackModule:Space()
+                    end
+                    return original(self, config)
+                end
+            end
+        end
+    end
     
     
-    return GroupModule.__type, GroupModule
+    return HStackModule.__type, HStackModule
 end
 
 return Element
