@@ -24,26 +24,11 @@ jobs:
             - name: Install dependencies
               run: npm install
 
-            - name: Cache Aftman tool storage
-              uses: actions/cache@v4
-              id: aftman-cache
-              with:
-                  path: ~/.aftman/tool-storage
-                  key: aftman-${{ runner.os }}-${{ hashFiles('aftman.toml') }}
-                  restore-keys: |
-                      aftman-${{ runner.os }}-
+            - name: Setup Aftman
+              uses: ok-nick/setup-aftman@v0.3.0
 
-            - name: Install Aftman
-              run: |
-                  curl -fsSL \
-                    "https://github.com/LPGhatguy/aftman/releases/latest/download/aftman-linux.zip" \
-                    -o aftman.zip
-                  unzip -q aftman.zip -d aftman-bin
-                  ./aftman-bin/aftman self-install
-                  echo "$HOME/.aftman/bin" >> "$GITHUB_PATH"
-
-            - name: Install tools via Aftman
-              run: aftman install --no-trust-check
+            - name: Install Aftman tools
+              run: aftman install
 
             - name: Build
               run: npm run build
