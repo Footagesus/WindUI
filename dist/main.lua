@@ -2616,8 +2616,8 @@ local ae=a.load'l'.New
 local af=a.load'm'.New
 
 function aa.new(ag,ah,ai,aj)
-local ak=a.load'n'.Init(nil,ag.WindUI,ag.WindUI.ScreenGui.KeySystem)
-local al=ak.Create(true)
+local ak=a.load'n'
+local al=ak.Create(true,"Popup",ag.Window,ag.WindUI,ag.WindUI.ScreenGui.KeySystem)
 
 local am={}
 
@@ -13930,6 +13930,7 @@ end
 end
 
 aw.WindUI=aa
+aw.Window=aa.Window
 aw.Parent=aa.ScreenGui.Window
 
 if aa.Window then
