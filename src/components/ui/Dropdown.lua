@@ -54,6 +54,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 			--Name = "CanvasGroup",
 			ClipsDescendants = true,
 			LayoutOrder = 999,
+			Name = "Frame",
 		}, {
 			New("UICorner", {
 				CornerRadius = UDim.new(0, Element.MenuCorner - Element.MenuPadding),
