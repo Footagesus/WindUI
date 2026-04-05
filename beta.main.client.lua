@@ -55,6 +55,8 @@ local Tab3 = Window:Tab({
 	TabTitleAlign = "Right",
 })
 
+
+
 local PlayerParagraph = Tab:Paragraph({
 	Title = "...",
 	Desc = "...",
@@ -295,4 +297,35 @@ VStackThird:Toggle({
 	Callback = function(value)
 		print("Toggle in third VStack value:", value)
 	end,
+})
+
+local TestTab = Window:Tab({
+	Title = "Tab for testing",
+})
+
+somevalue = {
+	"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+	"eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+	"eighteen", "nineteen", "twenty", "twenty-one", "twenty-two", "twenty-three",
+	"twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight",
+	"twenty-nine", "thirty", "thirty-one", "thirty-two", "thirty-three",
+	"thirty-four", "thirty-five", "thirty-six", "thirty-seven", "thirty-eight",
+	"thirty-nine", "forty"
+}
+local function one()
+	local names = {}
+	for name, _ in pairs(somevalue) do
+		table.insert(names, name)
+	end
+	table.sort(names)
+	return names
+end
+
+TestTab:Dropdown({
+	Title = "Test",
+	Values = somevalue,
+	Value = "one",
+	Callback = function(Value)
+		getgenv().im = somevalue[Value]
+	end
 })
