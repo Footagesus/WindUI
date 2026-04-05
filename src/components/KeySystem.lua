@@ -8,8 +8,8 @@ local CreateButton = require("./ui/Button").New
 local CreateInput = require("./ui/Input").New
 
 function KeySystem.new(Config, Filename, func, keyValidator)
-	local KeyDialogInit = require("./window/Dialog").Init(nil, Config.WindUI, Config.WindUI.ScreenGui.KeySystem)
-	local KeyDialog = KeyDialogInit.Create(true)
+	local KeyDialogInit = require("./window/Dialog")
+	local KeyDialog = KeyDialogInit.Create(true, "Popup", Config.Window, Config.WindUI, Config.WindUI.ScreenGui.KeySystem)
 
 	local Services = {}
 
