@@ -39,6 +39,14 @@ local Window = WindUI:CreateWindow({
 	Transparent = true,
 	ToggleKey = Enum.KeyCode.F,
 	Acrylic = true,
+
+	KeySystem = {
+		Title = "Key System",
+		Description = "Enter the correct key to unlock the window",
+		KeyValidator = function(key)
+			return key == "HelloWorld"
+		end,
+	}
 })
 
 local Tag = Window:Tag({
