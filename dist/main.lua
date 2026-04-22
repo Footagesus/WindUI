@@ -12709,6 +12709,25 @@ Color3.fromHex"#60C762",
 au.Topbar.ButtonsType=="Mac"and 9 or nil
 )
 
+local function SetSize(z)
+an(au.UIElements.Main,0.45,{
+Size=not au.IsFullscreen and x or UDim2.new(
+0,
+(at.WindUI.ScreenGui.AbsoluteSize.X-20)/at.WindUI.UIScale,
+0,
+(at.WindUI.ScreenGui.AbsoluteSize.Y-20-52)/at.WindUI.UIScale
+),
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+
+an(
+au.UIElements.Main,
+0.45,
+{Position=not au.IsFullscreen and v or UDim2.new(0.5,0,0.5,26)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
+end
+
 function au.ToggleFullscreen(z)
 local A=au.IsFullscreen
 
@@ -12725,29 +12744,21 @@ au.CanResize=true
 end
 end
 
-an(
-au.UIElements.Main,
-0.45,
-{Size=A and x or UDim2.new(1,-20,1,-72)},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.Out
-):Play()
-
-an(
-au.UIElements.Main,
-0.45,
-{Position=A and v or UDim2.new(0.5,0,0.5,26)},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.Out
-):Play()
-
-
-
 au.IsFullscreen=not A
+
+SetSize(true)
 end
 
+al.AddSignal(at.WindUI.ScreenGui:GetPropertyChangedSignal"AbsoluteSize",function()
+if au.IsFullscreen then
+SetSize()
+end
+end)
+
 au:CreateTopbarButton("Minimize","minus",function()
+if au.Close then
 au:Close()
+end
 
 
 
