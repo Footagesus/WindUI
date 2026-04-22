@@ -440,14 +440,16 @@ return function(Config)
 	local Main, MainTable = NewRoundFrame(Element.UICorner, "Squircle", {
 		Size = UDim2.new(1, 0, 0, 0),
 		AutomaticSize = "Y",
-		ImageTransparency = Element.Color and 0.05 or nil,
+		ImageTransparency = Element.Color and 0.05 or (not Config.Window.NewElements and 0.93 or nil),
 		--Text = "",
 		--TextTransparency = 1,
 		--AutoButtonColor = false,
 		Parent = Config.Parent,
 		ThemeTag = {
-			ImageColor3 = not Element.Color and "ElementBackground" or nil,
-			ImageTransparency = not Element.Color and "ElementBackgroundTransparency" or nil,
+			ImageColor3 = not Element.Color and (Config.Window.NewElements and "ElementBackground" or "Text") or nil,
+			ImageTransparency = not Element.Color
+					and (Config.Window.NewElements and "ElementBackgroundTransparency" or nil)
+				or nil,
 		},
 		ImageColor3 = Element.Color and (typeof(Element.Color) == "string" and Color3.fromHex(
 			Creator.Colors[Element.Color]
@@ -561,7 +563,6 @@ return function(Config)
 				end
 			else
 				ThumbnailFrame.Visible = false
-
 			end
 		else
 			if newThumbnail then
@@ -595,7 +596,9 @@ return function(Config)
 
 		if newImage then
 			local OldImageParent = ImageFrame and ImageFrame.Parent or Element.UIElements.Container.TitleFrame
-			if ImageFrame then ImageFrame:Destroy() end
+			if ImageFrame then
+				ImageFrame:Destroy()
+			end
 
 			ImageFrame = Creator.Image(
 				newImage,
@@ -605,14 +608,14 @@ return function(Config)
 				"Image",
 				not Element.Color and true or false
 			)
-			if ImageFrame then 
+			if ImageFrame then
 				if typeof(Element.Color) == "string" and not string.find(Element.Image, "rbxthumb") then
-					ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
+					ImageFrame.ImageLabel.ImageColor3 =
+						GetTextColorForHSB(Color3.fromHex(Creator.Colors[Element.Color]))
 				elseif typeof(Element.Color) == "Color3" and not string.find(Element.Image, "rbxthumb") then
 					ImageFrame.ImageLabel.ImageColor3 = GetTextColorForHSB(Element.Color)
 				end
 
-				
 				ImageFrame.Visible = true
 				ImageFrame.Parent = OldImageParent
 				ImageFrame.LayoutOrder = -99
