@@ -1160,6 +1160,25 @@ return function(Config)
 		Window.Topbar.ButtonsType == "Mac" and 9 or nil
 	)
 
+	local function SetSize(isAnimation)
+		Tween(Window.UIElements.Main, 0.45, {
+			Size = not Window.IsFullscreen and CurrentSize or UDim2.new(
+				0,
+				(Config.WindUI.ScreenGui.AbsoluteSize.X - 20) / Config.WindUI.UIScale,
+				0,
+				(Config.WindUI.ScreenGui.AbsoluteSize.Y - 20 - 52) / Config.WindUI.UIScale
+			),
+		}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+
+		Tween(
+			Window.UIElements.Main,
+			0.45,
+			{ Position = not Window.IsFullscreen and CurrentPos or UDim2.new(0.5, 0, 0.5, 52 / 2) },
+			Enum.EasingStyle.Quint,
+			Enum.EasingDirection.Out
+		):Play()
+	end
+
 	function Window:ToggleFullscreen()
 		local isFullscreen = Window.IsFullscreen
 		-- Creator.SetDraggable(isFullscreen)
@@ -1176,29 +1195,21 @@ return function(Config)
 			end
 		end
 
-		Tween(
-			Window.UIElements.Main,
-			0.45,
-			{ Size = isFullscreen and CurrentSize or UDim2.new(1, -20, 1, -20 - 52) },
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		):Play()
-
-		Tween(
-			Window.UIElements.Main,
-			0.45,
-			{ Position = isFullscreen and CurrentPos or UDim2.new(0.5, 0, 0.5, 52 / 2) },
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		):Play()
-		-- delay(0, function()
-		-- end)
-
 		Window.IsFullscreen = not isFullscreen
+
+		SetSize(true)
 	end
 
+	Creator.AddSignal(Config.WindUI.ScreenGui:GetPropertyChangedSignal("AbsoluteSize"), function()
+		if Window.IsFullscreen then
+			SetSize()
+		end
+	end)
+
 	Window:CreateTopbarButton("Minimize", "minus", function()
-		Window:Close()
+		if Window.Close then
+			Window:Close()
+		end
 		-- task.spawn(function()
 		--     task.wait(.3)
 		--     if not Window.IsPC and Window.IsOpenButtonEnabled then
