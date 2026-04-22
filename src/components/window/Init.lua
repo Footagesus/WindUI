@@ -924,7 +924,7 @@ return function(Config)
 
 		Window.TopBarButtons[100 - LayoutOrder] = {
 			Name = Name,
-			Object = Button,
+			Object = ButtonContainer,
 		}
 
 		Creator.AddSignal(Button.MouseButton1Click, function()
