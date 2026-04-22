@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-04-05  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-04-22  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -5749,14 +5749,16 @@ Padding=UDim.new(0,8),
 local f,g=ac(ag.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
-ImageTransparency=ag.Color and 0.05 or nil,
+ImageTransparency=ag.Color and 0.05 or(not af.Window.NewElements and 0.93 or nil),
 
 
 
 Parent=af.Parent,
 ThemeTag={
-ImageColor3=not ag.Color and"ElementBackground"or nil,
-ImageTransparency=not ag.Color and"ElementBackgroundTransparency"or nil,
+ImageColor3=not ag.Color and(af.Window.NewElements and"ElementBackground"or"Text")or nil,
+ImageTransparency=not ag.Color
+and(af.Window.NewElements and"ElementBackgroundTransparency"or nil)
+or nil,
 },
 ImageColor3=ag.Color and(typeof(ag.Color)=="string"and Color3.fromHex(
 aa.Colors[ag.Color]
@@ -5870,7 +5872,6 @@ end
 end
 else
 an.Visible=false
-
 end
 else
 if j then
@@ -5904,7 +5905,9 @@ end
 
 if j then
 local m=ao and ao.Parent or ag.UIElements.Container.TitleFrame
-if ao then ao:Destroy()end
+if ao then
+ao:Destroy()
+end
 
 ao=aa.Image(
 j,
@@ -5916,11 +5919,11 @@ not ag.Color and true or false
 )
 if ao then
 if typeof(ag.Color)=="string"and not string.find(ag.Image,"rbxthumb")then
-ao.ImageLabel.ImageColor3=GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
+ao.ImageLabel.ImageColor3=
+GetTextColorForHSB(Color3.fromHex(aa.Colors[ag.Color]))
 elseif typeof(ag.Color)=="Color3"and not string.find(ag.Image,"rbxthumb")then
 ao.ImageLabel.ImageColor3=GetTextColorForHSB(ag.Color)
 end
-
 
 ao.Visible=true
 ao.Parent=m
@@ -12456,7 +12459,7 @@ Scale=1,
 true
 )
 
-am("Frame",{
+local J=am("Frame",{
 Size=au.Topbar.ButtonsType~="Default"and UDim2.new(0,24,0,24)
 or UDim2.new(0,au.Topbar.Height-16,0,au.Topbar.Height-16),
 BackgroundTransparency=1,
@@ -12470,7 +12473,7 @@ H,
 
 au.TopBarButtons[100-A]={
 Name=v,
-Object=H,
+Object=J,
 }
 
 al.AddSignal(H.MouseButton1Click,function()
@@ -12873,7 +12876,6 @@ end
 end)
 
 au.CanDropdown=true
-
 au.UIElements.Main.Visible=true
 task.spawn(function()
 task.wait(0.05)
@@ -12894,7 +12896,9 @@ end
 
 at.WindUI:ToggleAcrylic(false)
 
-au.UIElements.Main:WaitForChild"Main".Visible=false
+if au.UIElements.Main and au.UIElements.Main:WaitForChild"Main"then
+au.UIElements.Main.Main.Visible=false
+end
 
 au.CanDropdown=false
 au.Closed=true
