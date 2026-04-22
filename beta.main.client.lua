@@ -29,7 +29,6 @@ do
 	end
 end
 
-
 --[[ local function LoadFont()
 	local FontUrl = "https://github.com/vercel/geist-font/raw/refs/heads/main/fonts/Geist/otf/Geist-SemiBold.otf"
 
@@ -84,6 +83,7 @@ local Window = WindUI:CreateWindow({
 	Size = UDim2.new(0, 840, 0, 500),
 	MinSize = Vector2.new(815, 400),
 	MaxSize = Vector2.new(1000, 700),
+	--Transparent = true,
 })
 
 local Tab = Window:Tab({
@@ -102,8 +102,6 @@ local Tab3 = Window:Tab({
 	ShowTabTitle = true,
 	TabTitleAlign = "Right",
 })
-
-
 
 local PlayerParagraph = Tab:Paragraph({
 	Title = "...",
@@ -195,10 +193,6 @@ local Button = Group1:Button({
 	end,
 })
 
-
-
-
-
 local CoolTab = Window:Tab({
 	Title = "Cool Tab",
 })
@@ -214,10 +208,10 @@ CoolTab:Toggle({
 CoolTab:Slider({
 	Title = "Slider Example",
 	Value = {
-        Min = 0,
-        Max = 100,
-        Default = 50
-    },
+		Min = 0,
+		Max = 100,
+		Default = 50,
+	},
 	Width = 250,
 	IsTooltip = true,
 	Callback = function(value)
@@ -225,26 +219,28 @@ CoolTab:Slider({
 	end,
 })
 
-
 -- tab 3
 
 local Tab3 = Window:Tab({
 	Title = "Tab 3",
 })
 
-local HStack = Tab3:HStack({AutoSpace = true})
+local HStack = Tab3:HStack({ AutoSpace = true })
 
-local VStackLeft = HStack:VStack()   -- left
-local VStackRight = HStack:VStack()  -- right
-local VStackThird = HStack:VStack()  -- third
-
+local VStackLeft = HStack:VStack() -- left
+local VStackRight = HStack:VStack() -- right
+local VStackThird = HStack:VStack() -- third
 
 -- left
 VStackLeft:Paragraph({
 	Title = "[HIDDEN]" or Players.LocalPlayer.DisplayName,
 	Desc = "[HIDDEN]" or Players.LocalPlayer.Name,
-	Image = Players:GetUserThumbnailAsync(Players.LocalPlayer.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size420x420),
-	ImageSize = 70
+	Image = Players:GetUserThumbnailAsync(
+		Players.LocalPlayer.UserId,
+		Enum.ThumbnailType.HeadShot,
+		Enum.ThumbnailSize.Size420x420
+	),
+	ImageSize = 70,
 })
 
 VStackLeft:Button({
@@ -261,7 +257,6 @@ VStackLeft:Button({
 	end,
 })
 
-
 -- right
 
 local PlaceInfo = MarketplaceService:GetProductInfoAsync(game.PlaceId)
@@ -269,8 +264,10 @@ local PlaceInfo = MarketplaceService:GetProductInfoAsync(game.PlaceId)
 VStackRight:Paragraph({
 	Title = PlaceInfo.Name,
 	Desc = PlaceInfo.Description or "Cool Place!!",
-	Image = "https://assetgame.roblox.com/Game/Tools/ThumbnailAsset.ashx?aid="..game.PlaceId .."&fmt=png&wd=420&ht=420",
-	ImageSize = 70
+	Image = "https://assetgame.roblox.com/Game/Tools/ThumbnailAsset.ashx?aid="
+		.. game.PlaceId
+		.. "&fmt=png&wd=420&ht=420",
+	ImageSize = 70,
 })
 
 VStackRight:Button({
@@ -317,7 +314,6 @@ VStackRight:Button({
 	end,
 })
 
-
 -- third
 
 -- create some elements pls
@@ -331,7 +327,7 @@ VStackThird:Space()
 
 VStackThird:Button({
 	Title = "Print Window Size",
-	Icon = "app-window", 
+	Icon = "app-window",
 	Callback = function()
 		print("UI Size:", Window.Size)
 	end,
@@ -352,13 +348,46 @@ local TestTab = Window:Tab({
 })
 
 somevalue = {
-	"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-	"eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
-	"eighteen", "nineteen", "twenty", "twenty-one", "twenty-two", "twenty-three",
-	"twenty-four", "twenty-five", "twenty-six", "twenty-seven", "twenty-eight",
-	"twenty-nine", "thirty", "thirty-one", "thirty-two", "thirty-three",
-	"thirty-four", "thirty-five", "thirty-six", "thirty-seven", "thirty-eight",
-	"thirty-nine", "forty"
+	"one",
+	"two",
+	"three",
+	"four",
+	"five",
+	"six",
+	"seven",
+	"eight",
+	"nine",
+	"ten",
+	"eleven",
+	"twelve",
+	"thirteen",
+	"fourteen",
+	"fifteen",
+	"sixteen",
+	"seventeen",
+	"eighteen",
+	"nineteen",
+	"twenty",
+	"twenty-one",
+	"twenty-two",
+	"twenty-three",
+	"twenty-four",
+	"twenty-five",
+	"twenty-six",
+	"twenty-seven",
+	"twenty-eight",
+	"twenty-nine",
+	"thirty",
+	"thirty-one",
+	"thirty-two",
+	"thirty-three",
+	"thirty-four",
+	"thirty-five",
+	"thirty-six",
+	"thirty-seven",
+	"thirty-eight",
+	"thirty-nine",
+	"forty",
 }
 local function one()
 	local names = {}
@@ -375,9 +404,8 @@ TestTab:Dropdown({
 	Value = "one",
 	Callback = function(Value)
 		getgenv().im = somevalue[Value]
-	end
+	end,
 })
-
 
 local ColorpickerTab = Window:Tab({
 	Title = "Colorpicker Test",
