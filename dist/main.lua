@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-04-22  |  Roblox UI Library for scripts
+    v1.6.64  |  2026-04-24  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -6071,27 +6071,35 @@ local ai=ab("Frame",{
 Size=UDim2.new(1,0,0,38),
 BackgroundTransparency=1,
 AutomaticSize="Y",
-Parent=ah.UIElements.Container
+Parent=ah.UIElements.Container,
 },{
 ab("UIListLayout",{
 Padding=UDim.new(0,10),
 FillDirection="Vertical",
+}),
 })
-})
-
 
 for aj,ak in next,af.Buttons do
-local al=ad(ak.Title,ak.Icon,ak.Callback,"White",ai,nil,nil,af.Window.NewElements and 999 or 10)
+local al=ad(
+ak.Title,
+ak.Icon,
+ak.Callback,
+ak.Variant or"White",
+ai,
+nil,
+nil,
+af.Window.NewElements and 999 or 10
+)
 al.Size=UDim2.new(1,0,0,38)
 
 end
 end
 
 return ag.__type,ag
-
 end
 
 return ac end function a.D()
+
 local aa=a.load'c'local ab=
 aa.New
 
@@ -7564,7 +7572,9 @@ if#av>0 then
 av=av:sub(1,#av-2)
 end
 else
-av=typeof(an.Value)=="table"and(an.Value.Title or an.Value[1])or an.Value or""
+av=typeof(an.Value)=="table"and(an.Value.Title or an.Value[1])
+or an.Value
+or""
 end
 
 if an.UIElements.Dropdown then
@@ -7645,6 +7655,10 @@ end
 end
 
 function ar.Refresh(at,au)
+if am.Window.Destroyed then
+return
+end
+
 for av,aw in next,an.UIElements.Menu.Frame.ScrollingFrame:GetChildren()do
 if not aw:IsA"UIListLayout"then
 aw:Destroy()
@@ -11656,7 +11670,7 @@ au.TopBarButtonIconSize=au.TopBarButtonIconSize or(au.Topbar.ButtonsType=="Mac"a
 
 au.ElementConfig={
 UIPadding=(au.NewElements and 10 or 13),
-UICorner=au.ElementsRadius or(au.NewElements and 23 or 12),
+UICorner=au.ElementsRadius or(au.NewElements and 23 or 16),
 }
 
 local av=au.Size or UDim2.new(0,580,0,460)
@@ -12055,25 +12069,31 @@ local g
 local h=typeof(au.Background)=="string"and string.match(au.Background,"^video:(.+)")or nil
 local j=typeof(au.Background)=="string"
 and not h
-and string.match(au.Background,"^(https?://.+|rbx%w+://.+)")
+and(string.match(au.Background,"^https?://.+")or string.match(au.Background,"^rbx%w+://.+"))
 or nil
 
 local function GetImageExtension(l)
-local m=l:match"%.(%w+)$"or l:match"%.(%w+)%?"
-if m then
-m=m:lower()
-if m=="jpg"or m=="jpeg"or m=="png"or m=="webp"then
-return"."..m
+if not l or typeof(l)~="string"then
+return".png"
+end
+local m=l:match"^([^?#]+)"or l
+local p=m:match"%.(%w+)$"
+if p then
+p=p:lower()
+if p=="jpg"or p=="jpeg"or p=="png"or p=="webp"then
+return"."..p
 end
 end
 return".png"
 end
 
+print(GetImageExtension(j))
+
 if typeof(au.Background)=="string"and h then
 f=true
 
 if string.find(h,"http")then
-local l=au.Folder.."/assets/."..al.SanitizeFilename(h)..".webm"
+local l=(au.Folder or"Temp").."/assets/."..al.SanitizeFilename(h)..".webm"
 if not isfile(l)then
 local m,p=pcall(function()
 
@@ -12082,7 +12102,13 @@ local m,p=pcall(function()
 
 
 local m=game.HttpGet and game:HttpGet(h)
-writefile(l,m.Body)
+or al.Request{
+Url=h,
+Method="GET",
+Headers={["User-Agent"]="Roblox/Exploit"},
+}.Body
+print(m)
+writefile(l,m)
 end)
 if not m then
 warn("[ WindUI.Window.Background ] Failed to download video: "..tostring(p))
@@ -12114,7 +12140,7 @@ CornerRadius=UDim.new(0,au.UICorner),
 })
 g:Play()
 elseif j then
-local l=au.Folder
+local l=(au.Folder or"Temp")
 .."/assets/."
 ..al.SanitizeFilename(j)
 ..GetImageExtension(j)
@@ -12126,7 +12152,13 @@ local m,p=pcall(function()
 
 
 local m=game.HttpGet and game:HttpGet(j)
-writefile(l,m.Body)
+or al.Request{
+Url=h,
+Method="GET",
+Headers={["User-Agent"]="Roblox/Exploit"},
+}.Body
+print(m)
+writefile(l,m)
 end)
 if not m then
 warn("[ Window.Background ] Failed to download image: "..tostring(p))
