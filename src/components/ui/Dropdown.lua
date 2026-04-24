@@ -161,7 +161,9 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				Str = Str:sub(1, #Str - 2)
 			end
 		else
-			Str = typeof(Dropdown.Value) == "table" and (Dropdown.Value.Title or Dropdown.Value[1]) or Dropdown.Value or ""
+			Str = typeof(Dropdown.Value) == "table" and (Dropdown.Value.Title or Dropdown.Value[1])
+				or Dropdown.Value
+				or ""
 		end
 
 		if Dropdown.UIElements.Dropdown then
@@ -242,6 +244,10 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	end
 
 	function DropdownModule:Refresh(Values)
+		if Config.Window.Destroyed then
+			return
+		end
+
 		for _, Elementt in next, Dropdown.UIElements.Menu.Frame.ScrollingFrame:GetChildren() do
 			if not Elementt:IsA("UIListLayout") then
 				Elementt:Destroy()
