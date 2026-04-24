@@ -35,7 +35,7 @@ local Window = WindUI:CreateWindow({
 	Author = "by .ftgs",
 	Icon = "solar:wind-bold",
 	Theme = ThemeName,
-	NewElements = true,
+	--NewElements = true,
 	--Transparent = true,
 	ToggleKey = Enum.KeyCode.F,
 	--Acrylic = true,
@@ -78,7 +78,54 @@ Window:Tab({
 	Icon = "eye",
 })
 
-Window:Tab({
+local InfoTab = Window:Tab({
 	Title = "Info",
 	Icon = "badge-info",
+})
+
+InfoTab:Paragraph({
+	Title = "WindUI",
+	Desc = "WindUI is a open source UI library for Roblox Script Hubs",
+	Buttons = {
+		{
+			Title = "GitHub",
+			Callback = function()
+				print("GitHub Button Clicked")
+			end,
+		},
+		{
+			Title = "Documentation",
+			Variant = "Secondary",
+			Callback = function()
+				print("Documentation Button Clicked")
+			end,
+		},
+	},
+})
+
+local HStack1 = InfoTab:HStack()
+
+local VStackLeft = HStack1:VStack()
+local VStackRight = HStack1:VStack()
+
+VStackLeft:Button({
+	Title = "Reload UI",
+	Justify = "Center",
+	Icon = "refresh-ccw",
+	IconAlign = "Left",
+	Color = Color3.fromHex("#F44732"),
+	Callback = function()
+		print("Reloading UI...")
+	end,
+})
+
+VStackRight:Button({
+	Title = "Rejoin Place",
+	Justify = "Center",
+	Icon = "log-out",
+	IconAlign = "Left",
+	Color = Color3.fromHex("#f4b332"),
+	Callback = function()
+		print("Rejoining place...")
+	end,
 })
