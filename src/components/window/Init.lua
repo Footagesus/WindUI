@@ -107,7 +107,7 @@ return function(Config)
 
 	Window.ElementConfig = {
 		UIPadding = (Window.NewElements and 10 or 13),
-		UICorner = Window.ElementsRadius or (Window.NewElements and 23 or 12),
+		UICorner = Window.ElementsRadius or (Window.NewElements and 23 or 16),
 	}
 
 	local WindowSize = Window.Size or UDim2.new(0, 580, 0, 460)
@@ -506,11 +506,15 @@ return function(Config)
 	local BGVideo = typeof(Window.Background) == "string" and string.match(Window.Background, "^video:(.+)") or nil
 	local BGImageUrl = typeof(Window.Background) == "string"
 			and not BGVideo
-			and string.match(Window.Background, "^(https?://.+|rbx%w+://.+)")
+			and (string.match(Window.Background, "^https?://.+") or string.match(Window.Background, "^rbx%w+://.+"))
 		or nil
 
 	local function GetImageExtension(url)
-		local ext = url:match("%.(%w+)$") or url:match("%.(%w+)%?")
+		if not url or typeof(url) ~= "string" then
+			return ".png"
+		end
+		local cleanUrl = url:match("^([^?#]+)") or url
+		local ext = cleanUrl:match("%.(%w+)$")
 		if ext then
 			ext = ext:lower()
 			if ext == "jpg" or ext == "jpeg" or ext == "png" or ext == "webp" then
@@ -520,11 +524,13 @@ return function(Config)
 		return ".png"
 	end
 
+	print(GetImageExtension(BGImageUrl))
+
 	if typeof(Window.Background) == "string" and BGVideo then
 		IsVideoBG = true
 
 		if string.find(BGVideo, "http") then
-			local videoPath = Window.Folder .. "/assets/." .. Creator.SanitizeFilename(BGVideo) .. ".webm"
+			local videoPath = (Window.Folder or "Temp") .. "/assets/." .. Creator.SanitizeFilename(BGVideo) .. ".webm"
 			if not isfile(videoPath) then
 				local success, result = pcall(function()
 					-- local response = Creator.Request({
@@ -533,7 +539,13 @@ return function(Config)
 					-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
 					-- })
 					local response = game.HttpGet and game:HttpGet(BGVideo)
-					writefile(videoPath, response.Body)
+						or Creator.Request({
+							Url = BGVideo,
+							Method = "GET",
+							Headers = { ["User-Agent"] = "Roblox/Exploit" },
+						}).Body
+					print(response)
+					writefile(videoPath, response)
 				end)
 				if not success then
 					warn("[ WindUI.Window.Background ] Failed to download video: " .. tostring(result))
@@ -565,7 +577,7 @@ return function(Config)
 		})
 		BGImage:Play()
 	elseif BGImageUrl then
-		local imagePath = Window.Folder
+		local imagePath = (Window.Folder or "Temp")
 			.. "/assets/."
 			.. Creator.SanitizeFilename(BGImageUrl)
 			.. GetImageExtension(BGImageUrl)
@@ -577,7 +589,13 @@ return function(Config)
 				-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
 				-- })
 				local response = game.HttpGet and game:HttpGet(BGImageUrl)
-				writefile(imagePath, response.Body)
+					or Creator.Request({
+						Url = BGVideo,
+						Method = "GET",
+						Headers = { ["User-Agent"] = "Roblox/Exploit" },
+					}).Body
+				print(response)
+				writefile(imagePath, response)
 			end)
 			if not success then
 				warn("[ Window.Background ] Failed to download image: " .. tostring(result))
