@@ -83,6 +83,7 @@ local Window = WindUI:CreateWindow({
 	Size = UDim2.new(0, 840, 0, 500),
 	MinSize = Vector2.new(815, 400),
 	MaxSize = Vector2.new(1000, 700),
+	Background = "https://www.wwf.org.uk/sites/default/files/styles/ar_16x9_1920px/public/2023-09/Tropical.jpg",
 	--Transparent = true,
 })
 
@@ -145,7 +146,7 @@ local Dropdown = Tab:Dropdown({
 
 Dropdown:Refresh(RefreshPlayersTable())
 
--- autp update players list when player joins/leaves
+-- auto update players list when player joins/leaves
 Players.ChildAdded:Connect(function()
 	Dropdown:Refresh(RefreshPlayersTable())
 end)
