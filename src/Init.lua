@@ -20,6 +20,8 @@ local WindUI = {
 
 	cloneref = nil,
 	UIScaleObj = nil,
+
+	CreateWindow = nil,
 }
 
 local cloneref = (cloneref or clonereference or function(instance)
