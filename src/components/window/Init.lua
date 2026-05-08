@@ -549,7 +549,6 @@ return function(Config)
 				end)
 				if not success then
 					warn("[ WindUI.Window.Background ] Failed to download video: " .. tostring(result))
-					return
 				end
 			end
 
@@ -558,7 +557,6 @@ return function(Config)
 			end)
 			if not success then
 				warn("[ WindUI.Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
-				return
 			end
 			warn("[ WindUI.Window.Background ] VideoFrame may not work with custom video")
 			BGVideo = customAsset
@@ -599,7 +597,6 @@ return function(Config)
 			end)
 			if not success then
 				warn("[ Window.Background ] Failed to download image: " .. tostring(result))
-				return
 			end
 		end
 
@@ -608,7 +605,6 @@ return function(Config)
 		end)
 		if not success then
 			warn("[ Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
-			return
 		end
 
 		BGImage = New("ImageLabel", {
@@ -692,20 +688,21 @@ return function(Config)
 		},
 	})
 
-	Window.UIElements.Main = New("Frame", {
+	Window.UIElements.Main = New("CanvasGroup", {
 		Size = Window.Size,
 		Position = Window.Position,
 		BackgroundTransparency = 1,
 		Parent = Config.Parent,
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Active = true,
+		GroupTransparency = 1,
 	}, {
-		Config.WindUI.UIScaleObj,
+		--Config.WindUI.UIScaleObj,
 		Window.AcrylicPaint and Window.AcrylicPaint.Frame or nil,
 		Blur,
 		Creator.NewRoundFrame(Window.UICorner, "Squircle", {
-			ImageTransparency = 1, -- Window.Transparent and 0.25 or 0
-			Size = UDim2.new(1, 0, 1, -240),
+			ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0, -- Window.Transparent and 0.25 or 0
+			Size = UDim2.new(1, 0, 1, 0),
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = UDim2.new(0.5, 0, 0.5, 0),
 			Name = "Background",
@@ -717,9 +714,9 @@ return function(Config)
 			BGImage,
 			BottomDragFrame,
 			ResizeHandle,
-			-- New("UIScale", {
-			--     Scale = 0.95,
-			-- }),
+		}),
+		New("UIScale", {
+			Scale = 0.89,
 		}),
 		--UIStroke,
 		UICorner,
@@ -730,7 +727,7 @@ return function(Config)
 			BackgroundTransparency = 1,
 			Name = "Main",
 			--GroupTransparency = 1,
-			Visible = false,
+			--Visible = false,
 			ZIndex = 97,
 		}, {
 			New("UICorner", {
@@ -833,27 +830,22 @@ return function(Config)
 		}),
 	})
 
-	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
-		local LeftWidth = 0
-		local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
-			/ Config.WindUI.UIScale
-		-- if WindowTitle and WindowAuthor then
-		--     LeftWidth = math.max(WindowTitle.TextBounds.X / Config.WindUI.UIScale, WindowAuthor.TextBounds.X / Config.WindUI.UIScale)
-		-- else
-		--     LeftWidth = WindowTitle.TextBounds.X / Config.WindUI.UIScale
-		-- end
-		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.WindUI.UIScale
+	local function UpdateCenterFrame()
+		local UIScale = Config.WindUI.UIScale
+		local Topbar = Window.UIElements.Main.Main.Topbar
+
+		local leftWidth = Topbar.Left.AbsoluteSize.X / UIScale
+		local rightWidth = Topbar.Right.UIListLayout.AbsoluteContentSize.X / UIScale
+		local padding = Window.UIPadding / UIScale
+
 		if Window.Topbar.ButtonsType ~= "Default" then
-			LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
+			leftWidth = leftWidth + rightWidth + Window.UIPadding - 4
+			rightWidth = 0
 		end
-		-- if WindowIcon then
-		--     LeftWidth = LeftWidth + (Window.IconSize / Config.WindUI.UIScale) + (Window.UIPadding / Config.WindUI.UIScale) + (4 / Config.WindUI.UIScale)
-		-- end
-		Window.UIElements.Main.Main.Topbar.Center.Position =
-			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.WindUI.UIScale), 0.5, 0)
-		Window.UIElements.Main.Main.Topbar.Center.Size =
-			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.WindUI.UIScale), 1, 0)
-	end)
+
+		Topbar.Center.Position = UDim2.new(0, leftWidth + padding, 0.5, 0)
+		Topbar.Center.Size = UDim2.new(1, -leftWidth - rightWidth - (padding * 2), 1, 0)
+	end
 
 	if Window.Topbar.ButtonsType ~= "Default" then
 		Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Right:GetPropertyChangedSignal("AbsoluteSize"), function()
@@ -1292,8 +1284,8 @@ return function(Config)
 			task.wait(0.06)
 			Window.Closed = false
 
-			Tween(Window.UIElements.Main.Background, 0.2, {
-				ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+			Tween(Window.UIElements.Main, 0.2, {
+				GroupTransparency = 0,
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
 			if Window.UIElements.BackgroundGradient then
@@ -1302,9 +1294,9 @@ return function(Config)
 				}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 			end
 
-			Tween(Window.UIElements.Main.Background, 0.4, {
+			--[[Tween(Window.UIElements.Main.Background, 0.4, {
 				Size = UDim2.new(1, 0, 1, 0),
-			}, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out):Play()
+			}, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out):Play()]]
 
 			if BGImage then
 				if BGImage:IsA("VideoFrame") then
@@ -1320,7 +1312,7 @@ return function(Config)
 				Window.OpenButtonMain:Visible(false)
 			end
 
-			--Tween(Window.UIElements.Main.Background.UIScale, 0.2, {Scale = 1}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+			Tween(Window.UIElements.Main.UIScale, 0.33, { Scale = 1 }, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
 			Tween(
 				Blur,
 				0.25,
@@ -1359,7 +1351,7 @@ return function(Config)
 			Window.UIElements.Main.Visible = true
 			task.spawn(function()
 				task.wait(0.05)
-				Window.UIElements.Main:WaitForChild("Main").Visible = true
+				--Window.UIElements.Main:WaitForChild("Main").Visible = true
 
 				Config.WindUI:ToggleAcrylic(true)
 			end)
@@ -1376,27 +1368,27 @@ return function(Config)
 
 		Config.WindUI:ToggleAcrylic(false)
 
-		if Window.UIElements.Main and Window.UIElements.Main:WaitForChild("Main") then
+		--[[if Window.UIElements.Main and Window.UIElements.Main:WaitForChild("Main") then
 			Window.UIElements.Main.Main.Visible = false
-		end
+		end]]
 
 		Window.CanDropdown = false
 		Window.Closed = true
 
-		Tween(Window.UIElements.Main.Background, 0.32, {
-			ImageTransparency = 1,
-		}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+		Tween(Window.UIElements.Main, 0.24, {
+			GroupTransparency = 1,
+		}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		if Window.UIElements.BackgroundGradient then
-			Tween(Window.UIElements.BackgroundGradient, 0.32, {
+			Tween(Window.UIElements.BackgroundGradient, 0.2, {
 				ImageTransparency = 1,
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
 		end
 
-		Tween(Window.UIElements.Main.Background, 0.4, {
+		--[[Tween(Window.UIElements.Main.Background, 0.4, {
 			Size = UDim2.new(1, 0, 1, -240),
-		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()
+		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()]]
 
-		--Tween(Window.UIElements.Main.Background.UIScale, 0.19, {Scale = .95}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+		Tween(Window.UIElements.Main.UIScale, 0.28, { Scale = 0.85 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		if BGImage then
 			if BGImage:IsA("VideoFrame") then
 				BGImage.Visible = false
@@ -1407,9 +1399,9 @@ return function(Config)
 			end
 		end
 		Tween(Blur, 0.25, { ImageTransparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-		if UIStroke then
+		--[[if UIStroke then
 			Tween(UIStroke, 0.25, { Transparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-		end
+		end]]
 
 		Tween(
 			BottomDragFrame,
@@ -1444,11 +1436,15 @@ return function(Config)
 						Creator.SafeCallback(Window.OnDestroyCallback)
 					end)
 				end
+
 				if Window.AcrylicPaint and Window.AcrylicPaint.Model then
 					Window.AcrylicPaint.Model:Destroy()
 				end
+
 				Window.Destroyed = true
+
 				task.wait(0.4)
+
 				Config.WindUI.ScreenGui:Destroy()
 				Config.WindUI.NotificationGui:Destroy()
 				Config.WindUI.DropdownGui:Destroy()
