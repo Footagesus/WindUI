@@ -69,7 +69,7 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 			},
 			Size = UDim2.new(1, 0, 1, 0),
 			--ImageColor3 = Variant == "White" and Color3.new(0,0,0) or nil,
-			ImageTransparency = 0.6,
+			ImageTransparency = 0.92,
 			Name = "Outline",
 		}, {
 			-- New("UIGradient", {
