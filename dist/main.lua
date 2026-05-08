@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-04-24  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-05-08  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2118,7 +2118,7 @@ New=a.load'i'.New
 return[[
 {
     "name": "windui",
-    "version": "1.6.64",
+    "version": "1.6.65",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Footagesus/WindUI",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
@@ -2219,7 +2219,7 @@ ImageColor3="White",
 },
 Size=UDim2.new(1,0,1,0),
 
-ImageTransparency=0.6,
+ImageTransparency=0.92,
 Name="Outline",
 },{
 
@@ -2440,7 +2440,6 @@ Holder=nil,
 Parent=nil,
 }
 
-
 function ad.Create(ae,af,ag,ah,ai)
 local aj={
 UICorner=28,
@@ -2527,8 +2526,8 @@ ImageTransparency=af.."BackgroundTransparency",
 ZIndex=9999,
 },{
 aa.NewRoundFrame(aj.UICorner,"Glass-1",{
-ImageTransparency=0.89,
-Size=UDim2.new(1,0,1,0)
+ImageTransparency=0.92,
+Size=UDim2.new(1,0,1,0),
 }),
 aj.UIElements.Main,
 
@@ -2606,6 +2605,7 @@ return aj
 end
 
 return ad end function a.o()
+
 local aa={}
 
 local ab=a.load'c'
@@ -9407,10 +9407,11 @@ Expandable=false,
 
 local am
 
-
 function al.SetIcon(an,ao)
 al.Icon=ao or nil
-if am then am:Destroy()end
+if am then
+am:Destroy()
+end
 if ao then
 am=aa.Image(
 ao,
@@ -9429,7 +9430,7 @@ end
 local an=ae("Frame",{
 Size=UDim2.new(0,al.IconSize,0,al.IconSize),
 BackgroundTransparency=1,
-Visible=false
+Visible=false,
 },{
 ae("ImageLabel",{
 Size=UDim2.new(1,0,1,0),
@@ -9441,9 +9442,8 @@ ThemeTag={
 ImageTransparency="SectionExpandIconTransparency",
 ImageColor3="SectionExpandIcon",
 },
+}),
 })
-})
-
 
 if al.Icon then
 al:SetIcon(al.Icon)
@@ -9457,8 +9457,8 @@ ae("UIListLayout",{
 FillDirection="Vertical",
 HorizontalAlignment=al.TextXAlignment,
 VerticalAlignment="Center",
-Padding=UDim.new(0,4)
-})
+Padding=UDim.new(0,4),
+}),
 })
 
 local ap,aq
@@ -9477,12 +9477,7 @@ FontFace=Font.new(aa.Font,as=="Title"and al.FontWeight or al.DescFontWeight),
 
 
 Text=ar,
-Size=UDim2.new(
-1,
-0,
-0,
-0
-),
+Size=UDim2.new(1,0,0,0),
 TextWrapped=true,
 Parent=ao,
 })
@@ -9504,7 +9499,6 @@ end
 ao.Size=UDim2.new(1,ar,0,0)
 end
 
-
 local ar=aa.NewRoundFrame(ak.Window.ElementConfig.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 BackgroundTransparency=1,
@@ -9517,7 +9511,10 @@ ImageColor3="SectionBoxBackground",
 },
 ImageTransparency=not al.Box and 1 or nil,
 },{
-aa.NewRoundFrame(ak.Window.ElementConfig.UICorner,ak.Window.NewElements and"Glass-1"or"SquircleOutline",{
+aa.NewRoundFrame(
+ak.Window.ElementConfig.UICorner,
+ak.Window.NewElements and"Glass-1"or"SquircleOutline",
+{
 Size=UDim2.new(1,0,1,0),
 
 ThemeTag={
@@ -9526,7 +9523,8 @@ ImageColor3="SectionBoxBorder",
 },
 Visible=al.Box and al.BoxBorder,
 Name="Outline",
-}),
+}
+),
 ae("TextButton",{
 Size=UDim2.new(1,0,0,al.Expandable and 0 or(not aq and al.HeaderSize or 0)),
 BackgroundTransparency=1,
@@ -9535,10 +9533,22 @@ Text="",
 Name="Top",
 },{
 al.Box and ae("UIPadding",{
-PaddingTop=UDim.new(0,ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)),
-PaddingLeft=UDim.new(0,ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)),
-PaddingRight=UDim.new(0,ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)),
-PaddingBottom=UDim.new(0,ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)),
+PaddingTop=UDim.new(
+0,
+ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)
+),
+PaddingLeft=UDim.new(
+0,
+ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)
+),
+PaddingRight=UDim.new(
+0,
+ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)
+),
+PaddingBottom=UDim.new(
+0,
+ak.Window.ElementConfig.UIPadding+(ak.Window.NewElements and 4 or 0)
+),
 })or nil,
 am,
 ao,
@@ -9556,7 +9566,7 @@ Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 Name="Content",
 Visible=false,
-Position=UDim2.new(0,0,0,al.HeaderSize)
+Position=UDim2.new(0,0,0,al.HeaderSize),
 },{
 al.Box and ae("UIPadding",{
 PaddingLeft=UDim.new(0,ak.Window.ElementConfig.UIPadding),
@@ -9568,7 +9578,7 @@ FillDirection="Vertical",
 Padding=UDim.new(0,ak.Tab.Gap),
 VerticalAlignment="Top",
 }),
-})
+}),
 })
 
 
@@ -9581,10 +9591,13 @@ if aq then
 ar.Top:GetPropertyChangedSignal"AbsoluteSize":Connect(function()
 ar.Content.Position=UDim2.new(0,0,0,ar.Top.AbsoluteSize.Y/ak.UIScale)
 
-if al.Opened then al:Open(true)else al.Close(true)end
+if al.Opened then
+al:Open(true)
+else
+al.Close(true)
+end
 end)
 end
-
 
 local as=ak.ElementsModule
 
@@ -9595,7 +9608,6 @@ an.Visible=true
 UpdateTitleSize()
 end
 end,as,ak.UIScale,ak.Tab)
-
 
 UpdateTitleSize()
 
@@ -9631,14 +9643,30 @@ function al.Open(at,au)
 if al.Expandable then
 al.Opened=true
 if au then
-ar.Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,(ar.Top.AbsoluteSize.Y)/ak.UIScale+(ar.Content.AbsoluteSize.Y/ak.UIScale))
+ar.Size=UDim2.new(
+ar.Size.X.Scale,
+ar.Size.X.Offset,
+0,
+ar.Top.AbsoluteSize.Y/ak.UIScale+(ar.Content.AbsoluteSize.Y/ak.UIScale)
+)
 an.ImageLabel.Rotation=180
 else
 af(ar,0.33,{
-Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,(ar.Top.AbsoluteSize.Y)/ak.UIScale+(ar.Content.AbsoluteSize.Y/ak.UIScale))
+Size=UDim2.new(
+ar.Size.X.Scale,
+ar.Size.X.Offset,
+0,
+ar.Top.AbsoluteSize.Y/ak.UIScale+(ar.Content.AbsoluteSize.Y/ak.UIScale)
+),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
-af(an.ImageLabel,0.2,{Rotation=180},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+af(
+an.ImageLabel,
+0.2,
+{Rotation=180},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
 end
 end
 end
@@ -9646,13 +9674,25 @@ function al.Close(at,au)
 if al.Expandable then
 al.Opened=false
 if au then
-ar.Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,(ar.Top.AbsoluteSize.Y/ak.UIScale))
+ar.Size=
+UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,(ar.Top.AbsoluteSize.Y/ak.UIScale))
 an.ImageLabel.Rotation=0
 else
 af(ar,0.26,{
-Size=UDim2.new(ar.Size.X.Scale,ar.Size.X.Offset,0,(ar.Top.AbsoluteSize.Y/ak.UIScale))
+Size=UDim2.new(
+ar.Size.X.Scale,
+ar.Size.X.Offset,
+0,
+(ar.Top.AbsoluteSize.Y/ak.UIScale)
+),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-af(an.ImageLabel,0.2,{Rotation=0},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+af(
+an.ImageLabel,
+0.2,
+{Rotation=0},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
 end
 end
 end
@@ -9670,6 +9710,8 @@ end)
 aa.AddSignal(ar.Content.UIListLayout:GetPropertyChangedSignal"AbsoluteContentSize",function()
 if al.Opened then
 al:Open(true)
+else
+al:Close(true)
 end
 end)
 
@@ -9693,7 +9735,6 @@ end
 if al.Opened then
 al:Open()
 end
-
 end)
 
 return al.__type,al
@@ -12087,7 +12128,7 @@ end
 return".png"
 end
 
-print(GetImageExtension(j))
+
 
 if typeof(au.Background)=="string"and h then
 f=true
@@ -12107,7 +12148,7 @@ Url=h,
 Method="GET",
 Headers={["User-Agent"]="Roblox/Exploit"},
 }.Body
-print(m)
+
 writefile(l,m)
 end)
 if not m then
@@ -12157,7 +12198,7 @@ Url=h,
 Method="GET",
 Headers={["User-Agent"]="Roblox/Exploit"},
 }.Body
-print(m)
+
 writefile(l,m)
 end)
 if not m then
@@ -13367,7 +13408,7 @@ HorizontalFlex="Fill",
 })
 
 local P=am("Frame",{
-Size=UDim2.new(1,0,0,40),
+Size=UDim2.new(1,0,0,36),
 AutomaticSize="None",
 BackgroundTransparency=1,
 Parent=J.UIElements.Main,
