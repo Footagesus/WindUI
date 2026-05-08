@@ -83,8 +83,22 @@ local Window = WindUI:CreateWindow({
 	Size = UDim2.new(0, 840, 0, 500),
 	MinSize = Vector2.new(815, 400),
 	MaxSize = Vector2.new(1000, 700),
-	Background = "https://www.wwf.org.uk/sites/default/files/styles/ar_16x9_1920px/public/2023-09/Tropical.jpg",
+	--Background = "https://www.wwf.org.uk/sites/default/files/styles/ar_16x9_1920px/public/2023-09/Tropical.jpg",
 	--Transparent = true,
+	Topbar = {
+		Height = 44,
+		ButtonsType = "Mac", -- Default or Mac
+	},
+})
+
+Window:Tag({
+	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
+})
+Window:Tag({
+	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
+})
+Window:Tag({
+	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
 })
 
 local Tab = Window:Tab({
