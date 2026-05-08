@@ -830,22 +830,21 @@ return function(Config)
 		}),
 	})
 
-	local function UpdateCenterFrame()
-		local UIScale = Config.WindUI.UIScale
-		local Topbar = Window.UIElements.Main.Main.Topbar
+	Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Left:GetPropertyChangedSignal("AbsoluteSize"), function()
+		local LeftWidth = 0
+		local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
+			/ Config.WindUI.UIScale
 
-		local leftWidth = Topbar.Left.AbsoluteSize.X / UIScale
-		local rightWidth = Topbar.Right.UIListLayout.AbsoluteContentSize.X / UIScale
-		local padding = Window.UIPadding / UIScale
-
+		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.WindUI.UIScale
 		if Window.Topbar.ButtonsType ~= "Default" then
-			leftWidth = leftWidth + rightWidth + Window.UIPadding - 4
-			rightWidth = 0
+			LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
 		end
 
-		Topbar.Center.Position = UDim2.new(0, leftWidth + padding, 0.5, 0)
-		Topbar.Center.Size = UDim2.new(1, -leftWidth - rightWidth - (padding * 2), 1, 0)
-	end
+		Window.UIElements.Main.Main.Topbar.Center.Position =
+			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.WindUI.UIScale), 0.5, 0)
+		Window.UIElements.Main.Main.Topbar.Center.Size =
+			UDim2.new(1, -LeftWidth - (Window.UIPadding / Config.WindUI.UIScale), 1, 0)
+	end)
 
 	if Window.Topbar.ButtonsType ~= "Default" then
 		Creator.AddSignal(Window.UIElements.Main.Main.Topbar.Right:GetPropertyChangedSignal("AbsoluteSize"), function()
