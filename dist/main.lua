@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.64  |  2026-04-24  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-05-08  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2118,7 +2118,7 @@ New=a.load'i'.New
 return[[
 {
     "name": "windui",
-    "version": "1.6.64",
+    "version": "1.6.65",
     "main": "./dist/main.lua",
     "repository": "https://github.com/Footagesus/WindUI",
     "discord": "https://discord.gg/ftgs-development-hub-1300692552005189632",
@@ -12084,7 +12084,7 @@ end
 return".png"
 end
 
-print(GetImageExtension(j))
+
 
 if typeof(au.Background)=="string"and h then
 f=true
@@ -12104,7 +12104,7 @@ Url=h,
 Method="GET",
 Headers={["User-Agent"]="Roblox/Exploit"},
 }.Body
-print(m)
+
 writefile(l,m)
 end)
 if not m then
@@ -12154,7 +12154,7 @@ Url=h,
 Method="GET",
 Headers={["User-Agent"]="Roblox/Exploit"},
 }.Body
-print(m)
+
 writefile(l,m)
 end)
 if not m then
