@@ -524,7 +524,7 @@ return function(Config)
 		return ".png"
 	end
 
-	print(GetImageExtension(BGImageUrl))
+	--print(GetImageExtension(BGImageUrl))
 
 	if typeof(Window.Background) == "string" and BGVideo then
 		IsVideoBG = true
@@ -544,7 +544,7 @@ return function(Config)
 							Method = "GET",
 							Headers = { ["User-Agent"] = "Roblox/Exploit" },
 						}).Body
-					print(response)
+					--print(response)
 					writefile(videoPath, response)
 				end)
 				if not success then
@@ -594,7 +594,7 @@ return function(Config)
 						Method = "GET",
 						Headers = { ["User-Agent"] = "Roblox/Exploit" },
 					}).Body
-				print(response)
+				--print(response)
 				writefile(imagePath, response)
 			end)
 			if not success then
@@ -1804,7 +1804,7 @@ return function(Config)
 		})
 
 		local ButtonsContent = New("Frame", {
-			Size = UDim2.new(1, 0, 0, 40),
+			Size = UDim2.new(1, 0, 0, 36),
 			AutomaticSize = "None",
 			BackgroundTransparency = 1,
 			Parent = Dialog.UIElements.Main,
@@ -1851,7 +1851,7 @@ return function(Config)
 				ButtonsContent.AutomaticSize = Enum.AutomaticSize.Y
 
 				for _, button in ipairs(Buttons) do
-					button.Size = UDim2.new(1, 0, 0, 40)
+					button.Size = UDim2.new(1, 0, 0, 36)
 					button.AutomaticSize = Enum.AutomaticSize.None
 				end
 			else
