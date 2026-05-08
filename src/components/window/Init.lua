@@ -524,7 +524,7 @@ return function(Config)
 		return ".png"
 	end
 
-	print(GetImageExtension(BGImageUrl))
+	--print(GetImageExtension(BGImageUrl))
 
 	if typeof(Window.Background) == "string" and BGVideo then
 		IsVideoBG = true
@@ -544,7 +544,7 @@ return function(Config)
 							Method = "GET",
 							Headers = { ["User-Agent"] = "Roblox/Exploit" },
 						}).Body
-					print(response)
+					--print(response)
 					writefile(videoPath, response)
 				end)
 				if not success then
@@ -594,7 +594,7 @@ return function(Config)
 						Method = "GET",
 						Headers = { ["User-Agent"] = "Roblox/Exploit" },
 					}).Body
-				print(response)
+				--print(response)
 				writefile(imagePath, response)
 			end)
 			if not success then
