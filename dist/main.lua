@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-05-08  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-05-13  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -4074,6 +4074,7 @@ Size=UDim2.new(1,0,0,42),
 Parent=ag,
 BackgroundTransparency=1,
 Text="",
+Interactable=false,
 },{
 ac("Frame",{
 Size=UDim2.new(1,0,1,0),
@@ -4091,7 +4092,7 @@ ThemeTag={
 ImageColor3="Outline",
 },
 Size=UDim2.new(1,0,1,0),
-ImageTransparency=0.48,
+ImageTransparency=0.67,
 },{
 
 
@@ -7111,7 +7112,9 @@ return al.__type,al
 end
 
 return ah end function a.I()
-local aa=(cloneref or clonereference or function(aa)return aa end)
+local aa=(cloneref or clonereference or function(aa)
+return aa
+end)
 
 local ac=aa(game:GetService"UserInputService")
 
@@ -7145,12 +7148,20 @@ Locked=aj.Locked or false,
 LockedTitle=aj.LockedTitle,
 Value=NormalizeKeyCode(aj.Value)or"F",
 Callback=aj.Callback or function()end,
-CanChange=aj.CanChange or true,
+CanChange=aj.CanChange~=false,
+Blacklist=aj.Blacklist or{},
 Picking=false,
 UIElements={},
 }
 
-local al=true
+local al={}
+
+for am,an in next,ak.Blacklist do
+table.insert(al,Enum.KeyCode[NormalizeKeyCode(an)])
+end
+table.insert(al,Enum.KeyCode[NormalizeKeyCode"Escape"])
+
+local am=true
 
 ak.KeybindFrame=a.load'B'{
 Title=ak.Title,
@@ -7165,82 +7176,106 @@ ElementTable=ak,
 ParentConfig=aj,
 }
 
-ak.UIElements.Keybind=ah(ak.Value,nil,ak.KeybindFrame.UIElements.Main,nil,aj.Window.NewElements and 12 or 10)
-
-ak.UIElements.Keybind.Size=UDim2.new(
-0,24
-+ak.UIElements.Keybind.Frame.Frame.TextLabel.TextBounds.X,
-0,
-42
+ak.UIElements.Keybind=ah(
+ak.Value,
+nil,
+ak.KeybindFrame.UIElements.Main,
+nil,
+aj.Window.NewElements and 12 or 10
 )
+
+ak.UIElements.Keybind.Size=
+UDim2.new(0,24+ak.UIElements.Keybind.Frame.Frame.TextLabel.TextBounds.X,0,42)
 ak.UIElements.Keybind.AnchorPoint=Vector2.new(1,0.5)
 ak.UIElements.Keybind.Position=UDim2.new(1,0,0.5,0)
 
 ae("UIScale",{
 Parent=ak.UIElements.Keybind,
-Scale=.85,
+Scale=0.85,
 })
 
-ad.AddSignal(ak.UIElements.Keybind.Frame.Frame.TextLabel:GetPropertyChangedSignal"TextBounds",function()
-ak.UIElements.Keybind.Size=UDim2.new(
-0,24
-+ak.UIElements.Keybind.Frame.Frame.TextLabel.TextBounds.X,
-0,
-42
+ad.AddSignal(
+ak.UIElements.Keybind.Frame.Frame.TextLabel:GetPropertyChangedSignal"TextBounds",
+function()
+ak.UIElements.Keybind.Size=
+UDim2.new(0,24+ak.UIElements.Keybind.Frame.Frame.TextLabel.TextBounds.X,0,42)
+end
 )
-end)
 
-function ak.Lock(am)
+function ak.Lock(an)
 ak.Locked=true
-al=false
+am=false
 return ak.KeybindFrame:Lock(ak.LockedTitle)
 end
-function ak.Unlock(am)
+function ak.Unlock(an)
 ak.Locked=false
-al=true
+am=true
 return ak.KeybindFrame:Unlock()
 end
 
-function ak.Set(am,an)
-local ao=NormalizeKeyCode(an)
-ak.Value=ao
-ak.UIElements.Keybind.Frame.Frame.TextLabel.Text=ao
+function ak.Set(an,ao)
+local ap=NormalizeKeyCode(ao)
+ak.Value=ap
+ak.UIElements.Keybind.Frame.Frame.TextLabel.Text=ap
 end
 
 if ak.Locked then
 ak:Lock()
 end
 
+local an
+
 ad.AddSignal(ak.KeybindFrame.UIElements.Main.MouseButton1Click,function()
-if al then
+if am then
 if ak.CanChange then
 ak.Picking=true
 ak.UIElements.Keybind.Frame.Frame.TextLabel.Text="..."
 
-task.wait(0.2)
 
-local am
-am=ac.InputBegan:Connect(function(an)
+
 local ao
+ao=ac.InputBegan:Connect(function(ap)
+local aq
 
-if an.UserInputType==Enum.UserInputType.Keyboard then
-ao=an.KeyCode.Name
-elseif an.UserInputType==Enum.UserInputType.MouseButton1 then
-ao="MouseLeft"
-elseif an.UserInputType==Enum.UserInputType.MouseButton2 then
-ao="MouseRight"
+if ap.UserInputType==Enum.UserInputType.Keyboard then
+if table.find(al,ap.KeyCode)then
+aq=nil
+return
+else
+aq=ap.KeyCode.Name
+end
+elseif
+ap.UserInputType==Enum.UserInputType.MouseButton1
+and not table.find(al,"MouseLeftButton")
+then
+aq="MouseLeftButton"
+elseif
+ap.UserInputType==Enum.UserInputType.MouseButton2
+and not table.find(al,"MouseRightButton")
+then
+aq="MouseRightButton"
 end
 
-local ap
-ap=ac.InputEnded:Connect(function(aq)
-if aq.KeyCode.Name==ao or ao=="MouseLeft"and aq.UserInputType==Enum.UserInputType.MouseButton1 or ao=="MouseRight"and aq.UserInputType==Enum.UserInputType.MouseButton2 then
+if an then
+an:Disconnect()
+end
+
+an=ac.InputEnded:Connect(function(ar)
+if
+aq
+and(
+ar.KeyCode.Name==aq
+or aq=="MouseLeft"and ar.UserInputType==Enum.UserInputType.MouseButton1
+or aq=="MouseRight"and ar.UserInputType==Enum.UserInputType.MouseButton2
+)
+then
 ak.Picking=false
 
-ak.UIElements.Keybind.Frame.Frame.TextLabel.Text=ao
-ak.Value=ao
+ak.UIElements.Keybind.Frame.Frame.TextLabel.Text=aq
+ak.Value=aq
 
-am:Disconnect()
-ap:Disconnect()
+ao:Disconnect()
+an:Disconnect()
 end
 end)
 end)
@@ -7248,22 +7283,24 @@ end
 end
 end)
 
-ad.AddSignal(ac.InputBegan,function(am,an)
+ad.AddSignal(ac.InputBegan,function(ao,ap)
 if ac:GetFocusedTextBox()then
 return
 end
-
-if not al then
+if not am then
+return
+end
+if ak.Picking then
 return
 end
 
-if am.UserInputType==Enum.UserInputType.Keyboard then
-if am.KeyCode.Name==ak.Value then
-ad.SafeCallback(ak.Callback,am.KeyCode.Name)
+if ao.UserInputType==Enum.UserInputType.Keyboard then
+if ao.KeyCode.Name==ak.Value then
+ad.SafeCallback(ak.Callback,ao.KeyCode.Name)
 end
-elseif am.UserInputType==Enum.UserInputType.MouseButton1 and ak.Value=="MouseLeft"then
+elseif ao.UserInputType==Enum.UserInputType.MouseButton1 and ak.Value=="MouseLeft"then
 ad.SafeCallback(ak.Callback,"MouseLeft")
-elseif am.UserInputType==Enum.UserInputType.MouseButton2 and ak.Value=="MouseRight"then
+elseif ao.UserInputType==Enum.UserInputType.MouseButton2 and ak.Value=="MouseRight"then
 ad.SafeCallback(ak.Callback,"MouseRight")
 end
 end)
@@ -7272,6 +7309,7 @@ return ak.__type,ak
 end
 
 return ag end function a.J()
+
 local aa=a.load'c'
 local ac=aa.New local ad=
 aa.Tween
@@ -12153,7 +12191,6 @@ writefile(l,m)
 end)
 if not m then
 warn("[ WindUI.Window.Background ] Failed to download video: "..tostring(p))
-return
 end
 end
 
@@ -12162,7 +12199,6 @@ return getcustomasset(l)
 end)
 if not m then
 warn("[ WindUI.Window.Background ] Failed to load custom asset: "..tostring(p))
-return
 end
 warn"[ WindUI.Window.Background ] VideoFrame may not work with custom video"
 h=p
@@ -12203,7 +12239,6 @@ writefile(l,m)
 end)
 if not m then
 warn("[ Window.Background ] Failed to download image: "..tostring(p))
-return
 end
 end
 
@@ -12212,7 +12247,6 @@ return getcustomasset(l)
 end)
 if not m then
 warn("[ Window.Background ] Failed to load custom asset: "..tostring(p))
-return
 end
 
 g=am("ImageLabel",{
@@ -12296,20 +12330,21 @@ TextColor3="WindowTopbarTitle",
 },
 })
 
-au.UIElements.Main=am("Frame",{
+au.UIElements.Main=am("CanvasGroup",{
 Size=au.Size,
 Position=au.Position,
 BackgroundTransparency=1,
 Parent=at.Parent,
 AnchorPoint=Vector2.new(0.5,0.5),
 Active=true,
+GroupTransparency=1,
 },{
-at.WindUI.UIScaleObj,
+
 au.AcrylicPaint and au.AcrylicPaint.Frame or nil,
 aA,
 al.NewRoundFrame(au.UICorner,"Squircle",{
-ImageTransparency=1,
-Size=UDim2.new(1,0,1,-240),
+ImageTransparency=au.Transparent and at.WindUI.TransparencyValue or 0,
+Size=UDim2.new(1,0,1,0),
 AnchorPoint=Vector2.new(0.5,0.5),
 Position=UDim2.new(0.5,0,0.5,0),
 Name="Background",
@@ -12321,9 +12356,9 @@ ImageColor3="WindowBackground",
 g,
 l,
 ax,
-
-
-
+}),
+am("UIScale",{
+Scale=0.89,
 }),
 
 aw,
@@ -12334,7 +12369,7 @@ Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
 Name="Main",
 
-Visible=false,
+
 ZIndex=97,
 },{
 am("UICorner",{
@@ -12442,21 +12477,15 @@ local u=0
 local v=au.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
 /at.WindUI.UIScale
 
-
-
-
-
 u=au.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X/at.WindUI.UIScale
 if au.Topbar.ButtonsType~="Default"then
 u=u+v+au.UIPadding-4
 end
 
-
-
 au.UIElements.Main.Main.Topbar.Center.Position=
 UDim2.new(0,u+(au.UIPadding/at.WindUI.UIScale),0.5,0)
 au.UIElements.Main.Main.Topbar.Center.Size=
-UDim2.new(1,-u-v-((au.UIPadding*2)/at.WindUI.UIScale),1,0)
+UDim2.new(1,-u-(au.UIPadding/at.WindUI.UIScale),1,0)
 end)
 
 if au.Topbar.ButtonsType~="Default"then
@@ -12896,8 +12925,8 @@ end
 task.wait(0.06)
 au.Closed=false
 
-an(au.UIElements.Main.Background,0.2,{
-ImageTransparency=au.Transparent and at.WindUI.TransparencyValue or 0,
+an(au.UIElements.Main,0.2,{
+GroupTransparency=0,
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
 if au.UIElements.BackgroundGradient then
@@ -12906,9 +12935,9 @@ ImageTransparency=0,
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 end
 
-an(au.UIElements.Main.Background,0.4,{
-Size=UDim2.new(1,0,1,0),
-},Enum.EasingStyle.Exponential,Enum.EasingDirection.Out):Play()
+
+
+
 
 if g then
 if g:IsA"VideoFrame"then
@@ -12924,7 +12953,7 @@ if au.OpenButtonMain and au.IsOpenButtonEnabled then
 au.OpenButtonMain:Visible(false)
 end
 
-
+an(au.UIElements.Main.UIScale,0.33,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
 an(
 aA,
 0.25,
@@ -12963,7 +12992,7 @@ au.CanDropdown=true
 au.UIElements.Main.Visible=true
 task.spawn(function()
 task.wait(0.05)
-au.UIElements.Main:WaitForChild"Main".Visible=true
+
 
 at.WindUI:ToggleAcrylic(true)
 end)
@@ -12980,27 +13009,27 @@ end
 
 at.WindUI:ToggleAcrylic(false)
 
-if au.UIElements.Main and au.UIElements.Main:WaitForChild"Main"then
-au.UIElements.Main.Main.Visible=false
-end
+
+
+
 
 au.CanDropdown=false
 au.Closed=true
 
-an(au.UIElements.Main.Background,0.32,{
-ImageTransparency=1,
-},Enum.EasingStyle.Quint,Enum.EasingDirection.InOut):Play()
+an(au.UIElements.Main,0.24,{
+GroupTransparency=1,
+},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 if au.UIElements.BackgroundGradient then
-an(au.UIElements.BackgroundGradient,0.32,{
+an(au.UIElements.BackgroundGradient,0.2,{
 ImageTransparency=1,
 },Enum.EasingStyle.Quint,Enum.EasingDirection.InOut):Play()
 end
 
-an(au.UIElements.Main.Background,0.4,{
-Size=UDim2.new(1,0,1,-240),
-},Enum.EasingStyle.Exponential,Enum.EasingDirection.InOut):Play()
 
 
+
+
+an(au.UIElements.Main.UIScale,0.28,{Scale=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 if g then
 if g:IsA"VideoFrame"then
 g.Visible=false
@@ -13011,9 +13040,9 @@ ImageTransparency=1,
 end
 end
 an(aA,0.25,{ImageTransparency=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-if UIStroke then
-an(UIStroke,0.25,{Transparency=1},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
-end
+
+
+
 
 an(
 l,
@@ -13048,11 +13077,15 @@ task.spawn(function()
 al.SafeCallback(au.OnDestroyCallback)
 end)
 end
+
 if au.AcrylicPaint and au.AcrylicPaint.Model then
 au.AcrylicPaint.Model:Destroy()
 end
+
 au.Destroyed=true
+
 task.wait(0.4)
+
 at.WindUI.ScreenGui:Destroy()
 at.WindUI.NotificationGui:Destroy()
 at.WindUI.DropdownGui:Destroy()
@@ -13762,6 +13795,8 @@ OnThemeChangeFunction=nil,
 
 cloneref=nil,
 UIScaleObj=nil,
+
+CreateWindow=nil,
 }
 
 local ae=(cloneref or clonereference or function(ae)
