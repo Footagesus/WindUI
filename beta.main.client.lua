@@ -331,8 +331,6 @@ VStackRight:Button({
 
 -- third
 
--- create some elements pls
-
 VStackThird:Paragraph({
 	Title = "Paragraph in Third VStack",
 	Desc = "This is a paragraph inside the third VStack.",
@@ -356,6 +354,18 @@ VStackThird:Toggle({
 	Callback = function(value)
 		print("Toggle in third VStack value:", value)
 	end,
+})
+
+VStackThird:Keybind({
+	Title = "Hmmm",
+	Value = "G",
+	Callback = function(V)
+		print("Clicked: ", V)
+	end,
+	Blacklist = {
+		"MouseLeftButton",
+		"MouseRightButton",
+	},
 })
 
 local TestTab = Window:Tab({
