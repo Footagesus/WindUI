@@ -12339,7 +12339,7 @@ AnchorPoint=Vector2.new(0.5,0.5),
 Active=true,
 GroupTransparency=1,
 },{
-
+at.WindUI.UIScaleObj,
 au.AcrylicPaint and au.AcrylicPaint.Frame or nil,
 aA,
 al.NewRoundFrame(au.UICorner,"Squircle",{
@@ -12357,9 +12357,9 @@ g,
 l,
 ax,
 }),
-am("UIScale",{
-Scale=0.89,
-}),
+
+
+
 
 aw,
 ay,
@@ -12953,7 +12953,14 @@ if au.OpenButtonMain and au.IsOpenButtonEnabled then
 au.OpenButtonMain:Visible(false)
 end
 
-an(au.UIElements.Main.UIScale,0.33,{Scale=1},Enum.EasingStyle.Back,Enum.EasingDirection.Out):Play()
+at.WindUI.UIScaleObj.Scale-=0.15000000000000002
+an(
+at.WindUI.UIScaleObj,
+0.33,
+{Scale=at.WindUI.UIScale},
+Enum.EasingStyle.Back,
+Enum.EasingDirection.Out
+):Play()
 an(
 aA,
 0.25,
@@ -13029,7 +13036,13 @@ end
 
 
 
-an(au.UIElements.Main.UIScale,0.28,{Scale=0.85},Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
+an(
+at.WindUI.UIScaleObj,
+0.28,
+{Scale=at.WindUI.UIScale-(0.15000000000000002)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
 if g then
 if g:IsA"VideoFrame"then
 g.Visible=false
