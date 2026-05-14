@@ -74,6 +74,7 @@ function Element:New(Config)
 		UDim2.new(0, 12 + 12 + Keybind.UIElements.Keybind.Frame.Frame.TextLabel.TextBounds.X, 0, 42)
 	Keybind.UIElements.Keybind.AnchorPoint = Vector2.new(1, 0.5)
 	Keybind.UIElements.Keybind.Position = UDim2.new(1, 0, 0.5, 0)
+	Keybind.UIElements.Keybind.Interactable = false
 
 	New("UIScale", {
 		Parent = Keybind.UIElements.Keybind,
