@@ -12315,10 +12315,10 @@ ImageColor3="WindowBackground",
 g,
 l,
 ax,
-
-
-
 }),
+
+
+
 
 aw,
 ay,
@@ -12907,7 +12907,14 @@ if au.OpenButtonMain and au.IsOpenButtonEnabled then
 au.OpenButtonMain:Visible(false)
 end
 
-
+at.WindUI.UIScaleObj.Scale-=0.15000000000000002
+an(
+at.WindUI.UIScaleObj,
+0.33,
+{Scale=at.WindUI.UIScale},
+Enum.EasingStyle.Back,
+Enum.EasingDirection.Out
+):Play()
 an(
 aA,
 0.25,
@@ -12983,7 +12990,13 @@ an(au.UIElements.Main.Background,0.4,{
 Size=UDim2.new(1,0,1,-240),
 },Enum.EasingStyle.Exponential,Enum.EasingDirection.InOut):Play()
 
-
+an(
+at.WindUI.UIScaleObj,
+0.28,
+{Scale=at.WindUI.UIScale-(0.15000000000000002)},
+Enum.EasingStyle.Quint,
+Enum.EasingDirection.Out
+):Play()
 if g then
 if g:IsA"VideoFrame"then
 g.Visible=false
