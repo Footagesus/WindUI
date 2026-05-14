@@ -717,10 +717,10 @@ return function(Config)
 			BGImage,
 			BottomDragFrame,
 			ResizeHandle,
-			-- New("UIScale", {
-			--     Scale = 0.95,
-			-- }),
 		}),
+		--[[New("UIScale", {
+			Scale = 0.89,
+		}),]]
 		--UIStroke,
 		UICorner,
 		FullScreenIcon,
@@ -1309,7 +1309,14 @@ return function(Config)
 				Window.OpenButtonMain:Visible(false)
 			end
 
-			--Tween(Window.UIElements.Main.Background.UIScale, 0.2, {Scale = 1}, Enum.EasingStyle.Back, Enum.EasingDirection.Out):Play()
+			Config.WindUI.UIScaleObj.Scale -= 1 - 0.85
+			Tween(
+				Config.WindUI.UIScaleObj,
+				0.33,
+				{ Scale = Config.WindUI.UIScale },
+				Enum.EasingStyle.Back,
+				Enum.EasingDirection.Out
+			):Play()
 			Tween(
 				Blur,
 				0.25,
@@ -1385,7 +1392,13 @@ return function(Config)
 			Size = UDim2.new(1, 0, 1, -240),
 		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()
 
-		--Tween(Window.UIElements.Main.Background.UIScale, 0.19, {Scale = .95}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+		Tween(
+			Config.WindUI.UIScaleObj,
+			0.28,
+			{ Scale = Config.WindUI.UIScale - (1 - 0.85) },
+			Enum.EasingStyle.Quint,
+			Enum.EasingDirection.Out
+		):Play()
 		if BGImage then
 			if BGImage:IsA("VideoFrame") then
 				BGImage.Visible = false
