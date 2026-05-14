@@ -37,7 +37,6 @@ function Label.New(Text, Icon, Parent, IsPlaceholder, Radius)
 		Parent = Parent,
 		BackgroundTransparency = 1,
 		Text = "",
-		Interactable = false,
 	}, {
 		New("Frame", {
 			Size = UDim2.new(1, 0, 1, 0),
