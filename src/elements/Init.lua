@@ -16,6 +16,7 @@ return {
 		Group = require("./Group"),
 		HStack = require("./HStack"),
 		VStack = require("./VStack"),
+		Viewport = require("./Viewport"),
 		--Video       = require("./Video"),
 	},
 	Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale, Tab)
@@ -33,7 +34,7 @@ return {
 				config.UIScale = UIScale
 				config.ElementsModule = ElementsModule
 
-				local elementInstance, content = module:New(config)
+				local _elementInstance, content = module:New(config)
 
 				if config.Flag and typeof(config.Flag) == "string" then
 					if Window.CurrentConfig then

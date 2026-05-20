@@ -40,13 +40,15 @@ local Window = WindUI:CreateWindow({
 	ToggleKey = Enum.KeyCode.F,
 	--Acrylic = true,
 
-	-- KeySystem = {
-	-- 	Title = "SUper key Sustem",
-	-- 	Note = "fejnighsrbefijdkamejsh",
-	-- 	KeyValidator = function(Key)
-	-- 		return Key == "HelloWorld"
-	-- 	end,
-	-- },
+	--[[
+	KeySystem = {
+		Title = "Key System",
+		Description = "Enter the correct key to unlock the window",
+		KeyValidator = function(key)
+			return key == "HelloWorld"
+		end,
+	}
+	]]
 })
 
 Window:Tag({
@@ -128,4 +130,25 @@ VStackRight:Button({
 	Callback = function()
 		print("Rejoining place...")
 	end,
+})
+
+local Section = Tab1:Section({
+	Title = "Hi1",
+	Icon = "rbxassetid://77799629590713",
+	IconThemed = true,
+})
+
+local Viewport = Tab1:Viewport({
+	Object = Instance.new("Part"),
+	Interactive = true,
+})
+
+local EmptyTab = Window:Tab({
+	Title = "Custom empty page tab",
+
+	CustomEmptyPage = {
+		Icon = "lucide:smile",
+		Title = "This is a cool empty tab",
+		Desc = "I like it. its so great tab with cool 'custom empty page'",
+	},
 })
