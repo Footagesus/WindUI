@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-05-14  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-05-20  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -14,7 +14,19 @@
     License: MIT
 ]]
 
-local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()local b=(cloneref or clonereference or function(b)return b end)
+type ConfigType__DARKLUA_TYPE_a={
+Object:Instance,
+Camera:Instance?,
+Interactive:boolean?,
+Height:number?,
+Focused:boolean,
+
+Window:any,
+Tab:any,
+Parent:Instance,
+}local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()
+
+local b=(cloneref or clonereference or function(b)return b end)
 
 local d=b(game:GetService"ReplicatedStorage":WaitForChild("GetIcons",99999):InvokeServer())
 
@@ -254,7 +266,7 @@ BackgroundTransparency=0,
 Hover="Text",
 
 PanelBackground="White",
-PanelBackgroundTransparency=.95,
+PanelBackgroundTransparency=0.95,
 
 WindowBackground="Background",
 
@@ -270,7 +282,7 @@ WindowSearchBarBackground="Background",
 
 TabBackground="Hover",
 TabBackgroundHover="Hover",
-TabBackgroundHoverTransparency=.97,
+TabBackgroundHoverTransparency=0.97,
 TabBackgroundActive="Hover",
 TabBackgroundActiveTransparency=0.93,
 TabText="Text",
@@ -284,9 +296,8 @@ TabBorderTransparency=1,
 TabBorderTransparencyActive=0.75,
 TabBorder="White",
 
-
 ElementBackground="Text",
-ElementBackgroundTransparency=.93,
+ElementBackgroundTransparency=0.93,
 ElementBackgroundHover=b:AddColor("ElementBackground","#ffffff",0.1),
 ElementTitle="Text",
 ElementDesc="Text",
@@ -310,7 +321,7 @@ ToggleBar="White",
 Checkbox="Primary",
 CheckboxIcon="White",
 CheckboxBorder="White",
-CheckboxBorderTransparency=.75,
+CheckboxBorderTransparency=0.75,
 
 SliderIcon="Icon",
 
@@ -329,34 +340,37 @@ TabSectionIcon="Icon",
 SectionIcon="Icon",
 
 SectionExpandIcon="White",
-SectionExpandIconTransparency=.4,
+SectionExpandIconTransparency=0.4,
 SectionBox="White",
-SectionBoxTransparency=.95,
+SectionBoxTransparency=0.95,
 SectionBoxBorder="White",
-SectionBoxBorderTransparency=.75,
+SectionBoxBorderTransparency=0.75,
 SectionBoxBackground="White",
-SectionBoxBackgroundTransparency=.95,
+SectionBoxBackgroundTransparency=0.95,
 
 SearchBarBorder="White",
-SearchBarBorderTransparency=.75,
+SearchBarBorderTransparency=0.75,
 
 Notification="Background",
 NotificationTitle="Text",
 NotificationTitleTransparency=0,
 NotificationContent="Text",
-NotificationContentTransparency=.4,
+NotificationContentTransparency=0.4,
 NotificationDuration="White",
-NotificationDurationTransparency=.95,
+NotificationDurationTransparency=0.95,
 NotificationBorder="White",
-NotificationBorderTransparency=.75,
+NotificationBorderTransparency=0.75,
 
 DropdownTabBorder="White",
 
 LabelBackground="White",
-LabelBackgroundTransparency=.95,
-}
+LabelBackgroundTransparency=0.95,
 
+ViewportBackground="ElementBackground",
+ViewportBackgroundTransparency="ElementBackgroundTransparency",
+}
 end end function a.c()
+
 local b=(cloneref or clonereference or function(b)
 return b
 end)
@@ -3138,16 +3152,15 @@ return{viewportPointToWorld,getOffset}end function a.q()
 
 
 
-local aa=(cloneref or clonereference or function(aa)return aa end)
-
+local aa=(cloneref or clonereference or function(aa)
+return aa
+end)
 
 local ab=a.load'c'
 local ac=ab.New
 
-
 local ad,ae=unpack(a.load'p')
 local af=Instance.new("Folder",aa(game:GetService"Workspace").CurrentCamera)
-
 
 local function createAcrylic()
 local ag=ac("Part",{
@@ -3169,7 +3182,6 @@ Offset=Vector3.new(0,0,-1E-6),
 
 return ag
 end
-
 
 local function createAcrylicBlur(ag)
 local ah={}
@@ -3211,9 +3223,11 @@ local as=ad(ap,ag)
 local at=(ar-aq).Magnitude
 local au=(ar-as).Magnitude
 
+if aj and aj.Parent and aj:FindFirstChild"Mesh"and aj.Mesh.Parent and aj.Mesh.Scale then
 aj.CFrame=
 CFrame.fromMatrix((aq+as)/2,am.XVector,am.YVector,am.ZVector)
 aj.Mesh.Scale=Vector3.new(at,au,0)
+end
 end
 
 local function onChange(ak)
@@ -3282,6 +3296,7 @@ ah.Model=aj
 
 return ah
 end end function a.r()
+
 
 
 local aa=a.load'c'
@@ -10091,6 +10106,213 @@ return ak.__type,ak
 end
 
 return af end function a.X()
+local aa=(cloneref or clonereference or function(aa)
+return aa
+end)
+
+local ae=aa(game:GetService"UserInputService")
+
+local af=a.load'c'
+local ah=af.New
+
+local aj={}
+
+
+
+
+
+
+
+
+
+
+
+
+
+function aj.New(ak,al:ConfigType__DARKLUA_TYPE_a)
+local am={
+__type="Viewport",
+Object=al.Object,
+Camera=al.Camera or Instance.new"Camera",
+Interactive=al.Interactive or false,
+Height=al.Height or 200,
+Focused=al.Focused~=false,
+}
+
+local an=false
+local ao=false
+local ap,aq=0
+
+local ar=af.NewRoundFrame(al.Window.ElementConfig.UICorner,"Squircle",{
+Size=UDim2.new(1,0,0,am.Height),
+Parent=al.Parent,
+ThemeTag={
+ImageColor3="ViewportBackground",
+ImageTransparency="ViewportBackgroundTransparency",
+},
+},{
+ah("CanvasGroup",{
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+},{
+ah("UICorner",{
+CornerRadius=UDim.new(0,al.Window.ElementConfig.UICorner),
+}),
+ah("ViewportFrame",{
+Name="Viewport",
+Size=UDim2.new(1,0,1,0),
+BackgroundTransparency=1,
+CurrentCamera=am.Camera,
+Active=am.Interactive,
+},{
+am.Object,
+}),
+}),
+})
+
+af.AddSignal(ar.CanvasGroup.Viewport.MouseEnter,function()
+if am.Interactive then
+al.Tab.UIElements.ContainerFrame.ScrollingEnabled=false
+end
+end)
+
+af.AddSignal(ar.CanvasGroup.Viewport.InputEnded,function(as)
+if
+as.UserInputType==Enum.UserInputType.MouseMovement
+or as.UserInputType==Enum.UserInputType.Touch
+then
+al.Tab.UIElements.ContainerFrame.ScrollingEnabled=true
+end
+end)
+
+af.AddSignal(ar.CanvasGroup.Viewport.InputBegan,function(as)
+if am.Interactive then
+if
+(as.UserInputType==Enum.UserInputType.MouseButton1)
+or(as.UserInputType==Enum.UserInputType.Touch and not ao)
+then
+an=true
+aq=as.Position
+end
+end
+end)
+
+af.AddSignal(ae.InputEnded,function(as)
+if am.Interactive then
+if
+as.UserInputType==Enum.UserInputType.MouseButton1
+or as.UserInputType==Enum.UserInputType.Touch
+then
+an=false
+end
+end
+end)
+
+af.AddSignal(ae.InputChanged,function(as)
+if am.Interactive and an and not ao then
+if
+as.UserInputType==Enum.UserInputType.MouseMovement
+or as.UserInputType==Enum.UserInputType.Touch
+then
+local at=as.Position-aq
+aq=as.Position
+
+local au=am.Object:GetPivot().Position
+local av=am.Camera
+
+local aw=CFrame.fromAxisAngle(Vector3.new(0,1,0),-at.X*0.02)
+av.CFrame=CFrame.new(au)*aw*CFrame.new(-au)*av.CFrame
+
+local ax=CFrame.fromAxisAngle(av.CFrame.RightVector,-at.Y*0.02)
+local ay=CFrame.new(au)*ax*CFrame.new(-au)*av.CFrame
+
+if ay.UpVector.Y>0.1 then
+av.CFrame=ay
+end
+end
+end
+end)
+
+af.AddSignal(ar.CanvasGroup.Viewport.InputChanged,function(as)
+if am.Interactive then
+if as.UserInputType==Enum.UserInputType.MouseWheel then
+local at=as.Position.Z*2
+am.Camera.CFrame+=am.Camera.CFrame.LookVector*at
+end
+end
+end)
+
+af.AddSignal(ae.TouchPinch,function(as,at,au,av)
+if am.Interactive then
+if av==Enum.UserInputState.Begin then
+ao=true
+an=false
+ap=(as[1]-as[2]).Magnitude
+elseif av==Enum.UserInputState.Change then
+local aw=(as[1]-as[2]).Magnitude
+local ax=(aw-ap)*0.03
+ap=aw
+am.Camera.CFrame+=am.Camera.CFrame.LookVector*ax
+elseif av==Enum.UserInputState.End or av==Enum.UserInputState.Cancel then
+ao=false
+end
+end
+end)
+
+local function FocusCamera()
+local as=am.Object:IsA"BasePart"and am.Object.Size
+or select(2,am.Object:GetBoundingBox(0))
+local at=math.max(as.X,as.Y,as.Z)
+local au=at*2
+local av=am.Object:GetPivot().Position
+
+am.Camera.CFrame=
+CFrame.new(av+Vector3.new(0,at/2,au),av)
+end
+
+if am.Focused then
+FocusCamera()
+end
+
+function am.SetObject(as,at,au)
+if au then
+at=at:Clone()
+end
+if am.Object then
+am.Object:Destroy()
+end
+
+am.Object=at
+am.Object.Parent=ar.CanvasGroup.Viewport
+end
+
+function am.SetHeight(as,at)
+ar.Size=UDim2.new(1,0,0,at)
+end
+
+function am.Focus(as)
+if am.Object then
+FocusCamera()
+end
+end
+
+function am.SetCamera(as,at)
+am.Camera=at
+ar.CanvasGroup.Viewport.CurrentCamera=at
+end
+
+function am.SetInteractive(as,at)
+am.Interactive=at
+ar.CanvasGroup.Viewport.Active=at
+end
+
+am.Main=ar
+
+return am.__type,am
+end
+
+return aj end function a.Y()
+
 return{
 Elements={
 Paragraph=a.load'C',
@@ -10109,6 +10331,7 @@ Image=a.load'T',
 Group=a.load'U',
 HStack=a.load'V',
 VStack=a.load'W',
+Viewport=a.load'X',
 
 },
 Load=function(aa,ae,af,ah,aj,ak,al,am,an)
@@ -10233,7 +10456,7 @@ end
 end
 end
 end,
-}end function a.Y()
+}end function a.Z()
 
 local aa=(cloneref or clonereference or function(aa)
 return aa
@@ -10672,7 +10895,7 @@ end
 
 
 
-local ay=a.load'X'
+local ay=a.load'Y'
 
 ay.Load(
 ap,
@@ -10869,7 +11092,7 @@ am.OnChangeFunc(ao)
 end
 end
 
-return am end function a.Z()
+return am end function a._()
 
 local aa={}
 
@@ -10878,7 +11101,7 @@ local ae=a.load'c'
 local af=ae.New
 local ah=ae.Tween
 
-local aj=a.load'Y'
+local aj=a.load'Z'
 
 function aa.New(ak,al,am,an,ao)
 local ap={
@@ -11047,7 +11270,7 @@ return ap
 end
 
 
-return aa end function a._()
+return aa end function a.aa()
 return{
 Tab="table-of-contents",
 Paragraph="type",
@@ -11059,7 +11282,7 @@ Input="text-cursor-input",
 Dropdown="chevrons-up-down",
 Code="terminal",
 Colorpicker="palette",
-}end function a.aa()
+}end function a.ab()
 local aa=(cloneref or clonereference or function(aa)
 return aa
 end)
@@ -11083,7 +11306,7 @@ Radius=22,
 Width=400,
 MaxHeight=380,
 
-Icons=a.load'_',
+Icons=a.load'aa',
 }
 
 local ao=ah("TextBox",{
@@ -11594,7 +11817,7 @@ end)
 return an
 end
 
-return ae end function a.ab()
+return ae end function a.ac()
 
 
 
@@ -13206,8 +13429,8 @@ if au.OpenButton and typeof(au.OpenButton)=="table"then
 au:EditOpenButton(au.OpenButton)
 end
 
-local z=a.load'Y'
-local A=a.load'Z'
+local z=a.load'Z'
+local A=a.load'_'
 local B=z.Init(au,at.WindUI,at.WindUI.TooltipGui)
 B:OnChange(function(C)
 au.CurrentTab=C
@@ -13645,7 +13868,7 @@ end)
 
 
 if not au.HideSearchBar then
-local M=a.load'aa'
+local M=a.load'ab'
 local N=false
 
 
@@ -14000,7 +14223,7 @@ aa:SetTheme"Dark"
 aa:SetLanguage(ao.Language)
 
 function aa.CreateWindow(av,aw)
-local ax=a.load'ab'
+local ax=a.load'ac'
 
 if not ak:IsStudio()and writefile then
 if not isfolder"WindUI"then
