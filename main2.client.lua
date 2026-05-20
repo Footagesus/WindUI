@@ -40,6 +40,7 @@ local Window = WindUI:CreateWindow({
 	ToggleKey = Enum.KeyCode.F,
 	Acrylic = true,
 
+	--[[
 	KeySystem = {
 		Title = "Key System",
 		Description = "Enter the correct key to unlock the window",
@@ -47,6 +48,7 @@ local Window = WindUI:CreateWindow({
 			return key == "HelloWorld"
 		end,
 	}
+	]]
 })
 
 local Tag = Window:Tag({
@@ -260,9 +262,14 @@ local Toggle = TabSettings:Toggle({
 })
 
 local Section = Tab1:Section({
-	TItle = "Hi1",
+	Title = "Hi1",
 	Icon = "rbxassetid://77799629590713",
 	IconThemed = true,
+})
+
+local Viewport = Tab1:Viewport({
+	Object = Instance.new("Part"),
+	Interactive = true,
 })
 
 local EmptyTab = Window:Tab({
