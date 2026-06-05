@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-05-24  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-06-05  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -1912,7 +1912,7 @@ end
 local af,ag=request or http_request or syn_request,setclipboard or toclipboard
 
 function ValidateKey(ah)
-local ai="https://new.pandadevelopment.net/api/v1/keys/validate"
+local ai="https://pandauth.com/api/v1/keys/validate"
 
 local aj={
 ServiceID=ad,
@@ -6124,13 +6124,14 @@ Title=ae.Title or"Button",
 Desc=ae.Desc or nil,
 Icon=ae.Icon or"mouse-pointer-click",
 IconThemed=ae.IconThemed or false,
+IconColor=ae.IconColor or nil,
 Color=ae.Color,
 Justify=ae.Justify or"Between",
 IconAlign=ae.IconAlign or"Right",
 Locked=ae.Locked or false,
 LockedTitle=ae.LockedTitle,
 Callback=ae.Callback or function()end,
-UIElements={}
+UIElements={},
 }
 
 local ag=true
@@ -6175,12 +6176,17 @@ af.Icon,
 0,
 ae.Window.Folder,
 "Button",
-not af.Color and true or nil,
+not(af.Color or af.IconColor)and true or nil,
 af.IconThemed
 )
 
+if af.IconColor then
+af.UIElements.ButtonIcon.ImageLabel.ImageColor3=af.IconColor
+end
+
 af.UIElements.ButtonIcon.Size=UDim2.new(0,20,0,20)
-af.UIElements.ButtonIcon.Parent=af.Justify=="Between"and af.ButtonFrame.UIElements.Main or af.ButtonFrame.UIElements.Container.TitleFrame
+af.UIElements.ButtonIcon.Parent=af.Justify=="Between"and af.ButtonFrame.UIElements.Main
+or af.ButtonFrame.UIElements.Container.TitleFrame
 af.UIElements.ButtonIcon.LayoutOrder=af.IconAlign=="Left"and-99999 or 99999
 af.UIElements.ButtonIcon.AnchorPoint=Vector2.new(1,0.5)
 af.UIElements.ButtonIcon.Position=UDim2.new(1,0,0.5,0)
@@ -6213,6 +6219,7 @@ return af.__type,af
 end
 
 return ac end function a.E()
+
 local aa={}
 
 local ab=a.load'c'
