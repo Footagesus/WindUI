@@ -704,20 +704,20 @@ return function(Config)
 		},
 	})
 
-	Window.UIElements.Main = New("CanvasGroup", {
-		Size = Window.Size,
+	Window.UIElements.Main = New("Frame", {
+		Size = UDim2.new(Window.Size.X.Scale, Window.Size.X.Offset, 0, 0),
 		Position = Window.Position,
 		BackgroundTransparency = 1,
 		Parent = Config.Parent,
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Active = true,
-		GroupTransparency = 1,
+		--GroupTransparency = 1,
 	}, {
 		Config.WindUI.UIScaleObj,
 		Window.AcrylicPaint and Window.AcrylicPaint.Frame or nil,
 		Blur,
 		Creator.NewRoundFrame(Window.UICorner, "Squircle", {
-			ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0, -- Window.Transparent and 0.25 or 0
+			ImageTransparency = 1, --  Window.Transparent and Config.WindUI.TransparencyValue or 0,
 			Size = UDim2.new(1, 0, 1, 0),
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = UDim2.new(0.5, 0, 0.5, 0),
@@ -743,7 +743,7 @@ return function(Config)
 			BackgroundTransparency = 1,
 			Name = "Main",
 			--GroupTransparency = 1,
-			--Visible = false,
+			Visible = false,
 			ZIndex = 97,
 		}, {
 			New("UICorner", {
@@ -809,9 +809,9 @@ return function(Config)
 					AutomaticSize = "Y",
 					Visible = false,
 				}, {
-					New("UICorner", {
+					--[[New("UICorner", {
 						CornerRadius = UDim.new(1, 0),
-					}),
+					}),]]
 					New("ScrollingFrame", { -- Topbar Center Size
 						Name = "Holder",
 						BackgroundTransparency = 1,
@@ -934,7 +934,7 @@ return function(Config)
 				ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or 0, -- .93
 			},
 			{
-				Creator.NewRoundFrame(
+				--[[Creator.NewRoundFrame(
 					Window.Topbar.ButtonsType == "Default" and Window.UICorner - (Window.UIPadding / 2) or 999,
 					"Glass-1",
 					{
@@ -945,7 +945,7 @@ return function(Config)
 						ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or 0.5, -- .75
 						Name = "Outline",
 					}
-				),
+				),]]
 				IconFrame,
 				New("UIScale", {
 					Scale = 1,
@@ -979,7 +979,7 @@ return function(Config)
 		Creator.AddSignal(Button.MouseEnter, function()
 			if Window.Topbar.ButtonsType == "Default" then
 				Tween(Button, 0.15, { ImageTransparency = 0.93 }):Play()
-				Tween(Button.Outline, 0.15, { ImageTransparency = 0.75 }):Play()
+				--Tween(Button.Outline, 0.15, { ImageTransparency = 0.75 }):Play()
 				--Tween(IconFrame.ImageLabel, .15, {ImageTransparency = 0}):Play()
 			else
 				--Tween(Button, .1, {Size = UDim2.new(0,14+8,0,14+8)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
@@ -1008,7 +1008,7 @@ return function(Config)
 		Creator.AddSignal(Button.MouseLeave, function()
 			if Window.Topbar.ButtonsType == "Default" then
 				Tween(Button, 0.1, { ImageTransparency = 1 }):Play()
-				Tween(Button.Outline, 0.1, { ImageTransparency = 1 }):Play()
+				--Tween(Button.Outline, 0.1, { ImageTransparency = 1 }):Play()
 				--Tween(IconFrame.ImageLabel, .1, {ImageTransparency = .2}):Play()
 			else
 				--Tween(Button, .1, {Size = UDim2.new(0,14,0,14)}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
@@ -1318,8 +1318,11 @@ return function(Config)
 			task.wait(0.06)
 			Window.Closed = false
 
-			Tween(Window.UIElements.Main, 0.2, {
-				GroupTransparency = 0,
+			Window.UIElements.Main.Size = UDim2.new(Window.Size.X.Scale, Window.Size.X.Offset, 0, 100)
+
+			Tween(Window.UIElements.Main, 0.8, {
+				--GroupTransparency = 0,
+				Size = Window.Size,
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
 			if Window.UIElements.BackgroundGradient then
@@ -1328,9 +1331,11 @@ return function(Config)
 				}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 			end
 
-			--[[Tween(Window.UIElements.Main.Background, 0.4, {
-				Size = UDim2.new(1, 0, 1, 0),
-			}, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out):Play()]]
+			Window.UIElements.Main.Background.ImageTransparency = 1
+			Tween(Window.UIElements.Main.Background, 0.4, {
+				--Size = UDim2.new(1, 0, 1, 0),
+				ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+			}, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out):Play()
 
 			if BGImage then
 				if BGImage:IsA("VideoFrame") then
@@ -1361,9 +1366,9 @@ return function(Config)
 				Enum.EasingStyle.Quint,
 				Enum.EasingDirection.Out
 			):Play()
-			if UIStroke then
+			--[[if UIStroke then
 				Tween(UIStroke, 0.25, { Transparency = 0.8 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-			end
+			end]]
 
 			task.spawn(function()
 				task.wait(0.3)
@@ -1392,7 +1397,7 @@ return function(Config)
 			Window.UIElements.Main.Visible = true
 			task.spawn(function()
 				task.wait(0.05)
-				--Window.UIElements.Main:WaitForChild("Main").Visible = true
+				Window.UIElements.Main:WaitForChild("Main").Visible = true
 
 				Config.WindUI:ToggleAcrylic(true)
 			end)
@@ -1409,15 +1414,16 @@ return function(Config)
 
 		Config.WindUI:ToggleAcrylic(false)
 
-		--[[if Window.UIElements.Main and Window.UIElements.Main:WaitForChild("Main") then
+		if Window.UIElements.Main and Window.UIElements.Main:WaitForChild("Main") then
 			Window.UIElements.Main.Main.Visible = false
-		end]]
+		end
 
 		Window.CanDropdown = false
 		Window.Closed = true
 
-		Tween(Window.UIElements.Main, 0.24, {
-			GroupTransparency = 1,
+		Tween(Window.UIElements.Main, 0.9, {
+			--GroupTransparency = 1,
+			Size = UDim2.new(Window.Size.X.Scale, Window.Size.X.Offset, 0, 0),
 		}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		if Window.UIElements.BackgroundGradient then
 			Tween(Window.UIElements.BackgroundGradient, 0.2, {
@@ -1425,9 +1431,10 @@ return function(Config)
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
 		end
 
-		--[[Tween(Window.UIElements.Main.Background, 0.4, {
-			Size = UDim2.new(1, 0, 1, -240),
-		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()]]
+		Tween(Window.UIElements.Main.Background, 0.3, {
+			--Size = UDim2.new(1, 0, 1, -240),
+			ImageTransparency = 1,
+		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()
 
 		Tween(
 			Config.WindUI.UIScaleObj,
@@ -1591,7 +1598,7 @@ return function(Config)
 	do
 		local Margin = 40
 		local ViewportSize = CurrentCamera.ViewportSize
-		local WindowSize = Window.UIElements.Main.AbsoluteSize
+		local WindowSize = Vector2.new(Window.Size.X.Offset, Window.Size.Y.Offset)
 
 		if not Window.IsFullscreen and Window.AutoScale then
 			local AvailableWidth = ViewportSize.X - (Margin * 2)
