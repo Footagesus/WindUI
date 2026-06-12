@@ -6,7 +6,7 @@ local Tween = Creator.Tween
 
 function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded, Radius)
 	Variant = Variant or "Primary"
-	local Radius = Radius or (not FullRounded and 10 or 99)
+	local Radius = Radius or (not FullRounded and 10 or 999)
 	local IconButtonFrame
 	if Icon and Icon ~= "" then
 		IconButtonFrame = New("ImageLabel", {
@@ -63,13 +63,15 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 			Visible = not FullRounded,
 		}),
 
-		Creator.NewRoundFrame(Radius, not FullRounded and "Glass-1" or "Glass-0.7", {
+		Creator.NewRoundFrame(Radius, "SquircleGlass", {
 			ThemeTag = {
 				ImageColor3 = "White",
 			},
-			Size = UDim2.new(1, 0, 1, 0),
+			Size = UDim2.new(1, 2, 1, 2),
 			--ImageColor3 = Variant == "White" and Color3.new(0,0,0) or nil,
-			ImageTransparency = 0.92,
+			ImageTransparency = 0.8,
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
 			Name = "Outline",
 		}, {
 			-- New("UIGradient", {
