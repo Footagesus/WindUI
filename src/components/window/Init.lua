@@ -800,24 +800,37 @@ return function(Config)
 						PaddingLeft = UDim.new(0, 4),
 					}),
 				}),
-				New("ScrollingFrame", { -- Topbar Center Size
-					Name = "Center",
-					BackgroundTransparency = 1,
-					AutomaticSize = "Y",
-					ScrollBarThickness = 0,
-					ScrollingDirection = "X",
-					AutomaticCanvasSize = "X",
-					CanvasSize = UDim2.new(0, 0, 0, 0),
+				New("CanvasGroup", {
 					Size = UDim2.new(0, 0, 1, 0),
+					BackgroundTransparency = 1,
+					Name = "Center",
 					AnchorPoint = Vector2.new(0, 0.5),
 					Position = UDim2.new(0, 0, 0.5, 0),
+					AutomaticSize = "Y",
 					Visible = false,
 				}, {
-					New("UIListLayout", {
-						FillDirection = "Horizontal",
-						VerticalAlignment = "Center",
-						HorizontalAlignment = "Left",
-						Padding = UDim.new(0, Window.UIPadding / 2),
+					New("UICorner", {
+						CornerRadius = UDim.new(1, 0),
+					}),
+					New("ScrollingFrame", { -- Topbar Center Size
+						Name = "Holder",
+						BackgroundTransparency = 1,
+						AutomaticSize = "Y",
+						ScrollBarThickness = 0,
+						ScrollingDirection = "X",
+						AutomaticCanvasSize = "X",
+						CanvasSize = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						--AnchorPoint = Vector2.new(0, 0.5),
+						--Position = UDim2.new(0, 0, 0.5, 0),
+					}, {
+
+						New("UIListLayout", {
+							FillDirection = "Horizontal",
+							VerticalAlignment = "Center",
+							HorizontalAlignment = "Left",
+							Padding = UDim.new(0, Window.UIPadding / 2),
+						}),
 					}),
 				}),
 				New("Frame", { -- Topbar Right Side -- Window.UIElements.Main.Main.Topbar.Right
@@ -858,8 +871,14 @@ return function(Config)
 
 		Window.UIElements.Main.Main.Topbar.Center.Position =
 			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.WindUI.UIScale), 0.5, 0)
-		Window.UIElements.Main.Main.Topbar.Center.Size =
-			UDim2.new(1, -LeftWidth - (Window.UIPadding / Config.WindUI.UIScale), 1, 0)
+		Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(
+			1,
+			-LeftWidth
+				- (Window.UIPadding / Config.WindUI.UIScale)
+				- (Window.Topbar.ButtonsType == "Default" and RightWidth + Window.UIPadding or 0),
+			1,
+			0
+		)
 	end)
 
 	if Window.Topbar.ButtonsType ~= "Default" then
@@ -1951,7 +1970,7 @@ return function(Config)
 			Window.UIElements.Main.Main.Topbar.Center.Visible = true
 		end
 		TagConfig.Window = Window
-		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center)
+		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center.Holder)
 	end
 
 	local function startResizing(input)
