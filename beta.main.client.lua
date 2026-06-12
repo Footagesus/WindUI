@@ -83,12 +83,13 @@ local Window = WindUI:CreateWindow({
 	Size = UDim2.new(0, 840, 0, 500),
 	MinSize = Vector2.new(815, 400),
 	MaxSize = Vector2.new(1000, 700),
+	HideSearchBar = false,
 	--Background = "https://www.wwf.org.uk/sites/default/files/styles/ar_16x9_1920px/public/2023-09/Tropical.jpg",
 	--Transparent = true,
-	Topbar = {
+	--[[Topbar = {
 		Height = 44,
 		ButtonsType = "Mac", -- Default or Mac
-	},
+	},]]
 })
 
 Window:Tag({
@@ -192,7 +193,7 @@ local Section1 = Tab3:Section({
 	Title = "Section Example",
 })
 
-local Group1 = Section1:Group() --HStack
+local Group1 = Section1:HStack() --HStack
 
 local Button = Group1:Button({
 	Title = "Button example 1",
@@ -208,12 +209,26 @@ local Button = Group1:Button({
 	end,
 })
 
+local Button = Group1:Button({
+	Title = "Button example 3",
+	Callback = function()
+		print("clicked")
+	end,
+})
+
 local CoolTab = Window:Tab({
 	Title = "Cool Tab",
 })
 
 CoolTab:Toggle({
+	Tags = {
+		{
+			Title = "Tag Example",
+			Color = Color3.fromHex("#ffd930"),
+		},
+	},
 	Title = "Toggle Example",
+	Desc = "Toggle Example bla bla bla bla",
 	Value = true,
 	Callback = function(value)
 		print("Toggle Value:", value)
@@ -260,6 +275,12 @@ VStackLeft:Paragraph({
 
 VStackLeft:Button({
 	Title = "Reset Character",
+	Tags = {
+		{
+			Title = "Warning",
+			Color = Color3.fromHex("#ff5230"),
+		},
+	},
 	Callback = function()
 		Players.LocalPlayer.Character:BreakJoints()
 	end,
