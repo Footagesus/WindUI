@@ -23,6 +23,8 @@ local Element = {
 	--UIPadding = 8
 }
 
+local ActiveSlider = nil
+
 function Element:Colorpicker(Config, Window, WindUI, OnApply)
 	local Colorpicker = {
 		__type = "Colorpicker",
@@ -61,7 +63,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		TextSize = 20,
 		FontFace = Font.new(Creator.Font, Enum.FontWeight.SemiBold),
 		TextXAlignment = "Left",
-		Size = UDim2.new(1, 0, 0, 0),
+		Size = UDim2.new(0, 0, 0, 0),
 		AutomaticSize = "Y",
 		ThemeTag = {
 			TextColor3 = "Text",
@@ -80,6 +82,12 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 	-- Colorpicker.UIElements.Title:GetPropertyChangedSignal("TextBounds"):Connect(function()
 	--     Colorpicker.UIElements.Title.Size = UDim2.new(1,0,0,Colorpicker.UIElements.Title.TextBounds.Y)
 	-- end)
+
+	local HueDragHolder = New("Frame", {
+		Size = UDim2.new(1, 0, 1, 0),
+		Position = UDim2.new(0, 0, 0, 0),
+		BackgroundTransparency = 1,
+	})
 
 	local SatCursor = New("Frame", {
 		Size = UDim2.new(0, 14, 0, 14),
@@ -279,12 +287,6 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		Rotation = 90,
 	})
 
-	local HueDragHolder = New("Frame", {
-		Size = UDim2.new(1, 0, 1, 0),
-		Position = UDim2.new(0, 0, 0, 0),
-		BackgroundTransparency = 1,
-	})
-
 	local HueDrag = New("Frame", {
 		Size = UDim2.new(0, 14, 0, 14),
 		AnchorPoint = Vector2.new(0.5, 0.5),
@@ -318,8 +320,8 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		HueDragHolder,
 	})
 
-	function CreateNewInput(Title, Value)
-		local InputFrame = CreateInput(Title, nil, Colorpicker.UIElements.Inputs)
+	local function CreateNewInput(Title, Value)
+		local InputFrame = CreateInput(Title, nil, Colorpicker.UIElements.Inputs, nil, nil, nil, nil, nil, true)
 
 		New("TextLabel", {
 			BackgroundTransparency = 1,
@@ -366,7 +368,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 	end
 
 	local ButtonsContent = New("Frame", {
-		Size = UDim2.new(1, 0, 0, 40),
+		Size = UDim2.new(0, 0, 0, 40),
 		AutomaticSize = "Y",
 		Position = UDim2.new(0, 0, 0, 40 + 8 + 182 + 24 + Colorpicker.TextPadding),
 		BackgroundTransparency = 1,
@@ -386,6 +388,21 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		--     })
 	})
 
+	Creator.AddSignal(ColorpickerFrame.UIElements.Main:GetPropertyChangedSignal("AbsoluteSize"), function()
+		Colorpicker.UIElements.Title.Size = UDim2.new(
+			0,
+			ColorpickerFrame.UIElements.Main.AbsoluteSize.X / Config.UIScale - (ColorpickerFrame.UIPadding * 2),
+			0,
+			0
+		)
+		ButtonsContent.Size = UDim2.new(
+			0,
+			ColorpickerFrame.UIElements.Main.AbsoluteSize.X / Config.UIScale - ColorpickerFrame.UIPadding * 2,
+			0,
+			40
+		)
+	end)
+
 	local Buttons = {
 		{
 			Title = "Cancel",
@@ -394,7 +411,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		},
 		{
 			Title = "Apply",
-			Icon = "chevron-right",
+			--Icon = "chevron-right",
 			Variant = "Primary",
 			Callback = function()
 				OnApply(Color3.fromHSV(Colorpicker.Hue, Colorpicker.Sat, Colorpicker.Vib), Colorpicker.Transparency)
@@ -410,7 +427,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 			Button.Variant,
 			ButtonsContent,
 			ColorpickerFrame,
-			false
+			true
 		)
 		ButtonFrame.Size = UDim2.new(0.5, -3, 0, 40)
 		ButtonFrame.AutomaticSize = "None"
@@ -586,67 +603,114 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 
 	-- fu
 
-	local SatVibMap = Colorpicker.UIElements.SatVibMap
-	Creator.AddSignal(SatVibMap.InputBegan, function(Input)
-		if
-			Input.UserInputType == Enum.UserInputType.MouseButton1
-			or Input.UserInputType == Enum.UserInputType.Touch
-		then
-			while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-				local MinX = SatVibMap.AbsolutePosition.X
-				local MaxX = MinX + SatVibMap.AbsoluteSize.X
-				local MouseX = math.clamp(Mouse.X, MinX, MaxX)
+	local function UpdateSatVib(SatVibMap, Colorpicker)
+		local MinX = SatVibMap.AbsolutePosition.X
+		local MaxX = MinX + SatVibMap.AbsoluteSize.X
+		local MinY = SatVibMap.AbsolutePosition.Y
+		local MaxY = MinY + SatVibMap.AbsoluteSize.Y
 
-				local MinY = SatVibMap.AbsolutePosition.Y
-				local MaxY = MinY + SatVibMap.AbsoluteSize.Y
-				local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
+		local MouseX = math.clamp(Mouse.X, MinX, MaxX)
+		local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
 
-				Colorpicker.Sat = (MouseX - MinX) / (MaxX - MinX)
-				Colorpicker.Vib = 1 - ((MouseY - MinY) / (MaxY - MinY))
-				Colorpicker:Update()
+		Colorpicker.Sat = (MouseX - MinX) / (MaxX - MinX)
+		Colorpicker.Vib = 1 - ((MouseY - MinY) / (MaxY - MinY))
 
-				RenderStepped:Wait()
-			end
-		end
-	end)
-
-	Creator.AddSignal(HueSlider.InputBegan, function(Input)
-		if
-			Input.UserInputType == Enum.UserInputType.MouseButton1
-			or Input.UserInputType == Enum.UserInputType.Touch
-		then
-			while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-				local MinY = HueSlider.AbsolutePosition.Y
-				local MaxY = MinY + HueSlider.AbsoluteSize.Y
-				local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
-
-				Colorpicker.Hue = ((MouseY - MinY) / (MaxY - MinY))
-				Colorpicker:Update()
-
-				RenderStepped:Wait()
-			end
-		end
-	end)
-
-	if Colorpicker.Transparency then
-		Creator.AddSignal(TransparencySlider.InputBegan, function(Input)
-			if
-				Input.UserInputType == Enum.UserInputType.MouseButton1
-				or Input.UserInputType == Enum.UserInputType.Touch
-			then
-				while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
-					local MinY = TransparencySlider.AbsolutePosition.Y
-					local MaxY = MinY + TransparencySlider.AbsoluteSize.Y
-					local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
-
-					Colorpicker.Transparency = 1 - ((MouseY - MinY) / (MaxY - MinY))
-					Colorpicker:Update()
-
-					RenderStepped:Wait()
-				end
-			end
-		end)
+		Colorpicker:Update()
 	end
+
+	local function UpdateHue(HueSlider, Colorpicker)
+		local MinY = HueSlider.AbsolutePosition.Y
+		local MaxY = MinY + HueSlider.AbsoluteSize.Y
+
+		local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
+
+		Colorpicker.Hue = (MouseY - MinY) / (MaxY - MinY)
+
+		Colorpicker:Update()
+	end
+
+	local function UpdateTransparency(TransparencySlider, Colorpicker)
+		local MinY = TransparencySlider.AbsolutePosition.Y
+		local MaxY = MinY + TransparencySlider.AbsoluteSize.Y
+
+		local MouseY = math.clamp(Mouse.Y, MinY, MaxY)
+
+		Colorpicker.Transparency = 1 - ((MouseY - MinY) / (MaxY - MinY))
+
+		Colorpicker:Update()
+	end
+
+	UserInputService.InputChanged:Connect(function(input)
+		if
+			input.UserInputType ~= Enum.UserInputType.MouseMovement
+			and input.UserInputType ~= Enum.UserInputType.Touch
+		then
+			return
+		end
+
+		if ActiveSlider == "SatVib" then
+			UpdateSatVib(Colorpicker.UIElements.SatVibMap, Colorpicker)
+		elseif ActiveSlider == "Hue" then
+			UpdateHue(HueSlider, Colorpicker)
+		elseif ActiveSlider == "Transparency" then
+			UpdateTransparency(TransparencySlider, Colorpicker)
+		end
+	end)
+
+	Colorpicker.UIElements.SatVibMap.InputBegan:Connect(function(input)
+		if
+			input.UserInputType ~= Enum.UserInputType.MouseButton1
+			and input.UserInputType ~= Enum.UserInputType.Touch
+		then
+			return
+		end
+
+		if ActiveSlider and ActiveSlider ~= "SatVib" then
+			return
+		end
+
+		ActiveSlider = "SatVib"
+
+		UpdateSatVib(Colorpicker.UIElements.SatVibMap, Colorpicker)
+	end)
+
+	HueSlider.InputBegan:Connect(function(input)
+		if
+			input.UserInputType ~= Enum.UserInputType.MouseButton1
+			and input.UserInputType ~= Enum.UserInputType.Touch
+		then
+			return
+		end
+
+		if ActiveSlider and ActiveSlider ~= "Hue" then
+			return
+		end
+
+		ActiveSlider = "Hue"
+
+		UpdateHue(HueSlider, Colorpicker)
+	end)
+
+	TransparencySlider.InputBegan:Connect(function(input)
+		if
+			input.UserInputType ~= Enum.UserInputType.MouseButton1
+			and input.UserInputType ~= Enum.UserInputType.Touch
+		then
+			return
+		end
+
+		if ActiveSlider and ActiveSlider ~= "Transparency" then
+			return
+		end
+
+		ActiveSlider = "Transparency"
+
+		UpdateTransparency(TransparencySlider, Colorpicker)
+	end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		ActiveSlider = nil
+	end)
 
 	return Colorpicker
 end
@@ -693,7 +757,15 @@ function Element:New(Config)
 		AnchorPoint = Vector2.new(1, 0),
 		Position = UDim2.new(1, 0, 0, 0),
 		ZIndex = 2,
-	}, nil, true)
+	}, {
+		Creator.NewRoundFrame(Element.UICorner, "SquircleGlass", {
+			Size = UDim2.new(1, 0, 1, 0),
+			ThemeTag = {
+				ImageColor3 = "Outline",
+			},
+			ImageTransparency = 0.55,
+		}),
+	}, true)
 
 	function Colorpicker:Lock()
 		Colorpicker.Locked = true
