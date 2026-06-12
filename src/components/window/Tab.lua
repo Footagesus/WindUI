@@ -524,32 +524,28 @@ function TabModule.New(Config, UIScale)
 			-- 	ImageTransparency = 0.6,
 			-- }),
 			EmptyPageIcon,
-			Tab.CustomEmptyPage.Title
-					and New("TextLabel", { -- Title
-						AutomaticSize = "XY",
-						Text = Tab.CustomEmptyPage.Title,
-						ThemeTag = {
-							TextColor3 = "Text",
-						},
-						TextSize = 18,
-						TextTransparency = 0.5,
-						BackgroundTransparency = 1,
-						FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
-					})
-				or nil,
-			Tab.CustomEmptyPage.Desc
-					and New("TextLabel", { -- Desc
-						AutomaticSize = "XY",
-						Text = Tab.CustomEmptyPage.Desc,
-						ThemeTag = {
-							TextColor3 = "Text",
-						},
-						TextSize = 15,
-						TextTransparency = 0.65,
-						BackgroundTransparency = 1,
-						FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
-					})
-				or nil,
+			Tab.CustomEmptyPage.Title and New("TextLabel", { -- Title
+				AutomaticSize = "XY",
+				Text = Tab.CustomEmptyPage.Title,
+				ThemeTag = {
+					TextColor3 = "Text",
+				},
+				TextSize = 18,
+				TextTransparency = 0.5,
+				BackgroundTransparency = 1,
+				FontFace = Font.new(Creator.Font, Enum.FontWeight.Medium),
+			}) or nil,
+			Tab.CustomEmptyPage.Desc and New("TextLabel", { -- Desc
+				AutomaticSize = "XY",
+				Text = Tab.CustomEmptyPage.Desc,
+				ThemeTag = {
+					TextColor3 = "Text",
+				},
+				TextSize = 15,
+				TextTransparency = 0.65,
+				BackgroundTransparency = 1,
+				FontFace = Font.new(Creator.Font, Enum.FontWeight.Regular),
+			}) or nil,
 		})
 
 		-- Empty.TextLabel:GetPropertyChangedSignal("TextBounds"):Connect(function()
@@ -596,6 +592,7 @@ function TabModule:SelectTab(TabIndex)
 			end
 		end
 		Creator.SetThemeTag(TabModule.Tabs[TabIndex].UIElements.Main, {
+			ImageColor3 = "TabBackgroundActive",
 			ImageTransparency = "TabBackgroundActiveTransparency",
 		}, 0.15)
 		if TabModule.Tabs[TabIndex].Border then
