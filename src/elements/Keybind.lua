@@ -60,6 +60,7 @@ function Element:New(Config)
 		Window = Config.Window,
 		ElementTable = Keybind,
 		ParentConfig = Config,
+		Tags = Config.Tags,
 	})
 
 	Keybind.UIElements.Keybind = CreateLabel(

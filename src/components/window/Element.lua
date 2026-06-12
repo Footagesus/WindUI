@@ -10,6 +10,8 @@ end)
 
 local UserInputService = cloneref(game:GetService("UserInputService"))
 
+local TagModule = require("../ui/Tag")
+
 local function Color3ToHSB(color)
 	local r, g, b = color.R, color.G, color.B
 	local max = math.max(r, g, b)
@@ -57,7 +59,7 @@ local function GetTextColorForHSB(color)
 	end
 end
 
-local function getElementPosition(elements, targetIndex)
+local function getElementPosition(elements, targetIndex, isHStack)
 	if type(targetIndex) ~= "number" or targetIndex ~= math.floor(targetIndex) then
 		return nil, 1
 	end
@@ -91,10 +93,10 @@ local function getElementPosition(elements, targetIndex)
 			return "Squircle"
 		end
 		if pos == 1 then
-			return "Squircle-TL-TR"
+			return isHStack and "SquircleH-TL-TR" or "Squircle-TL-TR"
 		end
 		if pos == size then
-			return "Squircle-BL-BR"
+			return isHStack and "SquircleH-BL-BR" or "Squircle-BL-BR"
 		end
 		return "Square"
 	end
@@ -141,6 +143,7 @@ return function(Config)
 		UIPadding = Config.Window.ElementConfig.UIPadding,
 		UICorner = Config.Window.ElementConfig.UICorner,
 		Size = Config.Size or "Default", -- Small, Default, Large
+		Tags = Config.Tags or {},
 		UIElements = {},
 
 		Index = Config.Index,
@@ -288,11 +291,57 @@ return function(Config)
 					VerticalAlignment = "Center",
 					HorizontalAlignment = "Left",
 				}),
+				New("ScrollingFrame", {
+					Size = UDim2.new(1, 0, 0, 0),
+					AutomaticSize = "Y",
+					LayoutOrder = -99,
+					BackgroundTransparency = 1,
+					ScrollingDirection = "X",
+					CanvasSize = UDim2.new(0, 0, 0, 0),
+					ScrollBarThickness = 0,
+					Visible = false,
+				}, {
+					New("UIListLayout", {
+						FillDirection = "Horizontal",
+						VerticalAlignment = "Center",
+						HorizontalAlignment = "Left",
+						Padding = UDim.new(0, Config.Window.UIPadding / 2),
+					}),
+				}),
+				New("Frame", {
+					Name = "Space",
+					Size = UDim2.new(1, 0, 0, 0),
+					BackgroundTransparency = 1,
+					Visible = false,
+				}),
 				Title,
 				Desc,
 			}),
 		}),
 	})
+
+	for _, TagConfig in next, Config.Tags or {} do
+		if not Element.UIElements.Container.TitleFrame.TitleFrame.ScrollingFrame.Visible then
+			Element.UIElements.Container.TitleFrame.TitleFrame.ScrollingFrame.Visible = true
+			Element.UIElements.Container.TitleFrame.TitleFrame.Space.Visible = true
+		end
+		local Tag = TagModule:New(TagConfig, Element.UIElements.Container.TitleFrame.TitleFrame.ScrollingFrame)
+	end
+
+	Creator.AddSignal(
+		Element.UIElements.Container.TitleFrame.TitleFrame.ScrollingFrame.UIListLayout:GetPropertyChangedSignal(
+			"AbsoluteContentSize"
+		),
+		function()
+			Element.UIElements.Container.TitleFrame.TitleFrame.ScrollingFrame.Size = UDim2.new(
+				1,
+				0,
+				0,
+				Element.UIElements.Container.TitleFrame.TitleFrame.ScrollingFrame.UIListLayout.AbsoluteContentSize.Y
+					/ Config.ParentConfig.UIScale
+			)
+		end
+	)
 
 	-- print(Config.Tab.Elements)
 	-- print(Config.Index)
@@ -376,6 +425,7 @@ return function(Config)
 	local HoverOutline, HoverOutlineTable = NewRoundFrame(Element.UICorner, "Squircle-Outline", {
 		Size = UDim2.new(1, 0, 1, 0),
 		ImageTransparency = 1, -- 0.25
+		Visible = false,
 		Active = false,
 		ThemeTag = {
 			ImageColor3 = "Text",
@@ -709,20 +759,19 @@ return function(Config)
 
 	function Element.UpdateShape(Tab)
 		if Config.Window.NewElements then
-			local newShape
-			if Config.ParentConfig.ParentType == "Group" then
-				newShape = "Squircle"
-			else
-				newShape = getElementPosition(Tab.Elements, Element.Index)
-			end
+			local newShape = getElementPosition(
+				Tab.Elements,
+				Element.Index,
+				Config.ParentConfig.ParentTable.__type == "HStack" or Config.ParentConfig.ParentTable.__type == "Group"
+			)
 
 			if newShape and Main then
 				MainTable:SetType(newShape)
 				LockedTable:SetType(newShape)
 				HighlightTable:SetType(newShape)
-				HighlightOutlineTable:SetType(newShape .. "-Outline")
+				--HighlightOutlineTable:SetType(newShape .. "-Outline")
 				HoverTable:SetType(newShape)
-				HoverOutlineTable:SetType(newShape .. "-Outline")
+				--HoverOutlineTable:SetType(newShape .. "-Outline")
 			end
 		end
 	end

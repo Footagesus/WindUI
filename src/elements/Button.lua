@@ -41,6 +41,7 @@ function Element:New(Config)
 		ElementTable = Button,
 		ParentConfig = Config,
 		Size = Config.Size,
+		Tags = Config.Tags,
 	})
 
 	-- Button.UIElements.ButtonIcon = New("ImageLabel",{
