@@ -504,9 +504,15 @@ return function(Config)
 	local BGImage = nil
 
 	local BGVideo = typeof(Window.Background) == "string" and string.match(Window.Background, "^video:(.+)") or nil
-	local BGImageUrl = typeof(Window.Background) == "string"
+
+	local BGHttpImage = typeof(Window.Background) == "string"
 			and not BGVideo
-			and (string.match(Window.Background, "^https?://.+") or string.match(Window.Background, "^rbx%w+://.+"))
+			and string.match(Window.Background, "^https?://.+")
+		or nil
+
+	local BGRobloxImage = typeof(Window.Background) == "string"
+			and not BGVideo
+			and string.match(Window.Background, "^rbxassetid://%d+")
 		or nil
 
 	local function GetImageExtension(url)
@@ -574,27 +580,24 @@ return function(Config)
 			}),
 		})
 		BGImage:Play()
-	elseif BGImageUrl then
+	elseif BGHttpImage then
 		local imagePath = (Window.Folder or "Temp")
 			.. "/assets/."
-			.. Creator.SanitizeFilename(BGImageUrl)
-			.. GetImageExtension(BGImageUrl)
+			.. Creator.SanitizeFilename(BGHttpImage)
+			.. GetImageExtension(BGHttpImage)
+
 		if isfile and not isfile(imagePath) then
 			local success, result = pcall(function()
-				-- local response = Creator.Request({
-				-- 	Url = BGImageUrl,
-				-- 	Method = "GET",
-				-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
-				-- })
-				local response = game.HttpGet and game:HttpGet(BGImageUrl)
+				local response = game.HttpGet and game:HttpGet(BGHttpImage)
 					or Creator.Request({
-						Url = BGVideo,
+						Url = BGHttpImage,
 						Method = "GET",
 						Headers = { ["User-Agent"] = "Roblox/Exploit" },
 					}).Body
-				--print(response)
+
 				writefile(imagePath, response)
 			end)
+
 			if not success then
 				warn("[ Window.Background ] Failed to download image: " .. tostring(result))
 			end
@@ -603,6 +606,7 @@ return function(Config)
 		local success, customAsset = pcall(function()
 			return getcustomasset(imagePath)
 		end)
+
 		if not success then
 			warn("[ Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
 		end
@@ -610,7 +614,19 @@ return function(Config)
 		BGImage = New("ImageLabel", {
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1, 0, 1, 0),
-			Image = customAsset or BGImageUrl,
+			Image = customAsset,
+			ImageTransparency = 0,
+			ScaleType = "Crop",
+		}, {
+			New("UICorner", {
+				CornerRadius = UDim.new(0, Window.UICorner),
+			}),
+		})
+	elseif BGRobloxImage then
+		BGImage = New("ImageLabel", {
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 1, 0),
+			Image = BGRobloxImage,
 			ImageTransparency = 0,
 			ScaleType = "Crop",
 		}, {
