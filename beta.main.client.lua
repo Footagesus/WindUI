@@ -94,6 +94,7 @@ local Window = WindUI:CreateWindow({
 
 Window:Tag({
 	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
+	Radius = 0,
 })
 Window:Tag({
 	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
@@ -236,6 +237,12 @@ CoolTab:Toggle({
 })
 
 CoolTab:Slider({
+	Tags = {
+		{
+			Title = "Tag Example",
+			Color = Color3.fromHex("#ffd930"),
+		},
+	},
 	Title = "Slider Example",
 	Value = {
 		Min = 0,
@@ -450,6 +457,21 @@ TestTab:Dropdown({
 	Value = "one",
 	Callback = function(Value)
 		getgenv().im = somevalue[Value]
+	end,
+})
+
+local AllThemes = {}
+
+for Name, _ in next, WindUI.Themes do
+	table.insert(AllThemes, Name)
+end
+
+TestTab:Dropdown({
+	Title = "Set theme",
+	Values = AllThemes,
+	Value = WindUI.Theme.Name,
+	Callback = function(v)
+		WindUI:SetTheme(v)
 	end,
 })
 
