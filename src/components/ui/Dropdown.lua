@@ -203,7 +203,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 				if isLocked then
 					Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-					Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+					--Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 					Tween(tab.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0.6 }):Play()
 					if tab.UIElements.TabIcon then
 						Tween(tab.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0.6 }):Play()
@@ -214,14 +214,14 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				else
 					if tab.Selected then
 						Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
-						Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
+						--Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 						Tween(tab.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
 						if tab.UIElements.TabIcon then
 							Tween(tab.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0 }):Play()
 						end
 					else
 						Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-						Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+						--Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 						Tween(
 							tab.UIElements.TabItem.Frame.Title.TextLabel,
 							0.1,
@@ -437,7 +437,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 				if TabMain.Selected and not TabMain.Locked then
 					TabMain.UIElements.TabItem.ImageTransparency = 0.95
-					TabMain.UIElements.TabItem.Highlight.ImageTransparency = 0.75
+					--TabMain.UIElements.TabItem.Highlight.ImageTransparency = 0.75
 					TabMain.UIElements.TabItem.Frame.Title.TextLabel.TextTransparency = 0
 					if TabMain.UIElements.TabIcon then
 						TabMain.UIElements.TabIcon.ImageLabel.ImageTransparency = 0
@@ -458,7 +458,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 							if not TabMain.Selected then
 								TabMain.Selected = true
 								Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
-								Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
+								--Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 								Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
 								if TabMain.UIElements.TabIcon then
 									Tween(TabMain.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0 }):Play()
@@ -470,7 +470,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 								end
 								TabMain.Selected = false
 								Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-								Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+								--Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 								Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0.4 }):Play()
 								if TabMain.UIElements.TabIcon then
 									Tween(TabMain.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0.2 }):Play()
@@ -486,7 +486,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 						else
 							for Index, TabPisun in next, Dropdown.Tabs do
 								Tween(TabPisun.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-								Tween(TabPisun.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+								--Tween(TabPisun.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 								Tween(
 									TabPisun.UIElements.TabItem.Frame.Title.TextLabel,
 									0.1,
@@ -499,7 +499,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 							end
 							TabMain.Selected = true
 							Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
-							Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
+							--Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 							Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
 							if TabMain.UIElements.TabIcon then
 								Tween(TabMain.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0 }):Play()

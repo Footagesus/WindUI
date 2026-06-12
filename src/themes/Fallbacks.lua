@@ -26,7 +26,8 @@ return function(Creator)
 		WindowTopbarIcon = "Icon",
 		WindowTopbarButtonIcon = "Icon",
 
-		WindowSearchBarBackground = "Background",
+		--WindowSearchBarBackground = "Background",
+		WindowSearchBarBackground = "Dialog",
 
 		TabBackground = "Hover",
 		TabBackgroundHover = "Hover",
