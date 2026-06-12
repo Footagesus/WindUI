@@ -8,6 +8,8 @@ local TweenService = cloneref(game:GetService("TweenService"))
 local LocalizationService = cloneref(game:GetService("LocalizationService"))
 local HttpService = cloneref(game:GetService("HttpService"))
 
+local DynamicShapeModule = require("./DynamicShape")
+
 local RenderStepped = RunService.Heartbeat
 
 local IconsURL = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
@@ -36,6 +38,7 @@ Creator = {
 	Signals = {},
 	Objects = {},
 	LocalizationObjects = {},
+	UIScale = 1,
 	FontObjects = {},
 	Language = string.match(LocalizationService.SystemLocaleId, "^[a-z]+"),
 	Request = http_request or (syn and syn.request) or request,
@@ -106,7 +109,7 @@ Creator = {
 		Grey = "#484848",
 	},
 	ThemeFallbacks = nil,
-	Shapes = {
+	--[[Shapes = {
 		["Square"] = "rbxassetid://82909646051652",
 		["Square-Outline"] = "rbxassetid://72946211851948",
 
@@ -126,7 +129,7 @@ Creator = {
 		["Glass-0.7"] = "rbxassetid://79047752995006",
 		["Glass-1"] = "rbxassetid://97324581055162",
 		["Glass-1.4"] = "rbxassetid://95071123641270",
-	},
+	},]]
 	ThemeChangeCallbacks = {},
 }
 
@@ -134,6 +137,10 @@ function Creator.Init(WindUITable)
 	WindUI = WindUITable
 
 	Creator.ThemeFallbacks = require("../themes/Fallbacks")(Creator)
+
+	Creator.UIScale = WindUITable.UIScale
+
+	DynamicShapeModule:Init(Creator)
 end
 
 function Creator.AddSignal(Signal, Function)
@@ -259,7 +266,7 @@ function Creator.GetThemeProperty(Property, Theme)
 		end
 
 		if typeof(value) == "function" then
-			return value(themeTable) 
+			return value(themeTable)
 		end
 
 		return value
@@ -535,7 +542,7 @@ function Creator.Tween(Object, Time, Properties, ...)
 	return TweenService:Create(Object, TweenInfo.new(Time, ...), Properties)
 end
 
-function Creator.NewRoundFrame(Radius, Type, Properties, Children, isButton, ReturnTable)
+--[[function Creator.NewRoundFrame(Radius, Type, Properties, Children, isButton, ReturnTable)
 	local function getImageForType(shapeType)
 		return Creator.Shapes[shapeType]
 	end
@@ -604,6 +611,10 @@ function Creator.NewRoundFrame(Radius, Type, Properties, Children, isButton, Ret
 	UpdateSliceScale(Radius)
 
 	return Image, ReturnTable and Wrapper or nil
+end]]
+
+function Creator.NewRoundFrame(Radius, Type, Properties, Children, IsButton, ReturnTable)
+	return DynamicShapeModule:New(Radius, Type, Properties, Children, IsButton, nil)
 end
 
 local New = Creator.New
@@ -882,7 +893,9 @@ end
 
 function Creator:AddColor(base, add, weight)
 	weight = math.clamp(weight or 1, 0, 1)
-	if typeof(add) == "string" then add = Color3.fromHex(add) end
+	if typeof(add) == "string" then
+		add = Color3.fromHex(add)
+	end
 
 	return function(theme)
 		local baseColor
