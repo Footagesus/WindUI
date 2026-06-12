@@ -58,7 +58,7 @@ return function(Creator)
 		PopupContent = "Text",
 		PopupIcon = "Icon",
 
-		DialogBackground = "Background",
+		DialogBackground = "Dialog",
 		DialogBackgroundTransparency = "BackgroundTransparency",
 		DialogTitle = "Text",
 		DialogContent = "Text",
@@ -111,6 +111,8 @@ return function(Creator)
 		NotificationBorderTransparency = 0.75,
 
 		DropdownTabBorder = "White",
+		DropdownTabBackground = "ElementBackground",
+		DropdownBackground = "Background",
 
 		LabelBackground = "White",
 		LabelBackgroundTransparency = 0.95,
