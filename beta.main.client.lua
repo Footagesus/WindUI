@@ -83,6 +83,7 @@ local Window = WindUI:CreateWindow({
 	Size = UDim2.new(0, 840, 0, 500),
 	MinSize = Vector2.new(815, 400),
 	MaxSize = Vector2.new(1000, 700),
+	ToggleKey = Enum.KeyCode.RightShift,
 	HideSearchBar = false,
 	--Background = "https://www.wwf.org.uk/sites/default/files/styles/ar_16x9_1920px/public/2023-09/Tropical.jpg",
 	--Transparent = true,
@@ -192,6 +193,7 @@ Dropdown2 = Tab2:Dropdown({
 
 local Section1 = Tab3:Section({
 	Title = "Section Example",
+	Box = true,
 })
 
 local Group1 = Section1:HStack() --HStack
