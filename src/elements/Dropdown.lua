@@ -69,6 +69,7 @@ function Element:New(Config)
 		Window = Config.Window,
 		ElementTable = Dropdown,
 		ParentConfig = Config,
+		Tags = Config.Tags,
 	})
 
 	if Dropdown.Callback then

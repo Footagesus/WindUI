@@ -11,7 +11,6 @@ local DialogModule = {
 	Parent = nil,
 }
 
-
 function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 	local Dialog = {
 		UICorner = 28,
@@ -35,7 +34,7 @@ function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 	if not Key then
 		Dialog.UIElements.FullScreen = New("Frame", {
 			ZIndex = 999,
-			BackgroundTransparency = 1, -- 0.3
+			BackgroundTransparency = 1, -- 0.65
 			BackgroundColor3 = Color3.fromHex("#000000"),
 			Size = UDim2.new(1, 0, 1, 0),
 			Active = false, -- true
@@ -97,10 +96,12 @@ function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 		},
 		ZIndex = 9999,
 	}, {
-		Creator.NewRoundFrame(Dialog.UICorner, "Glass-1", {
-		    ImageTransparency = 0.89,
-		    Size = UDim2.new(1,0,1,0)
-		}),
+		--[[Creator.NewRoundFrame(Dialog.UICorner, "SquircleGlass", {
+			ImageTransparency = 0.92,
+			Size = UDim2.new(1, 2, 1, 2),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
+		}),]]
 		Dialog.UIElements.Main,
 
 		-- New("UIScale", {
@@ -134,7 +135,7 @@ function DialogModule.Create(Key, Type, Window, WindUI, Parent)
 			Dialog.UIElements.MainContainer.Visible = true
 
 			if not Key then
-				Tween(Dialog.UIElements.FullScreen, 0.1, { BackgroundTransparency = 0.3 }):Play()
+				Tween(Dialog.UIElements.FullScreen, 0.1, { BackgroundTransparency = 0.65 }):Play()
 			end
 			Tween(Dialog.UIElements.MainContainer, 0.1, { ImageTransparency = 0 }):Play()
 			--Tween(Dialog.UIElements.MainContainer.UIScale, 0.1, {Scale = 1}):Play()

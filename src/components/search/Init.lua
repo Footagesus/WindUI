@@ -184,17 +184,21 @@ function SearchBar.new(TabModule, Parent, OnClose)
 			Scale = 0.9, -- 1
 		}),
 		SearchFrame,
-		Creator.NewRoundFrame(SearchBarModule.Radius, "Glass-0.7", {
-			Size = UDim2.new(1, 0, 1, 0),
+		--[[Creator.NewRoundFrame(SearchBarModule.Radius, "SquircleGlass", {
+			Size = UDim2.new(1, 4, 1, 4),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
 			BackgroundTransparency = 1,
+			ImageTransparency = 1,
 			--AutomaticSize = "Y",
 			--Visible = false,
-			ThemeTag = {
+			--[ThemeTag = {
 				ImageColor3 = "SearchBarBorder",
 				ImageTransparency = "SearchBarBorderTransparency",
-			},
+			},]
 			Name = "Outline",
 		}),
+		]]
 	})
 
 	local function CreateSearchTab(Title, Desc, Icon, Parent, IsParent, Callback)
@@ -342,11 +346,11 @@ function SearchBar.new(TabModule, Parent, OnClose)
 
 		Creator.AddSignal(Tab.Main.MouseEnter, function()
 			Tween(Tab.Main, 0.04, { ImageTransparency = 0.95 }):Play()
-			Tween(Tab.Main.Outline, 0.04, { ImageTransparency = 0.75 }):Play()
+			--Tween(Tab.Main.Outline, 0.04, { ImageTransparency = 0.75 }):Play()
 		end)
 		Creator.AddSignal(Tab.Main.InputEnded, function()
 			Tween(Tab.Main, 0.08, { ImageTransparency = 1 }):Play()
-			Tween(Tab.Main.Outline, 0.08, { ImageTransparency = 1 }):Play()
+			--Tween(Tab.Main.Outline, 0.08, { ImageTransparency = 1 }):Play()
 		end)
 		Creator.AddSignal(Tab.Main.MouseButton1Click, function()
 			if Callback then

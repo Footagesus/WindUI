@@ -26,7 +26,8 @@ return function(Creator)
 		WindowTopbarIcon = "Icon",
 		WindowTopbarButtonIcon = "Icon",
 
-		WindowSearchBarBackground = "Background",
+		--WindowSearchBarBackground = "Background",
+		WindowSearchBarBackground = "Dialog",
 
 		TabBackground = "Hover",
 		TabBackgroundHover = "Hover",
@@ -57,7 +58,7 @@ return function(Creator)
 		PopupContent = "Text",
 		PopupIcon = "Icon",
 
-		DialogBackground = "Background",
+		DialogBackground = "Dialog",
 		DialogBackgroundTransparency = "BackgroundTransparency",
 		DialogTitle = "Text",
 		DialogContent = "Text",
@@ -87,19 +88,21 @@ return function(Creator)
 
 		SectionIcon = "Icon",
 
-		SectionExpandIcon = "White",
+		SectionExpandIcon = "Icon",
 		SectionExpandIconTransparency = 0.4,
-		SectionBox = "White",
+		SectionBox = "Text",
 		SectionBoxTransparency = 0.95,
 		SectionBoxBorder = "White",
 		SectionBoxBorderTransparency = 0.75,
-		SectionBoxBackground = "White",
-		SectionBoxBackgroundTransparency = 0.95,
+		SectionBoxBackground = "ElementBackground",
+		SectionBoxBackgroundTransparency = 0.5,
 
 		SearchBarBorder = "White",
 		SearchBarBorderTransparency = 0.75,
 
 		Notification = "Background",
+		Notification2 = "White",
+		Notification2Transparency = 0.92,
 		NotificationTitle = "Text",
 		NotificationTitleTransparency = 0,
 		NotificationContent = "Text",
@@ -110,6 +113,8 @@ return function(Creator)
 		NotificationBorderTransparency = 0.75,
 
 		DropdownTabBorder = "White",
+		DropdownTabBackground = "ElementBackground",
+		DropdownBackground = "Background",
 
 		LabelBackground = "White",
 		LabelBackgroundTransparency = 0.95,

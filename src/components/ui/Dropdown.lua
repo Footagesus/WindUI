@@ -16,6 +16,8 @@ local Creator = require("../../modules/Creator")
 local New = Creator.New
 local Tween = Creator.Tween
 
+local TabBackgroundTransparency = 0.67
+
 function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	local DropdownModule = {}
 
@@ -31,7 +33,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 	Dropdown.UIElements.Menu = Creator.NewRoundFrame(Element.MenuCorner, "Squircle", {
 		ThemeTag = {
-			ImageColor3 = "Background",
+			ImageColor3 = "DropdownBackground",
 		},
 		ImageTransparency = 1, -- 0.05
 		Size = UDim2.new(1, 0, 1, 0),
@@ -203,7 +205,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 				if isLocked then
 					Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-					Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+					--Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 					Tween(tab.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0.6 }):Play()
 					if tab.UIElements.TabIcon then
 						Tween(tab.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0.6 }):Play()
@@ -213,15 +215,15 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 					tab.Locked = true
 				else
 					if tab.Selected then
-						Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
-						Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
+						Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = TabBackgroundTransparency }):Play()
+						--Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 						Tween(tab.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
 						if tab.UIElements.TabIcon then
 							Tween(tab.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0 }):Play()
 						end
 					else
 						Tween(tab.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-						Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+						--Tween(tab.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 						Tween(
 							tab.UIElements.TabItem.Frame.Title.TextLabel,
 							0.1,
@@ -301,9 +303,12 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 					{
 						Size = UDim2.new(1, 0, 0, 36),
 						AutomaticSize = TabMain.Desc and "Y",
-						ImageTransparency = 1, -- .95
+						ImageTransparency = 1, -- 0
 						Parent = Dropdown.UIElements.Menu.Frame.ScrollingFrame,
-						ImageColor3 = Color3.new(1, 1, 1),
+						--ImageColor3 = Color3.new(1, 1, 1),
+						ThemeTag = {
+							ImageColor3 = "DropdownTabBackground",
+						},
 						Active = not TabMain.Locked,
 					},
 					{
@@ -436,8 +441,8 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				end
 
 				if TabMain.Selected and not TabMain.Locked then
-					TabMain.UIElements.TabItem.ImageTransparency = 0.95
-					TabMain.UIElements.TabItem.Highlight.ImageTransparency = 0.75
+					TabMain.UIElements.TabItem.ImageTransparency = TabBackgroundTransparency
+					--TabMain.UIElements.TabItem.Highlight.ImageTransparency = 0.75
 					TabMain.UIElements.TabItem.Frame.Title.TextLabel.TextTransparency = 0
 					if TabMain.UIElements.TabIcon then
 						TabMain.UIElements.TabIcon.ImageLabel.ImageTransparency = 0
@@ -457,8 +462,12 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 						if Dropdown.Multi then
 							if not TabMain.Selected then
 								TabMain.Selected = true
-								Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
-								Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
+								Tween(
+									TabMain.UIElements.TabItem,
+									0.1,
+									{ ImageTransparency = TabBackgroundTransparency }
+								):Play()
+								--Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 								Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
 								if TabMain.UIElements.TabIcon then
 									Tween(TabMain.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0 }):Play()
@@ -470,7 +479,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 								end
 								TabMain.Selected = false
 								Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-								Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+								--Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 								Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0.4 }):Play()
 								if TabMain.UIElements.TabIcon then
 									Tween(TabMain.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0.2 }):Play()
@@ -486,7 +495,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 						else
 							for Index, TabPisun in next, Dropdown.Tabs do
 								Tween(TabPisun.UIElements.TabItem, 0.1, { ImageTransparency = 1 }):Play()
-								Tween(TabPisun.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
+								--Tween(TabPisun.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 1 }):Play()
 								Tween(
 									TabPisun.UIElements.TabItem.Frame.Title.TextLabel,
 									0.1,
@@ -498,8 +507,8 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 								TabPisun.Selected = false
 							end
 							TabMain.Selected = true
-							Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = 0.95 }):Play()
-							Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
+							Tween(TabMain.UIElements.TabItem, 0.1, { ImageTransparency = TabBackgroundTransparency }):Play()
+							--Tween(TabMain.UIElements.TabItem.Highlight, 0.1, { ImageTransparency = 0.75 }):Play()
 							Tween(TabMain.UIElements.TabItem.Frame.Title.TextLabel, 0.1, { TextTransparency = 0 }):Play()
 							if TabMain.UIElements.TabIcon then
 								Tween(TabMain.UIElements.TabIcon.ImageLabel, 0.1, { ImageTransparency = 0 }):Play()
@@ -511,7 +520,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 				elseif Type == "Menu" then
 					if not TabMain.Locked then
 						Creator.AddSignal(TabMain.UIElements.TabItem.MouseEnter, function()
-							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 0.95 }):Play()
+							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = TabBackgroundTransparency }):Play()
 						end)
 						Creator.AddSignal(TabMain.UIElements.TabItem.InputEnded, function()
 							Tween(TabMain.UIElements.TabItem, 0.08, { ImageTransparency = 1 }):Play()
@@ -578,7 +587,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 			Dropdown.UIElements.Menu.Size = UDim2.new(1, 0, 0, 0)
 			Tween(Dropdown.UIElements.Menu, 0.1, {
 				Size = UDim2.new(1, 0, 1, 0),
-				ImageTransparency = 0.05,
+				ImageTransparency = 0,
 			}, Enum.EasingStyle.Quart, Enum.EasingDirection.Out):Play()
 
 			task.spawn(function()

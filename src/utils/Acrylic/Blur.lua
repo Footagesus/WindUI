@@ -1,14 +1,15 @@
 -- Credits: Fluent - Dawid
 
-local cloneref = (cloneref or clonereference or function(instance)
-	return instance
-end)
+local cloneref = (cloneref or clonereference or function(instance) return instance end)
+
 
 local Creator = require("../../modules/Creator")
 local New = Creator.New
 
+
 local viewportPointToWorld, getOffset = unpack(require("./Utils"))
 local BlurFolder = Instance.new("Folder", cloneref(game:GetService("Workspace")).CurrentCamera)
+
 
 local function createAcrylic()
 	local Part = New("Part", {
@@ -30,6 +31,7 @@ local function createAcrylic()
 
 	return Part
 end
+
 
 local function createAcrylicBlur(distance)
 	local cleanups = {}
@@ -71,11 +73,9 @@ local function createAcrylicBlur(distance)
 		local width = (topRight3D - topLeft3D).Magnitude
 		local height = (topRight3D - bottomRight3D).Magnitude
 
-		if model and model.Parent and model:FindFirstChild("Mesh") and model.Mesh.Parent and model.Mesh.Scale then
-			model.CFrame =
-				CFrame.fromMatrix((topLeft3D + bottomRight3D) / 2, camera.XVector, camera.YVector, camera.ZVector)
-			model.Mesh.Scale = Vector3.new(width, height, 0)
-		end
+		model.CFrame =
+			CFrame.fromMatrix((topLeft3D + bottomRight3D) / 2, camera.XVector, camera.YVector, camera.ZVector)
+		model.Mesh.Scale = Vector3.new(width, height, 0)
 	end
 
 	local function onChange(rbx)

@@ -504,9 +504,15 @@ return function(Config)
 	local BGImage = nil
 
 	local BGVideo = typeof(Window.Background) == "string" and string.match(Window.Background, "^video:(.+)") or nil
-	local BGImageUrl = typeof(Window.Background) == "string"
+
+	local BGHttpImage = typeof(Window.Background) == "string"
 			and not BGVideo
-			and (string.match(Window.Background, "^https?://.+") or string.match(Window.Background, "^rbx%w+://.+"))
+			and string.match(Window.Background, "^https?://.+")
+		or nil
+
+	local BGRobloxImage = typeof(Window.Background) == "string"
+			and not BGVideo
+			and string.match(Window.Background, "^rbxassetid://%d+")
 		or nil
 
 	local function GetImageExtension(url)
@@ -549,7 +555,6 @@ return function(Config)
 				end)
 				if not success then
 					warn("[ WindUI.Window.Background ] Failed to download video: " .. tostring(result))
-					return
 				end
 			end
 
@@ -558,7 +563,6 @@ return function(Config)
 			end)
 			if not success then
 				warn("[ WindUI.Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
-				return
 			end
 			warn("[ WindUI.Window.Background ] VideoFrame may not work with custom video")
 			BGVideo = customAsset
@@ -576,45 +580,53 @@ return function(Config)
 			}),
 		})
 		BGImage:Play()
-	elseif BGImageUrl then
+	elseif BGHttpImage then
 		local imagePath = (Window.Folder or "Temp")
 			.. "/assets/."
-			.. Creator.SanitizeFilename(BGImageUrl)
-			.. GetImageExtension(BGImageUrl)
+			.. Creator.SanitizeFilename(BGHttpImage)
+			.. GetImageExtension(BGHttpImage)
+
 		if isfile and not isfile(imagePath) then
 			local success, result = pcall(function()
-				-- local response = Creator.Request({
-				-- 	Url = BGImageUrl,
-				-- 	Method = "GET",
-				-- 	Headers = { ["User-Agent"] = "Roblox/Exploit" },
-				-- })
-				local response = game.HttpGet and game:HttpGet(BGImageUrl)
+				local response = game.HttpGet and game:HttpGet(BGHttpImage)
 					or Creator.Request({
-						Url = BGVideo,
+						Url = BGHttpImage,
 						Method = "GET",
 						Headers = { ["User-Agent"] = "Roblox/Exploit" },
 					}).Body
-				--print(response)
+
 				writefile(imagePath, response)
 			end)
+
 			if not success then
 				warn("[ Window.Background ] Failed to download image: " .. tostring(result))
-				return
 			end
 		end
 
 		local success, customAsset = pcall(function()
 			return getcustomasset(imagePath)
 		end)
+
 		if not success then
 			warn("[ Window.Background ] Failed to load custom asset: " .. tostring(customAsset))
-			return
 		end
 
 		BGImage = New("ImageLabel", {
 			BackgroundTransparency = 1,
 			Size = UDim2.new(1, 0, 1, 0),
-			Image = customAsset or BGImageUrl,
+			Image = customAsset,
+			ImageTransparency = 0,
+			ScaleType = "Crop",
+		}, {
+			New("UICorner", {
+				CornerRadius = UDim.new(0, Window.UICorner),
+			}),
+		})
+	elseif BGRobloxImage then
+		BGImage = New("ImageLabel", {
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 1, 0),
+			Image = BGRobloxImage,
 			ImageTransparency = 0,
 			ScaleType = "Crop",
 		}, {
@@ -693,19 +705,20 @@ return function(Config)
 	})
 
 	Window.UIElements.Main = New("Frame", {
-		Size = Window.Size,
+		Size = UDim2.new(Window.Size.X.Scale, Window.Size.X.Offset, 0, 0),
 		Position = Window.Position,
 		BackgroundTransparency = 1,
 		Parent = Config.Parent,
 		AnchorPoint = Vector2.new(0.5, 0.5),
 		Active = true,
+		--GroupTransparency = 1,
 	}, {
 		Config.WindUI.UIScaleObj,
 		Window.AcrylicPaint and Window.AcrylicPaint.Frame or nil,
 		Blur,
 		Creator.NewRoundFrame(Window.UICorner, "Squircle", {
-			ImageTransparency = 1, -- Window.Transparent and 0.25 or 0
-			Size = UDim2.new(1, 0, 1, -240),
+			ImageTransparency = 1, --  Window.Transparent and Config.WindUI.TransparencyValue or 0,
+			Size = UDim2.new(1, 0, 1, 0),
 			AnchorPoint = Vector2.new(0.5, 0.5),
 			Position = UDim2.new(0.5, 0, 0.5, 0),
 			Name = "Background",
@@ -787,24 +800,37 @@ return function(Config)
 						PaddingLeft = UDim.new(0, 4),
 					}),
 				}),
-				New("ScrollingFrame", { -- Topbar Center Size
-					Name = "Center",
-					BackgroundTransparency = 1,
-					AutomaticSize = "Y",
-					ScrollBarThickness = 0,
-					ScrollingDirection = "X",
-					AutomaticCanvasSize = "X",
-					CanvasSize = UDim2.new(0, 0, 0, 0),
+				New("CanvasGroup", {
 					Size = UDim2.new(0, 0, 1, 0),
+					BackgroundTransparency = 1,
+					Name = "Center",
 					AnchorPoint = Vector2.new(0, 0.5),
 					Position = UDim2.new(0, 0, 0.5, 0),
+					AutomaticSize = "Y",
 					Visible = false,
 				}, {
-					New("UIListLayout", {
-						FillDirection = "Horizontal",
-						VerticalAlignment = "Center",
-						HorizontalAlignment = "Left",
-						Padding = UDim.new(0, Window.UIPadding / 2),
+					--[[New("UICorner", {
+						CornerRadius = UDim.new(1, 0),
+					}),]]
+					New("ScrollingFrame", { -- Topbar Center Size
+						Name = "Holder",
+						BackgroundTransparency = 1,
+						AutomaticSize = "Y",
+						ScrollBarThickness = 0,
+						ScrollingDirection = "X",
+						AutomaticCanvasSize = "X",
+						CanvasSize = UDim2.new(0, 0, 0, 0),
+						Size = UDim2.new(1, 0, 1, 0),
+						--AnchorPoint = Vector2.new(0, 0.5),
+						--Position = UDim2.new(0, 0, 0.5, 0),
+					}, {
+
+						New("UIListLayout", {
+							FillDirection = "Horizontal",
+							VerticalAlignment = "Center",
+							HorizontalAlignment = "Left",
+							Padding = UDim.new(0, Window.UIPadding / 2),
+						}),
 					}),
 				}),
 				New("Frame", { -- Topbar Right Side -- Window.UIElements.Main.Main.Topbar.Right
@@ -837,22 +863,22 @@ return function(Config)
 		local LeftWidth = 0
 		local RightWidth = Window.UIElements.Main.Main.Topbar.Right.UIListLayout.AbsoluteContentSize.X
 			/ Config.WindUI.UIScale
-		-- if WindowTitle and WindowAuthor then
-		--     LeftWidth = math.max(WindowTitle.TextBounds.X / Config.WindUI.UIScale, WindowAuthor.TextBounds.X / Config.WindUI.UIScale)
-		-- else
-		--     LeftWidth = WindowTitle.TextBounds.X / Config.WindUI.UIScale
-		-- end
+
 		LeftWidth = Window.UIElements.Main.Main.Topbar.Left.AbsoluteSize.X / Config.WindUI.UIScale
 		if Window.Topbar.ButtonsType ~= "Default" then
 			LeftWidth = LeftWidth + RightWidth + Window.UIPadding - 4
 		end
-		-- if WindowIcon then
-		--     LeftWidth = LeftWidth + (Window.IconSize / Config.WindUI.UIScale) + (Window.UIPadding / Config.WindUI.UIScale) + (4 / Config.WindUI.UIScale)
-		-- end
+
 		Window.UIElements.Main.Main.Topbar.Center.Position =
 			UDim2.new(0, LeftWidth + (Window.UIPadding / Config.WindUI.UIScale), 0.5, 0)
-		Window.UIElements.Main.Main.Topbar.Center.Size =
-			UDim2.new(1, -LeftWidth - RightWidth - ((Window.UIPadding * 2) / Config.WindUI.UIScale), 1, 0)
+		Window.UIElements.Main.Main.Topbar.Center.Size = UDim2.new(
+			1,
+			-LeftWidth
+				- (Window.UIPadding / Config.WindUI.UIScale)
+				- (Window.Topbar.ButtonsType == "Default" and RightWidth + Window.UIPadding or 0),
+			1,
+			0
+		)
 	end)
 
 	if Window.Topbar.ButtonsType ~= "Default" then
@@ -908,7 +934,7 @@ return function(Config)
 				ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or 0, -- .93
 			},
 			{
-				Creator.NewRoundFrame(
+				--[[Creator.NewRoundFrame(
 					Window.Topbar.ButtonsType == "Default" and Window.UICorner - (Window.UIPadding / 2) or 999,
 					"Glass-1",
 					{
@@ -919,7 +945,7 @@ return function(Config)
 						ImageTransparency = Window.Topbar.ButtonsType == "Default" and 1 or 0.5, -- .75
 						Name = "Outline",
 					}
-				),
+				),]]
 				IconFrame,
 				New("UIScale", {
 					Scale = 1,
@@ -942,7 +968,7 @@ return function(Config)
 
 		Window.TopBarButtons[100 - LayoutOrder] = {
 			Name = Name,
-			Object = Button,
+			Object = ButtonContainer,
 		}
 
 		Creator.AddSignal(Button.MouseButton1Click, function()
@@ -953,7 +979,7 @@ return function(Config)
 		Creator.AddSignal(Button.MouseEnter, function()
 			if Window.Topbar.ButtonsType == "Default" then
 				Tween(Button, 0.15, { ImageTransparency = 0.93 }):Play()
-				Tween(Button.Outline, 0.15, { ImageTransparency = 0.75 }):Play()
+				--Tween(Button.Outline, 0.15, { ImageTransparency = 0.75 }):Play()
 				--Tween(IconFrame.ImageLabel, .15, {ImageTransparency = 0}):Play()
 			else
 				--Tween(Button, .1, {Size = UDim2.new(0,14+8,0,14+8)}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
@@ -982,7 +1008,7 @@ return function(Config)
 		Creator.AddSignal(Button.MouseLeave, function()
 			if Window.Topbar.ButtonsType == "Default" then
 				Tween(Button, 0.1, { ImageTransparency = 1 }):Play()
-				Tween(Button.Outline, 0.1, { ImageTransparency = 1 }):Play()
+				--Tween(Button.Outline, 0.1, { ImageTransparency = 1 }):Play()
 				--Tween(IconFrame.ImageLabel, .1, {ImageTransparency = .2}):Play()
 			else
 				--Tween(Button, .1, {Size = UDim2.new(0,14,0,14)}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
@@ -1178,6 +1204,25 @@ return function(Config)
 		Window.Topbar.ButtonsType == "Mac" and 9 or nil
 	)
 
+	local function SetSize(isAnimation)
+		Tween(Window.UIElements.Main, 0.45, {
+			Size = not Window.IsFullscreen and CurrentSize or UDim2.new(
+				0,
+				(Config.WindUI.ScreenGui.AbsoluteSize.X - 20) / Config.WindUI.UIScale,
+				0,
+				(Config.WindUI.ScreenGui.AbsoluteSize.Y - 20 - 52) / Config.WindUI.UIScale
+			),
+		}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+
+		Tween(
+			Window.UIElements.Main,
+			0.45,
+			{ Position = not Window.IsFullscreen and CurrentPos or UDim2.new(0.5, 0, 0.5, 52 / 2) },
+			Enum.EasingStyle.Quint,
+			Enum.EasingDirection.Out
+		):Play()
+	end
+
 	function Window:ToggleFullscreen()
 		local isFullscreen = Window.IsFullscreen
 		-- Creator.SetDraggable(isFullscreen)
@@ -1194,29 +1239,21 @@ return function(Config)
 			end
 		end
 
-		Tween(
-			Window.UIElements.Main,
-			0.45,
-			{ Size = isFullscreen and CurrentSize or UDim2.new(1, -20, 1, -20 - 52) },
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		):Play()
-
-		Tween(
-			Window.UIElements.Main,
-			0.45,
-			{ Position = isFullscreen and CurrentPos or UDim2.new(0.5, 0, 0.5, 52 / 2) },
-			Enum.EasingStyle.Quint,
-			Enum.EasingDirection.Out
-		):Play()
-		-- delay(0, function()
-		-- end)
-
 		Window.IsFullscreen = not isFullscreen
+
+		SetSize(true)
 	end
 
+	Creator.AddSignal(Config.WindUI.ScreenGui:GetPropertyChangedSignal("AbsoluteSize"), function()
+		if Window.IsFullscreen then
+			SetSize()
+		end
+	end)
+
 	Window:CreateTopbarButton("Minimize", "minus", function()
-		Window:Close()
+		if Window.Close then
+			Window:Close()
+		end
 		-- task.spawn(function()
 		--     task.wait(.3)
 		--     if not Window.IsPC and Window.IsOpenButtonEnabled then
@@ -1271,6 +1308,9 @@ return function(Config)
 	end
 
 	function Window:Open()
+		if Window.Destroyed then
+			return
+		end
 		task.spawn(function()
 			if Window.OnOpenCallback then
 				task.spawn(function()
@@ -1281,8 +1321,11 @@ return function(Config)
 			task.wait(0.06)
 			Window.Closed = false
 
-			Tween(Window.UIElements.Main.Background, 0.2, {
-				ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
+			Window.UIElements.Main.Size = UDim2.new(Window.Size.X.Scale, Window.Size.X.Offset, 0, 100)
+
+			Tween(Window.UIElements.Main, 0.8, {
+				--GroupTransparency = 0,
+				Size = Window.Size,
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
 			if Window.UIElements.BackgroundGradient then
@@ -1291,8 +1334,10 @@ return function(Config)
 				}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 			end
 
+			Window.UIElements.Main.Background.ImageTransparency = 1
 			Tween(Window.UIElements.Main.Background, 0.4, {
-				Size = UDim2.new(1, 0, 1, 0),
+				--Size = UDim2.new(1, 0, 1, 0),
+				ImageTransparency = Window.Transparent and Config.WindUI.TransparencyValue or 0,
 			}, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out):Play()
 
 			if BGImage then
@@ -1324,44 +1369,46 @@ return function(Config)
 				Enum.EasingStyle.Quint,
 				Enum.EasingDirection.Out
 			):Play()
-			if UIStroke then
+			--[[if UIStroke then
 				Tween(UIStroke, 0.25, { Transparency = 0.8 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-			end
+			end]]
 
-			task.spawn(function()
-				task.wait(0.3)
+			Tween(
+				BottomDragFrame,
+				0.45,
+				{ Size = UDim2.new(0, Window.DragFrameSize, 0, 4), ImageTransparency = 0.8 },
+				Enum.EasingStyle.Exponential,
+				Enum.EasingDirection.Out
+			):Play()
+			WindowDragModule:Set(true)
+
+			if Window.Resizable then
 				Tween(
-					BottomDragFrame,
+					ResizeHandle.ImageLabel,
 					0.45,
-					{ Size = UDim2.new(0, Window.DragFrameSize, 0, 4), ImageTransparency = 0.8 },
+					{ ImageTransparency = 0.8 },
 					Enum.EasingStyle.Exponential,
 					Enum.EasingDirection.Out
 				):Play()
-				WindowDragModule:Set(true)
-				task.wait(0.45)
-				if Window.Resizable then
-					Tween(
-						ResizeHandle.ImageLabel,
-						0.45,
-						{ ImageTransparency = 0.8 },
-						Enum.EasingStyle.Exponential,
-						Enum.EasingDirection.Out
-					):Play()
-					Window.CanResize = true
-				end
-			end)
+				Window.CanResize = true
+			end
 
 			Window.CanDropdown = true
 			Window.UIElements.Main.Visible = true
-			task.spawn(function()
-				task.wait(0.05)
-				Window.UIElements.Main:WaitForChild("Main").Visible = true
+			--task.spawn(function()
+			--task.wait(0.05)
 
-				Config.WindUI:ToggleAcrylic(true)
-			end)
+			Window.UIElements.Main:WaitForChild("Main").Visible = true
+
+			Config.WindUI:ToggleAcrylic(true)
+			--end)
 		end)
 	end
 	function Window:Close()
+		if Window.Destroyed then
+			return
+		end
+
 		local Close = {}
 
 		if Window.OnCloseCallback then
@@ -1379,17 +1426,19 @@ return function(Config)
 		Window.CanDropdown = false
 		Window.Closed = true
 
-		Tween(Window.UIElements.Main.Background, 0.32, {
-			ImageTransparency = 1,
-		}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
+		Tween(Window.UIElements.Main, 0.9, {
+			--GroupTransparency = 1,
+			Size = UDim2.new(Window.Size.X.Scale, Window.Size.X.Offset, 0, 0),
+		}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 		if Window.UIElements.BackgroundGradient then
-			Tween(Window.UIElements.BackgroundGradient, 0.32, {
+			Tween(Window.UIElements.BackgroundGradient, 0.2, {
 				ImageTransparency = 1,
 			}, Enum.EasingStyle.Quint, Enum.EasingDirection.InOut):Play()
 		end
 
-		Tween(Window.UIElements.Main.Background, 0.4, {
-			Size = UDim2.new(1, 0, 1, -240),
+		Tween(Window.UIElements.Main.Background, 0.3, {
+			--Size = UDim2.new(1, 0, 1, -240),
+			ImageTransparency = 1,
 		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()
 
 		Tween(
@@ -1409,9 +1458,9 @@ return function(Config)
 			end
 		end
 		Tween(Blur, 0.25, { ImageTransparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-		if UIStroke then
+		--[[if UIStroke then
 			Tween(UIStroke, 0.25, { Transparency = 1 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
-		end
+		end]]
 
 		Tween(
 			BottomDragFrame,
@@ -1432,6 +1481,11 @@ return function(Config)
 
 		task.spawn(function()
 			task.wait(0.4)
+
+			if not Window.Closed then
+				return
+			end
+
 			Window.UIElements.Main.Visible = false
 
 			if Window.OpenButtonMain and not Window.Destroyed and not Window.IsPC and Window.IsOpenButtonEnabled then
@@ -1446,11 +1500,15 @@ return function(Config)
 						Creator.SafeCallback(Window.OnDestroyCallback)
 					end)
 				end
+
 				if Window.AcrylicPaint and Window.AcrylicPaint.Model then
 					Window.AcrylicPaint.Model:Destroy()
 				end
+
 				Window.Destroyed = true
+
 				task.wait(0.4)
+
 				Config.WindUI.ScreenGui:Destroy()
 				Config.WindUI.NotificationGui:Destroy()
 				Config.WindUI.DropdownGui:Destroy()
@@ -1550,7 +1608,7 @@ return function(Config)
 	do
 		local Margin = 40
 		local ViewportSize = CurrentCamera.ViewportSize
-		local WindowSize = Window.UIElements.Main.AbsoluteSize
+		local WindowSize = Vector2.new(Window.Size.X.Offset, Window.Size.Y.Offset)
 
 		if not Window.IsFullscreen and Window.AutoScale then
 			local AvailableWidth = ViewportSize.X - (Margin * 2)
@@ -1806,7 +1864,7 @@ return function(Config)
 		})
 
 		local ButtonsContent = New("Frame", {
-			Size = UDim2.new(1, 0, 0, 40),
+			Size = UDim2.new(1, 0, 0, 36),
 			AutomaticSize = "None",
 			BackgroundTransparency = 1,
 			Parent = Dialog.UIElements.Main,
@@ -1853,7 +1911,7 @@ return function(Config)
 				ButtonsContent.AutomaticSize = Enum.AutomaticSize.Y
 
 				for _, button in ipairs(Buttons) do
-					button.Size = UDim2.new(1, 0, 0, 40)
+					button.Size = UDim2.new(1, 0, 0, 36)
 					button.AutomaticSize = Enum.AutomaticSize.None
 				end
 			else
@@ -1929,8 +1987,10 @@ return function(Config)
 			Window.UIElements.Main.Main.Topbar.Center.Visible = true
 		end
 		TagConfig.Window = Window
-		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center)
+		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center.Holder)
 	end
+
+	local CurResizeInput = Config.WindUI.GenerateGUID()
 
 	local function startResizing(input)
 		if Window.CanResize then
@@ -1944,6 +2004,12 @@ return function(Config)
 
 			Creator.AddSignal(input.Changed, function()
 				if input.UserInputState == Enum.UserInputState.End then
+					if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+						return
+					end
+
+					Config.WindUI.CurrentInput = nil
+
 					isResizing = false
 					FullScreenIcon.Active = false
 					--Tween(FullScreenIcon, 0.2, {ImageTransparency = 1}):Play()
@@ -1959,6 +2025,11 @@ return function(Config)
 			input.UserInputType == Enum.UserInputType.MouseButton1
 			or input.UserInputType == Enum.UserInputType.Touch
 		then
+			if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+				return
+			end
+			Config.WindUI.CurrentInput = CurResizeInput
+
 			if Window.CanResize then
 				startResizing(input)
 			end
@@ -1991,11 +2062,17 @@ return function(Config)
 	end)
 
 	Creator.AddSignal(ResizeHandle.MouseEnter, function()
+		if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+			return
+		end
 		if not isResizing then
 			Tween(ResizeHandle.ImageLabel, 0.1, { ImageTransparency = 0.35 }):Play()
 		end
 	end)
 	Creator.AddSignal(ResizeHandle.MouseLeave, function()
+		if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+			return
+		end
 		if not isResizing then
 			Tween(ResizeHandle.ImageLabel, 0.17, { ImageTransparency = 0.8 }):Play()
 		end

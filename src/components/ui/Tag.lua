@@ -67,8 +67,10 @@ function Tag:New(TagConfig, Parent)
 		},
 	}, {
 		BackgroundGradient,
-		Creator.NewRoundFrame(TagModule.Radius, "Glass-1", {
-			Size = UDim2.new(1, 0, 1, 0),
+		Creator.NewRoundFrame(TagModule.Radius + 1, "SquircleGlass", {
+			Size = UDim2.new(1, 1, 1, 1),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
 			ThemeTag = {
 				ImageColor3 = "White",
 			},
