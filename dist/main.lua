@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-06-12  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-06-13  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -567,7 +567,7 @@ SectionBoxTransparency=0.95,
 SectionBoxBorder="White",
 SectionBoxBorderTransparency=0.75,
 SectionBoxBackground="White",
-SectionBoxBackgroundTransparency=0.95,
+SectionBoxBackgroundTransparency=0.97,
 
 SearchBarBorder="White",
 SearchBarBorderTransparency=0.75,
@@ -7513,7 +7513,6 @@ end
 end
 
 ae.AddSignal(al.UIElements.SliderContainer.TextBox.FocusLost,function(az)
-if az then
 local aA=tonumber(al.UIElements.SliderContainer.TextBox.Text)
 if aA then
 al:Set(aA)
@@ -7521,7 +7520,6 @@ else
 al.UIElements.SliderContainer.TextBox.Text=FormatValue(aq)
 if ax then
 ax.TitleFrame.Text=FormatValue(aq)
-end
 end
 end
 end)
@@ -10328,6 +10326,8 @@ as.Content.Visible=true
 end
 if am.Opened then
 am:Open()
+else
+am:Close(true)
 end
 end)
 
@@ -13717,6 +13717,9 @@ end
 end
 
 function av.Open(B)
+if av.Destroyed then
+return
+end
 task.spawn(function()
 if av.OnOpenCallback then
 task.spawn(function()
@@ -13779,8 +13782,6 @@ Enum.EasingDirection.Out
 
 
 
-task.spawn(function()
-task.wait(0.3)
 ao(
 p,
 0.45,
@@ -13789,7 +13790,7 @@ Enum.EasingStyle.Exponential,
 Enum.EasingDirection.Out
 ):Play()
 x:Set(true)
-task.wait(0.45)
+
 if av.Resizable then
 ao(
 ay.ImageLabel,
@@ -13800,19 +13801,23 @@ Enum.EasingDirection.Out
 ):Play()
 av.CanResize=true
 end
-end)
 
 av.CanDropdown=true
 av.UIElements.Main.Visible=true
-task.spawn(function()
-task.wait(0.05)
+
+
+
 av.UIElements.Main:WaitForChild"Main".Visible=true
 
 au.WindUI:ToggleAcrylic(true)
-end)
+
 end)
 end
 function av.Close(B)
+if av.Destroyed then
+return
+end
+
 local C={}
 
 if av.OnCloseCallback then
@@ -13885,6 +13890,11 @@ av.CanResize=false
 
 task.spawn(function()
 task.wait(0.4)
+
+if not av.Closed then
+return
+end
+
 av.UIElements.Main.Visible=false
 
 if av.OpenButtonMain and not av.Destroyed and not av.IsPC and av.IsOpenButtonEnabled then
