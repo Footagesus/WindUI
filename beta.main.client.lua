@@ -223,6 +223,15 @@ local Button = Group1:Button({
 	end,
 })
 
+Tab3:Space()
+
+Tab3:Viewport({
+	Object = workspace:FindFirstChild("Cylinder") and workspace:FindFirstChild("Cylinder"):Clone()
+		or Instance.new("Part"),
+	Interactive = true,
+	Focused = true,
+})
+
 local CoolTab = Window:Tab({
 	Title = "Cool Tab",
 })
