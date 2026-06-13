@@ -573,6 +573,8 @@ SearchBarBorder="White",
 SearchBarBorderTransparency=0.75,
 
 Notification="Background",
+Notification2="White",
+Notification2Transparency=0.92,
 NotificationTitle="Text",
 NotificationTitleTransparency=0,
 NotificationContent="Text",
@@ -1221,9 +1223,11 @@ r.CanDraggable=x
 end
 
 function r.Drag(x,z,A)
-local B
-local C,F,G
-local H={
+local B=p.GenerateGUID()
+
+local C
+local F,G,H
+local J={
 CanDraggable=true,
 }
 
@@ -1231,44 +1235,54 @@ if not z or typeof(z)~="table"then
 z={x}
 end
 
-local function update(J)
-if not C or not H.CanDraggable then
+local function update(L)
+if not F or not J.CanDraggable then
 return
 end
 
-local L=J.Position-F
+local M=L.Position-G
 r.Tween(x,0.02,{
 Position=UDim2.new(
-G.X.Scale,
-G.X.Offset+L.X,
-G.Y.Scale,
-G.Y.Offset+L.Y
+H.X.Scale,
+H.X.Offset+M.X,
+H.Y.Scale,
+H.Y.Offset+M.Y
 ),
 }):Play()
 end
 
-for J,L in pairs(z)do
-L.InputBegan:Connect(function(M)
+for L,M in pairs(z)do
+M.InputBegan:Connect(function(N)
 if
 (
-M.UserInputType==Enum.UserInputType.MouseButton1
-or M.UserInputType==Enum.UserInputType.Touch
-)and H.CanDraggable
+N.UserInputType==Enum.UserInputType.MouseButton1
+or N.UserInputType==Enum.UserInputType.Touch
+)and J.CanDraggable
 then
-if B==nil then
-B=L
-C=true
-F=M.Position
-G=x.Position
+if p and p.CurrentInput and p.CurrentInput~=B then
+return
+end
+p.CurrentInput=B
+
+if C==nil then
+C=M
+F=true
+G=N.Position
+H=x.Position
 
 if A and typeof(A)=="function"then
-A(true,B)
+A(true,C)
 end
 
-M.Changed:Connect(function()
-if M.UserInputState==Enum.UserInputState.End then
-C=false
-B=nil
+N.Changed:Connect(function()
+if N.UserInputState==Enum.UserInputState.End then
+if p and p.CurrentInput and p.CurrentInput~=B then
+return
+end
+
+p.CurrentInput=nil
+F=false
+C=nil
 
 if A and typeof(A)=="function"then
 A(false,nil)
@@ -1279,34 +1293,34 @@ end
 end
 end)
 
-L.InputChanged:Connect(function(M)
-if C and B==L then
+M.InputChanged:Connect(function(N)
+if F and C==M then
 if
-M.UserInputType==Enum.UserInputType.MouseMovement
-or M.UserInputType==Enum.UserInputType.Touch
+N.UserInputType==Enum.UserInputType.MouseMovement
+or N.UserInputType==Enum.UserInputType.Touch
 then
-update(M)
+update(N)
 end
 end
 end)
 end
 
-e.InputChanged:Connect(function(J)
-if C and B~=nil then
+e.InputChanged:Connect(function(L)
+if F and C~=nil then
 if
-J.UserInputType==Enum.UserInputType.MouseMovement
-or J.UserInputType==Enum.UserInputType.Touch
+L.UserInputType==Enum.UserInputType.MouseMovement
+or L.UserInputType==Enum.UserInputType.Touch
 then
-update(J)
+update(L)
 end
 end
 end)
 
-function H.Set(J,L)
-H.CanDraggable=L
+function J.Set(L,M)
+J.CanDraggable=M
 end
 
-return H
+return J
 end
 
 m.Init(u,"Icon")
@@ -1753,20 +1767,24 @@ ImageColor3="Notification",
 },
 
 },{
-b.NewRoundFrame(f.UICorner,"SquircleGlass",{
-Size=UDim2.new(1,2,1,2),
+b.NewRoundFrame(f.UICorner,"Squircle",{
+Size=UDim2.new(1,0,1,0),
 ThemeTag={
-ImageColor3="NotificationBorder",
-ImageTransparency="NotificationBorderTransparency",
+ImageColor3="Notification2",
+ImageTransparency="Notification2Transparency",
 },
-AnchorPoint=Vector2.new(0.5,0.5),
-Position=UDim2.new(0.5,0,0.5,0),
 }),
 d("Frame",{
 Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
 Name="DurationFrame",
 },{
+
+
+
+
+
+
 d("Frame",{
 Size=UDim2.new(1,0,1,0),
 BackgroundTransparency=1,
@@ -6872,6 +6890,8 @@ as:Disconnect()
 as=nil
 end
 
+al.WindUI.CurrentInput=nil
+
 if aB then
 return
 end
@@ -7109,14 +7129,24 @@ end
 
 ai:Set(ak,false,ah.Window.NewElements)
 
+local an=ah.WindUI.GenerateGUID()
+
 if ah.Window.NewElements and am.Animate then
 if ai.Type=="Toggle"then
-aa.AddSignal(al.ToggleFrame.Hitbox.InputBegan,function(an)
+aa.AddSignal(al.ToggleFrame.Hitbox.InputBegan,function(ao)
 if
-not ah.Window.IsToggleDragging and an.UserInputType==Enum.UserInputType.MouseButton1
-or an.UserInputType==Enum.UserInputType.Touch
+not ah.Window.IsToggleDragging
+and(
+ao.UserInputType==Enum.UserInputType.MouseButton1
+or ao.UserInputType==Enum.UserInputType.Touch
+)
 then
-am:Animate(an,ai)
+if ah.WindUI.CurrentInput and ah.WindUI.CurrentInput~=an then
+return
+end
+
+ah.WindUI.CurrentInput=an
+am:Animate(ao,ai)
 end
 end)
 end
@@ -7446,6 +7476,8 @@ ao:Disconnect()
 ai=false
 ay.ScrollingEnabled=true
 
+ak.WindUI.CurrentInput=nil
+
 if ak.Window.NewElements then
 ag(al.UIElements.SliderIcon.Frame.Thumb,0.2,{
 ImageTransparency=0,
@@ -7524,17 +7556,23 @@ end
 end
 end)
 
-ae.AddSignal(al.UIElements.SliderContainer.InputBegan,function(az)
+local az=ak.WindUI.GenerateGUID()
+
+ae.AddSignal(al.UIElements.SliderContainer.InputBegan,function(aA)
 if al.Locked or ai then
 return
 end
-
-al:Set(ap,az)
-
 if
-az.UserInputType==Enum.UserInputType.MouseButton1
-or az.UserInputType==Enum.UserInputType.Touch
+aA.UserInputType==Enum.UserInputType.MouseButton1
+or aA.UserInputType==Enum.UserInputType.Touch
 then
+if ak.WindUI.CurrentInput and ak.WindUI.CurrentInput~=az then
+return
+end
+ak.WindUI.CurrentInput=az
+
+al:Set(ap,aA)
+
 
 if ak.Window.NewElements then
 ag(al.UIElements.SliderIcon.Frame.Thumb,0.24,{
@@ -9791,10 +9829,12 @@ L.Transparency=1-((O-M)/(N-M))
 L:Update()
 end
 
-aj.InputChanged:Connect(function(J)
+local J=aw.GenerateGUID()
+
+aj.InputChanged:Connect(function(L)
 if
-J.UserInputType~=Enum.UserInputType.MouseMovement
-and J.UserInputType~=Enum.UserInputType.Touch
+L.UserInputType~=Enum.UserInputType.MouseMovement
+and L.UserInputType~=Enum.UserInputType.Touch
 then
 return
 end
@@ -9808,13 +9848,18 @@ UpdateTransparency(F,ay)
 end
 end)
 
-ay.UIElements.SatVibMap.InputBegan:Connect(function(J)
+ay.UIElements.SatVibMap.InputBegan:Connect(function(L)
 if
-J.UserInputType~=Enum.UserInputType.MouseButton1
-and J.UserInputType~=Enum.UserInputType.Touch
+L.UserInputType~=Enum.UserInputType.MouseButton1
+and L.UserInputType~=Enum.UserInputType.Touch
 then
 return
 end
+
+if aw.CurrentInput and aw.CurrentInput~=J then
+return
+end
+aw.CurrentInput=J
 
 if as and as~="SatVib"then
 return
@@ -9825,13 +9870,18 @@ as="SatVib"
 UpdateSatVib(ay.UIElements.SatVibMap,ay)
 end)
 
-r.InputBegan:Connect(function(J)
+r.InputBegan:Connect(function(L)
 if
-J.UserInputType~=Enum.UserInputType.MouseButton1
-and J.UserInputType~=Enum.UserInputType.Touch
+L.UserInputType~=Enum.UserInputType.MouseButton1
+and L.UserInputType~=Enum.UserInputType.Touch
 then
 return
 end
+
+if aw.CurrentInput and aw.CurrentInput~=J then
+return
+end
+aw.CurrentInput=J
 
 if as and as~="Hue"then
 return
@@ -9842,13 +9892,18 @@ as="Hue"
 UpdateHue(r,ay)
 end)
 
-F.InputBegan:Connect(function(J)
+F.InputBegan:Connect(function(L)
 if
-J.UserInputType~=Enum.UserInputType.MouseButton1
-and J.UserInputType~=Enum.UserInputType.Touch
+L.UserInputType~=Enum.UserInputType.MouseButton1
+and L.UserInputType~=Enum.UserInputType.Touch
 then
 return
 end
+
+if aw.CurrentInput and aw.CurrentInput~=J then
+return
+end
+aw.CurrentInput=J
 
 if as and as~="Transparency"then
 return
@@ -9859,8 +9914,13 @@ as="Transparency"
 UpdateTransparency(F,ay)
 end)
 
-aj.InputEnded:Connect(function(J)
+aj.InputEnded:Connect(function(L)
 as=nil
+
+if aw.CurrentInput and aw.CurrentInput~=J then
+return
+end
+aw.CurrentInput=nil
 end)
 
 return ay
@@ -14399,18 +14459,26 @@ L.Window=av
 return as:New(L,av.UIElements.Main.Main.Topbar.Center.Holder)
 end
 
-local function startResizing(J)
+local J=au.WindUI.GenerateGUID()
+
+local function startResizing(L)
 if av.CanResize then
 isResizing=true
 az.Active=true
 initialSize=av.UIElements.Main.Size
-initialInputPosition=J.Position
+initialInputPosition=L.Position
 
 
 ao(ay.ImageLabel,0.1,{ImageTransparency=0.35}):Play()
 
-am.AddSignal(J.Changed,function()
-if J.UserInputState==Enum.UserInputState.End then
+am.AddSignal(L.Changed,function()
+if L.UserInputState==Enum.UserInputState.End then
+if au.WindUI.CurrentInput and au.WindUI.CurrentInput~=J then
+return
+end
+
+au.WindUI.CurrentInput=nil
+
 isResizing=false
 az.Active=false
 
@@ -14421,48 +14489,59 @@ end)
 end
 end
 
-am.AddSignal(ay.InputBegan,function(J)
+am.AddSignal(ay.InputBegan,function(L)
 if
-J.UserInputType==Enum.UserInputType.MouseButton1
-or J.UserInputType==Enum.UserInputType.Touch
+L.UserInputType==Enum.UserInputType.MouseButton1
+or L.UserInputType==Enum.UserInputType.Touch
 then
+if au.WindUI.CurrentInput and au.WindUI.CurrentInput~=J then
+return
+end
+au.WindUI.CurrentInput=J
+
 if av.CanResize then
-startResizing(J)
+startResizing(L)
 end
 end
 end)
 
-am.AddSignal(ae.InputChanged,function(J)
+am.AddSignal(ae.InputChanged,function(L)
 if
-J.UserInputType==Enum.UserInputType.MouseMovement
-or J.UserInputType==Enum.UserInputType.Touch
+L.UserInputType==Enum.UserInputType.MouseMovement
+or L.UserInputType==Enum.UserInputType.Touch
 then
 if isResizing and av.CanResize then
-local L=J.Position-initialInputPosition
-local M=UDim2.new(0,initialSize.X.Offset+L.X*2,0,initialSize.Y.Offset+L.Y*2)
+local M=L.Position-initialInputPosition
+local N=UDim2.new(0,initialSize.X.Offset+M.X*2,0,initialSize.Y.Offset+M.Y*2)
 
-M=UDim2.new(
-M.X.Scale,
-math.clamp(M.X.Offset,av.MinSize.X,av.MaxSize.X),
-M.Y.Scale,
-math.clamp(M.Y.Offset,av.MinSize.Y,av.MaxSize.Y)
+N=UDim2.new(
+N.X.Scale,
+math.clamp(N.X.Offset,av.MinSize.X,av.MaxSize.X),
+N.Y.Scale,
+math.clamp(N.Y.Offset,av.MinSize.Y,av.MaxSize.Y)
 )
 
 ao(av.UIElements.Main,0.08,{
-Size=M,
+Size=N,
 },Enum.EasingStyle.Quad,Enum.EasingDirection.Out):Play()
 
-av.Size=M
+av.Size=N
 end
 end
 end)
 
 am.AddSignal(ay.MouseEnter,function()
+if au.WindUI.CurrentInput and au.WindUI.CurrentInput~=J then
+return
+end
 if not isResizing then
 ao(ay.ImageLabel,0.1,{ImageTransparency=0.35}):Play()
 end
 end)
 am.AddSignal(ay.MouseLeave,function()
+if au.WindUI.CurrentInput and au.WindUI.CurrentInput~=J then
+return
+end
 if not isResizing then
 ao(ay.ImageLabel,0.17,{ImageTransparency=0.8}):Play()
 end
@@ -14470,52 +14549,52 @@ end)
 
 
 
-local J=0
-local L=0.4
-local M
-local N=0
+local L=0
+local M=0.4
+local N
+local O=0
 
 function onDoubleClick()
 av:SetToTheCenter()
 end
 
 am.AddSignal(p.Frame.MouseButton1Up,function()
-local O=tick()
-local P=av.Position
+local P=tick()
+local Q=av.Position
 
-N=N+1
+O=O+1
 
-if N==1 then
-J=O
-M=P
+if O==1 then
+L=P
+N=Q
 
 task.spawn(function()
-task.wait(L)
-if N==1 then
-N=0
-M=nil
+task.wait(M)
+if O==1 then
+O=0
+N=nil
 end
 end)
-elseif N==2 then
-if O-J<=L and P==M then
+elseif O==2 then
+if P-L<=M and Q==N then
 onDoubleClick()
 end
 
-N=0
-M=nil
-J=0
+O=0
+N=nil
+L=0
 else
-N=1
-J=O
-M=P
+O=1
+L=P
+N=Q
 end
 end)
 
 
 
 if not av.HideSearchBar then
-local O=a.load'ac'
-local P=false
+local P=a.load'ac'
+local Q=false
 
 
 
@@ -14537,18 +14616,18 @@ local P=false
 
 
 
-local Q=ap("Search","search",av.UIElements.SideBarContainer,true)
-Q.Size=UDim2.new(1,-av.UIPadding/2,0,39)
-Q.Position=UDim2.new(0,av.UIPadding/2,0,0)
+local R=ap("Search","search",av.UIElements.SideBarContainer,true)
+R.Size=UDim2.new(1,-av.UIPadding/2,0,39)
+R.Position=UDim2.new(0,av.UIPadding/2,0,0)
 
-am.AddSignal(Q.MouseButton1Click,function()
-if P then
+am.AddSignal(R.MouseButton1Click,function()
+if Q then
 return
 end
 
-O.new(av.TabModule,av.UIElements.Main,function()
+P.new(av.TabModule,av.UIElements.Main,function()
 
-P=false
+Q=false
 if av.Resizable then
 av.CanResize=true
 end
@@ -14559,18 +14638,18 @@ end)
 ao(aA,0.1,{ImageTransparency=0.65}):Play()
 aA.Active=true
 
-P=true
+Q=true
 av.CanResize=false
 end)
 end
 
 
 
-function av.DisableTopbarButtons(O,P)
-for Q,R in next,P do
-for S,T in next,av.TopBarButtons do
-if T.Name==R then
-T.Object.Visible=false
+function av.DisableTopbarButtons(P,Q)
+for R,S in next,Q do
+for T,U in next,av.TopBarButtons do
+if U.Name==S then
+U.Object.Visible=false
 end
 end
 end
@@ -14629,6 +14708,8 @@ cloneref=nil,
 UIScaleObj=nil,
 
 CreateWindow=nil,
+
+CurrentInput=nil,
 }
 
 local ae=(cloneref or clonereference or function(ae)
@@ -14641,44 +14722,81 @@ local ah=ae(game:GetService"HttpService")
 local aj=ae(game:GetService"Players")
 local ak=ae(game:GetService"CoreGui")
 local al=ae(game:GetService"RunService")
+local am=ae(game:GetService"UserInputService")
 
-local am=aj.LocalPlayer or nil
-
-local an=ah:JSONDecode(a.load'l')
-if an then
-aa.Version=an.version
+function aa.GenerateGUID()
+return ah:GenerateGUID(false)
 end
 
-local ao=a.load'p'
+local an=aa.GenerateGUID()
 
-local ap=aa.Creator
-
-local aq=ap.New
+am.InputBegan:Connect(function(ao,ap)
 
 
 
 
-local ar=a.load't'
+task.defer(function()
+if
+ao.UserInputType==Enum.UserInputType.MouseButton1
+or ao.UserInputType==Enum.UserInputType.Touch
+then
+if aa.CurrentInput and aa.CurrentInput~=an then
+return
+end
 
-local as=protectgui or(syn and syn.protect_gui)or function()end
+aa.CurrentInput=an
+print(an)
 
-local at=gethui and gethui()or(ak or am:WaitForChild"PlayerGui")
+end
+end)
+end)
+am.InputEnded:Connect(function(ao,ap)
+if ao.UserInputType==Enum.UserInputType.MouseButton1 or ao.UserInputType==Enum.UserInputType.Touch then
+if aa.CurrentInput and aa.CurrentInput~=an then
+return
+end
 
-local au=aq("UIScale",{
+aa.CurrentInput=nil
+end
+end)
+
+local ao=aj.LocalPlayer or nil
+
+local ap=ah:JSONDecode(a.load'l')
+if ap then
+aa.Version=ap.version
+end
+
+local aq=a.load'p'
+
+local ar=aa.Creator
+
+local as=ar.New
+
+
+
+
+local at=a.load't'
+
+local au=protectgui or(syn and syn.protect_gui)or function()end
+
+local av=gethui and gethui()or(ak or ao:WaitForChild"PlayerGui")
+
+local aw=as("UIScale",{
 Scale=aa.UIScale,
 })
 
-aa.UIScaleObj=au
+aa.UIScaleObj=aw
 
-aa.ScreenGui=aq("ScreenGui",{
+aa.ScreenGui=as("ScreenGui",{
 Name="WindUI",
-Parent=at,
+Parent=av,
 IgnoreGuiInset=true,
 ScreenInsets="None",
 DisplayOrder=-99999,
 },{
 
-aq("Folder",{
+as("Folder",{
 Name="Window",
 }),
 
@@ -14687,257 +14805,257 @@ Name="Window",
 
 
 
-aq("Folder",{
+as("Folder",{
 Name="KeySystem",
 }),
-aq("Folder",{
+as("Folder",{
 Name="Popups",
 }),
-aq("Folder",{
+as("Folder",{
 Name="ToolTips",
 }),
 })
 
-aa.NotificationGui=aq("ScreenGui",{
+aa.NotificationGui=as("ScreenGui",{
 Name="WindUI/Notifications",
-Parent=at,
+Parent=av,
 IgnoreGuiInset=true,
 })
-aa.DropdownGui=aq("ScreenGui",{
+aa.DropdownGui=as("ScreenGui",{
 Name="WindUI/Dropdowns",
-Parent=at,
+Parent=av,
 IgnoreGuiInset=true,
 })
-aa.TooltipGui=aq("ScreenGui",{
+aa.TooltipGui=as("ScreenGui",{
 Name="WindUI/Tooltips",
-Parent=at,
+Parent=av,
 IgnoreGuiInset=true,
 })
-as(aa.ScreenGui)
-as(aa.NotificationGui)
-as(aa.DropdownGui)
-as(aa.TooltipGui)
+au(aa.ScreenGui)
+au(aa.NotificationGui)
+au(aa.DropdownGui)
+au(aa.TooltipGui)
 
-ap.Init(aa)
+ar.Init(aa)
 
-function aa.SetParent(av,aw)
+function aa.SetParent(ax,ay)
 if aa.ScreenGui then
-aa.ScreenGui.Parent=aw
+aa.ScreenGui.Parent=ay
 end
 if aa.NotificationGui then
-aa.NotificationGui.Parent=aw
+aa.NotificationGui.Parent=ay
 end
 if aa.DropdownGui then
-aa.DropdownGui.Parent=aw
+aa.DropdownGui.Parent=ay
 end
 if aa.TooltipGui then
-aa.TooltipGui.Parent=aw
+aa.TooltipGui.Parent=ay
 end
 end
 math.clamp(aa.TransparencyValue,0,1)
 
-local av=aa.NotificationModule.Init(aa.NotificationGui)
+local ax=aa.NotificationModule.Init(aa.NotificationGui)
 
-function aa.Notify(aw,ax)
-ax.Holder=av.Frame
-ax.Window=aa.Window
+function aa.Notify(ay,az)
+az.Holder=ax.Frame
+az.Window=aa.Window
 
-return aa.NotificationModule.New(ax)
+return aa.NotificationModule.New(az)
 end
 
-function aa.SetNotificationLower(aw,ax)
-av.SetLower(ax)
+function aa.SetNotificationLower(ay,az)
+ax.SetLower(az)
 end
 
-function aa.SetFont(aw,ax)
-ap.UpdateFont(ax)
+function aa.SetFont(ay,az)
+ar.UpdateFont(az)
 end
 
-function aa.OnThemeChange(aw,ax)
-aa.OnThemeChangeFunction=ax
+function aa.OnThemeChange(ay,az)
+aa.OnThemeChangeFunction=az
 end
 
-function aa.AddTheme(aw,ax)
-aa.Themes[ax.Name]=ax
-return ax
+function aa.AddTheme(ay,az)
+aa.Themes[az.Name]=az
+return az
 end
 
-function aa.SetTheme(aw,ax)
-if aa.Themes[ax]then
-aa.Theme=aa.Themes[ax]
-ap.SetTheme(aa.Themes[ax])
+function aa.SetTheme(ay,az)
+if aa.Themes[az]then
+aa.Theme=aa.Themes[az]
+ar.SetTheme(aa.Themes[az])
 
 if aa.OnThemeChangeFunction then
-aa.OnThemeChangeFunction(ax)
+aa.OnThemeChangeFunction(az)
 end
 
-return aa.Themes[ax]
+return aa.Themes[az]
 end
 return nil
 end
 
-function aa.GetThemes(aw)
+function aa.GetThemes(ay)
 return aa.Themes
 end
-function aa.GetCurrentTheme(aw)
+function aa.GetCurrentTheme(ay)
 return aa.Theme.Name
 end
-function aa.GetTransparency(aw)
+function aa.GetTransparency(ay)
 return aa.Transparent or false
 end
-function aa.GetWindowSize(aw)
+function aa.GetWindowSize(ay)
 return aa.Window.UIElements.Main.Size
 end
-function aa.Localization(aw,ax)
-return aa.LocalizationModule:New(ax,ap)
+function aa.Localization(ay,az)
+return aa.LocalizationModule:New(az,ar)
 end
 
-function aa.SetLanguage(aw,ax)
-if ap.Localization then
-return ap.SetLanguage(ax)
+function aa.SetLanguage(ay,az)
+if ar.Localization then
+return ar.SetLanguage(az)
 end
 return false
 end
 
-function aa.ToggleAcrylic(aw,ax)
+function aa.ToggleAcrylic(ay,az)
 if aa.Window and aa.Window.AcrylicPaint and aa.Window.AcrylicPaint.Model then
-aa.Window.Acrylic=ax
-aa.Window.AcrylicPaint.Model.Transparency=ax and 0.98 or 1
-if ax then
-ar.Enable()
+aa.Window.Acrylic=az
+aa.Window.AcrylicPaint.Model.Transparency=az and 0.98 or 1
+if az then
+at.Enable()
 else
-ar.Disable()
+at.Disable()
 end
 end
 end
 
-function aa.Gradient(aw,ax,ay)
-local az={}
-local aA={}
+function aa.Gradient(ay,az,aA)
+local aB={}
+local b={}
 
-for aB,b in next,ax do
-local d=tonumber(aB)
-if d then
-d=math.clamp(d/100,0,1)
+for d,f in next,az do
+local g=tonumber(d)
+if g then
+g=math.clamp(g/100,0,1)
 
-local f=b.Color
-if typeof(f)=="string"and string.sub(f,1,1)=="#"then
-f=Color3.fromHex(f)
+local h=f.Color
+if typeof(h)=="string"and string.sub(h,1,1)=="#"then
+h=Color3.fromHex(h)
 end
 
-local g=b.Transparency or 0
+local i=f.Transparency or 0
 
-table.insert(az,ColorSequenceKeypoint.new(d,f))
-table.insert(aA,NumberSequenceKeypoint.new(d,g))
+table.insert(aB,ColorSequenceKeypoint.new(g,h))
+table.insert(b,NumberSequenceKeypoint.new(g,i))
 end
 end
 
-table.sort(az,function(aB,b)
-return aB.Time<b.Time
+table.sort(aB,function(d,f)
+return d.Time<f.Time
 end)
-table.sort(aA,function(aB,b)
-return aB.Time<b.Time
+table.sort(b,function(d,f)
+return d.Time<f.Time
 end)
 
-if#az<2 then
-table.insert(az,ColorSequenceKeypoint.new(1,az[1].Value))
-table.insert(aA,NumberSequenceKeypoint.new(1,aA[1].Value))
+if#aB<2 then
+table.insert(aB,ColorSequenceKeypoint.new(1,aB[1].Value))
+table.insert(b,NumberSequenceKeypoint.new(1,b[1].Value))
 end
 
-local aB={
-Color=ColorSequence.new(az),
-Transparency=NumberSequence.new(aA),
+local d={
+Color=ColorSequence.new(aB),
+Transparency=NumberSequence.new(b),
 }
 
-if ay then
-for b,d in pairs(ay)do
-aB[b]=d
+if aA then
+for f,g in pairs(aA)do
+d[f]=g
 end
 end
 
-return aB
+return d
 end
 
-function aa.Popup(aw,ax)
-ax.WindUI=aa
-return a.load'u'.new(ax,aa.ScreenGui.Popups)
+function aa.Popup(ay,az)
+az.WindUI=aa
+return a.load'u'.new(az,aa.ScreenGui.Popups)
 end
 
-aa.Themes=a.load'v'(aa,ap)
+aa.Themes=a.load'v'(aa,ar)
 
-ap.Themes=aa.Themes
+ar.Themes=aa.Themes
 
 aa:SetTheme"Dark"
-aa:SetLanguage(ap.Language)
+aa:SetLanguage(ar.Language)
 
-function aa.CreateWindow(aw,ax)
-local ay=a.load'ad'
+function aa.CreateWindow(ay,az)
+local aA=a.load'ad'
 
 if not al:IsStudio()and writefile then
 if not isfolder"WindUI"then
 makefolder"WindUI"
 end
-if ax.Folder then
-makefolder(ax.Folder)
+if az.Folder then
+makefolder(az.Folder)
 else
-makefolder(ax.Title)
+makefolder(az.Title)
 end
 end
 
-ax.WindUI=aa
-ax.Window=aa.Window
-ax.Parent=aa.ScreenGui.Window
+az.WindUI=aa
+az.Window=aa.Window
+az.Parent=aa.ScreenGui.Window
 
 if aa.Window then
 warn"You cannot create more than one window"
 return
 end
 
-local az=true
+local aB=true
 
-local aA=aa.Themes[ax.Theme or"Dark"]
+local b=aa.Themes[az.Theme or"Dark"]
 
 
-ap.SetTheme(aA)
+ar.SetTheme(b)
 
-local aB=gethwid or function()
+local d=gethwid or function()
 return aj.LocalPlayer.UserId
 end
 
-local b=aB()
+local f=d()
 
-if ax.KeySystem then
-az=false
+if az.KeySystem then
+aB=false
 
 local function loadKeysystem()
-ao.new(ax,b,function(d)
-az=d
+aq.new(az,f,function(g)
+aB=g
 end)
 end
 
-local d=(ax.Folder or"Temp").."/"..b..".key"
+local g=(az.Folder or"Temp").."/"..f..".key"
 
-if ax.KeySystem.KeyValidator then
-if ax.KeySystem.SaveKey and isfile(d)then
-local f=readfile(d)
-local g=ax.KeySystem.KeyValidator(f)
+if az.KeySystem.KeyValidator then
+if az.KeySystem.SaveKey and isfile(g)then
+local h=readfile(g)
+local i=az.KeySystem.KeyValidator(h)
 
-if g then
-az=true
+if i then
+aB=true
 else
 loadKeysystem()
 end
 else
 loadKeysystem()
 end
-elseif not ax.KeySystem.API then
-if ax.KeySystem.SaveKey and isfile(d)then
-local f=readfile(d)
-local g=(type(ax.KeySystem.Key)=="table")and table.find(ax.KeySystem.Key,f)
-or tostring(ax.KeySystem.Key)==tostring(f)
+elseif not az.KeySystem.API then
+if az.KeySystem.SaveKey and isfile(g)then
+local h=readfile(g)
+local i=(type(az.KeySystem.Key)=="table")and table.find(az.KeySystem.Key,h)
+or tostring(az.KeySystem.Key)==tostring(h)
 
-if g then
-az=true
+if i then
+aB=true
 else
 loadKeysystem()
 end
@@ -14945,29 +15063,29 @@ else
 loadKeysystem()
 end
 else
-if isfile(d)then
-local f=readfile(d)
-local g=false
+if isfile(g)then
+local h=readfile(g)
+local i=false
 
-for h,i in next,ax.KeySystem.API do
-local l=aa.Services[i.Type]
-if l then
-local m={}
-for p,r in next,l.Args do
-table.insert(m,i[r])
+for l,m in next,az.KeySystem.API do
+local p=aa.Services[m.Type]
+if p then
+local r={}
+for u,v in next,p.Args do
+table.insert(r,m[v])
 end
 
-local p=l.New(table.unpack(m))
-local r=p.Verify(f)
-if r then
-g=true
+local u=p.New(table.unpack(r))
+local v=u.Verify(h)
+if v then
+i=true
 break
 end
 end
 end
 
-az=g
-if not g then
+aB=i
+if not i then
 loadKeysystem()
 end
 else
@@ -14977,16 +15095,16 @@ end
 
 repeat
 task.wait()
-until az
+until aB
 end
 
-local d=ay(ax)
+local g=aA(az)
 
-aa.Transparent=ax.Transparent
-aa.Window=d
+aa.Transparent=az.Transparent
+aa.Window=g
 
-if ax.Acrylic then
-ar.init()
+if az.Acrylic then
+at.init()
 end
 
 
@@ -15001,7 +15119,7 @@ end
 
 
 
-return d
+return g
 end
 
 return aa
