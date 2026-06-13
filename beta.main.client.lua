@@ -201,7 +201,11 @@ local Group1 = Section1:HStack() --HStack
 local Button = Group1:Button({
 	Title = "Button example 1",
 	Callback = function()
-		print("clicked")
+		WindUI:Notify({
+			Title = "HEELLOOO!!",
+			Content = "PISUNING completed successfully",
+			Duration = 20000,
+		})
 	end,
 })
 
