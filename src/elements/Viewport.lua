@@ -17,6 +17,7 @@ type ConfigType = {
 	Focused: boolean,
 
 	Window: any, -- later
+	WindUI: any, -- later
 	Tab: any, -- later
 	Parent: Instance,
 }
@@ -62,6 +63,8 @@ function Element:New(Config: ConfigType)
 		}),
 	})
 
+	local CurInput = Config.WindUI.GenerateGUID()
+
 	Creator.AddSignal(Main.CanvasGroup.Viewport.MouseEnter, function()
 		if Viewport.Interactive then
 			Config.Tab.UIElements.ContainerFrame.ScrollingEnabled = false
@@ -83,6 +86,12 @@ function Element:New(Config: ConfigType)
 				(Input.UserInputType == Enum.UserInputType.MouseButton1)
 				or (Input.UserInputType == Enum.UserInputType.Touch and not Pinching)
 			then
+				if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurInput then
+					return
+				end
+
+				Config.WindUI.CurrentInput = CurInput
+
 				Dragging = true
 				LastMousePos = Input.Position
 			end
@@ -95,6 +104,12 @@ function Element:New(Config: ConfigType)
 				Input.UserInputType == Enum.UserInputType.MouseButton1
 				or Input.UserInputType == Enum.UserInputType.Touch
 			then
+				if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurInput then
+					return
+				end
+
+				Config.WindUI.CurrentInput = nil
+
 				Dragging = false
 			end
 		end
