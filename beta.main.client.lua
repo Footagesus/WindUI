@@ -107,6 +107,7 @@ Window:Tag({
 local Tab = Window:Tab({
 	Title = "Tab 1",
 	ShowTabTitle = true,
+	Border = true,
 })
 
 local Tab2 = Window:Tab({
