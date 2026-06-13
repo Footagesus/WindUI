@@ -1308,6 +1308,9 @@ return function(Config)
 	end
 
 	function Window:Open()
+		if Window.Destroyed then
+			return
+		end
 		task.spawn(function()
 			if Window.OnOpenCallback then
 				task.spawn(function()
@@ -1370,40 +1373,42 @@ return function(Config)
 				Tween(UIStroke, 0.25, { Transparency = 0.8 }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 			end]]
 
-			task.spawn(function()
-				task.wait(0.3)
+			Tween(
+				BottomDragFrame,
+				0.45,
+				{ Size = UDim2.new(0, Window.DragFrameSize, 0, 4), ImageTransparency = 0.8 },
+				Enum.EasingStyle.Exponential,
+				Enum.EasingDirection.Out
+			):Play()
+			WindowDragModule:Set(true)
+
+			if Window.Resizable then
 				Tween(
-					BottomDragFrame,
+					ResizeHandle.ImageLabel,
 					0.45,
-					{ Size = UDim2.new(0, Window.DragFrameSize, 0, 4), ImageTransparency = 0.8 },
+					{ ImageTransparency = 0.8 },
 					Enum.EasingStyle.Exponential,
 					Enum.EasingDirection.Out
 				):Play()
-				WindowDragModule:Set(true)
-				task.wait(0.45)
-				if Window.Resizable then
-					Tween(
-						ResizeHandle.ImageLabel,
-						0.45,
-						{ ImageTransparency = 0.8 },
-						Enum.EasingStyle.Exponential,
-						Enum.EasingDirection.Out
-					):Play()
-					Window.CanResize = true
-				end
-			end)
+				Window.CanResize = true
+			end
 
 			Window.CanDropdown = true
 			Window.UIElements.Main.Visible = true
-			task.spawn(function()
-				task.wait(0.05)
-				Window.UIElements.Main:WaitForChild("Main").Visible = true
+			--task.spawn(function()
+			--task.wait(0.05)
 
-				Config.WindUI:ToggleAcrylic(true)
-			end)
+			Window.UIElements.Main:WaitForChild("Main").Visible = true
+
+			Config.WindUI:ToggleAcrylic(true)
+			--end)
 		end)
 	end
 	function Window:Close()
+		if Window.Destroyed then
+			return
+		end
+
 		local Close = {}
 
 		if Window.OnCloseCallback then
@@ -1476,6 +1481,11 @@ return function(Config)
 
 		task.spawn(function()
 			task.wait(0.4)
+
+			if not Window.Closed then
+				return
+			end
+
 			Window.UIElements.Main.Visible = false
 
 			if Window.OpenButtonMain and not Window.Destroyed and not Window.IsPC and Window.IsOpenButtonEnabled then
