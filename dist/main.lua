@@ -11218,11 +11218,13 @@ ImageColor3="TabBackground",
 },
 ImageTransparency=1,
 },{
-aj.NewRoundFrame(aq.UICorner,"Glass-1.4",{
-Size=UDim2.new(1,0,1,0),
+aj.NewRoundFrame(aq.UICorner-1,"Glass-1.4",{
+Size=UDim2.new(1,1,1,1),
 ThemeTag={
 ImageColor3="TabBorder",
 },
+AnchorPoint=Vector2.new(0.5,0.5),
+Position=UDim2.new(0.5,0,0.5,0),
 ImageTransparency=1,
 Name="Outline",
 },{
