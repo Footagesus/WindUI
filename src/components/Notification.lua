@@ -210,20 +210,24 @@ function NotificationModule.New(Config)
 		},
 		--ZIndex = 20
 	}, {
-		Creator.NewRoundFrame(NotificationModule.UICorner, "SquircleGlass", {
-			Size = UDim2.new(1, 2, 1, 2),
+		Creator.NewRoundFrame(NotificationModule.UICorner, "Squircle", {
+			Size = UDim2.new(1, 0, 1, 0),
 			ThemeTag = {
-				ImageColor3 = "NotificationBorder",
-				ImageTransparency = "NotificationBorderTransparency",
+				ImageColor3 = "Notification2",
+				ImageTransparency = "Notification2Transparency",
 			},
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.5, 0),
 		}),
 		New("Frame", {
 			Size = UDim2.new(1, 0, 1, 0),
 			BackgroundTransparency = 1,
 			Name = "DurationFrame",
 		}, {
+			--[[Creator.NewRoundFrame(NotificationModule.UICorner, "SquircleOutline", {
+				Size = UDim2.new(1, 0, 1, 0),
+				ImageTransparency = 0.8,
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+			}),]]
 			New("Frame", {
 				Size = UDim2.new(1, 0, 1, 0), -- 0,0,1,0
 				BackgroundTransparency = 1,

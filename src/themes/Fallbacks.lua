@@ -101,6 +101,8 @@ return function(Creator)
 		SearchBarBorderTransparency = 0.75,
 
 		Notification = "Background",
+		Notification2 = "White",
+		Notification2Transparency = 0.92,
 		NotificationTitle = "Text",
 		NotificationTitleTransparency = 0,
 		NotificationContent = "Text",
