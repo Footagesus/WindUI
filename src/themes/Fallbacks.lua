@@ -95,7 +95,7 @@ return function(Creator)
 		SectionBoxBorder = "White",
 		SectionBoxBorderTransparency = 0.75,
 		SectionBoxBackground = "White",
-		SectionBoxBackgroundTransparency = 0.95,
+		SectionBoxBackgroundTransparency = 0.97,
 
 		SearchBarBorder = "White",
 		SearchBarBorderTransparency = 0.75,

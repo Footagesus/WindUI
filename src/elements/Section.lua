@@ -361,6 +361,8 @@ function Element:New(Config)
 		end
 		if Section.Opened then
 			Section:Open()
+		else
+			Section:Close(true)
 		end
 	end)
 
