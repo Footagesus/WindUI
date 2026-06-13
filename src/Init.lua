@@ -59,7 +59,7 @@ UserInputService.InputBegan:Connect(function(Input, GameProcessed)
 			end
 
 			WindUI.CurrentInput = CurInput
-			print(CurInput)
+			--print(CurInput)
 			--WindUI.InputStartedOnUI = false
 		end
 	end)
