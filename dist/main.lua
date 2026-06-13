@@ -22,6 +22,7 @@ Height:number?,
 Focused:boolean,
 
 Window:any,
+WindUI:any,
 Tab:any,
 Parent:Instance,
 }local a a={cache={}, load=function(b)if not a.cache[b]then a.cache[b]={c=a[b]()}end return a.cache[b].c end}do function a.a()
@@ -10776,6 +10777,7 @@ local ak={}
 
 
 
+
 function ak.New(al,am:ConfigType__DARKLUA_TYPE_a)
 local an={
 __type="Viewport",
@@ -10817,140 +10819,154 @@ an.Object,
 }),
 })
 
+local at=am.WindUI.GenerateGUID()
+
 ah.AddSignal(as.CanvasGroup.Viewport.MouseEnter,function()
 if an.Interactive then
 am.Tab.UIElements.ContainerFrame.ScrollingEnabled=false
 end
 end)
 
-ah.AddSignal(as.CanvasGroup.Viewport.InputEnded,function(at)
+ah.AddSignal(as.CanvasGroup.Viewport.InputEnded,function(au)
 if
-at.UserInputType==Enum.UserInputType.MouseMovement
-or at.UserInputType==Enum.UserInputType.Touch
+au.UserInputType==Enum.UserInputType.MouseMovement
+or au.UserInputType==Enum.UserInputType.Touch
 then
 am.Tab.UIElements.ContainerFrame.ScrollingEnabled=true
 end
 end)
 
-ah.AddSignal(as.CanvasGroup.Viewport.InputBegan,function(at)
+ah.AddSignal(as.CanvasGroup.Viewport.InputBegan,function(au)
 if an.Interactive then
 if
-(at.UserInputType==Enum.UserInputType.MouseButton1)
-or(at.UserInputType==Enum.UserInputType.Touch and not ap)
+(au.UserInputType==Enum.UserInputType.MouseButton1)
+or(au.UserInputType==Enum.UserInputType.Touch and not ap)
 then
+if am.WindUI.CurrentInput and am.WindUI.CurrentInput~=at then
+return
+end
+
+am.WindUI.CurrentInput=at
+
 ao=true
-ar=at.Position
+ar=au.Position
 end
 end
 end)
 
-ah.AddSignal(ae.InputEnded,function(at)
+ah.AddSignal(ae.InputEnded,function(au)
 if an.Interactive then
 if
-at.UserInputType==Enum.UserInputType.MouseButton1
-or at.UserInputType==Enum.UserInputType.Touch
+au.UserInputType==Enum.UserInputType.MouseButton1
+or au.UserInputType==Enum.UserInputType.Touch
 then
+if am.WindUI.CurrentInput and am.WindUI.CurrentInput~=at then
+return
+end
+
+am.WindUI.CurrentInput=nil
+
 ao=false
 end
 end
 end)
 
-ah.AddSignal(ae.InputChanged,function(at)
+ah.AddSignal(ae.InputChanged,function(au)
 if an.Interactive and ao and not ap then
 if
-at.UserInputType==Enum.UserInputType.MouseMovement
-or at.UserInputType==Enum.UserInputType.Touch
+au.UserInputType==Enum.UserInputType.MouseMovement
+or au.UserInputType==Enum.UserInputType.Touch
 then
-local au=at.Position-ar
-ar=at.Position
+local av=au.Position-ar
+ar=au.Position
 
-local av=an.Object:GetPivot().Position
-local aw=an.Camera
+local aw=an.Object:GetPivot().Position
+local ax=an.Camera
 
-local ax=CFrame.fromAxisAngle(Vector3.new(0,1,0),-au.X*0.02)
-aw.CFrame=CFrame.new(av)*ax*CFrame.new(-av)*aw.CFrame
+local ay=CFrame.fromAxisAngle(Vector3.new(0,1,0),-av.X*0.02)
+ax.CFrame=CFrame.new(aw)*ay*CFrame.new(-aw)*ax.CFrame
 
-local ay=CFrame.fromAxisAngle(aw.CFrame.RightVector,-au.Y*0.02)
-local az=CFrame.new(av)*ay*CFrame.new(-av)*aw.CFrame
+local az=CFrame.fromAxisAngle(ax.CFrame.RightVector,-av.Y*0.02)
+local aA=CFrame.new(aw)*az*CFrame.new(-aw)*ax.CFrame
 
-if az.UpVector.Y>0.1 then
-aw.CFrame=az
+if aA.UpVector.Y>0.1 then
+ax.CFrame=aA
 end
 end
 end
 end)
 
-ah.AddSignal(as.CanvasGroup.Viewport.InputChanged,function(at)
+ah.AddSignal(as.CanvasGroup.Viewport.InputChanged,function(au)
 if an.Interactive then
-if at.UserInputType==Enum.UserInputType.MouseWheel then
-local au=at.Position.Z*2
-an.Camera.CFrame+=an.Camera.CFrame.LookVector*au
+if au.UserInputType==Enum.UserInputType.MouseWheel then
+local av=au.Position.Z*2
+an.Camera.CFrame+=an.Camera.CFrame.LookVector*av
 end
 end
 end)
 
-ah.AddSignal(ae.TouchPinch,function(at,au,av,aw)
+ah.AddSignal(ae.TouchPinch,function(au,av,aw,ax)
 if an.Interactive then
-if aw==Enum.UserInputState.Begin then
+if ax==Enum.UserInputState.Begin then
 ap=true
 ao=false
-aq=(at[1]-at[2]).Magnitude
-elseif aw==Enum.UserInputState.Change then
-local ax=(at[1]-at[2]).Magnitude
-local ay=(ax-aq)*0.03
-aq=ax
-an.Camera.CFrame+=an.Camera.CFrame.LookVector*ay
-elseif aw==Enum.UserInputState.End or aw==Enum.UserInputState.Cancel then
+aq=(au[1]-au[2]).Magnitude
+elseif ax==Enum.UserInputState.Change then
+local ay=(au[1]-au[2]).Magnitude
+local az=(ay-aq)*0.03
+aq=ay
+an.Camera.CFrame+=an.Camera.CFrame.LookVector*az
+elseif ax==Enum.UserInputState.End or ax==Enum.UserInputState.Cancel then
 ap=false
 end
 end
 end)
 
 local function FocusCamera()
-local at=an.Object:IsA"BasePart"and an.Object.Size
+local au=an.Object:IsA"BasePart"and an.Object.Size
 or select(2,an.Object:GetBoundingBox(0))
-local au=math.max(at.X,at.Y,at.Z)
-local av=au*2
-local aw=an.Object:GetPivot().Position
+local av=math.max(au.X,au.Y,au.Z)
+local aw=av*2
+local ax=an.Object:GetPivot().Position
 
 an.Camera.CFrame=
-CFrame.new(aw+Vector3.new(0,au/2,av),aw)
+CFrame.new(ax+Vector3.new(0,av/2,aw),ax)
 end
 
 if an.Focused then
 FocusCamera()
 end
 
-function an.SetObject(at,au,av)
-if av then
-au=au:Clone()
+function an.SetObject(au,av,aw)
+if aw then
+av=av:Clone()
 end
 if an.Object then
 an.Object:Destroy()
 end
 
-an.Object=au
+an.Object=av
 an.Object.Parent=as.CanvasGroup.Viewport
 end
 
-function an.SetHeight(at,au)
-as.Size=UDim2.new(1,0,0,au)
+function an.SetHeight(au,av)
+as.Size=UDim2.new(1,0,0,av)
 end
 
-function an.Focus(at)
+function an.Focus(au)
 if an.Object then
 FocusCamera()
 end
 end
 
-function an.SetCamera(at,au)
-an.Camera=au
-as.CanvasGroup.Viewport.CurrentCamera=au
+function an.SetCamera(au,av)
+an.Camera=av
+as.CanvasGroup.Viewport.CurrentCamera=av
 end
 
-function an.SetInteractive(at,au)
-an.Interactive=au
-as.CanvasGroup.Viewport.Active=au
+function an.SetInteractive(au,av)
+an.Interactive=av
+as.CanvasGroup.Viewport.Active=av
 end
 
 an.Main=as
