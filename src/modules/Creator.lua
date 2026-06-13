@@ -625,6 +625,8 @@ function Creator.SetDraggable(can)
 end
 
 function Creator.Drag(mainFrame, dragFrames, ondrag)
+	local CurInput = WindUI.GenerateGUID()
+
 	local currentDragFrame = nil
 	local dragging, dragStart, startPos
 	local DragModule = {
@@ -659,6 +661,11 @@ function Creator.Drag(mainFrame, dragFrames, ondrag)
 					or input.UserInputType == Enum.UserInputType.Touch
 				) and DragModule.CanDraggable
 			then
+				if WindUI and WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+					return
+				end
+				WindUI.CurrentInput = CurInput
+
 				if currentDragFrame == nil then
 					currentDragFrame = dragFrame
 					dragging = true
@@ -671,6 +678,11 @@ function Creator.Drag(mainFrame, dragFrames, ondrag)
 
 					input.Changed:Connect(function()
 						if input.UserInputState == Enum.UserInputState.End then
+							if WindUI and WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+								return
+							end
+
+							WindUI.CurrentInput = nil
 							dragging = false
 							currentDragFrame = nil
 

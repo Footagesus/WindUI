@@ -22,6 +22,8 @@ local WindUI = {
 	UIScaleObj = nil,
 
 	CreateWindow = nil,
+
+	CurrentInput = nil,
 }
 
 local cloneref = (cloneref or clonereference or function(instance)
@@ -34,6 +36,43 @@ local HttpService = cloneref(game:GetService("HttpService"))
 local Players = cloneref(game:GetService("Players"))
 local CoreGui = cloneref(game:GetService("CoreGui"))
 local RunService = cloneref(game:GetService("RunService"))
+local UserInputService = cloneref(game:GetService("UserInputService"))
+
+function WindUI.GenerateGUID()
+	return HttpService:GenerateGUID(false)
+end
+
+local CurInput = WindUI.GenerateGUID()
+
+UserInputService.InputBegan:Connect(function(Input, GameProcessed)
+	--[[if GameProcessed then
+		return
+	end]]
+
+	task.defer(function()
+		if
+			Input.UserInputType == Enum.UserInputType.MouseButton1
+			or Input.UserInputType == Enum.UserInputType.Touch
+		then
+			if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+				return
+			end
+
+			WindUI.CurrentInput = CurInput
+			print(CurInput)
+			--WindUI.InputStartedOnUI = false
+		end
+	end)
+end)
+UserInputService.InputEnded:Connect(function(Input, GameProcessed)
+	if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
+		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+			return
+		end
+
+		WindUI.CurrentInput = nil
+	end
+end)
 
 local LocalPlayer = Players.LocalPlayer or nil
 

@@ -302,6 +302,8 @@ function Element:New(Config)
 							IsSliderHolding = false
 							ScrollingFrameParent.ScrollingEnabled = true
 
+							Config.WindUI.CurrentInput = nil
+
 							if Config.Window.NewElements then
 								Tween(Slider.UIElements.SliderIcon.Frame.Thumb, 0.2, {
 									ImageTransparency = 0,
@@ -380,17 +382,23 @@ function Element:New(Config)
 		end
 	end)
 
+	local CurInput = Config.WindUI.GenerateGUID()
+
 	Creator.AddSignal(Slider.UIElements.SliderContainer.InputBegan, function(input)
 		if Slider.Locked or IsSliderHolding then
 			return
 		end
-
-		Slider:Set(Value, input)
-
 		if
 			input.UserInputType == Enum.UserInputType.MouseButton1
 			or input.UserInputType == Enum.UserInputType.Touch
 		then
+			if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurInput then
+				return
+			end
+			Config.WindUI.CurrentInput = CurInput
+
+			Slider:Set(Value, input)
+
 			-- drag slider
 			if Config.Window.NewElements then
 				Tween(Slider.UIElements.SliderIcon.Frame.Thumb, 0.24, {

@@ -640,6 +640,8 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		Colorpicker:Update()
 	end
 
+	local CurInput = WindUI.GenerateGUID()
+
 	UserInputService.InputChanged:Connect(function(input)
 		if
 			input.UserInputType ~= Enum.UserInputType.MouseMovement
@@ -665,6 +667,11 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 			return
 		end
 
+		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+			return
+		end
+		WindUI.CurrentInput = CurInput
+
 		if ActiveSlider and ActiveSlider ~= "SatVib" then
 			return
 		end
@@ -681,6 +688,11 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		then
 			return
 		end
+
+		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+			return
+		end
+		WindUI.CurrentInput = CurInput
 
 		if ActiveSlider and ActiveSlider ~= "Hue" then
 			return
@@ -699,6 +711,11 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 			return
 		end
 
+		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+			return
+		end
+		WindUI.CurrentInput = CurInput
+
 		if ActiveSlider and ActiveSlider ~= "Transparency" then
 			return
 		end
@@ -710,6 +727,11 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 
 	UserInputService.InputEnded:Connect(function(input)
 		ActiveSlider = nil
+
+		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+			return
+		end
+		WindUI.CurrentInput = nil
 	end)
 
 	return Colorpicker

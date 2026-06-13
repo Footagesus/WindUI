@@ -99,14 +99,24 @@ function Element:New(Config)
 
 	Toggle:Set(Toggled, false, Config.Window.NewElements)
 
+	local CurInput = Config.WindUI.GenerateGUID()
+
 	if Config.Window.NewElements and ToggleFunc.Animate then
 		if Toggle.Type == "Toggle" then
-			Creator.AddSignal(ToggleFrame.ToggleFrame.Hitbox.InputBegan, function(input)
+			Creator.AddSignal(ToggleFrame.ToggleFrame.Hitbox.InputBegan, function(Input)
 				if
-					not Config.Window.IsToggleDragging and input.UserInputType == Enum.UserInputType.MouseButton1
-					or input.UserInputType == Enum.UserInputType.Touch
+					not Config.Window.IsToggleDragging
+					and (
+						Input.UserInputType == Enum.UserInputType.MouseButton1
+						or Input.UserInputType == Enum.UserInputType.Touch
+					)
 				then
-					ToggleFunc:Animate(input, Toggle)
+					if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurInput then
+						return
+					end
+
+					Config.WindUI.CurrentInput = CurInput
+					ToggleFunc:Animate(Input, Toggle)
 				end
 			end)
 		end

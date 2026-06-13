@@ -1990,6 +1990,8 @@ return function(Config)
 		return Tag:New(TagConfig, Window.UIElements.Main.Main.Topbar.Center.Holder)
 	end
 
+	local CurResizeInput = Config.WindUI.GenerateGUID()
+
 	local function startResizing(input)
 		if Window.CanResize then
 			isResizing = true
@@ -2002,6 +2004,12 @@ return function(Config)
 
 			Creator.AddSignal(input.Changed, function()
 				if input.UserInputState == Enum.UserInputState.End then
+					if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+						return
+					end
+
+					Config.WindUI.CurrentInput = nil
+
 					isResizing = false
 					FullScreenIcon.Active = false
 					--Tween(FullScreenIcon, 0.2, {ImageTransparency = 1}):Play()
@@ -2017,6 +2025,11 @@ return function(Config)
 			input.UserInputType == Enum.UserInputType.MouseButton1
 			or input.UserInputType == Enum.UserInputType.Touch
 		then
+			if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+				return
+			end
+			Config.WindUI.CurrentInput = CurResizeInput
+
 			if Window.CanResize then
 				startResizing(input)
 			end
@@ -2049,11 +2062,17 @@ return function(Config)
 	end)
 
 	Creator.AddSignal(ResizeHandle.MouseEnter, function()
+		if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+			return
+		end
 		if not isResizing then
 			Tween(ResizeHandle.ImageLabel, 0.1, { ImageTransparency = 0.35 }):Play()
 		end
 	end)
 	Creator.AddSignal(ResizeHandle.MouseLeave, function()
+		if Config.WindUI.CurrentInput and Config.WindUI.CurrentInput ~= CurResizeInput then
+			return
+		end
 		if not isResizing then
 			Tween(ResizeHandle.ImageLabel, 0.17, { ImageTransparency = 0.8 }):Play()
 		end
