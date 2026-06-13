@@ -88,14 +88,14 @@ return function(Creator)
 
 		SectionIcon = "Icon",
 
-		SectionExpandIcon = "White",
+		SectionExpandIcon = "Icon",
 		SectionExpandIconTransparency = 0.4,
-		SectionBox = "White",
+		SectionBox = "Text",
 		SectionBoxTransparency = 0.95,
 		SectionBoxBorder = "White",
 		SectionBoxBorderTransparency = 0.75,
-		SectionBoxBackground = "White",
-		SectionBoxBackgroundTransparency = 0.97,
+		SectionBoxBackground = "ElementBackground",
+		SectionBoxBackgroundTransparency = 0.5,
 
 		SearchBarBorder = "White",
 		SearchBarBorderTransparency = 0.75,
