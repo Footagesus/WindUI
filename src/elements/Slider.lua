@@ -369,15 +369,13 @@ function Element:New(Config)
 	end
 
 	Creator.AddSignal(Slider.UIElements.SliderContainer.TextBox.FocusLost, function(enterPressed)
-		if enterPressed then
-			local newValue = tonumber(Slider.UIElements.SliderContainer.TextBox.Text)
-			if newValue then
-				Slider:Set(newValue)
-			else
-				Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(LastValue)
-				if Tooltip then
-					Tooltip.TitleFrame.Text = FormatValue(LastValue)
-				end
+		local newValue = tonumber(Slider.UIElements.SliderContainer.TextBox.Text)
+		if newValue then
+			Slider:Set(newValue)
+		else
+			Slider.UIElements.SliderContainer.TextBox.Text = FormatValue(LastValue)
+			if Tooltip then
+				Tooltip.TitleFrame.Text = FormatValue(LastValue)
 			end
 		end
 	end)
