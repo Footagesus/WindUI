@@ -10051,7 +10051,7 @@ DescTextTransparency=al.DescTextTransparency or 0.4,
 Opened=al.Opened or false,
 UIElements={},
 
-HeaderSize=42,
+HeaderSize=al.Window.ElementConfig.UICorner*2+18,
 IconSize=20,
 Padding=10,
 
@@ -10158,7 +10158,7 @@ local as=aa.NewRoundFrame(al.Window.ElementConfig.UICorner,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 BackgroundTransparency=1,
 Parent=al.Parent,
-ClipsDescendants=true,
+
 AutomaticSize="Y",
 ThemeTag={
 ImageTransparency=am.Box and"SectionBoxBackgroundTransparency"or nil,
@@ -10166,20 +10166,20 @@ ImageColor3="SectionBoxBackground",
 },
 ImageTransparency=not am.Box and 1 or nil,
 },{
-aa.NewRoundFrame(
-al.Window.ElementConfig.UICorner,
-al.Window.NewElements and"Glass-1"or"SquircleOutline",
-{
-Size=UDim2.new(1,0,1,0),
+aa.NewRoundFrame(al.Window.ElementConfig.UICorner-1,"SquircleGlass",{
+Size=UDim2.new(1,2,1,2),
+AnchorPoint=Vector2.new(0.5,0.5),
+Position=UDim2.new(0.5,0,0.5,0),
 
 ThemeTag={
-ImageTransparency="SectionBoxBorderTransparency",
+
 ImageColor3="SectionBoxBorder",
 },
+ImageTransparency=0.92,
 Visible=am.Box and am.BoxBorder,
 Name="Outline",
-}
-),
+ClipsDescendants=true,
+},{
 ae("TextButton",{
 Size=UDim2.new(1,0,0,am.Expandable and 0 or(not ar and am.HeaderSize or 0)),
 BackgroundTransparency=1,
@@ -10221,17 +10221,18 @@ Size=UDim2.new(1,0,0,0),
 AutomaticSize="Y",
 Name="Content",
 Visible=false,
-Position=UDim2.new(0,0,0,am.HeaderSize),
+Position=UDim2.new(0,0,0,am.HeaderSize+10),
 },{
 am.Box and ae("UIPadding",{
-PaddingLeft=UDim.new(0,al.Window.ElementConfig.UIPadding),
-PaddingRight=UDim.new(0,al.Window.ElementConfig.UIPadding),
-PaddingBottom=UDim.new(0,al.Window.ElementConfig.UIPadding),
+PaddingLeft=UDim.new(0,al.Window.ElementConfig.UIPadding/1.5),
+PaddingRight=UDim.new(0,al.Window.ElementConfig.UIPadding/1.5),
+PaddingBottom=UDim.new(0,al.Window.ElementConfig.UIPadding/1.5),
 })or nil,
 ae("UIListLayout",{
 FillDirection="Vertical",
 Padding=UDim.new(0,al.Tab.Gap),
 VerticalAlignment="Top",
+}),
 }),
 }),
 })
@@ -10243,8 +10244,8 @@ VerticalAlignment="Top",
 am.ElementFrame=as
 
 if ar then
-as.Top:GetPropertyChangedSignal"AbsoluteSize":Connect(function()
-as.Content.Position=UDim2.new(0,0,0,as.Top.AbsoluteSize.Y/al.UIScale)
+as.Outline.Top:GetPropertyChangedSignal"AbsoluteSize":Connect(function()
+as.Outline.Content.Position=UDim2.new(0,0,0,as.Outline.Top.AbsoluteSize.Y/al.UIScale)
 
 if am.Opened then
 am:Open(true)
@@ -10256,7 +10257,7 @@ end
 
 local at=al.ElementsModule
 
-at.Load(am,as.Content,at.Elements,al.Window,al.WindUI,function()
+at.Load(am,as.Outline.Content,at.Elements,al.Window,al.WindUI,function()
 if not am.Expandable then
 am.Expandable=true
 ao.Visible=true
@@ -10302,7 +10303,9 @@ as.Size=UDim2.new(
 as.Size.X.Scale,
 as.Size.X.Offset,
 0,
-as.Top.AbsoluteSize.Y/al.UIScale+(as.Content.AbsoluteSize.Y/al.UIScale)
+as.Outline.Top.AbsoluteSize.Y/al.UIScale
++(as.Outline.Content.AbsoluteSize.Y/al.UIScale)
++10
 )
 ao.ImageLabel.Rotation=180
 else
@@ -10311,7 +10314,9 @@ Size=UDim2.new(
 as.Size.X.Scale,
 as.Size.X.Offset,
 0,
-as.Top.AbsoluteSize.Y/al.UIScale+(as.Content.AbsoluteSize.Y/al.UIScale)
+as.Outline.Top.AbsoluteSize.Y/al.UIScale
++(as.Outline.Content.AbsoluteSize.Y/al.UIScale)
++10
 ),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 
@@ -10329,8 +10334,12 @@ function am.Close(au,av)
 if am.Expandable then
 am.Opened=false
 if av then
-as.Size=
-UDim2.new(as.Size.X.Scale,as.Size.X.Offset,0,(as.Top.AbsoluteSize.Y/al.UIScale))
+as.Size=UDim2.new(
+as.Size.X.Scale,
+as.Size.X.Offset,
+0,
+(as.Outline.Top.AbsoluteSize.Y/al.UIScale)
+)
 ao.ImageLabel.Rotation=0
 else
 ah(as,0.26,{
@@ -10338,7 +10347,7 @@ Size=UDim2.new(
 as.Size.X.Scale,
 as.Size.X.Offset,
 0,
-(as.Top.AbsoluteSize.Y/al.UIScale)
+(as.Outline.Top.AbsoluteSize.Y/al.UIScale)
 ),
 },Enum.EasingStyle.Quint,Enum.EasingDirection.Out):Play()
 ah(
@@ -10352,7 +10361,7 @@ end
 end
 end
 
-aa.AddSignal(as.Top.MouseButton1Click,function()
+aa.AddSignal(as.Outline.Top.MouseButton1Click,function()
 if am.Expandable then
 if am.Opened then
 am:Close()
@@ -10362,7 +10371,7 @@ end
 end
 end)
 
-aa.AddSignal(as.Content.UIListLayout:GetPropertyChangedSignal"AbsoluteContentSize",function()
+aa.AddSignal(as.Outline.Content.UIListLayout:GetPropertyChangedSignal"AbsoluteContentSize",function()
 if am.Opened then
 am:Open(true)
 else
@@ -10381,11 +10390,12 @@ if am.Expandable then
 
 
 
-as.Size=UDim2.new(as.Size.X.Scale,as.Size.X.Offset,0,as.Top.AbsoluteSize.Y/al.UIScale)
+as.Size=
+UDim2.new(as.Size.X.Scale,as.Size.X.Offset,0,as.Outline.Top.AbsoluteSize.Y/al.UIScale)
 as.AutomaticSize="None"
-as.Top.Size=UDim2.new(1,0,0,(not ar and am.HeaderSize or 0))
-as.Top.AutomaticSize=(not am.Expandable or ar)and"Y"or"None"
-as.Content.Visible=true
+as.Outline.Top.Size=UDim2.new(1,0,0,(not ar and am.HeaderSize or 0))
+as.Outline.Top.AutomaticSize=(not am.Expandable or ar)and"Y"or"None"
+as.Outline.Content.Visible=true
 end
 if am.Opened then
 am:Open()
