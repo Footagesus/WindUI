@@ -10175,8 +10175,7 @@ ThemeTag={
 
 ImageColor3="SectionBoxBorder",
 },
-ImageTransparency=0.92,
-Visible=am.Box and am.BoxBorder,
+ImageTransparency=am.Box and am.BoxBorder and 0.92 or 1,
 Name="Outline",
 ClipsDescendants=true,
 },{
