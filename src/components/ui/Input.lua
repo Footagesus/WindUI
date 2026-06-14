@@ -21,7 +21,7 @@ function Input.New(Placeholder, Icon, Parent, Type, Callback, OnChange, Radius, 
 		})
 	end
 
-	local isMulti = Type ~= "Input"
+	local isMulti = Type == "Textarea"
 
 	local TextBox = New("TextBox", {
 		BackgroundTransparency = 1,
@@ -34,7 +34,7 @@ function Input.New(Placeholder, Icon, Parent, Type, Callback, OnChange, Radius, 
 		TextWrapped = isMulti,
 		MultiLine = isMulti,
 		TextXAlignment = "Left",
-		TextYAlignment = Type == "Input" and "Center" or "Top",
+		TextYAlignment = Type ~= "Textarea" and "Center" or "Top",
 		--AutomaticSize = "XY",
 		ThemeTag = {
 			PlaceholderColor3 = "PlaceholderText",
@@ -62,8 +62,10 @@ function Input.New(Placeholder, Icon, Parent, Type, Callback, OnChange, Radius, 
 				ThemeTag = {
 					ImageColor3 = "Outline",
 				},
-				Size = UDim2.new(1, 0, 1, 0),
-				ImageTransparency = 0.75,
+				Size = UDim2.new(1, 2, 1, 2),
+				AnchorPoint = Vector2.new(0.5, 0.5),
+				Position = UDim2.new(0.5, 0, 0.5, 0),
+				ImageTransparency = 0.8,
 			}) or nil,
 			Creator.NewRoundFrame(Radius, "Squircle", {
 				Size = UDim2.new(1, 0, 1, 0),
@@ -72,15 +74,15 @@ function Input.New(Placeholder, Icon, Parent, Type, Callback, OnChange, Radius, 
 				ImageTransparency = 0.95,
 			}, {
 				New("UIPadding", {
-					PaddingTop = UDim.new(0, Type == "Input" and 0 or 12),
+					PaddingTop = UDim.new(0, Type ~= "Textarea" and 0 or 12),
 					PaddingLeft = UDim.new(0, 12),
 					PaddingRight = UDim.new(0, 12),
-					PaddingBottom = UDim.new(0, Type == "Input" and 0 or 12),
+					PaddingBottom = UDim.new(0, Type ~= "Textarea" and 0 or 12),
 				}),
 				New("UIListLayout", {
 					FillDirection = "Horizontal",
 					Padding = UDim.new(0, 8),
-					VerticalAlignment = Type == "Input" and "Center" or "Top",
+					VerticalAlignment = Type ~= "Textarea" and "Center" or "Top",
 					HorizontalAlignment = "Left",
 				}),
 				IconInputFrame,
