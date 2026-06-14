@@ -7949,9 +7949,9 @@ end)
 
 local af=ae(game:GetService"UserInputService")
 local ag=ae(game:GetService"Players").LocalPlayer:GetMouse()
-local ah=ae(game:GetService"Workspace").CurrentCamera
+local ah=ae(game:GetService"Workspace").CurrentCamera local ai=
 
-local ai=workspace.CurrentCamera
+workspace.CurrentCamera
 
 local aj=a.load'n'.New
 
@@ -8041,9 +8041,9 @@ UDim2.fromOffset(0,ap.UIElements.UIListLayout.AbsoluteContentSize.Y)
 end
 
 local function RecalculateListSize()
-local au=ai.ViewportSize.Y*0.6
+local au=ao.WindUI.DropdownGui.AbsoluteSize.Y
 
-local av=ap.UIElements.UIListLayout.AbsoluteContentSize.Y
+local av=ap.UIElements.UIListLayout.AbsoluteContentSize.Y/ao.UIScale
 local aw=ap.SearchBarEnabled and(aq.SearchBarHeight+(aq.MenuPadding*3))
 or(aq.MenuPadding*2)
 local ax=av+aw
