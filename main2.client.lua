@@ -136,14 +136,16 @@ local Section = Tab1:Section({
 	Title = "Hi1",
 	Icon = "rbxassetid://77799629590713",
 	IconThemed = true,
+	Box = true,
+	BoxBorder = true,
 })
 
-local Viewport = Tab1:Viewport({
+local Viewport = Section:Viewport({
 	Object = Instance.new("Part"),
 	Interactive = true,
 })
 
-Tab1:Input({
+Section:Input({
 	Title = "Leave at Wave",
 	Desc = "Enter a wave number to automatically leave the raid at that wave (0 = never leave)",
 	Icon = "log-out",
