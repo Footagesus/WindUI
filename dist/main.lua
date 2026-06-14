@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-06-13  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-06-14  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2599,7 +2599,7 @@ ImageColor3="Icon",
 })
 end
 
-local ap=ah~="Input"
+local ap=ah=="Textarea"
 
 local aq=ac("TextBox",{
 BackgroundTransparency=1,
@@ -2612,7 +2612,7 @@ ClipsDescendants=true,
 TextWrapped=ap,
 MultiLine=ap,
 TextXAlignment="Left",
-TextYAlignment=ah=="Input"and"Center"or"Top",
+TextYAlignment=ah~="Textarea"and"Center"or"Top",
 
 ThemeTag={
 PlaceholderColor3="PlaceholderText",
@@ -2640,8 +2640,10 @@ not am and ab.NewRoundFrame(an,"SquircleGlass",{
 ThemeTag={
 ImageColor3="Outline",
 },
-Size=UDim2.new(1,0,1,0),
-ImageTransparency=0.75,
+Size=UDim2.new(1,2,1,2),
+AnchorPoint=Vector2.new(0.5,0.5),
+Position=UDim2.new(0.5,0,0.5,0),
+ImageTransparency=0.8,
 })or nil,
 ab.NewRoundFrame(an,"Squircle",{
 Size=UDim2.new(1,0,1,0),
@@ -2650,15 +2652,15 @@ ImageColor3=Color3.new(1,1,1),
 ImageTransparency=0.95,
 },{
 ac("UIPadding",{
-PaddingTop=UDim.new(0,ah=="Input"and 0 or 12),
+PaddingTop=UDim.new(0,ah~="Textarea"and 0 or 12),
 PaddingLeft=UDim.new(0,12),
 PaddingRight=UDim.new(0,12),
-PaddingBottom=UDim.new(0,ah=="Input"and 0 or 12),
+PaddingBottom=UDim.new(0,ah~="Textarea"and 0 or 12),
 }),
 ac("UIListLayout",{
 FillDirection="Horizontal",
 Padding=UDim.new(0,8),
-VerticalAlignment=ah=="Input"and"Center"or"Top",
+VerticalAlignment=ah~="Textarea"and"Center"or"Top",
 HorizontalAlignment="Left",
 }),
 ao,
@@ -7857,7 +7859,7 @@ ai.Window.NewElements and 12 or 10,
 aj.ClearTextOnFocus
 )
 
-if aj.Type=="Input"then
+if aj.Type~="TextArea"then
 al.Size=UDim2.new(0,aj.Width,0,36)
 al.Position=UDim2.new(1,0,ai.Window.NewElements and 0 or 0.5,0)
 al.AnchorPoint=Vector2.new(1,ai.Window.NewElements and 0 or 0.5)
@@ -11218,11 +11220,13 @@ ImageColor3="TabBackground",
 },
 ImageTransparency=1,
 },{
-aj.NewRoundFrame(aq.UICorner,"Glass-1.4",{
-Size=UDim2.new(1,0,1,0),
+aj.NewRoundFrame(aq.UICorner-1,"Glass-1.4",{
+Size=UDim2.new(1,1,1,1),
 ThemeTag={
 ImageColor3="TabBorder",
 },
+AnchorPoint=Vector2.new(0.5,0.5),
+Position=UDim2.new(0.5,0,0.5,0),
 ImageTransparency=1,
 Name="Outline",
 },{
