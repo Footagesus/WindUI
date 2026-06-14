@@ -23,7 +23,7 @@ function Element:New(Config)
 		Opened = Config.Opened or false,
 		UIElements = {},
 
-		HeaderSize = Config.Window.ElementConfig.UICorner * 2 + 18,
+		HeaderSize = 42,
 		IconSize = 20,
 		Padding = 10,
 
@@ -130,7 +130,7 @@ function Element:New(Config)
 		Size = UDim2.new(1, 0, 0, 0),
 		BackgroundTransparency = 1,
 		Parent = Config.Parent,
-		--ClipsDescendants = true,
+		ClipsDescendants = true,
 		AutomaticSize = "Y",
 		ThemeTag = {
 			ImageTransparency = Section.Box and "SectionBoxBackgroundTransparency" or nil,
@@ -138,73 +138,72 @@ function Element:New(Config)
 		},
 		ImageTransparency = not Section.Box and 1 or nil,
 	}, {
-		Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner - 1, "SquircleGlass", {
-			Size = UDim2.new(1, 2, 1, 2),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.5, 0),
-			--ImageTransparency = .75,
-			ThemeTag = {
-				--ImageTransparency = "SectionBoxBorderTransparency",
-				ImageColor3 = "SectionBoxBorder",
-			},
-			ImageTransparency = 0.92,
-			Visible = Section.Box and Section.BoxBorder,
-			Name = "Outline",
-			ClipsDescendants = true,
+		Creator.NewRoundFrame(
+			Config.Window.ElementConfig.UICorner,
+			Config.Window.NewElements and "Glass-1" or "SquircleOutline",
+			{
+				Size = UDim2.new(1, 0, 1, 0),
+				--ImageTransparency = .75,
+				ThemeTag = {
+					ImageTransparency = "SectionBoxBorderTransparency",
+					ImageColor3 = "SectionBoxBorder",
+				},
+				Visible = Section.Box and Section.BoxBorder,
+				Name = "Outline",
+			}
+		),
+		New("TextButton", {
+			Size = UDim2.new(1, 0, 0, Section.Expandable and 0 or (not DescFrame and Section.HeaderSize or 0)),
+			BackgroundTransparency = 1,
+			AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or nil,
+			Text = "",
+			Name = "Top",
 		}, {
-			New("TextButton", {
-				Size = UDim2.new(1, 0, 0, Section.Expandable and 0 or (not DescFrame and Section.HeaderSize or 0)),
-				BackgroundTransparency = 1,
-				AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or nil,
-				Text = "",
-				Name = "Top",
-			}, {
-				Section.Box and New("UIPadding", {
-					PaddingTop = UDim.new(
-						0,
-						Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
-					),
-					PaddingLeft = UDim.new(
-						0,
-						Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
-					),
-					PaddingRight = UDim.new(
-						0,
-						Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
-					),
-					PaddingBottom = UDim.new(
-						0,
-						Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
-					),
-				}) or nil,
-				Icon,
-				TitleContainer,
-				New("UIListLayout", {
-					Padding = UDim.new(0, 8),
-					FillDirection = "Horizontal",
-					VerticalAlignment = "Center",
-					HorizontalAlignment = "Left",
-				}),
-				ChevronIconFrame,
+			Section.Box and New("UIPadding", {
+				PaddingTop = UDim.new(
+					0,
+					Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
+				),
+				PaddingLeft = UDim.new(
+					0,
+					Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
+				),
+				PaddingRight = UDim.new(
+					0,
+					Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
+				),
+				PaddingBottom = UDim.new(
+					0,
+					Config.Window.ElementConfig.UIPadding + (Config.Window.NewElements and 4 or 0)
+				),
+			}) or nil,
+			Icon,
+			TitleContainer,
+			New("UIListLayout", {
+				Padding = UDim.new(0, 8),
+				FillDirection = "Horizontal",
+				VerticalAlignment = "Center",
+				HorizontalAlignment = "Left",
 			}),
-			New("Frame", {
-				BackgroundTransparency = 1,
-				Size = UDim2.new(1, 0, 0, 0),
-				AutomaticSize = "Y",
-				Name = "Content",
-				Visible = false,
-				Position = UDim2.new(0, 0, 0, Section.HeaderSize + 10),
-			}, {
-				Section.Box and New("UIPadding", {
-					PaddingLeft = UDim.new(0, Config.Window.ElementConfig.UIPadding / 1.5),
-					PaddingRight = UDim.new(0, Config.Window.ElementConfig.UIPadding / 1.5),
-					PaddingBottom = UDim.new(0, Config.Window.ElementConfig.UIPadding / 1.5),
-				}) or nil,
-				New("UIListLayout", {
-					FillDirection = "Vertical",
-					Padding = UDim.new(0, Config.Tab.Gap),
-					VerticalAlignment = "Top",
-				}),
+			ChevronIconFrame,
+		}),
+		New("Frame", {
+			BackgroundTransparency = 1,
+			Size = UDim2.new(1, 0, 0, 0),
+			AutomaticSize = "Y",
+			Name = "Content",
+			Visible = false,
+			Position = UDim2.new(0, 0, 0, Section.HeaderSize),
+		}, {
+			Section.Box and New("UIPadding", {
+				PaddingLeft = UDim.new(0, Config.Window.ElementConfig.UIPadding),
+				PaddingRight = UDim.new(0, Config.Window.ElementConfig.UIPadding),
+				PaddingBottom = UDim.new(0, Config.Window.ElementConfig.UIPadding),
+			}) or nil,
+			New("UIListLayout", {
+				FillDirection = "Vertical",
+				Padding = UDim.new(0, Config.Tab.Gap),
+				VerticalAlignment = "Top",
 			}),
 		}),
 	})
@@ -216,8 +215,8 @@ function Element:New(Config)
 	Section.ElementFrame = Main
 
 	if DescFrame then
-		Main.Outline.Top:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-			Main.Outline.Content.Position = UDim2.new(0, 0, 0, Main.Outline.Top.AbsoluteSize.Y / Config.UIScale)
+		Main.Top:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+			Main.Content.Position = UDim2.new(0, 0, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
 
 			if Section.Opened then
 				Section:Open(true)
@@ -229,7 +228,7 @@ function Element:New(Config)
 
 	local ElementsModule = Config.ElementsModule
 
-	ElementsModule.Load(Section, Main.Outline.Content, ElementsModule.Elements, Config.Window, Config.WindUI, function()
+	ElementsModule.Load(Section, Main.Content, ElementsModule.Elements, Config.Window, Config.WindUI, function()
 		if not Section.Expandable then
 			Section.Expandable = true
 			ChevronIconFrame.Visible = true
@@ -275,9 +274,7 @@ function Element:New(Config)
 					Main.Size.X.Scale,
 					Main.Size.X.Offset,
 					0,
-					Main.Outline.Top.AbsoluteSize.Y / Config.UIScale
-						+ (Main.Outline.Content.AbsoluteSize.Y / Config.UIScale)
-						+ 10
+					Main.Top.AbsoluteSize.Y / Config.UIScale + (Main.Content.AbsoluteSize.Y / Config.UIScale)
 				)
 				ChevronIconFrame.ImageLabel.Rotation = 180
 			else
@@ -286,9 +283,7 @@ function Element:New(Config)
 						Main.Size.X.Scale,
 						Main.Size.X.Offset,
 						0,
-						Main.Outline.Top.AbsoluteSize.Y / Config.UIScale
-							+ (Main.Outline.Content.AbsoluteSize.Y / Config.UIScale)
-							+ 10
+						Main.Top.AbsoluteSize.Y / Config.UIScale + (Main.Content.AbsoluteSize.Y / Config.UIScale)
 					),
 				}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 
@@ -306,12 +301,8 @@ function Element:New(Config)
 		if Section.Expandable then
 			Section.Opened = false
 			if IsNotAnim then
-				Main.Size = UDim2.new(
-					Main.Size.X.Scale,
-					Main.Size.X.Offset,
-					0,
-					(Main.Outline.Top.AbsoluteSize.Y / Config.UIScale)
-				)
+				Main.Size =
+					UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, (Main.Top.AbsoluteSize.Y / Config.UIScale))
 				ChevronIconFrame.ImageLabel.Rotation = 0
 			else
 				Tween(Main, 0.26, {
@@ -319,7 +310,7 @@ function Element:New(Config)
 						Main.Size.X.Scale,
 						Main.Size.X.Offset,
 						0,
-						(Main.Outline.Top.AbsoluteSize.Y / Config.UIScale)
+						(Main.Top.AbsoluteSize.Y / Config.UIScale)
 					),
 				}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
 				Tween(
@@ -333,7 +324,7 @@ function Element:New(Config)
 		end
 	end
 
-	Creator.AddSignal(Main.Outline.Top.MouseButton1Click, function()
+	Creator.AddSignal(Main.Top.MouseButton1Click, function()
 		if Section.Expandable then
 			if Section.Opened then
 				Section:Close()
@@ -343,7 +334,7 @@ function Element:New(Config)
 		end
 	end)
 
-	Creator.AddSignal(Main.Outline.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+	Creator.AddSignal(Main.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
 		if Section.Opened then
 			Section:Open(true)
 		else
@@ -362,12 +353,11 @@ function Element:New(Config)
 
 			--     Parent = Main.Top,
 			-- })
-			Main.Size =
-				UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, Main.Outline.Top.AbsoluteSize.Y / Config.UIScale)
+			Main.Size = UDim2.new(Main.Size.X.Scale, Main.Size.X.Offset, 0, Main.Top.AbsoluteSize.Y / Config.UIScale)
 			Main.AutomaticSize = "None"
-			Main.Outline.Top.Size = UDim2.new(1, 0, 0, (not DescFrame and Section.HeaderSize or 0))
-			Main.Outline.Top.AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or "None"
-			Main.Outline.Content.Visible = true
+			Main.Top.Size = UDim2.new(1, 0, 0, (not DescFrame and Section.HeaderSize or 0))
+			Main.Top.AutomaticSize = (not Section.Expandable or DescFrame) and "Y" or "None"
+			Main.Content.Visible = true
 		end
 		if Section.Opened then
 			Section:Open()
