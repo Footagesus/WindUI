@@ -57,7 +57,7 @@ function Element:New(Config)
 		Input.ClearTextOnFocus
 	)
 
-	if Input.Type ~= "TextArea" then
+	if Input.Type ~= "Textarea" then
 		InputComponent.Size = UDim2.new(0, Input.Width, 0, 36)
 		InputComponent.Position = UDim2.new(1, 0, Config.Window.NewElements and 0 or 0.5, 0)
 		InputComponent.AnchorPoint = Vector2.new(1, Config.Window.NewElements and 0 or 0.5)
@@ -65,10 +65,10 @@ function Element:New(Config)
 		InputComponent.Size = UDim2.new(1, 0, 0, 42 + 56 + 50)
 	end
 
-	New("UIScale", {
+	--[[New("UIScale", {
 		Parent = InputComponent,
 		Scale = 1,
-	})
+	})]]
 
 	function Input:Lock()
 		Input.Locked = true
