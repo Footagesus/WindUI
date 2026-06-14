@@ -98,9 +98,9 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	end
 
 	local function RecalculateListSize()
-		local MaxHeight = CurrentCamera.ViewportSize.Y * 0.6
+		local MaxHeight = Config.WindUI.DropdownGui.AbsoluteSize.Y
 
-		local ContentY = Dropdown.UIElements.UIListLayout.AbsoluteContentSize.Y
+		local ContentY = Dropdown.UIElements.UIListLayout.AbsoluteContentSize.Y / Config.UIScale
 		local SearchBarOffset = Dropdown.SearchBarEnabled and (Element.SearchBarHeight + (Element.MenuPadding * 3))
 			or (Element.MenuPadding * 2)
 		local TotalY = ContentY + SearchBarOffset
