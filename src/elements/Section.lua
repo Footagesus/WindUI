@@ -23,7 +23,7 @@ function Element:New(Config)
 		Opened = Config.Opened or false,
 		UIElements = {},
 
-		HeaderSize = Config.Window.ElementConfig.UICorner * 2 + 18,
+		HeaderSize = 48,
 		IconSize = 20,
 		Padding = 10,
 
@@ -138,10 +138,10 @@ function Element:New(Config)
 		},
 		ImageTransparency = not Section.Box and 1 or nil,
 	}, {
-		Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner - 1, "SquircleGlass", {
-			Size = UDim2.new(1, 2, 1, 2),
-			AnchorPoint = Vector2.new(0.5, 0.5),
-			Position = UDim2.new(0.5, 0, 0.5, 0),
+		Creator.NewRoundFrame(Config.Window.ElementConfig.UICorner - 1, "SquircleOutline", {
+			Size = UDim2.new(1, 0, 1, 0),
+			--AnchorPoint = Vector2.new(0.5, 0.5),
+			--Position = UDim2.new(0.5, 0, 0.5, 0),
 			--ImageTransparency = .75,
 			ThemeTag = {
 				--ImageTransparency = "SectionBoxBorderTransparency",
@@ -214,17 +214,15 @@ function Element:New(Config)
 
 	Section.ElementFrame = Main
 
-	if DescFrame then
-		Main.Outline.Top:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
-			Main.Outline.Content.Position = UDim2.new(0, 0, 0, Main.Outline.Top.AbsoluteSize.Y / Config.UIScale)
+	Main.Outline.Top:GetPropertyChangedSignal("AbsoluteSize"):Connect(function()
+		Main.Outline.Content.Position = UDim2.new(0, 0, 0, (Main.Outline.Top.AbsoluteSize.Y / Config.UIScale) + 10)
 
-			if Section.Opened then
-				Section:Open(true)
-			else
-				Section.Close(true)
-			end
-		end)
-	end
+		if Section.Opened then
+			Section:Open(true)
+		else
+			Section.Close(true)
+		end
+	end)
 
 	local ElementsModule = Config.ElementsModule
 
@@ -350,8 +348,7 @@ function Element:New(Config)
 		end
 	end)
 
-	task.spawn(function()
-		task.wait(0.02)
+	task.defer(function()
 		if Section.Expandable then
 			-- New("UIPadding", {
 			--     PaddingTop = UDim.new(0,4),
