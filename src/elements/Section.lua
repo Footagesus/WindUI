@@ -147,8 +147,7 @@ function Element:New(Config)
 				--ImageTransparency = "SectionBoxBorderTransparency",
 				ImageColor3 = "SectionBoxBorder",
 			},
-			ImageTransparency = 0.92,
-			Visible = Section.Box and Section.BoxBorder,
+			ImageTransparency = Section.Box and Section.BoxBorder and 0.92 or 1,
 			Name = "Outline",
 			ClipsDescendants = true,
 		}, {
