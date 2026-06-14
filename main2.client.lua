@@ -65,7 +65,7 @@ Window:Section({
 	Title = "Silent",
 })
 
-Window:Tab({
+local Tab1 = Window:Tab({
 	Title = "Exploits",
 	Icon = "terminal",
 })
