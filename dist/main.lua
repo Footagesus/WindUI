@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-06-14  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-06-19  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -618,7 +618,7 @@ if d:IsStudio()or not writefile then
 m=a.load'b'
 else
 m=loadstring(
-game.HttpGetAsync and game:HttpGetAsync(l)or h:GetAsync(l)
+game.HttpGet and game:HttpGet(l)or h:GetAsync(l)
 )()
 end
 
@@ -2252,33 +2252,25 @@ return ac end function a.i()
 
 
 
-
-
 local aa={}
-
 
 function aa.New(ab,ac)
 local ad="https://sdkapi-public.luarmor.net/library.lua"
 
-local ae=loadstring(
-game.HttpGetAsync and game:HttpGetAsync(ad)
-or HttpService:GetAsync(ad)
-)()
+local ae=loadstring(game.HttpGet and game:HttpGet(ad)or HttpService:GetAsync(ad))()
 local af=setclipboard or toclipboard
 
 ae.script_id=ab
 
 function ValidateKey(ag)
-local ah=ae.check_key(ag);
+local ah=ae.check_key(ag)
 
 
-if(ah.code=="KEY_VALID")then
+if ah.code=="KEY_VALID"then
 return true,"Whitelisted!"
-
-elseif(ah.code=="KEY_HWID_LOCKED")then
+elseif ah.code=="KEY_HWID_LOCKED"then
 return false,"Key linked to a different HWID. Please reset it using our bot"
-
-elseif(ah.code=="KEY_INCORRECT")then
+elseif ah.code=="KEY_INCORRECT"then
 return false,"Key is wrong or deleted!"
 else
 return false,"Key check failed:"..ah.message.." Code: "..ah.code
@@ -2291,12 +2283,12 @@ end
 
 return{
 Verify=ValidateKey,
-Copy=CopyLink
+Copy=CopyLink,
 }
 end
 
-
 return aa end function a.j()
+
 
 
 
