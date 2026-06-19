@@ -19,7 +19,7 @@ if RunService:IsStudio() or not writefile then
 	Icons = require("./Icons")
 else
 	Icons = loadstring(
-		game.HttpGetAsync and game:HttpGetAsync(IconsURL) or HttpService:GetAsync(IconsURL) --studio
+		game.HttpGet and game:HttpGet(IconsURL) or HttpService:GetAsync(IconsURL) --studio
 	)()
 end
 
