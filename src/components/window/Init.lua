@@ -242,7 +242,7 @@ return function(Config)
 			--PaddingTop = UDim.new(0,4),
 			PaddingLeft = UDim.new(0, Window.UIPadding / 2),
 			PaddingRight = UDim.new(0, Window.UIPadding / 2),
-			--PaddingBottom = UDim.new(0,Window.UIPadding),
+			PaddingBottom = UDim.new(0, Window.UIPadding / 2),
 		}),
 		--TabHighlight
 	})
@@ -261,15 +261,21 @@ return function(Config)
 		New("Frame", {
 			Name = "Content",
 			BackgroundTransparency = 1,
-			Size = UDim2.new(1, 0, 1, not Window.HideSearchBar and -39 - 6 - Window.UIPadding / 2 or 0),
-			Position = UDim2.new(0, 0, 1, 0),
+			Size = UDim2.new(1, 0, 1, not Window.HideSearchBar and -39 - 6 - Window.UIPadding or -Window.UIPadding / 2),
+			Position = UDim2.new(0, 0, 1, -Window.UIPadding / 2),
 			AnchorPoint = Vector2.new(0, 1),
 		}),
 		Window.UIElements.SideBar,
 	})
 
 	if Window.ScrollBarEnabled then
-		CreateScrollSlider(Window.UIElements.SideBar, Window.UIElements.SideBarContainer.Content, Window, 3)
+		CreateScrollSlider(
+			Window.UIElements.SideBar,
+			Window.UIElements.SideBarContainer.Content,
+			Window,
+			3,
+			Config.WindUI
+		)
 	end
 
 	Window.UIElements.MainBar = New("Frame", {
@@ -1354,14 +1360,14 @@ return function(Config)
 				Window.OpenButtonMain:Visible(false)
 			end
 
-			Config.WindUI.UIScaleObj.Scale -= 1 - 0.85
+			--[[Config.WindUI.UIScaleObj.Scale -= 1 - 0.85
 			Tween(
 				Config.WindUI.UIScaleObj,
 				0.33,
 				{ Scale = Config.WindUI.UIScale },
 				Enum.EasingStyle.Back,
 				Enum.EasingDirection.Out
-			):Play()
+			):Play()]]
 			Tween(
 				Blur,
 				0.25,
@@ -1441,13 +1447,13 @@ return function(Config)
 			ImageTransparency = 1,
 		}, Enum.EasingStyle.Exponential, Enum.EasingDirection.InOut):Play()
 
-		Tween(
+		--[[Tween(
 			Config.WindUI.UIScaleObj,
 			0.28,
 			{ Scale = Config.WindUI.UIScale - (1 - 0.85) },
 			Enum.EasingStyle.Quint,
 			Enum.EasingDirection.Out
-		):Play()
+		):Play()]]
 		if BGImage then
 			if BGImage:IsA("VideoFrame") then
 				BGImage.Visible = false

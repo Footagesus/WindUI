@@ -288,6 +288,13 @@ function TabModule.New(Config, UIScale)
 	}, {
 		Tab.UIElements.ContainerFrame,
 		New("Frame", {
+			Size = UDim2.new(1, -14, 1, -14),
+			Position = UDim2.new(0.5, 0, 0.5, 0),
+			AnchorPoint = Vector2.new(0.5, 0.5),
+			BackgroundTransparency = 1,
+			Name = "ScrollSliderHolder",
+		}),
+		New("Frame", {
 			Size = UDim2.new(1, 0, 0, ((Window.UIPadding * 2.4) + 12)),
 			BackgroundTransparency = 1,
 			Visible = Tab.ShowTabTitle or false,
@@ -347,7 +354,13 @@ function TabModule.New(Config, UIScale)
 	end)
 
 	if Window.ScrollBarEnabled then
-		CreateScrollSlider(Tab.UIElements.ContainerFrame, Tab.UIElements.ContainerFrameCanvas, Window, 3)
+		CreateScrollSlider(
+			Tab.UIElements.ContainerFrame,
+			Tab.UIElements.ContainerFrameCanvas.ScrollSliderHolder,
+			Window,
+			4,
+			WindUI
+		)
 	end
 
 	local ToolTip
