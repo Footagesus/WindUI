@@ -131,7 +131,7 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 	Creator.AddSignal(ButtonFrame.MouseLeave, function()
 		Tween(ButtonFrame.Frame, 0.047, { ImageTransparency = 1 }):Play()
 	end)
-	Creator.AddSignal(ButtonFrame.MouseButton1Up, function()
+	Creator.AddSignal(ButtonFrame.MouseButton1Click, function()
 		if Dialog then --idk
 			Dialog:Close()()
 		end
