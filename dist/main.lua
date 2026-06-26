@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-06-19  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-06-26  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -2554,7 +2554,7 @@ end)
 ab.AddSignal(ao.MouseLeave,function()
 ad(ao.Frame,0.047,{ImageTransparency=1}):Play()
 end)
-ab.AddSignal(ao.MouseButton1Up,function()
+ab.AddSignal(ao.MouseButton1Click,function()
 if aj then
 aj:Close()()
 end
@@ -4399,28 +4399,26 @@ return aa end function a.x()
 
 local aa={}
 
-local ab=(cloneref or clonereference or function(ab)return ab end)
-
-
+local ab=cloneref or clonereference or function(ab)
+return ab
+end
 local ac=ab(game:GetService"UserInputService")
 
 local ad=a.load'd'
-local ae=ad.New local af=
-ad.Tween
+local ae=ad.New
 
-
-function aa.New(ag,ah,ai,aj)
+function aa.New(af,ag,ah,ai,aj)
 local ak=ae("Frame",{
-Size=UDim2.new(0,aj,1,0),
+Size=UDim2.new(0,ai,1,0),
 BackgroundTransparency=1,
 Position=UDim2.new(1,0,0,0),
 AnchorPoint=Vector2.new(1,0),
-Parent=ah,
+Parent=ag,
 ZIndex=999,
 Active=true,
 })
 
-local al=ad.NewRoundFrame(aj/2,"Squircle",{
+local al=ad.NewRoundFrame(ai/2,"Squircle",{
 Size=UDim2.new(1,0,0,0),
 ImageTransparency=0.85,
 ThemeTag={ImageColor3="Text"},
@@ -4437,142 +4435,117 @@ ZIndex=999,
 Parent=al,
 })
 
-local an=false
-local ao=0
+local an=ad:GenerateUniqueID()
+local ao=false
+local ap,aq
 
-local function updateSliderSize()
-local ap=ag
-local aq=ap.AbsoluteCanvasSize.Y
-local ar=ap.AbsoluteWindowSize.Y
+local function UpdateVisuals()
+local ar=af.AbsoluteCanvasSize.Y
+local as=af.AbsoluteWindowSize.Y
 
-if aq<=ar then
+if ar<=as then
 al.Visible=false
 return
 end
 
-local as=math.clamp(ar/aq,0.1,1)
-al.Size=UDim2.new(1,0,as,0)
 al.Visible=true
-end
 
-local function updateScrollingFramePosition()
-local ap=al.Position.Y.Scale
-local aq=ag.AbsoluteCanvasSize.Y
-local ar=ag.AbsoluteWindowSize.Y
-local as=math.max(aq-ar,0)
+local at=math.clamp(as/ar,0.05,1)
+al.Size=UDim2.new(1,0,at,0)
 
-if as<=0 then return end
+local au=ar-as
+local av=1-at
 
-local at=math.max(1-al.Size.Y.Scale,0)
-if at<=0 then return end
-
-local au=ap/at
-
-ag.CanvasPosition=Vector2.new(
-ag.CanvasPosition.X,
-au*as
-)
-end
-
-local function updateThumbPosition()
-if an then return end
-
-local ap=ag.CanvasPosition.Y
-local aq=ag.AbsoluteCanvasSize.Y
-local ar=ag.AbsoluteWindowSize.Y
-local as=math.max(aq-ar,0)
-
-if as<=0 then
+if au>0 then
+local aw=af.CanvasPosition.Y/au
+al.Position=UDim2.new(0,0,math.clamp(aw*av,0,av),0)
+else
 al.Position=UDim2.new(0,0,0,0)
+end
+end
+
+local function StopDrag()
+if aj.CurrentInput==an then
+aj.CurrentInput=nil
+end
+ao=false
+af.ScrollingEnabled=true
+if ap then
+ap:Disconnect()
+end
+if aq then
+aq:Disconnect()
+end
+end
+
+ad.AddSignal(am.InputBegan,function(ar)
+if
+ar.UserInputType~=Enum.UserInputType.MouseButton1
+and ar.UserInputType~=Enum.UserInputType.Touch
+then
+return
+end
+if ao then
+return
+end
+if aj.CurrentInput and aj.CurrentInput~=an then
 return
 end
 
-local at=ap/as
-local au=math.max(1-al.Size.Y.Scale,0)
-local av=math.clamp(at*au,0,au)
+aj.CurrentInput=an
 
-al.Position=UDim2.new(0,0,av,0)
-end
+ao=true
+af.ScrollingEnabled=false
 
-ad.AddSignal(ak.InputBegan,function(ap)
-if(ap.UserInputType==Enum.UserInputType.MouseButton1 or ap.UserInputType==Enum.UserInputType.Touch)then
-local aq=al.AbsolutePosition.Y
-local ar=aq+al.AbsoluteSize.Y
+local as=ar.Position.Y
+local at=af.CanvasPosition.Y
 
-if not(ap.Position.Y>=aq and ap.Position.Y<=ar)then
-local as=ak.AbsolutePosition.Y
-local at=ak.AbsoluteSize.Y
-local au=al.AbsoluteSize.Y
+ap=ac.InputChanged:Connect(function(au)
+if
+au.UserInputType==Enum.UserInputType.MouseMovement
+or au.UserInputType==Enum.UserInputType.Touch
+then
+local av=au.Position.Y-as
 
-local av=ap.Position.Y-as-au/2
-local aw=at-au
+local aw=af.AbsoluteCanvasSize.Y
+local ax=af.AbsoluteWindowSize.Y
+local ay=math.max(aw-ax,0)
 
-local ax=math.clamp(av/aw,0,1-al.Size.Y.Scale)
+local az=ak.AbsoluteSize.Y
+local aA=al.AbsoluteSize.Y
+local aB=math.max(az-aA,1)
 
-al.Position=UDim2.new(0,0,ax,0)
-updateScrollingFramePosition()
-end
-end
-end)
+local b=av*(ay/aB)
 
-ad.AddSignal(am.InputBegan,function(ap)
-if ap.UserInputType==Enum.UserInputType.MouseButton1 or ap.UserInputType==Enum.UserInputType.Touch then
-an=true
-ao=ap.Position.Y-al.AbsolutePosition.Y
-
-local aq
-local ar
-
-aq=ac.InputChanged:Connect(function(as)
-if as.UserInputType==Enum.UserInputType.MouseMovement or as.UserInputType==Enum.UserInputType.Touch then
-local at=ak.AbsolutePosition.Y
-local au=ak.AbsoluteSize.Y
-local av=al.AbsoluteSize.Y
-
-local aw=as.Position.Y-at-ao
-local ax=au-av
-
-local ay=math.clamp(aw/ax,0,1-al.Size.Y.Scale)
-
-al.Position=UDim2.new(0,0,ay,0)
-updateScrollingFramePosition()
+af.CanvasPosition=
+Vector2.new(af.CanvasPosition.X,math.clamp(at+b,0,ay))
 end
 end)
 
-ar=ac.InputEnded:Connect(function(as)
-if as.UserInputType==Enum.UserInputType.MouseButton1 or as.UserInputType==Enum.UserInputType.Touch then
-an=false
-if aq then aq:Disconnect()end
-if ar then ar:Disconnect()end
+aq=ac.InputEnded:Connect(function(au)
+if au.UserInputType==ar.UserInputType then
+if aj.CurrentInput and aj.CurrentInput~=an then
+return
+end
+
+aj.CurrentInput=nil
+
+StopDrag()
 end
 end)
-end
 end)
 
-ad.AddSignal(ag:GetPropertyChangedSignal"AbsoluteWindowSize",function()
-updateSliderSize()
-updateThumbPosition()
-end)
+ad.AddSignal(af:GetPropertyChangedSignal"AbsoluteWindowSize",UpdateVisuals)
+ad.AddSignal(af:GetPropertyChangedSignal"AbsoluteCanvasSize",UpdateVisuals)
+ad.AddSignal(af:GetPropertyChangedSignal"CanvasPosition",UpdateVisuals)
 
-ad.AddSignal(ag:GetPropertyChangedSignal"AbsoluteCanvasSize",function()
-updateSliderSize()
-updateThumbPosition()
-end)
-
-ad.AddSignal(ag:GetPropertyChangedSignal"CanvasPosition",function()
-if not an then
-updateThumbPosition()
-end
-end)
-
-updateSliderSize()
-updateThumbPosition()
+UpdateVisuals()
 
 return ak
 end
 
-
 return aa end function a.y()
+
 local aa={}
 
 local ab=a.load'd'
@@ -11415,6 +11388,13 @@ ZIndex=5,
 },{
 ar.UIElements.ContainerFrame,
 al("Frame",{
+Size=UDim2.new(1,-14,1,-14),
+Position=UDim2.new(0.5,0,0.5,0),
+AnchorPoint=Vector2.new(0.5,0.5),
+BackgroundTransparency=1,
+Name="ScrollSliderHolder",
+}),
+al("Frame",{
 Size=UDim2.new(1,0,0,((Window.UIPadding*2.4)+12)),
 BackgroundTransparency=1,
 Visible=ar.ShowTabTitle or false,
@@ -11474,7 +11454,13 @@ end
 end)
 
 if Window.ScrollBarEnabled then
-an(ar.UIElements.ContainerFrame,ar.UIElements.ContainerFrameCanvas,Window,3)
+an(
+ar.UIElements.ContainerFrame,
+ar.UIElements.ContainerFrameCanvas.ScrollSliderHolder,
+Window,
+4,
+WindUI
+)
 end
 
 local aw
@@ -12733,7 +12719,7 @@ ao("UIPadding",{
 
 PaddingLeft=UDim.new(0,aw.UIPadding/2),
 PaddingRight=UDim.new(0,aw.UIPadding/2),
-
+PaddingBottom=UDim.new(0,aw.UIPadding/2),
 }),
 
 })
@@ -12752,15 +12738,21 @@ Visible=true,
 ao("Frame",{
 Name="Content",
 BackgroundTransparency=1,
-Size=UDim2.new(1,0,1,not aw.HideSearchBar and-45-aw.UIPadding/2 or 0),
-Position=UDim2.new(0,0,1,0),
+Size=UDim2.new(1,0,1,not aw.HideSearchBar and-45-aw.UIPadding or-aw.UIPadding/2),
+Position=UDim2.new(0,0,1,-aw.UIPadding/2),
 AnchorPoint=Vector2.new(0,1),
 }),
 aw.UIElements.SideBar,
 })
 
 if aw.ScrollBarEnabled then
-as(aw.UIElements.SideBar,aw.UIElements.SideBarContainer.Content,aw,3)
+as(
+aw.UIElements.SideBar,
+aw.UIElements.SideBarContainer.Content,
+aw,
+3,
+av.WindUI
+)
 end
 
 aw.UIElements.MainBar=ao("Frame",{
@@ -13845,14 +13837,14 @@ if aw.OpenButtonMain and aw.IsOpenButtonEnabled then
 aw.OpenButtonMain:Visible(false)
 end
 
-av.WindUI.UIScaleObj.Scale-=0.15000000000000002
-ap(
-av.WindUI.UIScaleObj,
-0.33,
-{Scale=av.WindUI.UIScale},
-Enum.EasingStyle.Back,
-Enum.EasingDirection.Out
-):Play()
+
+
+
+
+
+
+
+
 ap(
 b,
 0.25,
@@ -13932,13 +13924,13 @@ ap(aw.UIElements.Main.Background,0.3,{
 ImageTransparency=1,
 },Enum.EasingStyle.Exponential,Enum.EasingDirection.InOut):Play()
 
-ap(
-av.WindUI.UIScaleObj,
-0.28,
-{Scale=av.WindUI.UIScale-(0.15000000000000002)},
-Enum.EasingStyle.Quint,
-Enum.EasingDirection.Out
-):Play()
+
+
+
+
+
+
+
 if i then
 if i:IsA"VideoFrame"then
 i.Visible=false
