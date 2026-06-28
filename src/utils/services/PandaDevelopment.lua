@@ -18,7 +18,7 @@ function PandaDevelopment.New(serviceId)
 	local frequest, fsetclipboard = request or http_request or syn_request, setclipboard or toclipboard
 
 	function ValidateKey(key)
-		local validationUrl = "https://new.pandadevelopment.net/api/v1/keys/validate"
+		local validationUrl = "https://api.pandauth.com/api/v1/keys/validate"
 
 		local payload = {
 			ServiceID = serviceId,
