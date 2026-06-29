@@ -59,73 +59,6 @@ local function GetTextColorForHSB(color)
 	end
 end
 
-local function getElementPosition(elements, targetIndex, isHStack)
-	if type(targetIndex) ~= "number" or targetIndex ~= math.floor(targetIndex) then
-		return nil, 1
-	end
-
-	-- local maxIndex = 0
-	-- for k,_ in next, elements do
-	--     if type(k) == "number" and k > maxIndex then maxIndex = k end
-	-- end
-
-	local maxIndex = #elements
-	--print(maxIndex)
-
-	if maxIndex == 0 or targetIndex < 1 or targetIndex > maxIndex then
-		return nil, 2
-	end
-
-	local function isDelimiter(el)
-		if el == nil then
-			return true
-		end
-		local t = el.__type
-		return t == "Divider" or t == "Space" or t == "Section" or t == "Code"
-	end
-
-	if isDelimiter(elements[targetIndex]) then
-		return nil, 3
-	end
-
-	local function calculate(pos, size)
-		if size == 1 then
-			return "Squircle"
-		end
-		if pos == 1 then
-			return isHStack and "SquircleH-TL-TR" or "Squircle-TL-TR"
-		end
-		if pos == size then
-			return isHStack and "SquircleH-BL-BR" or "Squircle-BL-BR"
-		end
-		return "Square"
-	end
-
-	local groupStart = 1
-	local groupCount = 0
-
-	for i = 1, maxIndex do
-		local el = elements[i]
-		if isDelimiter(el) then
-			if targetIndex >= groupStart and targetIndex <= i - 1 then
-				local pos = targetIndex - groupStart + 1
-				return calculate(pos, groupCount)
-			end
-			groupStart = i + 1
-			groupCount = 0
-		else
-			groupCount = groupCount + 1
-		end
-	end
-
-	if targetIndex >= groupStart and targetIndex <= maxIndex then
-		local pos = targetIndex - groupStart + 1
-		return calculate(pos, groupCount)
-	end
-
-	return nil, 4
-end
-
 return function(Config)
 	local Element = {
 		Title = Config.Title,
@@ -759,7 +692,7 @@ return function(Config)
 
 	function Element.UpdateShape(Tab)
 		if Config.Window.NewElements then
-			local newShape = getElementPosition(
+			local newShape = Creator:GetElementPosition(
 				Tab.Elements,
 				Element.Index,
 				Config.ParentConfig.ParentTable.__type == "HStack" or Config.ParentConfig.ParentTable.__type == "Group"
