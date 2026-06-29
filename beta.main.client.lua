@@ -522,6 +522,81 @@ ColorpickerTab:Paragraph({ Title = "mefrjgehgwleqokfijvdhevrwfkoefijwrhjnjeredoe
 ColorpickerTab:Paragraph({ Title = "mefrjgehgwleqokfijvdhevrwfkoefijwrhjnjeredoekqfjwredbgekwedqjfwndbnjekw" })
 ColorpickerTab:Paragraph({ Title = "mefrjgehgwleqokfijvdhevrwfkoefijwrhjnjeredoekqfjwredbgekwedqjfwndbnjekw" })
 
+local CodeTab = Window:Tab({ Title = "Code Tab" })
+
+CodeTab:Code({
+	--Title = "wjefrgdfkoleoadksjbhgk.luau",
+	Code = [[local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Debris = game:GetService("Debris")
+
+local Player = Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+
+local function CreatePart()
+    local Part = Instance.new("Part")
+    Part.Name = "ExamplePart"
+    Part.Size = Vector3.new(4, 4, 4)
+    Part.Position = Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0)
+    Part.Anchored = true
+    Part.Parent = workspace
+
+    local Tween = TweenService:Create(
+        Part,
+        TweenInfo.new(2),
+        {
+            Transparency = 1,
+            Position = Part.Position + Vector3.new(0, 5, 0)
+        }
+    )
+
+    Tween:Play()
+    Debris:AddItem(Part, 3)
+end
+
+local function PrintInfo()
+    print("Player:", Player.Name)
+    print("UserId:", Player.UserId)
+end
+
+UserInputService.InputBegan:Connect(function(Input)
+    if Input.KeyCode == Enum.KeyCode.F then
+        CreatePart()
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if Character:FindFirstChild("Humanoid") then
+        local Health = Character.Humanoid.Health
+
+        if Health <= 0 then
+            print("Dead")
+        end
+    end
+end)
+
+local Remote = Instance.new("RemoteEvent")
+Remote.Name = "ExampleRemote"
+Remote.Parent = ReplicatedStorage
+
+Remote.OnClientEvent:Connect(function(Message)
+    print("Server:", Message)
+end)
+
+PrintInfo()]],
+	CanCopied = false,
+	Height = UDim.new(1, 0),
+})
+
+--CodeTab:Code({
+--	Title = "wjefrgdfkoleoadksjbhgk.luau",
+--	Code = [[local pisun = game:GetService("kmefjdnbgkopdawejfr")]],
+--	Height = UDim.new(1, 0),
+--})
+
 Window:Tab({ Title = "Test" })
 Window:Tab({ Title = "Test" })
 Window:Tab({ Title = "Test" })
