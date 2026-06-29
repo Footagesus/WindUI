@@ -38,6 +38,9 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		TextPadding = 10,
 	}
 
+	local Connections = {}
+	local IsTransparency = Colorpicker.Transparency ~= nil
+
 	function Colorpicker:SetHSVFromRGB(Color)
 		local H, S, V = Color3.toHSV(Color)
 		Colorpicker.Hue = H
@@ -149,7 +152,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		AutomaticSize = "XY",
 		Size = UDim2.new(0, 0, 0, 0),
 		Position = UDim2.fromOffset(
-			Colorpicker.Transparency and 160 + 10 + 10 + 10 + 10 + 10 + 10 + 20 or 160 + 10 + 10 + 10 + 20,
+			IsTransparency and 160 + 10 + 10 + 10 + 10 + 10 + 10 + 20 or 160 + 10 + 10 + 10 + 20,
 			40 + Colorpicker.TextPadding
 		),
 		BackgroundTransparency = 1,
@@ -363,7 +366,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 	local GreenInput = CreateNewInput("Green", ToRGB(Colorpicker.Default)["G"])
 	local BlueInput = CreateNewInput("Blue", ToRGB(Colorpicker.Default)["B"])
 	local AlphaInput
-	if Colorpicker.Transparency then
+	if IsTransparency then
 		AlphaInput = CreateNewInput("Alpha", ((1 - Colorpicker.Transparency) * 100) .. "%")
 	end
 
@@ -407,13 +410,25 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		{
 			Title = "Cancel",
 			Variant = "Secondary",
-			Callback = function() end,
+			Callback = function()
+				Config.IsShowed = false
+				for _, Conn in next, Connections do
+					Conn:Disconnect()
+				end
+				Connections = {}
+			end,
 		},
 		{
 			Title = "Apply",
 			--Icon = "chevron-right",
 			Variant = "Primary",
 			Callback = function()
+				Config.IsShowed = false
+				for _, Conn in next, Connections do
+					Conn:Disconnect()
+				end
+				Connections = {}
+
 				OnApply(Color3.fromHSV(Colorpicker.Hue, Colorpicker.Sat, Colorpicker.Vib), Colorpicker.Transparency)
 			end,
 		},
@@ -434,7 +449,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 	end
 
 	local TransparencySlider, TransparencyDrag, TransparencyColor
-	if Colorpicker.Transparency then
+	if IsTransparency then
 		local TransparencyDragHolder = New("Frame", {
 			Size = UDim2.new(1, 0, 1, 0),
 			Position = UDim2.fromOffset(0, 0),
@@ -530,7 +545,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		GreenInput.Frame.Frame.TextBox.Text = ToRGB(Color3.fromHSV(Hue, Sat, Vib))["G"]
 		BlueInput.Frame.Frame.TextBox.Text = ToRGB(Color3.fromHSV(Hue, Sat, Vib))["B"]
 
-		if transparency or Colorpicker.Transparency then
+		if transparency or IsTransparency then
 			NewDisplayFrame.BackgroundTransparency = Colorpicker.Transparency or transparency
 			TransparencyColor.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
 			TransparencyDrag.BackgroundColor3 = Color3.fromHSV(Hue, Sat, Vib)
@@ -556,17 +571,20 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		return math.clamp(tonumber(val) or 0, min, max)
 	end
 
-	Creator.AddSignal(HexInput.Frame.Frame.TextBox.FocusLost, function(Enter)
-		if Enter then
-			local hex = HexInput.Frame.Frame.TextBox.Text:gsub("#", "")
-			local Success, Result = pcall(Color3.fromHex, hex)
-			if Success and typeof(Result) == "Color3" then
-				Colorpicker.Hue, Colorpicker.Sat, Colorpicker.Vib = Color3.toHSV(Result)
-				Colorpicker:Update()
-				Colorpicker.Default = Result
+	table.insert(
+		Connections,
+		Creator.AddSignal(HexInput.Frame.Frame.TextBox.FocusLost, function(Enter)
+			if Enter then
+				local hex = HexInput.Frame.Frame.TextBox.Text:gsub("#", "")
+				local Success, Result = pcall(Color3.fromHex, hex)
+				if Success and typeof(Result) == "Color3" then
+					Colorpicker.Hue, Colorpicker.Sat, Colorpicker.Vib = Color3.toHSV(Result)
+					Colorpicker:Update()
+					Colorpicker.Default = Result
+				end
 			end
-		end
-	end)
+		end)
+	)
 
 	local function updateColorFromInput(inputBox, component)
 		Creator.AddSignal(inputBox.Frame.Frame.TextBox.FocusLost, function(Enter)
@@ -588,7 +606,7 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 	updateColorFromInput(GreenInput, "G")
 	updateColorFromInput(BlueInput, "B")
 
-	if Colorpicker.Transparency then
+	if IsTransparency then
 		Creator.AddSignal(AlphaInput.Frame.Frame.TextBox.FocusLost, function(Enter)
 			if Enter then
 				local textBox = AlphaInput.Frame.Frame.TextBox
@@ -642,69 +660,29 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 
 	local CurInput = WindUI.GenerateGUID()
 
-	UserInputService.InputChanged:Connect(function(input)
-		if
-			input.UserInputType ~= Enum.UserInputType.MouseMovement
-			and input.UserInputType ~= Enum.UserInputType.Touch
-		then
-			return
-		end
+	table.insert(
+		Connections,
+		UserInputService.InputChanged:Connect(function(input)
+			if
+				input.UserInputType ~= Enum.UserInputType.MouseMovement
+				and input.UserInputType ~= Enum.UserInputType.Touch
+			then
+				return
+			end
 
-		if ActiveSlider == "SatVib" then
-			UpdateSatVib(Colorpicker.UIElements.SatVibMap, Colorpicker)
-		elseif ActiveSlider == "Hue" then
-			UpdateHue(HueSlider, Colorpicker)
-		elseif ActiveSlider == "Transparency" then
-			UpdateTransparency(TransparencySlider, Colorpicker)
-		end
-	end)
+			if ActiveSlider == "SatVib" then
+				UpdateSatVib(Colorpicker.UIElements.SatVibMap, Colorpicker)
+			elseif ActiveSlider == "Hue" then
+				UpdateHue(HueSlider, Colorpicker)
+			elseif ActiveSlider == "Transparency" then
+				UpdateTransparency(TransparencySlider, Colorpicker)
+			end
+		end)
+	)
 
-	Colorpicker.UIElements.SatVibMap.InputBegan:Connect(function(input)
-		if
-			input.UserInputType ~= Enum.UserInputType.MouseButton1
-			and input.UserInputType ~= Enum.UserInputType.Touch
-		then
-			return
-		end
-
-		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
-			return
-		end
-		WindUI.CurrentInput = CurInput
-
-		if ActiveSlider and ActiveSlider ~= "SatVib" then
-			return
-		end
-
-		ActiveSlider = "SatVib"
-
-		UpdateSatVib(Colorpicker.UIElements.SatVibMap, Colorpicker)
-	end)
-
-	HueSlider.InputBegan:Connect(function(input)
-		if
-			input.UserInputType ~= Enum.UserInputType.MouseButton1
-			and input.UserInputType ~= Enum.UserInputType.Touch
-		then
-			return
-		end
-
-		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
-			return
-		end
-		WindUI.CurrentInput = CurInput
-
-		if ActiveSlider and ActiveSlider ~= "Hue" then
-			return
-		end
-
-		ActiveSlider = "Hue"
-
-		UpdateHue(HueSlider, Colorpicker)
-	end)
-
-	if TransparencySlider then
-		TransparencySlider.InputBegan:Connect(function(input)
+	table.insert(
+		Connections,
+		Colorpicker.UIElements.SatVibMap.InputBegan:Connect(function(input)
 			if
 				input.UserInputType ~= Enum.UserInputType.MouseButton1
 				and input.UserInputType ~= Enum.UserInputType.Touch
@@ -717,24 +695,79 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 			end
 			WindUI.CurrentInput = CurInput
 
-			if ActiveSlider and ActiveSlider ~= "Transparency" then
+			if ActiveSlider and ActiveSlider ~= "SatVib" then
 				return
 			end
 
-			ActiveSlider = "Transparency"
+			ActiveSlider = "SatVib"
 
-			UpdateTransparency(TransparencySlider, Colorpicker)
+			UpdateSatVib(Colorpicker.UIElements.SatVibMap, Colorpicker)
 		end)
+	)
+
+	table.insert(
+		Connections,
+		HueSlider.InputBegan:Connect(function(input)
+			if
+				input.UserInputType ~= Enum.UserInputType.MouseButton1
+				and input.UserInputType ~= Enum.UserInputType.Touch
+			then
+				return
+			end
+
+			if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+				return
+			end
+			WindUI.CurrentInput = CurInput
+
+			if ActiveSlider and ActiveSlider ~= "Hue" then
+				return
+			end
+
+			ActiveSlider = "Hue"
+
+			UpdateHue(HueSlider, Colorpicker)
+		end)
+	)
+
+	if TransparencySlider then
+		table.insert(
+			Connections,
+			TransparencySlider.InputBegan:Connect(function(input)
+				if
+					input.UserInputType ~= Enum.UserInputType.MouseButton1
+					and input.UserInputType ~= Enum.UserInputType.Touch
+				then
+					return
+				end
+
+				if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+					return
+				end
+				WindUI.CurrentInput = CurInput
+
+				if ActiveSlider and ActiveSlider ~= "Transparency" then
+					return
+				end
+
+				ActiveSlider = "Transparency"
+
+				UpdateTransparency(TransparencySlider, Colorpicker)
+			end)
+		)
 	end
 
-	UserInputService.InputEnded:Connect(function(input)
-		ActiveSlider = nil
+	table.insert(
+		Connections,
+		UserInputService.InputEnded:Connect(function(input)
+			ActiveSlider = nil
 
-		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
-			return
-		end
-		WindUI.CurrentInput = nil
-	end)
+			if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+				return
+			end
+			WindUI.CurrentInput = nil
+		end)
+	)
 
 	return Colorpicker
 end
@@ -752,6 +785,8 @@ function Element:New(Config)
 		UIScale = Config.UIScale,
 		Transparency = Config.Transparency,
 		UIElements = {},
+
+		IsShowed = false,
 	}
 
 	local CanCallback = true
@@ -820,7 +855,9 @@ function Element:New(Config)
 	end
 
 	Creator.AddSignal(Colorpicker.UIElements.Colorpicker.MouseButton1Click, function()
-		if CanCallback then
+		if CanCallback and not Colorpicker.IsShowed then
+			Colorpicker.IsShowed = true
+
 			Element:Colorpicker(Colorpicker, Config.Window, Config.WindUI, function(color, transparency)
 				Colorpicker:Update(color, transparency)
 				Colorpicker.Default = color
