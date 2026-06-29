@@ -130,6 +130,10 @@ return {
 					end
 				end
 
+				if not frame and element.UpdateShape then
+					frame = element
+				end
+
 				if frame then
 					--print("idx changed : " .. i .. " " .. (element.Title or "not found"))
 					frame.Index = i
