@@ -628,7 +628,10 @@ function Creator.Drag(mainFrame, dragFrames, ondrag)
 	local CurInput = WindUI.GenerateGUID()
 
 	local currentDragFrame = nil
-	local dragging, dragStart, startPos
+	local dragging = false
+	local dragStart, startPos
+	local activeInput = nil
+
 	local DragModule = {
 		CanDraggable = true,
 	}
@@ -655,65 +658,71 @@ function Creator.Drag(mainFrame, dragFrames, ondrag)
 
 	for _, dragFrame in pairs(dragFrames) do
 		dragFrame.InputBegan:Connect(function(input)
+			if not DragModule.CanDraggable or dragging then
+				return
+			end
+
 			if
-				(
-					input.UserInputType == Enum.UserInputType.MouseButton1
-					or input.UserInputType == Enum.UserInputType.Touch
-				) and DragModule.CanDraggable
+				input.UserInputType == Enum.UserInputType.MouseButton1
+				or input.UserInputType == Enum.UserInputType.Touch
 			then
 				if WindUI and WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
 					return
 				end
+
 				WindUI.CurrentInput = CurInput
 
-				if currentDragFrame == nil then
-					currentDragFrame = dragFrame
-					dragging = true
-					dragStart = input.Position
-					startPos = mainFrame.Position
+				dragging = true
+				activeInput = input
+				currentDragFrame = dragFrame
+				dragStart = input.Position
+				startPos = mainFrame.Position
 
-					if ondrag and typeof(ondrag) == "function" then
-						ondrag(true, currentDragFrame)
-					end
-
-					input.Changed:Connect(function()
-						if input.UserInputState == Enum.UserInputState.End then
-							if WindUI and WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
-								return
-							end
-
-							WindUI.CurrentInput = nil
-							dragging = false
-							currentDragFrame = nil
-
-							if ondrag and typeof(ondrag) == "function" then
-								ondrag(false, nil)
-							end
-						end
-					end)
-				end
-			end
-		end)
-
-		dragFrame.InputChanged:Connect(function(input)
-			if dragging and currentDragFrame == dragFrame then
-				if
-					input.UserInputType == Enum.UserInputType.MouseMovement
-					or input.UserInputType == Enum.UserInputType.Touch
-				then
-					update(input)
+				if ondrag and typeof(ondrag) == "function" then
+					ondrag(true, currentDragFrame)
 				end
 			end
 		end)
 	end
 
 	UserInputService.InputChanged:Connect(function(input)
-		if dragging and currentDragFrame ~= nil then
-			if
-				input.UserInputType == Enum.UserInputType.MouseMovement
-				or input.UserInputType == Enum.UserInputType.Touch
-			then
+		if not dragging then
+			return
+		end
+		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+			return
+		end
+
+		if activeInput.UserInputType == Enum.UserInputType.MouseButton1 then
+			if input.UserInputType == Enum.UserInputType.MouseMovement then
 				update(input)
+			end
+		elseif activeInput.UserInputType == Enum.UserInputType.Touch then
+			if input == activeInput then
+				update(input)
+			end
+		end
+	end)
+
+	UserInputService.InputEnded:Connect(function(input)
+		if not dragging or WindUI.CurrentInput ~= CurInput then
+			return
+		end
+
+		if
+			input == activeInput
+			or (
+				activeInput.UserInputType == Enum.UserInputType.MouseButton1
+				and input.UserInputType == Enum.UserInputType.MouseButton1
+			)
+		then
+			WindUI.CurrentInput = nil
+			dragging = false
+			activeInput = nil
+			currentDragFrame = nil
+
+			if ondrag and typeof(ondrag) == "function" then
+				ondrag(false, nil)
 			end
 		end
 	end)
@@ -929,6 +938,73 @@ function Creator:AddColor(base, add, weight)
 			math.clamp(baseColor.B + add.B * weight, 0, 1)
 		)
 	end
+end
+
+function Creator:GetElementPosition(elements, targetIndex, isHStack)
+	if type(targetIndex) ~= "number" or targetIndex ~= math.floor(targetIndex) then
+		return nil, 1
+	end
+
+	-- local maxIndex = 0
+	-- for k,_ in next, elements do
+	--     if type(k) == "number" and k > maxIndex then maxIndex = k end
+	-- end
+
+	local maxIndex = #elements
+	--print(maxIndex)
+
+	if maxIndex == 0 or targetIndex < 1 or targetIndex > maxIndex then
+		return nil, 2
+	end
+
+	local function isDelimiter(el)
+		if el == nil then
+			return true
+		end
+		local t = el.__type
+		return t == "Divider" or t == "Space" or t == "Section"
+	end
+
+	if isDelimiter(elements[targetIndex]) then
+		return nil, 3
+	end
+
+	local function calculate(pos, size)
+		if size == 1 then
+			return "Squircle"
+		end
+		if pos == 1 then
+			return isHStack and "SquircleH-TL-TR" or "Squircle-TL-TR"
+		end
+		if pos == size then
+			return isHStack and "SquircleH-BL-BR" or "Squircle-BL-BR"
+		end
+		return "Square"
+	end
+
+	local groupStart = 1
+	local groupCount = 0
+
+	for i = 1, maxIndex do
+		local el = elements[i]
+		if isDelimiter(el) then
+			if targetIndex >= groupStart and targetIndex <= i - 1 then
+				local pos = targetIndex - groupStart + 1
+				return calculate(pos, groupCount)
+			end
+			groupStart = i + 1
+			groupCount = 0
+		else
+			groupCount = groupCount + 1
+		end
+	end
+
+	if targetIndex >= groupStart and targetIndex <= maxIndex then
+		local pos = targetIndex - groupStart + 1
+		return calculate(pos, groupCount)
+	end
+
+	return nil, 4
 end
 
 return Creator
