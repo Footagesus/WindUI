@@ -209,7 +209,9 @@ function DynamicShapeModule:New(Radius, Type, Properties, Children, IsButton, Is
 				end
 			end
 
-			Wrapper:SetType(newType)
+			if newType ~= Wrapper:GetType() then
+				Wrapper:SetType(newType)
+			end
 		end
 	end)
 
