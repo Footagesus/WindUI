@@ -703,27 +703,29 @@ function Element:Colorpicker(Config, Window, WindUI, OnApply)
 		UpdateHue(HueSlider, Colorpicker)
 	end)
 
-	TransparencySlider.InputBegan:Connect(function(input)
-		if
-			input.UserInputType ~= Enum.UserInputType.MouseButton1
-			and input.UserInputType ~= Enum.UserInputType.Touch
-		then
-			return
-		end
+	if TransparencySlider then
+		TransparencySlider.InputBegan:Connect(function(input)
+			if
+				input.UserInputType ~= Enum.UserInputType.MouseButton1
+				and input.UserInputType ~= Enum.UserInputType.Touch
+			then
+				return
+			end
 
-		if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
-			return
-		end
-		WindUI.CurrentInput = CurInput
+			if WindUI.CurrentInput and WindUI.CurrentInput ~= CurInput then
+				return
+			end
+			WindUI.CurrentInput = CurInput
 
-		if ActiveSlider and ActiveSlider ~= "Transparency" then
-			return
-		end
+			if ActiveSlider and ActiveSlider ~= "Transparency" then
+				return
+			end
 
-		ActiveSlider = "Transparency"
+			ActiveSlider = "Transparency"
 
-		UpdateTransparency(TransparencySlider, Colorpicker)
-	end)
+			UpdateTransparency(TransparencySlider, Colorpicker)
+		end)
+	end
 
 	UserInputService.InputEnded:Connect(function(input)
 		ActiveSlider = nil
