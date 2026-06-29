@@ -18,7 +18,7 @@ local Tween = Creator.Tween
 
 local TabBackgroundTransparency = 0.67
 
-function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
+function DropdownMenu.New(Config, Dropdown, Element, Type)
 	local DropdownModule = {}
 
 	if not Dropdown.Callback then
@@ -175,12 +175,22 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 	local function Callback(customCallback)
 		DropdownModule:Display()
+		if Dropdown.Locked then
+			return
+		end
+
 		if Dropdown.Callback then
 			task.spawn(function()
+				if Dropdown.Locked then
+					return
+				end
 				Creator.SafeCallback(Dropdown.Callback, Dropdown.Value)
 			end)
 		else
 			task.spawn(function()
+				if Dropdown.Locked then
+					return
+				end
 				Creator.SafeCallback(customCallback)
 			end)
 		end
@@ -455,7 +465,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 				if Type == "Dropdown" then
 					Creator.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click, function()
-						if TabMain.Locked then
+						if Dropdown.Locked or TabMain.Locked then
 							return
 						end
 
@@ -527,7 +537,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 						end)
 					end
 					Creator.AddSignal(TabMain.UIElements.TabItem.MouseButton1Click, function()
-						if TabMain.Locked then
+						if Dropdown.Locked or TabMain.Locked then
 							return
 						end
 						Callback(Tab.Callback or function() end)
@@ -580,7 +590,7 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 	RecalculateCanvasSize()
 
 	function DropdownModule:Open()
-		if CanCallback then
+		if not Dropdown.Locked then
 			Dropdown.UIElements.Menu.Visible = true
 			Dropdown.UIElements.MenuCanvas.Visible = true
 			Dropdown.UIElements.MenuCanvas.Active = true
@@ -592,6 +602,9 @@ function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
 
 			task.spawn(function()
 				task.wait(0.1)
+				if Dropdown.Locked then
+					return
+				end
 				Dropdown.Opened = true
 			end)
 
