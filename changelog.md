@@ -1,16 +1,10 @@
-# 1.6.65
+# 1.6.66
 
 ## Changelog
 
-- added `IconColor` to `Button` element
-- now windui uses squircle shapes (also from ios)
-- new window open/close animations
-- new glass border (from ios 27)
-- fixed old bug with all "drag elements": slider, toggle, colorpicker sliders, window drag & resize, viewport
-- fixed `Input` element when `Type = "Default"`
-- fixed section height when closed
-- fixed colorpicker drag on mobile
-- fixed topbar tags
-- fixed theme colors
-- some ui fixes
-- removed glass in notification
+- added `CanCopied: boolean` and `Height: UDim` to [Code](https://footagesus.github.io/treehub-web/docs/windui/code) element (#91)
+- changed PandaDev API url in [Key System](https://footagesus.github.io/treehub-web/docs/windui/keysystem) (#92)
+- fixed [Section](https://footagesus.github.io/treehub-web/docs/windui/sections) bg (in custom themes)
+- fixed [Colorpicker](https://footagesus.github.io/treehub-web/docs/windui/colorpicker) issue
+- fixed `Viewport` bug when u can pinch it outside
+- fixed [Window](https://footagesus.github.io/treehub-web/docs/windui/window) Drag with multiple fingers (#79)
