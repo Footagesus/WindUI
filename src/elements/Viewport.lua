@@ -63,6 +63,16 @@ function Element:New(Config: ConfigType)
 		}),
 	})
 
+	local function IsTouchInsideViewport(Position)
+		local AbsPos = Main.CanvasGroup.Viewport.AbsolutePosition
+		local Size = Main.CanvasGroup.Viewport.AbsoluteSize
+
+		return Position.X >= AbsPos.X
+			and Position.X <= AbsPos.X + Size.X
+			and Position.Y >= AbsPos.Y
+			and Position.Y <= AbsPos.Y + Size.Y
+	end
+
 	local CurInput = Config.WindUI.GenerateGUID()
 
 	Creator.AddSignal(Main.CanvasGroup.Viewport.MouseEnter, function()
@@ -150,16 +160,21 @@ function Element:New(Config: ConfigType)
 	end)
 
 	Creator.AddSignal(UserInputService.TouchPinch, function(touchPositions, scale, velocity, state)
+		if not IsTouchInsideViewport(touchPositions[1]) or not IsTouchInsideViewport(touchPositions[2]) then
+			return
+		end
 		if Viewport.Interactive then
 			if state == Enum.UserInputState.Begin then
 				Pinching = true
 				Dragging = false
 				LastPinchDist = (touchPositions[1] - touchPositions[2]).Magnitude
 			elseif state == Enum.UserInputState.Change then
-				local currentDist = (touchPositions[1] - touchPositions[2]).Magnitude
-				local delta = (currentDist - LastPinchDist) * 0.03
-				LastPinchDist = currentDist
-				Viewport.Camera.CFrame += Viewport.Camera.CFrame.LookVector * delta
+				if Pinching then
+					local currentDist = (touchPositions[1] - touchPositions[2]).Magnitude
+					local delta = (currentDist - LastPinchDist) * 0.03
+					LastPinchDist = currentDist
+					Viewport.Camera.CFrame += Viewport.Camera.CFrame.LookVector * delta
+				end
 			elseif state == Enum.UserInputState.End or state == Enum.UserInputState.Cancel then
 				Pinching = false
 			end
