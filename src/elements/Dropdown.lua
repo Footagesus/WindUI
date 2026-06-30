@@ -56,8 +56,6 @@ function Element:New(Config)
 		Dropdown.Value = Dropdown.Values[Dropdown.Value]
 	end
 
-	local CanCallback = true
-
 	Dropdown.DropdownFrame = require("../components/window/Element")({
 		Title = Dropdown.Title,
 		Desc = Dropdown.Desc,
@@ -90,7 +88,7 @@ function Element:New(Config)
 		-- })
 	end
 
-	Dropdown.DropdownMenu = CreateDropdown(Config, Dropdown, Element, CanCallback, "Dropdown")
+	Dropdown.DropdownMenu = CreateDropdown(Config, Dropdown, Element, "Dropdown")
 
 	Dropdown.Display = Dropdown.DropdownMenu.Display
 	Dropdown.Refresh = Dropdown.DropdownMenu.Refresh
@@ -114,12 +112,13 @@ function Element:New(Config)
 
 	function Dropdown:Lock()
 		Dropdown.Locked = true
-		CanCallback = false
+		if Dropdown.Opened or Dropdown.UIElements.MenuCanvas.Visible then
+			Dropdown:Close()
+		end
 		return Dropdown.DropdownFrame:Lock(Dropdown.LockedTitle)
 	end
 	function Dropdown:Unlock()
 		Dropdown.Locked = false
-		CanCallback = true
 		return Dropdown.DropdownFrame:Unlock()
 	end
 
