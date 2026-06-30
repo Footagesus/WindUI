@@ -4,7 +4,7 @@
     | |/ |/ / / _ \/ _  / /_/ // /  
     |__/|__/_/_//_/\_,_/\____/___/
     
-    v1.6.65  |  2026-06-29  |  Roblox UI Library for scripts
+    v1.6.65  |  2026-06-30  |  Roblox UI Library for scripts
     
     To view the source code, see the `src/` folder on the official GitHub repository.
     
@@ -8094,12 +8094,22 @@ end
 
 local function Callback(av)
 at:Display()
+if ap.Locked then
+return
+end
+
 if ap.Callback then
 task.spawn(function()
+if ap.Locked then
+return
+end
 ak.SafeCallback(ap.Callback,ap.Value)
 end)
 else
 task.spawn(function()
+if ap.Locked then
+return
+end
 ak.SafeCallback(av)
 end)
 end
@@ -8374,7 +8384,7 @@ at:Display()
 
 if as=="Dropdown"then
 ak.AddSignal(az.UIElements.TabItem.MouseButton1Click,function()
-if az.Locked then
+if ap.Locked or az.Locked then
 return
 end
 
@@ -8446,7 +8456,7 @@ am(az.UIElements.TabItem,0.08,{ImageTransparency=1}):Play()
 end)
 end
 ak.AddSignal(az.UIElements.TabItem.MouseButton1Click,function()
-if az.Locked then
+if ap.Locked or az.Locked then
 return
 end
 Callback(ay.Callback or function()end)
@@ -8499,7 +8509,7 @@ RecalculateListSize()
 RecalculateCanvasSize()
 
 function at.Open(av)
-if ar then
+if not ap.Locked then
 ap.UIElements.Menu.Visible=true
 ap.UIElements.MenuCanvas.Visible=true
 ap.UIElements.MenuCanvas.Active=true
@@ -8511,6 +8521,9 @@ ImageTransparency=0,
 
 task.spawn(function()
 task.wait(0.1)
+if ap.Locked then
+return
+end
 ap.Opened=true
 end)
 
@@ -8645,8 +8658,6 @@ if ap.Values and typeof(ap.Value)=="number"then
 ap.Value=ap.Values[ap.Value]
 end
 
-local aq=true
-
 ap.DropdownFrame=a.load'C'{
 Title=ap.Title,
 Desc=ap.Desc,
@@ -8679,7 +8690,7 @@ ap.UIElements.Dropdown.AnchorPoint=Vector2.new(1,ao.Window.NewElements and 0 or 
 
 end
 
-ap.DropdownMenu=ak(ao,ap,am,aq,"Dropdown")
+ap.DropdownMenu=ak(ao,ap,am,"Dropdown")
 
 ap.Display=ap.DropdownMenu.Display
 ap.Refresh=ap.DropdownMenu.Refresh
@@ -8701,14 +8712,15 @@ Parent=ap.UIElements.Dropdown and ap.UIElements.Dropdown.Frame
 or ap.DropdownFrame.UIElements.Main,
 })
 
-function ap.Lock(ar)
+function ap.Lock(aq)
 ap.Locked=true
-aq=false
+if ap.Opened or ap.UIElements.MenuCanvas.Visible then
+ap:Close()
+end
 return ap.DropdownFrame:Lock(ap.LockedTitle)
 end
-function ap.Unlock(ar)
+function ap.Unlock(aq)
 ap.Locked=false
-aq=true
 return ap.DropdownFrame:Unlock()
 end
 
