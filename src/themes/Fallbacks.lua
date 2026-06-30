@@ -79,6 +79,11 @@ return function(Creator)
 		SliderIconFrom = "SliderIcon",
 		SliderIconTo = "SliderIcon",
 
+		ProgressBar = "Primary",
+		ProgressBarTrack = "Text",
+		ProgressBarTrackTransparency = 0.9,
+		ProgressBarText = "Text",
+
 		Tooltip = Color3.fromHex("4C4C4C"),
 		TooltipText = "White",
 		TooltipSecondary = "Primary",
