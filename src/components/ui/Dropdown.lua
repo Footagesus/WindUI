@@ -18,7 +18,7 @@ local Tween = Creator.Tween
 
 local TabBackgroundTransparency = 0.67
 
-function DropdownMenu.New(Config, Dropdown, Element, CanCallback, Type)
+function DropdownMenu.New(Config, Dropdown, Element, Type)
 	local DropdownModule = {}
 
 	if not Dropdown.Callback then
