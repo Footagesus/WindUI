@@ -8,3 +8,5 @@
 - fixed [Colorpicker](https://footagesus.github.io/treehub-web/docs/windui/colorpicker) issue
 - fixed `Viewport` bug when u can pinch it outside
 - fixed [Window](https://footagesus.github.io/treehub-web/docs/windui/window) Drag with multiple fingers (#79)
+- added `ProgressBar` element (#95 by [BitRevenant](https://github.com/BitRevenant)) [Github PR](https://github.com/Footagesus/WindUI/pull/95)
+- fixed `Dropdown.Locked` (#94 by [BitRevenant](https://github.com/BitRevenant)) [Github PR](https://github.com/Footagesus/WindUI/pull/94)
