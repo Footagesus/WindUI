@@ -74,11 +74,7 @@ function Element:New(Config)
 			return Value >= ProgressBar.Value.Max and 1 or 0
 		end
 
-		return math.clamp(
-			(Value - ProgressBar.Value.Min) / (ProgressBar.Value.Max - ProgressBar.Value.Min),
-			0,
-			1
-		)
+		return math.clamp((Value - ProgressBar.Value.Min) / (ProgressBar.Value.Max - ProgressBar.Value.Min), 0, 1)
 	end
 
 	local function GetValueText(Value, Ratio)
@@ -89,13 +85,8 @@ function Element:New(Config)
 		local Percentage = Ratio * 100
 
 		if typeof(ProgressBar.Format) == "function" then
-			local Success, Result = pcall(
-				ProgressBar.Format,
-				Value,
-				Percentage,
-				ProgressBar.Value.Min,
-				ProgressBar.Value.Max
-			)
+			local Success, Result =
+				pcall(ProgressBar.Format, Value, Percentage, ProgressBar.Value.Min, ProgressBar.Value.Max)
 
 			if Success and Result ~= nil then
 				return tostring(Result)
@@ -127,8 +118,7 @@ function Element:New(Config)
 
 	ProgressBar.UIElements.Fill = Creator.NewRoundFrame(99, "Squircle", {
 		Name = "Fill",
-		Size = ProgressBar.Indeterminate
-				and UDim2.new(0.3, 0, 1, 0)
+		Size = ProgressBar.Indeterminate and UDim2.new(0.3, 0, 1, 0)
 			or UDim2.new(GetRatio(ProgressBar.Value.Default), 0, 1, 0),
 		Position = ProgressBar.Indeterminate and UDim2.new(-0.3, 0, 0, 0) or UDim2.new(0, 0, 0, 0),
 		ThemeTag = {
@@ -146,7 +136,15 @@ function Element:New(Config)
 			ImageTransparency = "ProgressBarTrackTransparency",
 		},
 	}, {
-		ProgressBar.UIElements.Fill,
+		New("CanvasGroup", {
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundTransparency = 1,
+		}, {
+			New("UICorner", {
+				CornerRadius = UDim.new(1, 0),
+			}),
+			ProgressBar.UIElements.Fill,
+		}),
 	})
 
 	ProgressBar.UIElements.Value = New("TextLabel", {
