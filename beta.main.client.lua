@@ -509,6 +509,24 @@ TestTab:ProgressBar({
 	Indeterminate = true,
 })
 
+TestTab:ProgressBar({
+	Title = "Storage",
+	Desc = "Used space",
+	Value = { Min = 0, Max = 100, Default = 72 },
+	DisplayMode = "Value",
+	Width = 220,
+})
+
+TestTab:ProgressBar({
+	Title = "Bandwidth",
+	Desc = "Live traffic",
+	Value = { Min = 0, Max = 100, Default = 42 },
+	ValueWidth = 84,
+	Format = function(value, percentage, min, max)
+		return string.format("%d%% of %d", math.floor(percentage + 0.5), max)
+	end,
+})
+
 local ColorpickerTab = Window:Tab({
 	Title = "Colorpicker Test",
 })
