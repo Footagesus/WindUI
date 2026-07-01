@@ -494,7 +494,7 @@ TestTab:Dropdown({
 
 local Bar = TestTab:ProgressBar({
 	Title = "Determinate bar",
-	DisplayMode = "Fraction",
+
 	Value = {
 		Min = 0,
 		Max = 100,
