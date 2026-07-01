@@ -105,6 +105,7 @@ jobs:
                       if (buildStatus === '0') {
                         // Success
                         const loadstring = `${{ steps.loadstring.outputs.value }}`
+                        const rawUrl = `https://raw.githubusercontent.com/${context.repo.owner}/${context.repo.repo}/${commitSha}/dist/main.lua`
                         
                         body = [
                           "## <img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/circle-check.svg' width='20' height='20' align='center' /> Build Successful",
@@ -116,8 +117,6 @@ jobs:
                         ]
                         
                         if (usingMainClient === 'true') {
-                          const updated = fs.readFileSync("updated_example.txt", "utf8")
-                          
                           body.push(
                             "<details>",
                             "<summary><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/code.svg' width='16' height='16' align='center' /> <strong>Loadstring</strong></summary>",
@@ -129,11 +128,9 @@ jobs:
                             "</details>",
                             "",
                             "<details>",
-                            "<summary><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg' width='16' height='16' align='center' /> <strong>Updated Example</strong></summary>",
+                            "<summary><img src='https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/file-code.svg' width='16' height='16' align='center' /> <strong>Built File</strong></summary>",
                             "",
-                            "```lua",
-                            updated,
-                            "```",
+                            `Raw build: [dist/main.lua](${rawUrl})`,
                             "",
                             "</details>"
                           )
