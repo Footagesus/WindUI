@@ -492,6 +492,23 @@ TestTab:Dropdown({
 	end,
 })
 
+local Bar = TestTab:ProgressBar({
+	Title = "Determinate bar",
+	DisplayMode = "Fraction",
+	Value = {
+		Min = 0,
+		Max = 100,
+		Default = 25,
+	},
+})
+
+Bar:Set(150)
+
+TestTab:ProgressBar({
+	Title = "Indeterminate bar",
+	Indeterminate = true,
+})
+
 local ColorpickerTab = Window:Tab({
 	Title = "Colorpicker Test",
 })
