@@ -14,14 +14,7 @@ local RenderStepped = RunService.Heartbeat
 
 local IconsURL = "https://raw.githubusercontent.com/Footagesus/Icons/main/Main-v2.lua"
 
-local Icons
-if RunService:IsStudio() or not writefile then
-	Icons = require("./Icons")
-else
-	Icons = loadstring(
-		game.HttpGet and game:HttpGet(IconsURL) or HttpService:GetAsync(IconsURL) --studio
-	)()
-end
+local Icons = require("../Icons/Main-v2")
 
 Icons.SetIconsType("lucide")
 
