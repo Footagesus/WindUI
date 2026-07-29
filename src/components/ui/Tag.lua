@@ -39,6 +39,7 @@ function Tag:New(TagConfig, Parent)
 		TextColor3 = typeof(TagModule.Color) == "Color3" and Creator.GetTextColorForHSB(TagModule.Color) or typeof(
 			TagModule.Color
 		) == "string" and (Creator.GetTextColorForHSB(Creator.GetThemeProperty(TagModule.Color, Creator.Theme))),
+		LayoutOrder = 9999,
 	})
 
 	local BackgroundGradient
@@ -130,21 +131,21 @@ function Tag:New(TagConfig, Parent)
 	function TagModule:SetIcon(icon)
 		TagModule.Icon = icon
 
+		if TagIcon then
+			TagIcon:Destroy()
+			TagIcon = nil
+		end
+
 		if icon then
 			TagIcon = Creator.Image(icon, icon, 0, TagConfig.Window, "Tag", false)
 
 			TagIcon.Size = UDim2.new(0, TagModule.IconSize, 0, TagModule.IconSize)
-			TagIcon.Parent = TagFrame
+			TagIcon.Parent = TagFrame:FindFirstChild("Content")
 
 			if typeof(TagModule.Color) == "Color3" then
 				TagIcon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(TagModule.Color)
 			elseif typeof(TagModule.Color) == "table" then
 				TagIcon.ImageLabel.ImageColor3 = Creator.GetTextColorForHSB(Creator.GetAverageColor(BackgroundGradient))
-			end
-		else
-			if TagIcon then
-				TagIcon:Destroy()
-				TagIcon = nil
 			end
 		end
 		return TagModule
