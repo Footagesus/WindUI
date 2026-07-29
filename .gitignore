@@ -14,6 +14,9 @@ dist-ssr
 .env
 .env.example
 
+sourcemap.json
+src/server/
+
 build/.init.lua
 
 # Editor directories and files
