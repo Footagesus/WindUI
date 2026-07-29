@@ -94,7 +94,7 @@ local Window = WindUI:CreateWindow({
 	},]]
 })
 
-Window:Tag({
+local idkTab = Window:Tag({
 	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
 	Radius = 0,
 })
@@ -104,6 +104,8 @@ Window:Tag({
 Window:Tag({
 	Title = "eowfkrigjtbfkndosplwaokefijsrhbgrskewoslp[doekfjrgbhrknolwpokfsj",
 })
+
+idkTab:SetIcon("lucide:bird")
 
 local Tab = Window:Tab({
 	Title = "Tab 1",
