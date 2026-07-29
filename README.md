@@ -37,3 +37,18 @@
     ```luau
     loadstring(game:HttpGet('https://raw.githubusercontent.com/Footagesus/WindUI/refs/heads/main/main_example.lua'))()
     ```
+## AI / MCP
+
+For AI-assisted WindUI development, a community-maintained Model Context Protocol (MCP) server is available.
+
+### WindUI MCP
+
+https://github.com/TokyoZK/Windui-mcp
+
+Features:
+- Structured component metadata
+- Theme and icon lookup
+- Documentation search
+- Examples
+- AI workflow prompts
+- Offline operation
