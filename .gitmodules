@@ -1,0 +1,3 @@
+[submodule "src/Icons"]
+	path = src/Icons
+	url = https://github.com/Footagesus/Icons
