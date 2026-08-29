@@ -27,6 +27,7 @@ local ConfigManager = require("../../config/Init")
 local Notified = false
 
 return function(Config)
+	local MobileConfig = typeof(Config.Mobile) == "table" and Config.Mobile or {}
 	local Window = {
 		Title = Config.Title or "UI Library",
 		Author = Config.Author,
@@ -38,6 +39,11 @@ return function(Config)
 		Resizable = Config.Resizable ~= false,
 		Background = Config.Background,
 		BackgroundImageTransparency = Config.BackgroundImageTransparency or 0,
+		BackgroundOverlayTransparency = Config.BackgroundOverlayTransparency == nil and 0.5 or Config.BackgroundOverlayTransparency,
+		BackgroundElementTransparency = Config.BackgroundElementTransparency == nil
+			and (Config.Background and 0.18 or nil)
+			or math.clamp(Config.BackgroundElementTransparency, 0, 1),
+		SidebarBackgroundTransparency = Config.SidebarBackgroundTransparency,
 		ShadowTransparency = Config.ShadowTransparency or 0.6,
 		User = Config.User or {},
 		Footer = Config.Footer or {},
@@ -62,6 +68,15 @@ return function(Config)
 		IgnoreAlerts = Config.IgnoreAlerts or false,
 		HidePanelBackground = Config.HidePanelBackground or false,
 		AutoScale = Config.AutoScale ~= false,
+		MobileEnabled = Config.Mobile ~= false,
+		MobileForce = MobileConfig.Force == true,
+		MobileBreakpoint = MobileConfig.Breakpoint or Config.MobileBreakpoint or 700,
+		MobileSideBarWidth = MobileConfig.SideBarWidth or Config.MobileSideBarWidth or 250,
+		MobileSideBarPadding = MobileConfig.Padding or Config.MobileSideBarPadding or 8,
+		MobileSideBarGap = MobileConfig.Gap or Config.MobileSideBarGap or 8,
+		MobileNavigationOpen = false,
+		SidebarOpen = true,
+		IsMobile = false,
 		OpenButton = Config.OpenButton,
 		DragFrameSize = 160,
 
@@ -117,6 +132,20 @@ return function(Config)
 		WindowSize.Y.Scale,
 		math.clamp(WindowSize.Y.Offset, Window.MinSize.Y, Window.MaxSize.Y)
 	)
+
+	-- A phone can be narrower than the desktop minimum. Keep the first open
+	-- inside the visible ScreenGui; layout changes are applied after creation.
+	if Window.MobileEnabled and Config.WindUI and Config.WindUI.ScreenGui then
+		local screenSize = Config.WindUI.ScreenGui.AbsoluteSize
+		if screenSize.X > 0 and screenSize.X / Config.WindUI.UIScale <= Window.MobileBreakpoint then
+			Window.Size = UDim2.new(
+				0,
+				math.max(0, math.min(Window.Size.X.Offset, (screenSize.X - 24) / Config.WindUI.UIScale)),
+				0,
+				math.max(0, math.min(Window.Size.Y.Offset, (screenSize.Y - 24) / Config.WindUI.UIScale))
+			)
+		end
+	end
 
 	if Window.Topbar == {} then
 		Window.Topbar = { Height = 52, ButtonsType = "Default" }
@@ -227,6 +256,10 @@ return function(Config)
 			Size = UDim2.new(1, 0, 0, 0),
 			Name = "Frame",
 		}, {
+		New("UICorner", {
+				CornerRadius = UDim.new(0, 8),
+				Name = "SurfaceCorner",
+			}),
 			New("UIPadding", {
 				--PaddingTop = UDim.new(0,Window.UIPadding/2),
 				--PaddingLeft = UDim.new(0,4+(Window.UIPadding/2)),
@@ -256,8 +289,19 @@ return function(Config)
 		),
 		Position = UDim2.new(0, 0, 0, Window.Topbar.Height),
 		BackgroundTransparency = 1,
+		ClipsDescendants = true,
 		Visible = true,
 	}, {
+		Creator.NewRoundFrame(Window.UICorner - (Window.UIPadding / 2), "Squircle", {
+			Name = "Background",
+			Size = UDim2.new(1, 0, 1, 0),
+			ZIndex = 0,
+			ImageColor3 = Color3.fromRGB(42, 42, 44),
+			ThemeTag = {
+				ImageColor3 = "ElementBackground",
+			},
+			ImageTransparency = 0,
+		}),
 		New("Frame", {
 			Name = "Content",
 			BackgroundTransparency = 1,
@@ -654,6 +698,16 @@ return function(Config)
 		})
 	end
 
+	local BackgroundOverlay = BGImage and New("Frame", {
+		Name = "BackgroundOverlay",
+		Size = UDim2.new(1, 0, 1, 0),
+		BackgroundColor3 = Color3.new(0, 0, 0),
+		BackgroundTransparency = Window.BackgroundOverlayTransparency,
+		ZIndex = 1,
+	}, {
+		New("UICorner", { CornerRadius = UDim.new(0, Window.UICorner) }),
+	}) or nil
+
 	local BottomDragFrame = Creator.NewRoundFrame(99, "Squircle", {
 		ImageTransparency = 0.8,
 		ImageColor3 = Color3.new(1, 1, 1),
@@ -734,6 +788,7 @@ return function(Config)
 			--ZIndex = -9999,
 		}, {
 			BGImage,
+			BackgroundOverlay,
 			BottomDragFrame,
 			ResizeHandle,
 		}),
@@ -1061,6 +1116,235 @@ return function(Config)
 			ButtonConfig.IconSize
 		)
 	end
+
+	local MobileNavigationContainer = New("Frame", {
+		Name = "MobileNavigation",
+		Parent = Window.UIElements.Main.Main.Topbar.Left,
+		Size = UDim2.new(0, Window.Topbar.Height - 18, 0, Window.Topbar.Height - 18),
+		LayoutOrder = -2,
+		BackgroundTransparency = 1,
+		Visible = false,
+	})
+	local MobileNavigationButton = Creator.NewRoundFrame(
+		math.max(Window.UICorner - (Window.UIPadding / 2), 0),
+		"Squircle",
+		{
+			Parent = MobileNavigationContainer,
+			Size = UDim2.new(1, 0, 1, 0),
+			ImageTransparency = 1,
+			ThemeTag = { ImageColor3 = "Text" },
+		},
+		nil,
+		true
+	)
+	local MobileNavigationIcon = Creator.Image("menu", "Navigation", 0, Window.Folder, "WindowMobileNavigation", true)
+	MobileNavigationIcon.Parent = MobileNavigationButton
+	MobileNavigationIcon.Size = UDim2.new(0, Window.TopBarButtonIconSize, 0, Window.TopBarButtonIconSize)
+	MobileNavigationIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+	MobileNavigationIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+
+	local SidebarLayered = {}
+	local function raiseSidebarObject(object)
+		if object:IsA("GuiObject") and not SidebarLayered[object] then
+			SidebarLayered[object] = true
+			object.ZIndex += 200
+		end
+	end
+	for _, object in next, Window.UIElements.SideBarContainer:GetDescendants() do
+		raiseSidebarObject(object)
+	end
+	Creator.AddSignal(Window.UIElements.SideBarContainer.DescendantAdded, raiseSidebarObject)
+
+	local function applyResponsiveLayout()
+		if not Window.MobileEnabled or not Config.WindUI or not Config.WindUI.ScreenGui then
+			return
+		end
+
+		local viewportWidth = Config.WindUI.ScreenGui.AbsoluteSize.X / Config.WindUI.UIScale
+		local isMobile = Window.MobileForce or (viewportWidth > 0 and viewportWidth <= Window.MobileBreakpoint)
+		Window.IsMobile = isMobile
+
+		if isMobile then
+			local padding = Window.MobileSideBarPadding
+			Window.UIElements.MainBar.Size = UDim2.new(1, 0, 1, -Window.Topbar.Height)
+			Window.UIElements.MainBar.Position = UDim2.new(1, 0, 1, 0)
+			Window.UIElements.SideBarContainer.Size = UDim2.new(0, Window.MobileSideBarWidth, 1, -Window.Topbar.Height - 8)
+			Window.UIElements.SideBarContainer.Position = UDim2.new(
+				0,
+				Window.MobileNavigationOpen and 0 or -Window.MobileSideBarWidth,
+				0,
+				Window.Topbar.Height
+			)
+			Window.UIElements.SideBarContainer.ZIndex = 200
+			Window.UIElements.SideBarContainer.Visible = Window.MobileNavigationOpen
+			Window.UIElements.SideBarContainer.Background.Visible = false
+			Window.UIElements.Main.Main.ClipsDescendants = true
+			Window.UIElements.SideBar.Size = UDim2.new(
+				1,
+				Window.ScrollBarEnabled and -3 - (Window.UIPadding / 2) or 0,
+				1,
+				not Window.HideSearchBar and -39 - 6 or 0
+			)
+			Window.UIElements.SideBar.Position = UDim2.new(0, 0, 1, 0)
+			Window.UIElements.SideBar.Frame.AutomaticSize = "None"
+			Window.UIElements.SideBar.Frame.Size = UDim2.new(1, -(padding + 8), 1, -(padding * 2))
+			Window.UIElements.SideBar.Frame.Position = UDim2.new(0, padding, 0, padding)
+			Window.UIElements.SideBar.Frame.BackgroundColor3 = Color3.fromHex("#101010")
+			Window.UIElements.SideBar.Frame.BackgroundTransparency = Window.Background
+				and (Window.SidebarBackgroundTransparency == nil and 0.22 or Window.SidebarBackgroundTransparency)
+				or 0
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingTop = UDim.new(0, 4)
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingBottom = UDim.new(0, 4)
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingLeft = UDim.new(0, 4)
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingRight = UDim.new(0, 4)
+			Window.UIElements.SideBar.Frame.UIListLayout.Padding = UDim.new(0, Window.MobileSideBarGap)
+		else
+			Window.UIElements.SideBarContainer.Size = UDim2.new(
+				0,
+				Window.SidebarOpen and Window.SideBarWidth or 0,
+				1,
+				Window.User.Enabled and -Window.Topbar.Height - 42 - (Window.UIPadding * 2) or -Window.Topbar.Height
+			)
+			Window.UIElements.SideBarContainer.Position = UDim2.new(0, 0, 0, Window.Topbar.Height)
+			Window.UIElements.SideBarContainer.ZIndex = 1
+			Window.UIElements.SideBarContainer.Visible = Window.SidebarOpen
+			Window.UIElements.SideBarContainer.Background.Visible = false
+			Window.UIElements.Main.Main.ClipsDescendants = false
+			Window.UIElements.SideBar.Size = UDim2.new(
+				1,
+				Window.ScrollBarEnabled and -3 - (Window.UIPadding / 2) or 0,
+				1,
+				not Window.HideSearchBar and -39 - 6 or 0
+			)
+			Window.UIElements.SideBar.Position = UDim2.new(0, 0, 1, 0)
+			Window.UIElements.SideBar.Frame.AutomaticSize = "Y"
+			Window.UIElements.SideBar.Frame.Size = UDim2.new(1, 0, 0, 0)
+			Window.UIElements.SideBar.Frame.Position = UDim2.new(0, 0, 0, 0)
+			Window.UIElements.SideBar.Frame.BackgroundTransparency = 1
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingTop = UDim.new(0, 0)
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingBottom = UDim.new(0, Window.UIPadding / 2)
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingLeft = UDim.new(0, 0)
+			Window.UIElements.SideBar.Frame.UIPadding.PaddingRight = UDim.new(0, 0)
+			Window.UIElements.SideBar.Frame.UIListLayout.Padding = UDim.new(0, Window.Gap)
+			Window.UIElements.MainBar.Size = UDim2.new(1, Window.SidebarOpen and -Window.SideBarWidth or 0, 1, -Window.Topbar.Height)
+			Window.UIElements.MainBar.Position = UDim2.new(1, 0, 1, 0)
+		end
+
+		MobileNavigationContainer.Visible = isMobile
+	end
+
+	function Window:SetMobileNavigation(open)
+		Window.MobileNavigationOpen = open == true
+		Window.SidebarOpen = Window.MobileNavigationOpen
+		if Window.IsMobile then
+			local sidebar = Window.UIElements.SideBarContainer
+			if Window.MobileNavigationOpen then
+				sidebar.Visible = true
+				sidebar.Position = UDim2.new(0, -Window.MobileSideBarWidth, 0, Window.Topbar.Height)
+				Tween(sidebar, 0.28, { Position = UDim2.new(0, 0, 0, Window.Topbar.Height) }, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+			else
+				local animation = Tween(sidebar, 0.22, {
+					Position = UDim2.new(0, -Window.MobileSideBarWidth, 0, Window.Topbar.Height),
+				}, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+				Creator.AddSignal(animation.Completed, function()
+					if not Window.MobileNavigationOpen then sidebar.Visible = false end
+				end)
+				animation:Play()
+			end
+		end
+		return Window.MobileNavigationOpen
+	end
+
+	function Window:SetSidebarOpen(open)
+		open = open == true
+		if Window.IsMobile then
+			return Window:SetMobileNavigation(open)
+		end
+
+		Window.SidebarOpen = open
+		local sidebar = Window.UIElements.SideBarContainer
+		local mainBar = Window.UIElements.MainBar
+		local sidebarHeight = Window.User.Enabled and -Window.Topbar.Height - 42 - (Window.UIPadding * 2)
+			or -Window.Topbar.Height
+
+		if open then
+			sidebar.Visible = true
+			Tween(sidebar, 0.25, {
+				Size = UDim2.new(0, Window.SideBarWidth, 1, sidebarHeight),
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+			Tween(mainBar, 0.25, {
+				Size = UDim2.new(1, -Window.SideBarWidth, 1, -Window.Topbar.Height),
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.Out):Play()
+		else
+			local animation = Tween(sidebar, 0.22, {
+				Size = UDim2.new(0, 0, 1, sidebarHeight),
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.In)
+			Creator.AddSignal(animation.Completed, function()
+				if not Window.SidebarOpen then
+					sidebar.Visible = false
+				end
+			end)
+			animation:Play()
+			Tween(mainBar, 0.22, {
+				Size = UDim2.new(1, 0, 1, -Window.Topbar.Height),
+			}, Enum.EasingStyle.Quint, Enum.EasingDirection.In):Play()
+		end
+
+		return Window.SidebarOpen
+	end
+
+	function Window:ToggleSidebar()
+		return Window:SetSidebarOpen(not Window.SidebarOpen)
+	end
+
+	function Window:ApplyBackgroundElementTransparency(target)
+		if not Window.Background or Window.BackgroundElementTransparency == nil then
+			return
+		end
+
+		local taggedSurfaces = {
+			ElementBackgroundTransparency = true,
+			SectionBoxBackgroundTransparency = true,
+			ViewportBackgroundTransparency = true,
+		}
+		for object, objectData in next, Creator.Objects do
+			if object.Parent and object:IsDescendantOf(Window.UIElements.Main) and (not target or object == target or object:IsDescendantOf(target)) then
+				local transparencyTag = objectData.Properties and objectData.Properties.ImageTransparency
+				if taggedSurfaces[transparencyTag] then
+					local themeTransparency = Creator.GetThemeProperty(transparencyTag, Creator.Theme) or 0
+					object.ImageTransparency = math.max(themeTransparency, Window.BackgroundElementTransparency)
+				end
+			end
+		end
+	end
+
+	function Window:RefreshResponsiveLayout()
+		applyResponsiveLayout()
+		return Window.IsMobile
+	end
+
+	Creator.AddSignal(MobileNavigationButton.MouseButton1Click, function()
+		Window:SetMobileNavigation(not Window.MobileNavigationOpen)
+	end)
+	Creator.AddSignal(MobileNavigationButton.MouseEnter, function()
+		Tween(MobileNavigationButton, 0.15, { ImageTransparency = 0.93 }):Play()
+	end)
+	Creator.AddSignal(MobileNavigationButton.MouseLeave, function()
+		Tween(MobileNavigationButton, 0.1, { ImageTransparency = 1 }):Play()
+	end)
+	Window.UIElements.MobileNavigationButton = MobileNavigationButton
+	applyResponsiveLayout()
+	Window.ThemeBackgroundConnection = Creator:OnThemeChange(function()
+		task.defer(function()
+			if not Window.Destroyed then
+				Window:ApplyBackgroundElementTransparency()
+			end
+		end)
+	end)
+
+	Creator.AddSignal(Config.WindUI.ScreenGui:GetPropertyChangedSignal("AbsoluteSize"), function()
+		applyResponsiveLayout()
+	end)
 
 	-- local Dragged = false
 
@@ -1686,6 +1970,32 @@ return function(Config)
 		return TabModule.New(TabConfig, Config.WindUI.UIScale)
 	end
 
+	function Window:ThemeEditor(EditorConfig)
+		EditorConfig = EditorConfig or {}
+		local themeName = EditorConfig.Theme or Config.WindUI:GetCurrentTheme()
+		if not Config.WindUI.Themes[themeName] then
+			Config.WindUI:CreateTheme(themeName, EditorConfig.BaseTheme)
+		end
+		local tab = EditorConfig.Tab or Window:Tab({
+			Title = EditorConfig.Title or "Theme",
+			Icon = EditorConfig.Icon or "palette",
+		})
+		local keys = EditorConfig.Keys or { "Primary", "Accent", "Background", "Text", "Icon", "ElementBackground", "Toggle", "Slider" }
+		for _, key in next, keys do
+			local value = Config.WindUI.Themes[themeName][key]
+			if typeof(value) == "Color3" then
+				tab:Colorpicker({
+					Title = key,
+					Default = value,
+					Callback = function(color)
+						Config.WindUI:EditTheme(themeName, { [key] = color })
+					end,
+				})
+			end
+		end
+		return tab
+	end
+
 	function Window:SelectTab(Tab)
 		TabModule:SelectTab(Tab)
 	end
@@ -2129,10 +2439,32 @@ return function(Config)
 
 	-- / Search Bar /
 
-	if not Window.HideSearchBar then
+	if not Window.HideSearchBar or Config.CommandPalette ~= false then
 		local SearchBar = require("../search/Init")
 		local IsOpen = false
-		local CurrentSearchBar
+		local function OpenCommandPalette()
+			if IsOpen then return end
+			SearchBar.new(Window.TabModule, Window.UIElements.Main, function()
+				IsOpen = false
+				if Window.Resizable then Window.CanResize = true end
+				Tween(FullScreenBlur, 0.1, { ImageTransparency = 1 }):Play()
+				FullScreenBlur.Active = false
+			end)
+			Tween(FullScreenBlur, 0.1, { ImageTransparency = 0.65 }):Play()
+			FullScreenBlur.Active = true
+			IsOpen = true
+			Window.CanResize = false
+		end
+
+		Window.OpenCommandPalette = OpenCommandPalette
+		Window:CreateTopbarButton("Command Palette", "search", OpenCommandPalette, 996, true)
+		Creator.AddSignal(UserInputService.InputBegan, function(input, processed)
+			if processed or Window.Closed or Window.Destroyed then return end
+			local hotkey = Config.CommandPaletteKey or Enum.KeyCode.K
+			if input.KeyCode == hotkey and (hotkey ~= Enum.KeyCode.K or UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) or UserInputService:IsKeyDown(Enum.KeyCode.RightControl)) then
+				OpenCommandPalette()
+			end
+		end)
 
 		-- local SearchButton
 		-- SearchButton = Window:CreateTopbarButton("search", function()
@@ -2153,31 +2485,15 @@ return function(Config)
 		--     Window.CanResize = false
 		-- end, 996)
 
-		local SearchLabel = CreateLabel("Search", "search", Window.UIElements.SideBarContainer, true)
-		SearchLabel.Size = UDim2.new(1, -Window.UIPadding / 2, 0, 39)
-		SearchLabel.Position = UDim2.new(0, Window.UIPadding / 2, 0,--[[Window.UIPadding/2]] 0)
+		if not Window.HideSearchBar then
+			local SearchLabel = CreateLabel("Search", "search", Window.UIElements.SideBarContainer, true)
+			SearchLabel.Size = UDim2.new(1, -Window.UIPadding / 2, 0, 39)
+			SearchLabel.Position = UDim2.new(0, Window.UIPadding / 2, 0, 0)
 
-		Creator.AddSignal(SearchLabel.MouseButton1Click, function()
-			if IsOpen then
-				return
-			end
-
-			SearchBar.new(Window.TabModule, Window.UIElements.Main, function()
-				-- OnClose
-				IsOpen = false
-				if Window.Resizable then
-					Window.CanResize = true
-				end
-
-				Tween(FullScreenBlur, 0.1, { ImageTransparency = 1 }):Play()
-				FullScreenBlur.Active = false
+			Creator.AddSignal(SearchLabel.MouseButton1Click, function()
+				OpenCommandPalette()
 			end)
-			Tween(FullScreenBlur, 0.1, { ImageTransparency = 0.65 }):Play()
-			FullScreenBlur.Active = true
-
-			IsOpen = true
-			Window.CanResize = false
-		end)
+		end
 	end
 
 	-- / TopBar Edit /

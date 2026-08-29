@@ -87,7 +87,7 @@ function TabModule.New(Config, UIScale)
 
 	Tab.UIElements.Main = Creator.NewRoundFrame(Tab.UICorner, "Squircle", {
 		BackgroundTransparency = 1,
-		Size = UDim2.new(1, -7, 0, 0),
+		Size = UDim2.new(1, Window.IsMobile and 0 or -7, 0, 0),
 		AutomaticSize = "Y",
 		Parent = Config.Parent,
 		ThemeTag = {

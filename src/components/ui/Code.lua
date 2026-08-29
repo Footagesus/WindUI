@@ -7,6 +7,8 @@ local Tween = Creator.Tween
 local Highlighter = require("../../modules/Highlighter")
 
 function Code.New(Code, Window, Parent, Callback, UIScale)
+	local surfaceTransparency = Window.Background and Window.BackgroundElementTransparency or 0.035
+	surfaceTransparency = math.max(surfaceTransparency or 0.035, 0.035)
 	local CodeModule = {
 		Radius = Window.ElementConfig.UICorner,
 		Padding = Window.NewElements and Window.ElementConfig.UIPadding + 4 or Window.ElementConfig.UIPadding,
@@ -150,7 +152,7 @@ function Code.New(Code, Window, Parent, Callback, UIScale)
 		--     ImageColor3 = "Text"
 		-- },
 		ImageColor3 = Color3.fromHex("#212121"),
-		ImageTransparency = 0.035,
+		ImageTransparency = surfaceTransparency,
 		Size = Code.Height ~= nil
 				and UDim2.new(1, 0, Code.Height.Scale, Code.Height.Offset == 0 and -20 * 2 or Code.Height.Offset)
 			or UDim2.new(1, 0, 0, 20 + (CodeModule.Padding * 2)),
