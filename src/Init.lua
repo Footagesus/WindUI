@@ -5,6 +5,7 @@ local WindUI = {
 	LocalizationModule = require("./modules/Localization"),
 	NotificationModule = require("./components/Notification"),
 	Themes = nil,
+	Plugins = {},
 	Transparent = false,
 
 	TransparencyValue = 0.15,
@@ -91,6 +92,7 @@ local New = Creator.New
 --local ServicesModule = WindUI.Services
 
 local Acrylic = require("./utils/Acrylic/Init")
+local Persistence = require("./modules/Persistence")
 
 local ProtectGui = protectgui or (syn and syn.protect_gui) or function() end
 
@@ -190,8 +192,200 @@ function WindUI:OnThemeChange(func)
 end
 
 function WindUI:AddTheme(LTheme)
+	assert(typeof(LTheme) == "table" and typeof(LTheme.Name) == "string" and LTheme.Name ~= "", "Theme needs a name")
 	WindUI.Themes[LTheme.Name] = LTheme
 	return LTheme
+end
+
+function WindUI:CreateTheme(Name, Base)
+	assert(typeof(Name) == "string" and Name ~= "", "Theme needs a name")
+	local source = WindUI.Themes[Base or WindUI:GetCurrentTheme()] or WindUI.Theme or {}
+	local theme = { Name = Name }
+	for key, value in next, source do
+		if key ~= "Name" then theme[key] = value end
+	end
+	return WindUI:AddTheme(theme)
+end
+
+function WindUI:EditTheme(Name, Values)
+	local theme = WindUI.Themes[Name] or WindUI:CreateTheme(Name)
+	for key, value in next, Values or {} do
+		if key ~= "Name" then theme[key] = value end
+	end
+	if WindUI.Theme == theme then
+		Creator.SetTheme(theme)
+	end
+	return theme
+end
+
+function WindUI:RemoveTheme(Name)
+	if Name == WindUI:GetCurrentTheme() then
+		return false, "Cannot remove the active theme"
+	end
+	if not WindUI.Themes[Name] then return false, "Theme does not exist" end
+	WindUI.Themes[Name] = nil
+	return true
+end
+
+local function safeStorageName(name)
+	return tostring(name):gsub("[\\/:*?\"<>|]", "_")
+end
+
+function WindUI:SaveTheme(Name, Path)
+	local theme = WindUI.Themes[Name or WindUI:GetCurrentTheme()]
+	if not theme then return false, "Theme does not exist" end
+	local folder = Path or "WindUI/themes"
+	local ok, err = Persistence.EnsureFolder(folder)
+	if not ok then return false, err end
+	return Persistence.WriteJson(folder .. "/" .. safeStorageName(theme.Name) .. ".json", theme)
+end
+
+function WindUI:LoadTheme(Path)
+	local ok, theme = Persistence.ReadJson(Path)
+	if not ok then return false, theme end
+	if typeof(theme) ~= "table" or typeof(theme.Name) ~= "string" then
+		return false, "Theme manifest needs a Name"
+	end
+	WindUI.Themes[theme.Name] = theme
+	return theme
+end
+
+function WindUI:ListSavedThemes(Path)
+	return Persistence.ListJson(Path or "WindUI/themes")
+end
+
+function WindUI:DeleteSavedTheme(Name, Path)
+	if not delfile then return false, "Filesystem API is unavailable" end
+	local file = (Path or "WindUI/themes") .. "/" .. safeStorageName(Name) .. ".json"
+	if not isfile or not isfile(file) then return false, "Theme file does not exist" end
+	local ok, err = pcall(delfile, file)
+	return ok, ok and nil or tostring(err)
+end
+
+local function startPlugin(Plugin)
+	if Plugin.Enabled then
+		return Plugin
+	end
+	Plugin.Enabled = true
+	if typeof(Plugin.Init) == "function" then
+		Creator.SafeCallback(Plugin.Init, WindUI)
+	end
+	return Plugin
+end
+
+function WindUI:AddPlugin(Plugin)
+	assert(typeof(Plugin) == "table" and typeof(Plugin.Name) == "string" and Plugin.Name ~= "", "Plugin needs a name")
+	assert(not WindUI.Plugins[Plugin.Name], "Plugin is already registered: " .. Plugin.Name)
+	Plugin.Version = Plugin.Version or "0.0.0"
+	Plugin.Enabled = false
+	WindUI.Plugins[Plugin.Name] = Plugin
+	if Plugin.AutoStart ~= false then
+		startPlugin(Plugin)
+	end
+	return Plugin
+end
+
+function WindUI:GetPlugins()
+	return WindUI.Plugins
+end
+
+function WindUI:SavePluginState(Path)
+	local plugins = {}
+	for name, plugin in next, WindUI.Plugins do
+		plugins[name] = { Enabled = plugin.Enabled == true, Version = plugin.Version }
+	end
+	local folder = Path or "WindUI/plugins"
+	local ok, err = Persistence.EnsureFolder(folder)
+	if not ok then return false, err end
+	return Persistence.WriteJson(folder .. "/state.json", { Version = 1, Plugins = plugins })
+end
+
+function WindUI:LoadPluginState(Path)
+	local folder = Path or "WindUI/plugins"
+	local ok, state = Persistence.ReadJson(folder .. "/state.json")
+	if not ok then return false, state end
+	for name, saved in next, state.Plugins or {} do
+		local plugin = WindUI.Plugins[name]
+		if plugin then
+			if saved.Enabled then WindUI:EnablePlugin(name) else WindUI:DisablePlugin(name) end
+		end
+	end
+	return state
+end
+
+function WindUI:LoadPlugins(Path)
+	local folder = Path or "WindUI/plugins"
+	local ok, err = Persistence.EnsureFolder(folder)
+	if not ok then return {}, err end
+	if not listfiles or not readfile or not loadstring then return {}, "Plugin loader API is unavailable" end
+
+	local stateOk, state = Persistence.ReadJson(folder .. "/state.json")
+	local savedState = stateOk and state.Plugins or {}
+	local loaded, errors = {}, {}
+	for _, file in next, listfiles(folder) do
+		if file:sub(-4) == ".lua" then
+			local compiled, compileErr = loadstring(readfile(file))
+			if not compiled then
+				table.insert(errors, file .. ": " .. tostring(compileErr))
+			else
+				local ran, manifest = pcall(compiled)
+				if not ran or typeof(manifest) ~= "table" then
+					table.insert(errors, file .. ": manifest must return a table")
+				elseif typeof(manifest.Name) ~= "string" or manifest.Name == "" then
+					table.insert(errors, file .. ": manifest needs a Name")
+				elseif WindUI.Plugins[manifest.Name] then
+					table.insert(errors, file .. ": plugin already registered")
+				else
+					local saved = savedState[manifest.Name]
+					manifest.AutoStart = false
+					local plugin = WindUI:AddPlugin(manifest)
+					if not saved or saved.Enabled ~= false then WindUI:EnablePlugin(plugin.Name) end
+					table.insert(loaded, plugin)
+				end
+			end
+		end
+	end
+	return loaded, errors
+end
+
+function WindUI:GetPlugin(Name)
+	return WindUI.Plugins[Name]
+end
+
+function WindUI:ListPlugins()
+	local plugins = {}
+	for _, plugin in next, WindUI.Plugins do
+		table.insert(plugins, plugin)
+	end
+	table.sort(plugins, function(a, b)
+		return a.Name:lower() < b.Name:lower()
+	end)
+	return plugins
+end
+
+function WindUI:EnablePlugin(Name)
+	local plugin = WindUI.Plugins[Name]
+	if not plugin then return false, "Plugin does not exist" end
+	return startPlugin(plugin)
+end
+
+function WindUI:DisablePlugin(Name)
+	local plugin = WindUI.Plugins[Name]
+	if not plugin then return false, "Plugin does not exist" end
+	if not plugin.Enabled then return plugin end
+	plugin.Enabled = false
+	if typeof(plugin.Destroy) == "function" then
+		Creator.SafeCallback(plugin.Destroy, WindUI)
+	end
+	return plugin
+end
+
+function WindUI:RemovePlugin(Name)
+	local plugin = WindUI.Plugins[Name]
+	if not plugin then return false, "Plugin does not exist" end
+	WindUI:DisablePlugin(Name)
+	WindUI.Plugins[Name] = nil
+	return true
 end
 
 function WindUI:SetTheme(Value)

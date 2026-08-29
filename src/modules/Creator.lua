@@ -794,7 +794,10 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 
 				local assetSuccess, asset = pcall(getcustomasset, FileName)
 				if assetSuccess then
-					ImageFrame.ImageLabel.Image = asset
+					local ImageLabel = ImageFrame:FindFirstChild("ImageLabel")
+					if ImageLabel then
+						ImageLabel.Image = asset
+					end
 				else
 					warn(
 						string.format(
@@ -820,7 +823,10 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 	elseif Img == "" then
 		ImageFrame.Visible = false
 	else
-		ImageFrame.ImageLabel.Image = Img
+		local ImageLabel = ImageFrame:FindFirstChild("ImageLabel")
+		if ImageLabel then
+			ImageLabel.Image = Img
+		end
 	end
 
 	return ImageFrame

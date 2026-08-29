@@ -9,6 +9,8 @@ return {
 		Input = require("./Input"),
 		Dropdown = require("./Dropdown"),
 		Code = require("./Code"),
+		HTML = require("./HTML"),
+		Markdown = require("./Markdown"),
 		Colorpicker = require("./Colorpicker"),
 		Section = require("./Section"),
 		Divider = require("./Divider"),
@@ -18,7 +20,7 @@ return {
 		HStack = require("./HStack"),
 		VStack = require("./VStack"),
 		Viewport = require("./Viewport"),
-		--Video       = require("./Video"),
+		Video = require("./Video"),
 	},
 	Load = function(tbl, Container, Elements, Window, WindUI, OnElementCreateFunction, ElementsModule, UIScale, Tab)
 		for name, module in next, Elements do
@@ -103,6 +105,10 @@ return {
 						table.remove(Tab.Elements, config.Index)
 						tbl:UpdateAllElementShapes(tbl)
 					end
+				end
+
+				if Window.ApplyBackgroundElementTransparency then
+					Window:ApplyBackgroundElementTransparency(content.ElementFrame)
 				end
 
 				Window.AllElements[config.Index] = content

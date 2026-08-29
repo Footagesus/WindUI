@@ -11,6 +11,7 @@ ConfigManager = {
     Folder = nil,
     Path = nil,
     Configs = {},
+	CurrentProfile = nil,
     Parser = {
         Colorpicker = {
             Save = function(obj)
@@ -312,6 +313,129 @@ end
 
 function ConfigManager:Config(configFilename, autoload)
     return ConfigManager:CreateConfig(configFilename, autoload)
+end
+
+local function normalizeProfileName(name)
+	if typeof(name) ~= "string" then
+		return nil, "Profile name must be a string"
+	end
+	name = name:gsub("^%s+", ""):gsub("%s+$", "")
+	name = name:gsub("[\\/:*?\"<>|]", "")
+	if name == "" then
+		return nil, "Profile name cannot be empty"
+	end
+	return name
+end
+
+function ConfigManager:ListProfiles()
+	local profiles, seen = {}, {}
+	for _, name in next, ConfigManager:AllConfigs() do
+		seen[name] = true
+	end
+	for name in next, ConfigManager.Configs do
+		seen[name] = true
+	end
+	for name in next, seen do
+		table.insert(profiles, name)
+	end
+	table.sort(profiles, function(a, b)
+		return a:lower() < b:lower()
+	end)
+	return profiles
+end
+
+function ConfigManager:CreateProfile(name, autoload)
+	local normalized, err = normalizeProfileName(name)
+	if not normalized then return false, err end
+	if ConfigManager.Configs[normalized] then
+		return false, "Profile already exists"
+	end
+	local profile = ConfigManager:CreateConfig(normalized, autoload)
+	if not profile then return false, "Failed to create profile" end
+	ConfigManager.CurrentProfile = normalized
+	return profile
+end
+
+function ConfigManager:SelectProfile(name)
+	local normalized, err = normalizeProfileName(name)
+	if not normalized then return false, err end
+	local profile = ConfigManager.Configs[normalized] or ConfigManager:CreateConfig(normalized)
+	if not profile then return false, "Profile does not exist" end
+	profile:SetAsCurrent()
+	ConfigManager.CurrentProfile = normalized
+	return profile
+end
+
+function ConfigManager:SaveProfile(name)
+	local profile
+	if name then
+		profile = ConfigManager:SelectProfile(name)
+		if profile == false then return false, "Profile does not exist" end
+	else
+		profile = Window and Window.CurrentConfig
+	end
+	if not profile then return false, "No profile is selected" end
+	local data = profile:Save()
+	ConfigManager.CurrentProfile = profile.Path:match("([^\\/]+)%.json$") or ConfigManager.CurrentProfile
+	return data
+end
+
+function ConfigManager:LoadProfile(name)
+	local profile, err = ConfigManager:SelectProfile(name)
+	if not profile then return false, err end
+	local data, loadErr = profile:Load()
+	if data == false then return false, loadErr end
+	ConfigManager.CurrentProfile = name
+	return data
+end
+
+function ConfigManager:RenameProfile(fromName, toName)
+	local from, fromErr = normalizeProfileName(fromName)
+	local target, targetErr = normalizeProfileName(toName)
+	if not from then return false, fromErr end
+	if not target then return false, targetErr end
+	if from == target then return true end
+	if isfile(ConfigManager.Path .. target .. ".json") then
+		return false, "A profile with this name already exists"
+	end
+	local oldPath, newPath = ConfigManager.Path .. from .. ".json", ConfigManager.Path .. target .. ".json"
+	if not isfile(oldPath) then return false, "Profile does not exist" end
+	local ok, contents = pcall(readfile, oldPath)
+	if not ok then return false, "Failed to read profile" end
+	local wrote, writeErr = pcall(writefile, newPath, contents)
+	if not wrote then return false, "Failed to write renamed profile: " .. tostring(writeErr) end
+	if delfile then pcall(delfile, oldPath) end
+	local profile = ConfigManager.Configs[from]
+	if profile then
+		ConfigManager.Configs[from] = nil
+		profile.Path = newPath
+		ConfigManager.Configs[target] = profile
+	end
+	if ConfigManager.CurrentProfile == from then ConfigManager.CurrentProfile = target end
+	return true
+end
+
+function ConfigManager:GetCurrentProfile()
+	return ConfigManager.CurrentProfile
+end
+
+function ConfigManager:SetProfileAutoLoad(name, enabled)
+	local profile, err = ConfigManager:SelectProfile(name)
+	if not profile then return false, err end
+	profile:SetAutoLoad(enabled == true)
+	local saved, saveErr = profile:Save()
+	if not saved then return false, saveErr end
+	return profile
+end
+
+function ConfigManager:DeleteProfile(name)
+	local normalized, err = normalizeProfileName(name)
+	if not normalized then return false, err end
+	local deleted, deleteErr = ConfigManager:DeleteConfig(normalized)
+	if deleted and ConfigManager.CurrentProfile == normalized then
+		ConfigManager.CurrentProfile = nil
+	end
+	return deleted, deleteErr
 end
 
 function ConfigManager:GetAutoLoadConfigs()
