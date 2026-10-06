@@ -96,10 +96,11 @@ function Element:New(Config)
 	Dropdown.Open = Dropdown.DropdownMenu.Open
 	Dropdown.Close = Dropdown.DropdownMenu.Close
 
+	local DropdownIconData = Creator.Icon("chevrons-up-down")
 	local DropdownIcon = New("ImageLabel", {
-		Image = Creator.Icon("chevrons-up-down")[1],
-		ImageRectOffset = Creator.Icon("chevrons-up-down")[2].ImageRectPosition,
-		ImageRectSize = Creator.Icon("chevrons-up-down")[2].ImageRectSize,
+		Image = DropdownIconData and DropdownIconData[1],
+		ImageRectOffset = DropdownIconData and DropdownIconData[2] and DropdownIconData[2].ImageRectPosition,
+		ImageRectSize = DropdownIconData and DropdownIconData[2] and DropdownIconData[2].ImageRectSize,
 		Size = UDim2.new(0, 18, 0, 18),
 		Position = UDim2.new(1, Dropdown.UIElements.Dropdown and -12 or 0, 0.5, 0),
 		ThemeTag = {

@@ -489,7 +489,17 @@ function Creator.SetLanguage(lang)
 end
 
 function Creator.Icon(Icon, formatdefault)
-	return Icons.Icon2(Icon, nil, formatdefault ~= false)
+	local IconData = Icons.Icon2(Icon, nil, formatdefault ~= false)
+	if IconData == nil then
+		return {
+			"",
+			{
+				ImageRectPosition = Vector2.new(0, 0),
+				ImageRectSize = Vector2.new(0, 0),
+			},
+		}
+	end
+	return IconData
 end
 
 function Creator.AddIcons(packName, iconsData)
@@ -755,7 +765,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 			Size = UDim2.new(1, 0, 1, 0),
 			BackgroundTransparency = 1,
 			ScaleType = "Crop",
-			ThemeTag = (Creator.Icon(Img) or Themed) and {
+			ThemeTag = (Icons.Icon2(Img) or Themed) and {
 				ImageColor3 = IsThemeTag and (ThemeTagName or "Icon") or nil,
 			} or nil,
 		}, {
@@ -764,7 +774,7 @@ function Creator.Image(Img, Name, Corner, Folder, Type, IsThemeTag, Themed, Them
 			}),
 		}),
 	})
-	if Creator.Icon(Img) then
+	if Icons.Icon2(Img) then
 		ImageFrame.ImageLabel:Destroy()
 
 		local IconLabel = Icons.Image({

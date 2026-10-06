@@ -37,6 +37,7 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
         IconFrame.ImageLabel.ImageTransparency = .25
     end
     
+    local ChevronIconData = Creator.Icon("chevron-down")
     local ChevronIconFrame = New("Frame", {
         Size = UDim2.new(0,SectionModule.IconSize,0,SectionModule.IconSize),
         BackgroundTransparency = 1,
@@ -45,9 +46,9 @@ function Section.New(SectionConfig, Parent, Folder, UIScale, Window)
         New("ImageLabel", {
             Size = UDim2.new(1,0,1,0),
             BackgroundTransparency = 1,
-            Image = Creator.Icon("chevron-down")[1],
-            ImageRectSize = Creator.Icon("chevron-down")[2].ImageRectSize,
-            ImageRectOffset = Creator.Icon("chevron-down")[2].ImageRectPosition,
+            Image = ChevronIconData and ChevronIconData[1],
+            ImageRectSize = ChevronIconData and ChevronIconData[2] and ChevronIconData[2].ImageRectSize,
+            ImageRectOffset = ChevronIconData and ChevronIconData[2] and ChevronIconData[2].ImageRectPosition,
             ThemeTag = {
                 ImageColor3 = "Icon",
             },

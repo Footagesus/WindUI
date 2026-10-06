@@ -8,11 +8,12 @@ function Button.New(Title, Icon, Callback, Variant, Parent, Dialog, FullRounded,
 	Variant = Variant or "Primary"
 	local Radius = Radius or (not FullRounded and 10 or 999)
 	local IconButtonFrame
-	if Icon and Icon ~= "" then
+	local IconData = Creator.Icon(Icon)
+	if Icon and Icon ~= "" and IconData then
 		IconButtonFrame = New("ImageLabel", {
-			Image = Creator.Icon(Icon)[1],
-			ImageRectSize = Creator.Icon(Icon)[2].ImageRectSize,
-			ImageRectOffset = Creator.Icon(Icon)[2].ImageRectPosition,
+			Image = IconData[1],
+			ImageRectSize = IconData[2].ImageRectSize,
+			ImageRectOffset = IconData[2].ImageRectPosition,
 			Size = UDim2.new(0, 24 - 3, 0, 24 - 3),
 			BackgroundTransparency = 1,
 			ImageColor3 = Variant == "White" and Color3.new(0, 0, 0) or nil,
