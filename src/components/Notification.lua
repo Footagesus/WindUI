@@ -114,10 +114,11 @@ function NotificationModule.New(Config)
 
 	local CloseButton
 	if Notification.CanClose then
+		local CloseIconData = Creator.Icon("x")
 		CloseButton = New("ImageButton", {
-			Image = Creator.Icon("x")[1],
-			ImageRectSize = Creator.Icon("x")[2].ImageRectSize,
-			ImageRectOffset = Creator.Icon("x")[2].ImageRectPosition,
+			Image = CloseIconData and CloseIconData[1],
+			ImageRectSize = CloseIconData and CloseIconData[2] and CloseIconData[2].ImageRectSize,
+			ImageRectOffset = CloseIconData and CloseIconData[2] and CloseIconData[2].ImageRectPosition,
 			BackgroundTransparency = 1,
 			Size = UDim2.new(0, 16, 0, 16),
 			Position = UDim2.new(1, -NotificationModule.UIPadding, 0, NotificationModule.UIPadding),
