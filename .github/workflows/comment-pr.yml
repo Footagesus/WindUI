@@ -1,0 +1,79 @@
+name: Comment PR build result
+
+on:
+    workflow_run:
+        workflows: ["Build WindUI (Pull Request)"]
+        types: [completed]
+
+permissions:
+    actions: read
+    pull-requests: write
+    issues: write
+
+jobs:
+    comment:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/download-artifact@v4
+              with:
+                  name: pr-result
+                  path: pr-result
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  run-id: ${{ github.event.workflow_run.id }}
+
+            - uses: actions/github-script@v7
+              with:
+                  script: |
+                      const fs = require("fs")
+                      const read = (f, d = "") => {
+                        try { return fs.readFileSync(`pr-result/${f}`, "utf8").trim() } catch { return d }
+                      }
+
+                      const prNumber = parseInt(read("pr_number"), 10)
+                      if (!Number.isInteger(prNumber)) throw new Error("Bad PR number")
+
+                      const sha = read("sha").replace(/[^0-9a-f]/gi, "").slice(0, 40)
+                      const ok = read("outcome") === "success"
+                      const usingMain = read("using_main_client") === "true"
+                      const rawUrl = read("raw_url")
+                      const log = read("build.log", "Could not read build log").replace(/```/g, "'''")
+
+                      let body
+                      if (ok) {
+                        body = [
+                          "## ✅ Build Successful",
+                          `<sub>Built from commit <code>${sha.slice(0, 7)}</code></sub>`,
+                          "",
+                        ]
+                        if (usingMain) {
+                          body.push(
+                            "<details><summary><strong>Loadstring</strong></summary>",
+                            "",
+                            "```lua",
+                            `loadstring(game:HttpGet("${rawUrl}"))()`,
+                            "```",
+                            "</details>"
+                          )
+                        } else {
+                          body.push("ℹ️ <strong>main_example.lua</strong> uses a custom loadstring and was not modified.")
+                        }
+                      } else {
+                        body = [
+                          "## ❌ Build Failed",
+                          `<sub>Failed at commit <code>${sha.slice(0, 7)}</code></sub>`,
+                          "",
+                          "<details open><summary><strong>Build Error Log</strong></summary>",
+                          "",
+                          "```",
+                          log,
+                          "```",
+                          "</details>",
+                        ]
+                      }
+
+                      await github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: prNumber,
+                        body: body.join("\n"),
+                      })
