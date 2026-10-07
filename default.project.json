@@ -22,6 +22,9 @@
                 "main": {
                     "$path": "beta.main.client.lua"
                 }
+                // "customization": {
+                //     "$path": "tests/customization.client.lua"
+                // }
             }
         }
     }
