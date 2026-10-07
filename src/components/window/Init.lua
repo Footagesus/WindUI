@@ -168,6 +168,7 @@ return function(Config)
 			ImageTransparency = 1, -- .8; .35
 		}),
 	})
+	local FullScreenIconData = Creator.Icon("expand")
 	local FullScreenIcon = Creator.NewRoundFrame(Window.UICorner, "Squircle", {
 		Size = UDim2.new(1, 0, 1, 0),
 		ImageTransparency = 1, -- .65
@@ -177,9 +178,9 @@ return function(Config)
 	}, {
 		New("ImageLabel", {
 			Size = UDim2.new(0, 70, 0, 70),
-			Image = Creator.Icon("expand")[1],
-			ImageRectOffset = Creator.Icon("expand")[2].ImageRectPosition,
-			ImageRectSize = Creator.Icon("expand")[2].ImageRectSize,
+			Image = FullScreenIconData and FullScreenIconData[1],
+			ImageRectOffset = FullScreenIconData and FullScreenIconData[2] and FullScreenIconData[2].ImageRectPosition,
+			ImageRectSize = FullScreenIconData and FullScreenIconData[2] and FullScreenIconData[2].ImageRectSize,
 			BackgroundTransparency = 1,
 			Position = UDim2.new(0.5, 0, 0.5, 0),
 			AnchorPoint = Vector2.new(0.5, 0.5),
