@@ -9,7 +9,7 @@
 
 <img src="docs/WindUI – Themes.png" alt="WindUI Banner">
 
-[![Wind Ui](https://uibin.orqan.xyz/api/card?id=341a345c-b3c9-42fe-a45c-eb296580ce61&theme=green)](https://uibin.orqan.xyz/library/341a345c-b3c9-42fe-a45c-eb296580ce61)
+I might rewrite this project from scratch later.
 
 > [!WARNING]
 > This WindUI was not inspired by, and the name has nothing to do with UI Frameworks
