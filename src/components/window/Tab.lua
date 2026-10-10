@@ -574,6 +574,26 @@ function TabModule.New(Config, UIScale)
 		end)
 	end)
 
+	setmetatable(Tab, {
+		__index = function(self, key)
+			local registeredWindUI = WindUI or (Window and Window.WindUI)
+			if not registeredWindUI then
+				pcall(function()
+					registeredWindUI = require("../../Init")
+				end)
+			end
+
+			if registeredWindUI and registeredWindUI.RegisteredElements and registeredWindUI.RegisteredElements[key] then
+				local registeredElement = registeredWindUI.RegisteredElements[key]
+				return function(_, options)
+					return registeredElement.Create(registeredWindUI, self, options)
+				end
+			end
+
+			return nil
+		end,
+	})
+
 	return Tab
 end
 
